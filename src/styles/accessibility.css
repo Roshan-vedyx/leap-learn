@@ -1,0 +1,371 @@
+/* Vedyx Leap V2.0 - Neurodivergent-Friendly Design System */
+
+/* Load dyslexia-friendly fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+
+/* Detect user preferences */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animation-duration: 0ms;
+    --transition-duration: 0ms;
+  }
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --use-high-contrast: 1;
+  }
+}
+
+/* Core CSS Variables for Neurodivergent Accessibility */
+:root {
+  /* Base theme colors */
+  --background: 210 40% 98%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.75rem;
+
+  /* ADHD-Friendly High Contrast Variables */
+  --adhd-bg: 0 0% 0%;
+  --adhd-text: 0 0% 100%;
+  --adhd-accent: 142 100% 50%;
+  --adhd-secondary: 0 82% 63%;
+  --adhd-focus: 60 100% 50%;
+  
+  /* Dyslexia-Friendly Variables */
+  --dyslexia-font-primary: 'OpenDyslexic', 'Comic Sans MS', cursive;
+  --dyslexia-font-secondary: 'Lexend', 'Inter', sans-serif;
+  --dyslexia-letter-spacing: 0.05em;
+  --dyslexia-word-spacing: 0.16em;
+  --dyslexia-line-height: 1.8;
+  --dyslexia-bg: 44 87% 94%;
+  --dyslexia-text: 36 100% 12%;
+  --dyslexia-cream: 44 100% 97%;
+  
+  /* Autism-Friendly Calming Colors */
+  --autism-calm-mint: 152 68% 92%;
+  --autism-calm-lavender: 267 100% 92%;
+  --autism-calm-sage: 120 43% 92%;
+  --autism-calm-sky: 205 100% 92%;
+  --autism-primary: 209 100% 57%;
+  --autism-secondary: 77 100% 57%;
+  --autism-neutral: 210 17% 98%;
+  
+  /* Animation & Motion */
+  --animation-duration: 300ms;
+  --transition-duration: 200ms;
+  --reduced-motion: 0;
+  --gentle-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Touch Target Sizes (minimum 44px for accessibility) */
+  --touch-target-min: 44px;
+  --touch-target-comfortable: 56px;
+  --touch-target-large: 72px;
+  
+  /* Focus and interaction states */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--autism-primary);
+  
+  /* Spacing for motor accessibility */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-comfortable: 1.25rem; /* Extra comfortable spacing */
+}
+
+/* Dark mode adaptations */
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 94.1%;
+}
+
+/* ADHD-Specific High Contrast Mode */
+.adhd-mode {
+  --background: var(--adhd-bg);
+  --foreground: var(--adhd-text);
+  --primary: var(--adhd-accent);
+  --secondary: var(--adhd-secondary);
+  --border: var(--adhd-text);
+  color-scheme: dark;
+}
+
+.adhd-mode * {
+  border-color: hsl(var(--adhd-text)) !important;
+}
+
+/* Dyslexia-Friendly Mode */
+.dyslexia-mode {
+  --font-family: var(--dyslexia-font-primary);
+  --background: var(--dyslexia-bg);
+  --foreground: var(--dyslexia-text);
+  --card: var(--dyslexia-cream);
+  letter-spacing: var(--dyslexia-letter-spacing);
+  word-spacing: var(--dyslexia-word-spacing);
+  line-height: var(--dyslexia-line-height);
+}
+
+.dyslexia-mode * {
+  font-family: var(--dyslexia-font-primary) !important;
+}
+
+/* Autism-Friendly Calming Mode */
+.autism-mode {
+  --background: var(--autism-calm-mint);
+  --card: var(--autism-neutral);
+  --primary: var(--autism-primary);
+  --secondary: var(--autism-secondary);
+}
+
+/* Base accessibility styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px; /* Ensure minimum readable size */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--dyslexia-font-secondary);
+  line-height: 1.6;
+  letter-spacing: 0.025em;
+  word-spacing: 0.1em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: 0 0% 0%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
+  }
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: var(--focus-ring-width) solid hsl(var(--focus-ring-color));
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 4px;
+}
+
+/* Remove default focus styles to use our custom ones */
+*:focus {
+  outline: none;
+}
+
+/* Button and interactive element focus */
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  box-shadow: 0 0 0 var(--focus-ring-width) hsl(var(--focus-ring-color));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Touch target minimum sizes */
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-xs);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition-duration) var(--gentle-easing);
+}
+
+/* Comfortable spacing for form elements */
+input,
+select,
+textarea {
+  padding: var(--spacing-comfortable);
+  margin: var(--spacing-sm) 0;
+  border: 2px solid hsl(var(--border));
+  border-radius: var(--radius);
+  font-size: 1.125rem; /* 18px minimum */
+  line-height: 1.6;
+}
+
+/* Accessible text selection */
+::selection {
+  background-color: hsl(var(--primary) / 0.3);
+  color: hsl(var(--foreground));
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top var(--transition-duration);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive text scaling */
+@media (max-width: 768px) {
+  html {
+    font-size: 18px; /* Larger base size on mobile */
+  }
+  
+  button,
+  [role="button"] {
+    min-height: var(--touch-target-comfortable);
+    min-width: var(--touch-target-comfortable);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+}
+
+/* Error and validation states */
+.error {
+  color: hsl(var(--destructive));
+  border-color: hsl(var(--destructive));
+}
+
+.success {
+  color: hsl(var(--autism-secondary));
+  border-color: hsl(var(--autism-secondary));
+}
+
+/* Loading and disabled states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* Gentle animations for neurodivergent users */
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes calm-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gentle-animation {
+  animation: gentle-pulse 3s infinite;
+}
+
+.calm-enter {
+  animation: calm-slide-in 0.5s var(--gentle-easing);
+}
+
+/* Print styles for accessibility */
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a, a:visited {
+    text-decoration: underline;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
