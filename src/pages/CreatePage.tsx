@@ -1,13 +1,18 @@
+// src/pages/CreatePage.tsx - Simplified for MVP
 import React, { useState } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Input'
+import { useSessionStore } from '@/stores/sessionStore'
 
 const CreatePage: React.FC = () => {
   const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null)
   const [response, setResponse] = useState('')
   const [, setLocation] = useLocation()
+
+  // Zustand store
+  const { currentBrainState, setCreativeResponse } = useSessionStore()
 
   const prompts = [
     {
@@ -40,53 +45,109 @@ const CreatePage: React.FC = () => {
     }
   ]
 
+  // Adapt prompts based on brain state
+  const getAdaptedPrompts = () => {
+    if (!currentBrainState) return prompts
+
+    switch (currentBrainState.mood) {
+      case 'energetic':
+        return [
+          prompts[0], // What happens next - good for high energy
+          {
+            ...prompts[2],
+            title: 'Action time!',
+            description: 'What exciting action would you take?',
+            placeholder: 'If I were in this story, I would jump up and...'
+          },
+          prompts[3]
+        ]
+      case 'calm':
+        return [
+          prompts[1], // This reminds me - reflective
+          {
+            ...prompts[0],
+            title: 'What happens peacefully?',
+            description: 'Continue the story with a calm moment',
+            placeholder: 'Maya sat quietly and...'
+          },
+          prompts[3]
+        ]
+      case 'focused':
+      default:
+        return prompts
+    }
+  }
+
+  const adaptedPrompts = getAdaptedPrompts()
+
   const handlePromptSelect = (promptId: string) => {
     setSelectedPrompt(promptId)
-    const prompt = prompts.find(p => p.id === promptId)
+    const prompt = adaptedPrompts.find(p => p.id === promptId)
     if (prompt) {
       setResponse(prompt.placeholder)
+    }
+
+    // Announce selection for screen readers
+    const announcement = `Selected creative prompt: ${prompt?.title}`
+    const announcer = document.getElementById('accessibility-announcements')
+    if (announcer) {
+      announcer.textContent = announcement
     }
   }
 
   const handleContinue = () => {
-    // Save the creative response
-    localStorage.setItem('creative-response', JSON.stringify({
-      prompt: selectedPrompt,
-      response: response,
-      timestamp: new Date().toISOString()
-    }))
-    
-    // Go to celebration
-    setLocation('/celebrate')
+    if (selectedPrompt && response.trim().length >= 10) {
+      // Save the creative response to Zustand store
+      const creativeResponse = {
+        prompt: selectedPrompt,
+        response: response.trim(),
+        timestamp: new Date().toISOString()
+      }
+      
+      setCreativeResponse(creativeResponse)
+      
+      // Go to celebration
+      setLocation('/celebrate')
+    }
   }
 
-  const selectedPromptData = prompts.find(p => p.id === selectedPrompt)
+  const selectedPromptData = adaptedPrompts.find(p => p.id === selectedPrompt)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-sky to-autism-calm-sage p-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 p-4">
       <div className="max-w-4xl mx-auto py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-autism-primary mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
             Time to Create! 🎨
           </h1>
-          <p className="text-xl text-autism-primary/80 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             You've read an amazing story! Now it's your turn to add your own thoughts and ideas. 
             Pick what feels right to you - there are no wrong answers!
           </p>
+          
+          {/* Brain state adaptation message */}
+          {currentBrainState && (
+            <div className="mt-4 inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 text-sm border shadow-sm">
+              <span>{currentBrainState.emoji}</span>
+              <span className="text-muted-foreground">
+                Prompts adapted for your {currentBrainState.label.toLowerCase()} energy
+              </span>
+            </div>
+          )}
         </div>
 
         {!selectedPrompt ? (
           /* Prompt Selection */
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {prompts.map((prompt) => (
+            {adaptedPrompts.map((prompt) => (
               <Card
                 key={prompt.id}
-                interactive="full"
-                className="cursor-pointer transition-all duration-200 hover:scale-105 bg-autism-neutral border-autism-primary border-2"
+                className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg bg-card border-2 border-border"
                 onClick={() => handlePromptSelect(prompt.id)}
                 role="button"
                 tabIndex={0}
+                aria-label={`Select creative prompt: ${prompt.title}`}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
@@ -98,10 +159,10 @@ const CreatePage: React.FC = () => {
                   <div className="text-5xl mb-4" role="img" aria-label={prompt.title}>
                     {prompt.emoji}
                   </div>
-                  <h3 className="text-2xl font-semibold text-autism-primary mb-3">
+                  <h3 className="text-2xl font-semibold text-primary mb-3">
                     {prompt.title}
                   </h3>
-                  <p className="text-autism-primary/80 leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed">
                     {prompt.description}
                   </p>
                 </CardContent>
@@ -111,28 +172,38 @@ const CreatePage: React.FC = () => {
         ) : (
           /* Response Writing */
           <div className="space-y-6">
-            <Card className="bg-autism-neutral border-autism-primary border-2">
+            <Card className="bg-card border-primary border-2 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-2xl text-autism-primary flex items-center gap-3">
+                <CardTitle className="text-2xl text-primary flex items-center gap-3">
                   {selectedPromptData?.emoji} {selectedPromptData?.title}
                 </CardTitle>
-                <CardDescription className="text-lg text-autism-primary/80">
+                <CardDescription className="text-lg text-muted-foreground">
                   {selectedPromptData?.description}
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="bg-white border-autism-secondary border-2">
+            <Card className="bg-card border-2 border-border shadow-lg">
               <CardContent className="p-6">
                 <Textarea
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
                   placeholder={selectedPromptData?.placeholder}
-                  className="min-h-[200px] text-lg leading-relaxed resize-none"
-                  variant="calm"
-                  size="comfortable"
+                  className="min-h-[200px] text-lg leading-relaxed resize-none border-2 focus:ring-2 focus:ring-primary"
                   aria-label="Write your creative response here"
                 />
+                
+                {/* Character counter for encouragement */}
+                <div className="mt-3 text-right">
+                  <span className={`text-sm ${
+                    response.trim().length >= 10 
+                      ? 'text-primary font-medium' 
+                      : 'text-muted-foreground'
+                  }`}>
+                    {response.trim().length} characters
+                    {response.trim().length >= 10 && ' ✨ Great work!'}
+                  </span>
+                </div>
               </CardContent>
             </Card>
 
@@ -140,21 +211,22 @@ const CreatePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 variant="outline"
-                size="comfortable"
+                size="lg"
                 onClick={() => {
                   setSelectedPrompt(null)
                   setResponse('')
                 }}
+                className="min-h-[56px]"
               >
                 ← Choose Different Prompt
               </Button>
               
               <Button
-                variant="celebration"
-                size="comfortable"
+                variant="default"
+                size="lg"
                 onClick={handleContinue}
                 disabled={response.trim().length < 10}
-                className="text-lg px-8"
+                className="text-lg px-8 min-h-[56px]"
               >
                 {response.trim().length < 10 
                   ? 'Keep Writing...' 
@@ -165,18 +237,29 @@ const CreatePage: React.FC = () => {
 
             {/* Encouragement */}
             <div className="text-center">
-              <p className="text-autism-primary/60 text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 Take your time! Your ideas are valuable and there's no rush.
               </p>
             </div>
           </div>
         )}
 
+        {/* Back to Story */}
+        <div className="text-center mt-8">
+          <Button
+            variant="ghost"
+            onClick={() => setLocation('/story')}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            ← Back to Story
+          </Button>
+        </div>
+
         {/* Accessibility Information */}
         <div className="sr-only">
           <p>
             This page lets you respond creatively to the story you just read. 
-            Choose from four different prompts or write freely. 
+            Choose from different prompts that have been adapted to your current energy level.
             Your response will be celebrated, not graded.
           </p>
         </div>

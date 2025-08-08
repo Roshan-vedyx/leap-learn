@@ -1,40 +1,36 @@
+// src/pages/CelebratePage.tsx - Simplified for MVP
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { storage } from '@/lib/utils'
+import { useSessionStore } from '@/stores/sessionStore'
 
 const CelebratePage: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false)
   const [, setLocation] = useLocation()
 
-  // Get session data for personalized celebration
-  const brainState = storage.get('current-brain-state', 'focused')
-  const creativeResponse = storage.get('creative-response', null)
+  // Zustand store
+  const { 
+    currentBrainState, 
+    creativeResponse, 
+    completeSession, 
+    resetSession 
+  } = useSessionStore()
 
   useEffect(() => {
     // Start celebration animation
     setShowConfetti(true)
     
-    // Save session completion
-    const sessionData = {
-      completedAt: new Date().toISOString(),
-      brainState,
-      hasCreativeResponse: !!creativeResponse,
-      sessionDuration: '8-12 minutes' // Estimated
+    // Complete the session in global state
+    completeSession()
+    
+    // Announce completion for screen readers
+    const announcement = 'Congratulations! You have completed your reading session successfully.'
+    const announcer = document.getElementById('accessibility-announcements')
+    if (announcer) {
+      announcer.textContent = announcement
     }
-    
-    // Store in session history
-    const sessions = storage.get('completed-sessions', [])
-    sessions.push(sessionData)
-    storage.set('completed-sessions', sessions)
-    
-    // Clean up current session data
-    setTimeout(() => {
-      localStorage.removeItem('current-brain-state')
-      localStorage.removeItem('creative-response')
-    }, 30000) // Keep for 30 seconds for any needed access
-  }, [brainState, creativeResponse])
+  }, [completeSession])
 
   const celebrationMessages = {
     energetic: {
@@ -63,26 +59,33 @@ const CelebratePage: React.FC = () => {
     }
   }
 
-  const currentCelebration = celebrationMessages[brainState as keyof typeof celebrationMessages] || celebrationMessages.focused
+  const currentCelebration = currentBrainState 
+    ? celebrationMessages[currentBrainState.id as keyof typeof celebrationMessages] || celebrationMessages.focused
+    : celebrationMessages.focused
 
   const achievements = [
     { icon: '📚', text: 'Completed a full story', achieved: true },
     { icon: '🧠', text: 'Practiced phonics skills', achieved: true },
     { icon: '🎨', text: 'Created original response', achieved: !!creativeResponse },
     { icon: '⭐', text: 'Stayed engaged throughout', achieved: true },
-    { icon: '🎯', text: 'Made personal connections', achieved: !!creativeResponse }
+    { icon: '🎯', text: 'Made personal connections', achieved: !!creativeResponse },
+    { icon: '🚀', text: `Adapted to ${currentBrainState?.label || 'your'} energy`, achieved: !!currentBrainState }
   ]
 
   const handleContinue = () => {
+    // Reset session and start fresh
+    resetSession()
     setLocation('/brain-check')
   }
 
   const handleFinish = () => {
+    // Reset session and go home
+    resetSession()
     setLocation('/')
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-sky via-autism-calm-mint to-autism-calm-sage p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-orange-50 to-pink-50 p-4 relative overflow-hidden">
       {/* Confetti Animation */}
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none">
@@ -95,8 +98,8 @@ const CelebratePage: React.FC = () => {
                   left: `${Math.random() * 100}%`,
                   animationDelay: `${Math.random() * 3}s`,
                   backgroundColor: [
-                    'hsl(var(--autism-primary))',
-                    'hsl(var(--autism-secondary))',
+                    'hsl(var(--primary))',
+                    'hsl(var(--secondary))',
                     '#FFD700',
                     '#FF69B4',
                     '#00CED1'
@@ -111,22 +114,41 @@ const CelebratePage: React.FC = () => {
       <div className="max-w-4xl mx-auto py-8 relative z-10">
         {/* Main Celebration */}
         <div className="text-center mb-8">
-          <div className="text-8xl mb-6 animate-gentle-bounce">🎉</div>
-          <h1 className="text-4xl md:text-6xl font-bold text-autism-primary mb-4">
+          <div className="text-8xl mb-6 animate-bounce">🎉</div>
+          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">
             Amazing Work!
           </h1>
-          <h2 className="text-2xl md:text-3xl font-semibold text-autism-primary/90 mb-6">
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-6">
             {currentCelebration.title}
           </h2>
-          <p className="text-xl text-autism-primary/80 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             {currentCelebration.message}
           </p>
         </div>
 
+        {/* Personal Achievement Summary */}
+        {currentBrainState && (
+          <Card className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-primary border-2 shadow-lg">
+            <CardContent className="p-6 text-center">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <span className="text-3xl">{currentBrainState.emoji}</span>
+                <h3 className="text-xl font-semibold text-primary">
+                  Your Brain Journey Today
+                </h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Started feeling <strong>{currentBrainState.label.toLowerCase()}</strong> 
+                {creativeResponse && <span> → Created something amazing</span>}
+                <span> → Celebrated your success!</span>
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Achievements Grid */}
-        <Card className="mb-8 bg-white/90 border-autism-primary border-2">
+        <Card className="mb-8 bg-card border-primary border-2 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-center text-2xl text-autism-primary">
+            <CardTitle className="text-center text-2xl text-primary">
               🏆 What You Accomplished Today
             </CardTitle>
           </CardHeader>
@@ -135,22 +157,22 @@ const CelebratePage: React.FC = () => {
               {achievements.map((achievement, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-300 ${
+                  className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-300 border-2 ${
                     achievement.achieved
-                      ? 'bg-autism-calm-mint border-2 border-autism-secondary'
-                      : 'bg-gray-100 border-2 border-gray-300 opacity-50'
+                      ? 'bg-green-50 border-green-200'
+                      : 'bg-muted border-muted-foreground/20 opacity-50'
                   }`}
                 >
                   <span className="text-2xl" role="img" aria-hidden="true">
                     {achievement.achieved ? achievement.icon : '⭕'}
                   </span>
                   <span className={`font-medium ${
-                    achievement.achieved ? 'text-autism-primary' : 'text-gray-500'
+                    achievement.achieved ? 'text-primary' : 'text-muted-foreground'
                   }`}>
                     {achievement.text}
                   </span>
                   {achievement.achieved && (
-                    <span className="ml-auto text-autism-secondary font-bold">✓</span>
+                    <span className="ml-auto text-green-600 font-bold">✓</span>
                   )}
                 </div>
               ))}
@@ -158,18 +180,40 @@ const CelebratePage: React.FC = () => {
           </CardContent>
         </Card>
 
+        {/* Creative Response Highlight */}
+        {creativeResponse && (
+          <Card className="mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 border-2 shadow-lg">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary mb-4 text-center">
+                🎨 Your Creative Masterpiece
+              </h3>
+              <div className="bg-card rounded-lg p-4 border border-border">
+                <p className="text-sm text-muted-foreground mb-2">
+                  Your response to "{creativeResponse.prompt}":
+                </p>
+                <p className="text-foreground leading-relaxed italic">
+                  "{creativeResponse.response}"
+                </p>
+              </div>
+              <p className="text-center text-sm text-muted-foreground mt-3">
+                Your creativity and thoughts make stories come alive! 🌟
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Personal Message */}
-        <Card className="mb-8 bg-gradient-to-r from-autism-calm-mint to-autism-calm-sky border-autism-primary border-2">
+        <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-primary border-2 shadow-lg">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-semibold text-autism-primary mb-4">
+            <h3 className="text-2xl font-semibold text-primary mb-4">
               🌟 You're Building Real Skills
             </h3>
-            <p className="text-lg text-autism-primary/80 leading-relaxed mb-4">
+            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
               Every time you read, you're getting stronger at understanding words, 
               making connections, and expressing your ideas. That's not just reading - 
               that's becoming a more powerful thinker!
             </p>
-            <p className="text-base text-autism-primary/70 italic">
+            <p className="text-base text-muted-foreground italic">
               "Reading is not just about words on a page. It's about building worlds in your mind."
             </p>
           </CardContent>
@@ -178,19 +222,19 @@ const CelebratePage: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <Button
-            variant="celebration"
-            size="comfortable"
+            variant="default"
+            size="lg"
             onClick={handleContinue}
-            className="text-xl px-8 py-4"
+            className="text-xl px-8 py-4 min-h-[56px] shadow-lg"
           >
             🚀 Read Another Story!
           </Button>
           
           <Button
-            variant="calm"
-            size="comfortable"
+            variant="outline"
+            size="lg"
             onClick={handleFinish}
-            className="text-lg px-6 py-4"
+            className="text-lg px-6 py-4 min-h-[56px]"
           >
             ✨ I'm Done for Now
           </Button>
@@ -198,7 +242,7 @@ const CelebratePage: React.FC = () => {
 
         {/* Encouragement for Next Time */}
         <div className="text-center mt-8">
-          <p className="text-autism-primary/60 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Remember: Every time you read, you're growing your brain! 
             Come back whenever you're ready for your next adventure.
           </p>

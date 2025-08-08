@@ -48,7 +48,7 @@ export const accessibility = {
   }
 }
 
-// Audio utilities for Web Speech API
+// Enhanced Audio utilities for Web Speech API with TTS support
 export const audio = {
   // Check if speech synthesis is supported
   isSpeechSynthesisSupported: (): boolean => {
@@ -61,19 +61,20 @@ export const audio = {
     return speechSynthesis.getVoices()
   },
 
-  // Get child-friendly voices
+  // Get child-friendly voices (enhanced filtering)
   getChildVoices: (): SpeechSynthesisVoice[] => {
     const voices = audio.getVoices()
     return voices.filter(voice => 
       voice.name.toLowerCase().includes('child') ||
       voice.name.toLowerCase().includes('kid') ||
       voice.name.toLowerCase().includes('young') ||
+      voice.name.toLowerCase().includes('female') ||
       (voice.name.toLowerCase().includes('female') && voice.lang.startsWith('en'))
     )
   },
 
-  // Speak text with accessibility options
-  speak: (
+  // Enhanced speak function with better error handling and options
+  speak: async (
     text: string, 
     options: {
       rate?: number
@@ -104,6 +105,22 @@ export const audio = {
       utterance.onend = () => resolve()
       utterance.onerror = (event) => reject(event.error)
 
+      speechSynthesis.speak(utterance)
+    })
+  },
+
+  // Simple speak function (alternative interface matching your requested code)
+  speakSimple: async (text: string, options: any = {}): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (!audio.isSpeechSynthesisSupported()) {
+        reject(new Error('Speech synthesis not supported'))
+        return
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text)
+      Object.assign(utterance, options)
+      utterance.onend = () => resolve()
+      utterance.onerror = (event) => reject(event)
       speechSynthesis.speak(utterance)
     })
   },

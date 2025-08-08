@@ -11,6 +11,9 @@ import CreatePage from './pages/CreatePage'
 import CelebratePage from './pages/CelebratePage'
 import NotFoundPage from './pages/NotFoundPage'
 
+// Import Zustand store
+import { useSessionStore } from '@/stores/sessionStore'
+
 // Accessibility preference types
 type AccessibilityMode = 'default' | 'adhd' | 'dyslexia' | 'autism'
 type FontSize = 'default' | 'large' | 'extra-large'
@@ -20,6 +23,9 @@ function App() {
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [showCalmCorner, setShowCalmCorner] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+
+  // Zustand store for session management
+  const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
 
   // Load preferences on app start
   useEffect(() => {
@@ -35,6 +41,9 @@ function App() {
     preferences.setAccessibilityMode(savedMode)
     preferences.setFontSize(savedFontSize)
 
+    // Apply accessibility classes to document body
+    document.body.className = `${savedMode}-mode font-${savedFontSize}`
+
     // Apply reduced motion preference
     if (prefersReducedMotion) {
       document.documentElement.style.setProperty('--animation-duration', '0.01ms')
@@ -46,13 +55,48 @@ function App() {
   const handleAccessibilityModeChange = (mode: AccessibilityMode) => {
     setAccessibilityMode(mode)
     preferences.setAccessibilityMode(mode)
+    
+    // Update body class
+    document.body.className = `${mode}-mode font-${fontSize}`
+    
+    // Announce change to screen readers
+    const announcement = `Accessibility mode changed to ${mode === 'default' ? 'default' : mode + ' mode'}`
+    announceToScreenReader(announcement)
   }
 
   // Handle font size change
   const handleFontSizeChange = (size: FontSize) => {
     setFontSize(size)
     preferences.setFontSize(size)
+    
+    // Update body class
+    document.body.className = `${accessibilityMode}-mode font-${size}`
+    
+    // Announce change to screen readers
+    const announcement = `Font size changed to ${size === 'default' ? 'default' : size}`
+    announceToScreenReader(announcement)
   }
+
+  // Helper function to announce to screen readers
+  const announceToScreenReader = (message: string) => {
+    const announcer = document.getElementById('accessibility-announcements')
+    if (announcer) {
+      announcer.textContent = message
+      // Clear after a moment to allow for new announcements
+      setTimeout(() => {
+        announcer.textContent = ''
+      }, 1000)
+    }
+  }
+
+  // Handle calm corner toggle
+  const handleCalmCornerToggle = () => {
+    setShowCalmCorner(!showCalmCorner)
+    toggleCalmCorner()
+  }
+
+  // Get current session progress for navigation display
+  const sessionProgress = getSessionProgress()
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -67,18 +111,36 @@ function App() {
           {/* Logo/Home Link */}
           <Link href="/">
             <Button variant="ghost" className="text-2xl font-bold">
-              Vedyx Leap
+              <span className="text-primary">Vedyx</span> Leap
             </Button>
           </Link>
+
+          {/* Session Progress Indicator */}
+          {sessionProgress.step > 0 && (
+            <div className="hidden md:flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">
+                Session Progress
+              </span>
+              <div className="w-32 bg-muted rounded-full h-2">
+                <div 
+                  className="bg-primary h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${sessionProgress.progressPercent}%` }}
+                />
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {sessionProgress.step}/{sessionProgress.totalSteps}
+              </span>
+            </div>
+          )}
 
           {/* Navigation Actions */}
           <div className="flex items-center gap-4">
             {/* Calm Corner Button - Always Accessible */}
             <Button
               variant="calm"
-              onClick={() => setShowCalmCorner(true)}
+              onClick={handleCalmCornerToggle}
               aria-label="Open calm corner for emotional regulation"
-              className="no-print"
+              className={`no-print ${isInCalmCorner ? 'ring-2 ring-primary' : ''}`}
             >
               🕊️ Calm Corner
             </Button>
@@ -92,7 +154,8 @@ function App() {
                 id="accessibility-mode"
                 value={accessibilityMode}
                 onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
-                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm"
+                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm min-w-[120px]"
+                aria-describedby="accessibility-mode-help"
               >
                 <option value="default">Default</option>
                 <option value="adhd">ADHD Mode</option>
@@ -107,7 +170,8 @@ function App() {
                 id="font-size"
                 value={fontSize}
                 onChange={(e) => handleFontSizeChange(e.target.value as FontSize)}
-                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm"
+                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm min-w-[100px]"
+                aria-describedby="font-size-help"
               >
                 <option value="default">Default Size</option>
                 <option value="large">Large Text</option>
@@ -158,21 +222,26 @@ function App() {
       {/* Calm Corner Modal */}
       <CalmCornerModal
         open={showCalmCorner}
-        onOpenChange={setShowCalmCorner}
+        onOpenChange={(open) => {
+          setShowCalmCorner(open)
+          if (!open && isInCalmCorner) {
+            toggleCalmCorner()
+          }
+        }}
         onBreathingExercise={() => {
           // TODO: Implement breathing exercise
           console.log('Starting breathing exercise')
-          setShowCalmCorner(false)
+          announceToScreenReader('Starting breathing exercise')
         }}
         onCalmMusic={() => {
           // TODO: Implement calm music
           console.log('Playing calm music')
-          setShowCalmCorner(false)
+          announceToScreenReader('Playing calm music')
         }}
         onSafeSpace={() => {
           // TODO: Implement safe space visualization
           console.log('Opening safe space')
-          setShowCalmCorner(false)
+          announceToScreenReader('Opening safe space visualization')
         }}
       />
 
@@ -186,9 +255,45 @@ function App() {
         {/* Screen reader announcements will be inserted here dynamically */}
       </div>
 
+      {/* Session Status for Screen Readers */}
+      <div className="sr-only" aria-live="polite" id="session-status">
+        {sessionProgress.step > 0 && (
+          <span>
+            Currently in learning session, step {sessionProgress.step} of {sessionProgress.totalSteps}
+          </span>
+        )}
+      </div>
+
+      {/* Hidden accessibility help text */}
+      <div className="sr-only">
+        <div id="accessibility-mode-help">
+          Choose an accessibility mode that works best for your learning needs
+        </div>
+        <div id="font-size-help">
+          Adjust text size for comfortable reading
+        </div>
+      </div>
+
       {/* Dynamic CSS for accessibility modes */}
       <style dangerouslySetInnerHTML={{
         __html: `
+          /* Skip Link Styles */
+          .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+          }
+          
+          .skip-link:focus {
+            top: 6px;
+          }
+
           /* ADHD Mode Styles */
           .adhd-mode {
             --background: 0 0% 0%;
@@ -199,6 +304,8 @@ function App() {
             --input: 0 0% 100%;
             --ring: 60 100% 50%;
             --card: 0 0% 5%;
+            --muted: 0 0% 10%;
+            --muted-foreground: 0 0% 80%;
           }
 
           .adhd-mode * {
@@ -220,6 +327,8 @@ function App() {
             --background: 44 87% 94%;
             --foreground: 36 100% 12%;
             --card: 44 100% 97%;
+            --muted: 44 50% 88%;
+            --muted-foreground: 36 50% 40%;
           }
 
           .dyslexia-mode *, .dyslexia-mode *::before, .dyslexia-mode *::after {
@@ -232,6 +341,8 @@ function App() {
             --card: 210 17% 98%;
             --primary: 209 100% 57%;
             --secondary: 77 100% 57%;
+            --muted: 152 40% 85%;
+            --muted-foreground: 209 50% 30%;
           }
 
           /* Font Size Overrides */
@@ -264,6 +375,19 @@ function App() {
               scroll-behavior: auto !important;
             }
           ` : ''}
+
+          /* Focus Management */
+          :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+          }
+
+          /* High Contrast for Better Accessibility */
+          @media (prefers-contrast: high) {
+            :root {
+              --border: 0 0% 20%;
+            }
+          }
         `
       }} />
     </div>

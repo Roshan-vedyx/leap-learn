@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+// src/pages/BrainCheckPage.tsx - Simplified for MVP
+import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { EmotionalCard } from '@/components/ui/Card'
+import { useSessionStore } from '@/stores/sessionStore'
 
 // Brain state options for neurodivergent students
 interface BrainState {
@@ -52,7 +53,7 @@ const brainStates: BrainState[] = [
     label: 'Feeling Overwhelmed',
     emoji: '🌊',
     description: "There's a lot going on and I need things to be calm.",
-    color: 'bg-autism-calm-mint border-autism-primary',
+    color: 'bg-teal-100 border-teal-400',
     mood: 'calm'
   },
   {
@@ -68,16 +69,40 @@ const brainStates: BrainState[] = [
 const BrainCheckPage: React.FC = () => {
   const [selectedState, setSelectedState] = useState<string | null>(null)
   const [, setLocation] = useLocation()
+  
+  // Zustand store actions
+  const { setBrainState, resetSession, currentBrainState } = useSessionStore()
+
+  // Reset session when starting fresh
+  useEffect(() => {
+    resetSession()
+  }, [resetSession])
+
+  // Restore previous selection if available
+  useEffect(() => {
+    if (currentBrainState) {
+      setSelectedState(currentBrainState.id)
+    }
+  }, [currentBrainState])
 
   const handleStateSelect = (stateId: string) => {
     setSelectedState(stateId)
+    const brainState = brainStates.find(state => state.id === stateId)
+    if (brainState) {
+      setBrainState(brainState)
+      
+      // Announce selection for screen readers
+      const announcement = `Selected ${brainState.label}. ${brainState.description}`
+      const announcer = document.getElementById('accessibility-announcements')
+      if (announcer) {
+        announcer.textContent = announcement
+      }
+    }
   }
 
   const handleContinue = () => {
     if (selectedState) {
-      // Store the brain state for adaptive content selection
-      localStorage.setItem('current-brain-state', selectedState)
-      // Navigate to story selection
+      // Navigate to story selection with state already stored
       setLocation('/story')
     }
   }
@@ -85,14 +110,14 @@ const BrainCheckPage: React.FC = () => {
   const selectedBrainState = brainStates.find(state => state.id === selectedState)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky p-4">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
       <div className="max-w-4xl mx-auto py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-autism-primary mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
             How's Your Brain Today?
           </h1>
-          <p className="text-xl text-autism-primary/80 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             Let's check in with how you're feeling so I can find the perfect story for your brain today! 
             There's no wrong answer - just pick what feels right.
           </p>
@@ -101,15 +126,13 @@ const BrainCheckPage: React.FC = () => {
         {/* Brain State Selection Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {brainStates.map((state) => (
-            <EmotionalCard
+            <Card
               key={state.id}
-              mood={state.mood}
-              interactive="full"
               className={`
-                cursor-pointer transition-all duration-200 h-full
+                cursor-pointer transition-all duration-200 h-full border-2
                 ${selectedState === state.id 
-                  ? 'ring-4 ring-autism-primary ring-offset-2 scale-105' 
-                  : 'hover:scale-102'
+                  ? 'ring-4 ring-primary ring-offset-2 scale-105 shadow-lg' 
+                  : 'hover:scale-102 hover:shadow-md'
                 }
                 ${state.color}
               `}
@@ -117,6 +140,7 @@ const BrainCheckPage: React.FC = () => {
               role="button"
               tabIndex={0}
               aria-pressed={selectedState === state.id}
+              aria-label={`Select brain state: ${state.label}. ${state.description}`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
@@ -128,25 +152,25 @@ const BrainCheckPage: React.FC = () => {
                 <div className="text-6xl mb-4" role="img" aria-label={state.label}>
                   {state.emoji}
                 </div>
-                <h3 className="text-xl font-semibold text-autism-primary mb-3">
+                <h3 className="text-xl font-semibold text-primary mb-3">
                   {state.label}
                 </h3>
-                <p className="text-autism-primary/80 leading-relaxed text-base">
+                <p className="text-muted-foreground leading-relaxed text-base">
                   {state.description}
                 </p>
               </CardContent>
-            </EmotionalCard>
+            </Card>
           ))}
         </div>
 
         {/* Selected State Confirmation */}
         {selectedBrainState && (
-          <Card className="mb-8 bg-autism-neutral border-autism-primary border-2 animate-calm-fade">
+          <Card className="mb-8 bg-card border-primary border-2 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-center text-2xl text-autism-primary">
+              <CardTitle className="text-center text-2xl text-primary">
                 Perfect! Your brain is feeling {selectedBrainState.label.toLowerCase()} today
               </CardTitle>
-              <CardDescription className="text-center text-lg text-autism-primary/80">
+              <CardDescription className="text-center text-lg text-muted-foreground">
                 I'll find stories that match your energy level and help you have the best reading experience.
               </CardDescription>
             </CardHeader>
@@ -158,17 +182,17 @@ const BrainCheckPage: React.FC = () => {
           <Button
             onClick={handleContinue}
             disabled={!selectedState}
-            variant="celebration"
-            size="comfortable"
-            className="text-xl px-8 py-4"
+            variant={selectedState ? "default" : "secondary"}
+            size="lg"
+            className="text-xl px-8 py-4 min-h-[56px]"
           >
-            {selectedState ? "Let's Find Your Perfect Story!" : "Pick How You're Feeling First"}
+            {selectedState ? "Let's Find Your Perfect Story! 📚" : "Pick How You're Feeling First"}
           </Button>
         </div>
 
         {/* Help Text */}
         <div className="text-center mt-8">
-          <p className="text-autism-primary/60 text-sm leading-relaxed">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Remember: You can change your mind anytime! This just helps me suggest the best stories for you right now.
           </p>
         </div>
