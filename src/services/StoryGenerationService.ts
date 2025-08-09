@@ -26,8 +26,21 @@ export class StoryGenerationService {
     brainState: string
   ): Promise<MultiVersionStory> {
     
-    // For now, we'll use sophisticated mock generation
-    // Later this will be replaced with actual AI API calls
+    // Try AI generation first, fallback to mock if it fails
+    try {
+      const { AIStoryService } = await import('./AIStoryService')
+      return await AIStoryService.generateStory(selectedInterests, brainState)
+    } catch (error) {
+      console.warn('AI generation failed, using mock generation:', error)
+      return this.generateMockStory(selectedInterests, brainState)
+    }
+  }
+
+  // Keep the existing mock generation as fallback
+  private static generateMockStory(
+    selectedInterests: string[], 
+    brainState: string
+  ): MultiVersionStory {
     
     // Create a story concept by combining interests
     const concept = this.createStoryConcept(selectedInterests)
