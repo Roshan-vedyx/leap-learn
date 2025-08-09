@@ -190,6 +190,51 @@ export interface LoadingState {
   progress?: number
 }
 
+// Multi-Version Story Support
+export interface StoryVersion {
+  content: StoryContent[]
+  readingTime: string
+  vocabulary: 'basic' | 'standard' | 'advanced'
+  averageWordsPerSentence: number
+  phonicsComplexity: 'basic' | 'intermediate' | 'advanced'
+}
+
+export interface MultiVersionStory extends Omit<Story, 'content'> {
+  concept: string
+  interests: string[]
+  versions: {
+    simple: StoryVersion
+    full: StoryVersion
+    challenge: StoryVersion
+  }
+}
+
+// Complexity Level Type
+export type ComplexityLevel = 'simple' | 'full' | 'challenge'
+
+// Interest Selection Types
+export interface InterestTopic {
+  id: string
+  label: string
+  emoji: string
+  description: string
+  color: string
+  category: 'nature' | 'technology' | 'social' | 'adventure' | 'mystery' | 'creative'
+}
+
+// Story Generation Types
+export interface StoryGenerationRequest {
+  interests: string[]
+  brainState: BrainState
+  complexityPreference?: ComplexityLevel
+}
+
+export interface StoryGenerationResult {
+  story: MultiVersionStory
+  generationTime: number
+  selectedComplexity: ComplexityLevel
+}
+
 // API Response Types (for future backend integration)
 export interface ApiResponse<T> {
   data: T
@@ -208,7 +253,11 @@ export const STORAGE_KEYS = {
   CREATIVE_RESPONSE: 'creative-response',
   COMPLETED_SESSIONS: 'completed-sessions',
   USER_PROGRESS: 'user-progress',
-  PHONICS_PROGRESS: 'phonics-progress'
+  PHONICS_PROGRESS: 'phonics-progress',
+  SELECTED_INTERESTS: 'selected-interests',
+  CURRENT_GENERATED_STORY: 'current-generated-story',
+  CURRENT_COMPLEXITY_LEVEL: 'current-complexity-level',
+  STORY_GENERATION_HISTORY: 'story-generation-history'
 } as const
 
 // Validation Types

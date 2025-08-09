@@ -10,6 +10,8 @@ import StoryPage from './pages/StoryPage'
 import CreatePage from './pages/CreatePage'
 import CelebratePage from './pages/CelebratePage'
 import NotFoundPage from './pages/NotFoundPage'
+import InterestSelectionPage from './pages/InterestSelectionPage'
+import StoryGenerationPage from '@/pages/StoryGenerationPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -209,6 +211,15 @@ function App() {
             {/* Celebration page */}
             <Route path="/celebrate">
               <CelebratePage />
+            </Route>
+
+            {/* Interest Selection page */}
+            <Route path="/interests">
+              <InterestSelectionPage />
+            </Route>
+
+            <Route path="/story-generate">
+              <StoryGenerationPage />
             </Route>
 
             {/* 404 Not Found - catch all other routes */}

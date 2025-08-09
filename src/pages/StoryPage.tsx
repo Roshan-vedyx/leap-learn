@@ -1,16 +1,15 @@
-// src/pages/StoryPage.tsx - Simplified for MVP
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { useSessionStore } from '@/stores/sessionStore'
-import { audio } from '@/lib/utils'
+import { audio, storage } from '@/lib/utils'
+import { ComplexityLevel, MultiVersionStory } from '@/types'
 
 interface StoryPageProps {
   storyId?: string
 }
 
-// Mock story data - in real app this would come from API/database
+// Mock story data for fallback - keeping your existing structure
 const mockStories = {
   'space-adventure': {
     id: 'space-adventure',
@@ -41,57 +40,6 @@ const mockStories = {
         phonicsFocus: ['gleamed', 'starlight', 'searching', 'months']
       }
     ]
-  },
-  // Add more stories based on brain state
-  'calm-garden': {
-    id: 'calm-garden',
-    title: 'The Whispering Garden',
-    level: 'Grade 4',
-    readingTime: '6 minutes',
-    phonicsSkills: ['soft sounds', 'gentle rhythm'],
-    content: [
-      {
-        type: 'paragraph',
-        text: "Emma stepped softly into the quiet garden. The gentle breeze made the leaves whisper ancient secrets.",
-        phonicsFocus: ['softly', 'gentle', 'whisper']
-      },
-      {
-        type: 'paragraph',
-        text: "She found a peaceful spot by the bubbling brook. The water sang a calming song as it flowed over smooth stones.",
-        phonicsFocus: ['peaceful', 'bubbling', 'calming', 'smooth']
-      },
-      {
-        type: 'phonics-moment',
-        skill: 'soft sounds',
-        words: ['softly', 'gentle', 'peaceful', 'smooth'],
-        instruction: 'These words have soft, gentle sounds that match the peaceful garden.'
-      }
-    ]
-  },
-  'high-energy': {
-    id: 'high-energy',
-    title: 'The Lightning Fast Bike Race',
-    level: 'Grade 4', 
-    readingTime: '7 minutes',
-    phonicsSkills: ['action words', 'quick sounds'],
-    content: [
-      {
-        type: 'paragraph',
-        text: "ZOOM! Alex's bike shot forward like a rocket! The crowd cheered as she raced around the sharp turn.",
-        phonicsFocus: ['shot', 'rocket', 'cheered', 'sharp']
-      },
-      {
-        type: 'paragraph',
-        text: "Her heart pumped fast as she pedaled harder. The finish line was getting closer and closer!",
-        phonicsFocus: ['pumped', 'pedaled', 'harder', 'closer']
-      },
-      {
-        type: 'phonics-moment',
-        skill: 'action words',
-        words: ['shot', 'raced', 'pumped', 'pedaled'],
-        instruction: 'These action words have sharp, energetic sounds that match the exciting race!'
-      }
-    ]
   }
 }
 
@@ -99,66 +47,70 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
   const [currentSection, setCurrentSection] = useState(0)
   const [isReading, setIsReading] = useState(false)
   const [readingMode, setReadingMode] = useState<'text' | 'audio' | 'both'>('text')
+  const [complexityLevel, setComplexityLevel] = useState<ComplexityLevel>('full')
+  const [showComplexityHint, setShowComplexityHint] = useState(false)
   const [, setLocation] = useLocation()
 
-  // Zustand store
-  const { currentBrainState, setStoryId } = useSessionStore()
-
-  // Select story based on brain state or provided storyId
-  const getAdaptiveStory = () => {
-    if (storyId && mockStories[storyId as keyof typeof mockStories]) {
-      return mockStories[storyId as keyof typeof mockStories]
-    }
-
-    // Adaptive story selection based on brain state
-    if (currentBrainState) {
-      switch (currentBrainState.mood) {
-        case 'calm':
-          return mockStories['calm-garden']
-        case 'energetic':
-          return mockStories['high-energy']
-        case 'focused':
-        case 'neutral':
-        default:
-          return mockStories['space-adventure']
+  // Get story data - prioritize generated story, fallback to mock
+  const getStoryData = (): MultiVersionStory | any => {
+    const generatedStory = storage.get('current-generated-story', null)
+    if (generatedStory) {
+      // Check if it's already an object or needs parsing
+      if (typeof generatedStory === 'string') {
+        try {
+          return JSON.parse(generatedStory)
+        } catch (error) {
+          console.error('Error parsing generated story:', error)
+          // Clear corrupted data and fall back to mock
+          localStorage.removeItem('current-generated-story')
+          return storyId ? mockStories[storyId as keyof typeof mockStories] : mockStories['space-adventure']
+        }
+      } else {
+        // Already an object, return as-is
+        return generatedStory
       }
     }
-    
-    return mockStories['space-adventure']
+    // Fallback to existing mock story structure
+    return storyId ? mockStories[storyId as keyof typeof mockStories] : mockStories['space-adventure']
   }
 
-  const story = getAdaptiveStory()
+  const story = getStoryData()
+  const isMultiVersion = story.versions && story.versions[complexityLevel]
+
+  // Get brain state for adaptive presentation
+  const brainState = storage.get('current-brain-state', 'focused')
+  
+  // Get saved complexity level or use default
+  useEffect(() => {
+    const savedComplexity = storage.get('current-complexity-level', 'full') as ComplexityLevel
+    setComplexityLevel(savedComplexity)
+  }, [])
 
   useEffect(() => {
-    // Set the story ID in global state
-    setStoryId(story.id)
-
     // Adapt presentation based on brain state
-    if (currentBrainState) {
-      switch (currentBrainState.id) {
-        case 'overwhelmed':
-          setReadingMode('text') // Start with calm text-only mode
-          break
-        case 'energetic':
-        case 'excited':
-          setReadingMode('both') // More stimulating multi-modal
-          break
-        case 'tired':
-          setReadingMode('audio') // Less visual strain
-          break
-        default:
-          setReadingMode('text')
-      }
+    if (brainState === 'overwhelmed') {
+      setReadingMode('text') // Start with calm text-only mode
+      setComplexityLevel('simple') // Start with simpler version
+    } else if (brainState === 'energetic') {
+      setReadingMode('both') // More stimulating multi-modal
     }
-  }, [currentBrainState, story.id, setStoryId])
+  }, [brainState])
+
+  // Show complexity hint after first section for new users
+  useEffect(() => {
+    if (currentSection === 1 && isMultiVersion && !storage.get('complexity-hint-shown', false)) {
+      setShowComplexityHint(true)
+      storage.set('complexity-hint-shown', true)
+    }
+  }, [currentSection, isMultiVersion])
 
   const handleReadAloud = async (text: string) => {
-    if (!audio?.isSpeechSynthesisSupported()) return
+    if (!audio.isSpeechSynthesisSupported()) return
     
     setIsReading(true)
     try {
-      const voices = audio.getChildVoices?.() || audio.getVoices()
-      const selectedVoice = voices[0] || null
+      const voices = audio.getChildVoices()
+      const selectedVoice = voices[0] || audio.getVoices()[0]
       
       await audio.speak(text, {
         voice: selectedVoice,
@@ -173,15 +125,12 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
   }
 
   const handleNextSection = () => {
-    if (currentSection < story.content.length - 1) {
+    const maxSections = isMultiVersion 
+      ? story.versions[complexityLevel].content.length 
+      : story.content.length
+
+    if (currentSection < maxSections - 1) {
       setCurrentSection(currentSection + 1)
-      
-      // Announce progress for screen readers
-      const announcement = `Moving to section ${currentSection + 2} of ${story.content.length}`
-      const announcer = document.getElementById('accessibility-announcements')
-      if (announcer) {
-        announcer.textContent = announcement
-      }
     } else {
       // Story complete, go to creation page
       setLocation('/create')
@@ -194,134 +143,224 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
     }
   }
 
-  const currentContent = story.content[currentSection]
-  const isPhonicsmoment = currentContent.type === 'phonics-moment'
+  const handleComplexityChange = (newLevel: ComplexityLevel) => {
+    setComplexityLevel(newLevel)
+    storage.set('current-complexity-level', newLevel)
+    setShowComplexityHint(false)
+  }
+
+  const dismissComplexityHint = () => {
+    setShowComplexityHint(false)
+  }
+
+  // Get current content based on story structure
+  const getCurrentContent = () => {
+    if (isMultiVersion) {
+      return story.versions[complexityLevel].content[currentSection]
+    }
+    return story.content[currentSection]
+  }
+
+  const getTotalSections = () => {
+    if (isMultiVersion) {
+      return story.versions[complexityLevel].content.length
+    }
+    return story.content.length
+  }
+
+  const getReadingTime = () => {
+    if (isMultiVersion) {
+      return story.versions[complexityLevel].readingTime
+    }
+    return story.readingTime
+  }
+
+  const currentContent = getCurrentContent()
+  const totalSections = getTotalSections()
+  const isPhonicsМoment = currentContent.type === 'phonics-moment'
+
+  const complexityLabels = {
+    simple: { label: 'Simpler', emoji: '🌱', description: 'Shorter sentences, easier words' },
+    full: { label: 'Just Right', emoji: '🎯', description: 'Standard complexity' },
+    challenge: { label: 'Challenge Me', emoji: '🚀', description: 'Rich vocabulary, complex ideas' }
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-b from-autism-calm-sky to-autism-calm-mint p-4">
       <div className="max-w-4xl mx-auto py-8">
         {/* Story Header */}
-        <Card className="mb-6 bg-card border-primary border-2 shadow-lg">
+        <Card className="mb-6 bg-autism-neutral border-autism-primary border-2">
           <CardHeader>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <CardTitle className="text-3xl text-primary mb-2">
+                <CardTitle className="text-3xl text-autism-primary mb-2">
                   {story.title}
                 </CardTitle>
-                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                  <span>📚 {story.level}</span>
-                  <span>⏱️ {story.readingTime}</span>
-                  <span>🎯 Skills: {story.phonicsSkills.join(', ')}</span>
-                  {currentBrainState && (
-                    <span>🧠 Adapted for: {currentBrainState.label}</span>
+                <div className="flex flex-wrap gap-4 text-sm text-autism-primary/80">
+                  <span>📚 {story.level || 'Adaptive Grade Level'}</span>
+                  <span>⏱️ {getReadingTime()}</span>
+                  <span>🎯 Skills: {story.phonicsSkills?.join(', ') || 'Reading & Comprehension'}</span>
+                  {isMultiVersion && (
+                    <span>✨ {story.concept}</span>
                   )}
-                </div>
-              </div>
-              
-              {/* Reading Mode Controls */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-primary">Reading Mode:</label>
-                <div className="flex gap-2">
-                  <Button
-                    variant={readingMode === 'text' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setReadingMode('text')}
-                  >
-                    📖 Text
-                  </Button>
-                  <Button
-                    variant={readingMode === 'audio' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setReadingMode('audio')}
-                  >
-                    🎧 Audio
-                  </Button>
-                  <Button
-                    variant={readingMode === 'both' ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setReadingMode('both')}
-                  >
-                    🎭 Both
-                  </Button>
                 </div>
               </div>
             </div>
           </CardHeader>
         </Card>
 
-        {/* Progress Indicator */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-muted-foreground">Story Progress</span>
-            <span className="text-sm text-muted-foreground">
-              {currentSection + 1} of {story.content.length}
-            </span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-3">
-            <div 
-              className="bg-primary h-3 rounded-full transition-all duration-500"
-              style={{ width: `${((currentSection + 1) / story.content.length) * 100}%` }}
-            />
-          </div>
-        </div>
+        {/* Complexity Switcher - Only show for multi-version stories */}
+        {isMultiVersion && (
+          <Card className="mb-6 bg-white border-autism-secondary border-2">
+            <CardContent className="p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold text-autism-primary mb-1">Reading Level</h3>
+                  <p className="text-sm text-autism-primary/70">Switch anytime to match how you're feeling</p>
+                </div>
+                <div className="flex gap-2">
+                  {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => {
+                    const info = complexityLabels[level]
+                    const isActive = complexityLevel === level
+                    
+                    return (
+                      <Button
+                        key={level}
+                        variant={isActive ? 'celebration' : 'outline'}
+                        size="comfortable"
+                        onClick={() => handleComplexityChange(level)}
+                        className={`flex flex-col items-center p-3 h-auto ${
+                          isActive ? 'transform scale-105' : 'hover:scale-105'
+                        }`}
+                        aria-pressed={isActive}
+                        aria-label={`Switch to ${info.label} level: ${info.description}`}
+                      >
+                        <span className="text-lg mb-1">{info.emoji}</span>
+                        <span className="text-sm font-medium">{info.label}</span>
+                      </Button>
+                    )
+                  })}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Complexity Hint - Show once for new users */}
+        {showComplexityHint && (
+          <Card className="mb-6 bg-autism-calm-lavender border-autism-secondary border-2 animate-pulse">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">💡</span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-autism-primary mb-2">
+                    You're in control! 
+                  </h3>
+                  <p className="text-autism-primary/80 mb-3">
+                    If this feels too easy or too hard, try switching the reading level above. 
+                    The story stays the same - just the way it's told changes!
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={dismissComplexityHint}
+                  >
+                    Got it! ✓
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Reading Mode Controls */}
+        <Card className="mb-6 bg-autism-calm-mint border-autism-primary">
+          <CardContent className="p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h3 className="font-semibold text-autism-primary mb-1">How do you want to read?</h3>
+                <p className="text-sm text-autism-primary/70">Choose what works best for your brain today</p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={readingMode === 'text' ? 'celebration' : 'outline'}
+                  size="comfortable"
+                  onClick={() => setReadingMode('text')}
+                  aria-pressed={readingMode === 'text'}
+                >
+                  📖 Read
+                </Button>
+                <Button
+                  variant={readingMode === 'audio' ? 'celebration' : 'outline'}
+                  size="comfortable"
+                  onClick={() => setReadingMode('audio')}
+                  aria-pressed={readingMode === 'audio'}
+                >
+                  🎧 Listen
+                </Button>
+                <Button
+                  variant={readingMode === 'both' ? 'celebration' : 'outline'}
+                  size="comfortable"
+                  onClick={() => setReadingMode('both')}
+                  aria-pressed={readingMode === 'both'}
+                >
+                  👁️👂 Both
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Story Content */}
-        <Card className={`mb-6 ${isPhonicsmoment ? 'bg-yellow-50 border-yellow-400 border-2' : 'bg-card border-border'} shadow-lg`}>
+        <Card className="mb-6 bg-white border-autism-primary border-2">
           <CardContent className="p-8">
-            {isPhonicsmoment ? (
-              // Phonics Learning Moment
-              <div className="text-center">
-                <div className="text-4xl mb-4">🎯</div>
-                <h3 className="text-2xl font-semibold text-primary mb-4">
-                  Stealth Phonics Moment!
-                </h3>
-                <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  {(currentContent as any).instruction}
-                </p>
-                <div className="flex flex-wrap justify-center gap-4 mb-6">
+            {isPhonicsМoment ? (
+              // Phonics Moment - Keep your existing structure
+              <div>
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl md:text-3xl font-bold text-autism-primary mb-4">
+                    🎯 Reading Skill Moment
+                  </h3>
+                  <p className="text-lg text-autism-primary/80 leading-relaxed mb-6">
+                    {(currentContent as any).instruction}
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                   {(currentContent as any).words.map((word: string, index: number) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      size="lg"
-                      onClick={() => handleReadAloud(word)}
-                      className="text-xl font-bold min-h-[56px] hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {word}
-                    </Button>
+                    <Card key={index} className="bg-autism-calm-mint border-autism-secondary cursor-pointer hover:bg-autism-secondary hover:text-white transition-colors">
+                      <CardContent className="p-4 text-center" onClick={() => handleReadAloud(word)}>
+                        <span className="text-xl font-bold">{word}</span>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Click any word to hear how it sounds!
-                </p>
+                
+                <div className="text-center">
+                  <p className="text-autism-primary/70 text-sm mb-4">
+                    Click any word to hear it pronounced!
+                  </p>
+                </div>
               </div>
             ) : (
               // Regular Story Content
               <div>
-                <div className="text-xl md:text-2xl leading-relaxed text-foreground mb-6 font-readable">
+                <div className="text-xl md:text-2xl leading-relaxed text-autism-primary mb-6 font-readable">
                   {(currentContent as any).text}
                 </div>
                 
                 {/* Phonics-focused words highlighting */}
                 {(currentContent as any).phonicsFocus && (
-                  <div className="mt-6 p-4 bg-muted rounded-lg">
-                    <h4 className="text-lg font-semibold text-primary mb-3">
+                  <div className="mt-6 p-4 bg-autism-calm-mint rounded-lg">
+                    <h4 className="text-lg font-semibold text-autism-primary mb-3">
                       🔍 Word Detective: Can you find these special words?
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {(currentContent as any).phonicsFocus.map((word: string, index: number) => (
                         <span
                           key={index}
-                          className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:bg-primary/80 transition-colors"
+                          className="bg-autism-secondary text-white px-3 py-1 rounded-full text-sm font-medium cursor-pointer hover:bg-autism-secondary/80"
                           onClick={() => handleReadAloud(word)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault()
-                              handleReadAloud(word)
-                            }
-                          }}
                         >
                           {word}
                         </span>
@@ -335,15 +374,15 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
         </Card>
 
         {/* Audio Controls */}
-        {(readingMode === 'audio' || readingMode === 'both') && !isPhonicsmoment && (
-          <Card className="mb-6 bg-purple-50 border-purple-200 shadow-lg">
+        {(readingMode === 'audio' || readingMode === 'both') && !isPhonicsМoment && (
+          <Card className="mb-6 bg-autism-calm-lavender border-autism-primary">
             <CardContent className="p-6 text-center">
               <Button
-                variant="default"
-                size="lg"
+                variant="celebration"
+                size="comfortable"
                 onClick={() => handleReadAloud((currentContent as any).text)}
                 disabled={isReading}
-                className="text-lg min-h-[56px]"
+                className="text-lg"
               >
                 {isReading ? '🗣️ Reading...' : '🎧 Listen to this part'}
               </Button>
@@ -357,44 +396,36 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
             variant="outline"
             onClick={handlePreviousSection}
             disabled={currentSection === 0}
-            size="lg"
-            className="min-h-[56px]"
+            size="comfortable"
           >
             ← Previous
           </Button>
           
           <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm text-autism-primary/60 mb-2">
+              Section {currentSection + 1} of {totalSections}
+            </p>
+            <p className="text-sm text-autism-primary/60">
               Take your time - there's no rush!
             </p>
           </div>
           
           <Button
-            variant="default"
+            variant="celebration"
             onClick={handleNextSection}
-            size="lg"
-            className="min-h-[56px]"
+            size="comfortable"
           >
-            {currentSection === story.content.length - 1 ? "Time to Create! →" : "Next →"}
-          </Button>
-        </div>
-
-        {/* Back to Brain Check */}
-        <div className="text-center mt-6">
-          <Button
-            variant="ghost"
-            onClick={() => setLocation('/brain-check')}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            ← Change how I'm feeling today
+            {currentSection === totalSections - 1 ? "Time to Create! →" : "Next →"}
           </Button>
         </div>
 
         {/* Accessibility Information */}
         <div className="sr-only">
           <p>
-            You are reading "{story.title}", section {currentSection + 1} of {story.content.length}.
+            You are reading "{story.title}", section {currentSection + 1} of {totalSections}.
+            {isMultiVersion && ` Currently reading at ${complexityLabels[complexityLevel].label} level.`}
             Use the Previous and Next buttons to navigate, or use the audio controls to listen to the content.
+            {isMultiVersion && " You can switch reading levels anytime using the level buttons above."}
             This story includes embedded phonics learning opportunities.
           </p>
         </div>

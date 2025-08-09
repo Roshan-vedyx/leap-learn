@@ -103,7 +103,7 @@ const BrainCheckPage: React.FC = () => {
   const handleContinue = () => {
     if (selectedState) {
       // Navigate to story selection with state already stored
-      setLocation('/story')
+      setLocation('/interests')
     }
   }
 
