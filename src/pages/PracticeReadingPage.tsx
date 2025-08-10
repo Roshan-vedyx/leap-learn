@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
-import { Button } from '@/components/ui/Button'
 import { EmotionalCard } from '@/components/ui/Card'
 import { storage } from '@/lib/utils'
 
@@ -48,28 +47,16 @@ const readingActivities: ReadingActivity[] = [
 ]
 
 const PracticeReadingPage: React.FC = () => {
-  const [selectedActivity, setSelectedActivity] = useState<string | null>(null)
   const [, setLocation] = useLocation()
 
   // Get brain state for personalized recommendations
   const brainState = storage.get('current-brain-state', 'focused')
 
-  const handleActivitySelect = (activityId: string) => {
-    setSelectedActivity(activityId)
+  const handleActivityClick = (activity: ReadingActivity) => {
+    console.log('🚀 Navigating to:', activity.route) // Debug line
+    localStorage.setItem('selected-reading-activity', activity.id)
+    setLocation(activity.route)
   }
-
-  const handleContinue = () => {
-    if (selectedActivity) {
-      const activity = readingActivities.find(a => a.id === selectedActivity)
-      if (activity) {
-        console.log('🚀 Navigating to:', activity.route) // Debug line
-        localStorage.setItem('selected-reading-activity', selectedActivity)
-        setLocation(activity.route)
-      }
-    }
-  }
-
-  const selectedActivityData = readingActivities.find(activity => activity.id === selectedActivity)
 
   // Get personalized recommendation based on brain state
   const getRecommendation = () => {
@@ -112,7 +99,7 @@ const PracticeReadingPage: React.FC = () => {
           </h1>
           <p className="text-xl text-autism-primary/80 leading-relaxed max-w-2xl mx-auto">
             You've got two awesome ways to level up your reading skills. 
-            Both are fun and both make you a stronger reader!
+            Both are fun and both make you a stronger reader! Just click on your choice to get started.
           </p>
         </div>
 
@@ -142,21 +129,18 @@ const PracticeReadingPage: React.FC = () => {
               interactive="full"
               className={`
                 cursor-pointer transition-all duration-200 h-full
-                ${selectedActivity === activity.id 
-                  ? 'ring-4 ring-autism-primary ring-offset-2 scale-105' 
-                  : 'hover:scale-102'
-                }
+                hover:scale-105 hover:shadow-lg
                 ${activity.color}
                 ${recommendation.recommended === activity.id ? 'ring-2 ring-autism-secondary ring-offset-1' : ''}
               `}
-              onClick={() => handleActivitySelect(activity.id)}
+              onClick={() => handleActivityClick(activity)}
               role="button"
               tabIndex={0}
-              aria-pressed={selectedActivity === activity.id}
+              aria-label={`Start ${activity.label} - ${activity.description}`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
-                  handleActivitySelect(activity.id)
+                  handleActivityClick(activity)
                 }
               }}
             >
@@ -214,36 +198,16 @@ const PracticeReadingPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Click indicator */}
+                <div className="text-center mt-4 pt-4 border-t border-autism-primary/20">
+                  <p className="text-sm text-autism-primary/70 font-semibold">
+                    Click to start! 🚀
+                  </p>
+                </div>
               </CardContent>
             </EmotionalCard>
           ))}
-        </div>
-
-        {/* Selected Activity Confirmation */}
-        {selectedActivityData && (
-          <Card className="mb-8 bg-autism-neutral border-autism-primary border-2 animate-calm-fade">
-            <CardHeader>
-              <CardTitle className="text-center text-2xl text-autism-primary">
-                Perfect choice! {selectedActivityData.emoji} {selectedActivityData.label} it is!
-              </CardTitle>
-              <CardDescription className="text-center text-lg text-autism-primary/80">
-                Get ready for {selectedActivityData.duration} of awesome learning!
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        )}
-
-        {/* Continue Button */}
-        <div className="text-center">
-          <Button
-            onClick={handleContinue}
-            disabled={!selectedActivity}
-            variant="celebration"
-            size="comfortable"
-            className="text-xl px-8 py-4"
-          >
-            {selectedActivity ? `Start ${selectedActivityData?.label}!` : "Pick Your Adventure First"}
-          </Button>
         </div>
 
         {/* Help Text */}
@@ -272,7 +236,7 @@ const PracticeReadingPage: React.FC = () => {
             This page lets you choose between two reading practice activities: Word Building and Reading Stories.
             Word Building focuses on breaking apart and building words to understand patterns.
             Reading Stories focuses on comprehension and fluency through engaging narratives.
-            Choose the one that appeals to you most right now.
+            Click on either tile to start that activity immediately.
           </p>
         </div>
       </div>
