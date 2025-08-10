@@ -17,7 +17,7 @@ const TodayIWantToPage: React.FC = () => {
     // Navigate based on choice
     switch(choice) {
       case 'reading':
-        setLocation('/interests'); // or /story depending on your flow
+        setLocation('/practice-reading'); // or /story depending on your flow
         break;
       case 'numbers':
         setLocation('/math-activities'); // Future math section

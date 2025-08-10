@@ -9,13 +9,17 @@ import { useLocation } from 'wouter'
 
 // Import page components
 import BrainCheckPage from './pages/BrainCheckPage'
+import PracticeReadingPage from './pages/PracticeReadingPage'           // ADD THIS LINE
+import WordInterestSelectionPage from './pages/WordInterestSelectionPage' // ADD THIS LINE
+import WordBuildingGamePage from './pages/WordBuildingGamePage'         // ADD THIS LINE
+import SentenceBuildingPage from './pages/SentenceBuildingPage'         // ADD THIS LINE
 import StoryPage from './pages/StoryPage'
 import CreatePage from './pages/CreatePage'
 import CelebratePage from './pages/CelebratePage'
-import NotFoundPage from './pages/NotFoundPage'
 import InterestSelectionPage from './pages/InterestSelectionPage'
-import StoryGenerationPage from '@/pages/StoryGenerationPage'
 import TodayIWantToPage from './pages/TodayIWantToPage'
+import StoryGenerationPage from './pages/StoryGenerationPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -202,6 +206,22 @@ function App() {
               <BrainCheckPage />
             </Route>
 
+            {/* Practice Reading Route */}
+            <Route path="/practice-reading">
+              <PracticeReadingPage />
+            </Route>
+
+            {/* Word Building Routes */}
+            <Route path="/word-building">
+              <WordInterestSelectionPage />
+            </Route>
+            <Route path="/word-building/:theme">
+              {(params) => <WordBuildingGamePage theme={params.theme} />}
+            </Route>
+            <Route path="/sentence-building/:theme">
+              {(params) => <SentenceBuildingPage theme={params.theme} />}
+            </Route>
+            
             {/* Story reading page with optional story ID */}
             <Route path="/story/:storyId?">
               {(params) => <StoryPage storyId={params.storyId} />}
