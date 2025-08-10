@@ -1,4 +1,5 @@
 // src/pages/WordBuildingGamePage.tsx
+// Enhanced to work with new phonemic chunking algorithm
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -32,13 +33,18 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   // Initialize word chunks when word changes
   useEffect(() => {
     if (currentWord) {
+      // Use the NEW enhanced phonemic chunking
       const chunks = breakWordIntoChunks(currentWord)
+      
       // Shuffle chunks for the game
       const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
       setAvailableChunks(shuffledChunks)
       setArrangedChunks([])
       setIsWordComplete(false)
       setShowCelebration(false)
+      
+      // Debug: Log the phonemic chunks being created
+      console.log(`🎯 Phonemic chunking for "${currentWord}":`, chunks)
     }
   }, [currentWord])
 
@@ -253,9 +259,21 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
               <h3 className="text-2xl font-bold text-green-800 mb-2">
                 Amazing! You built "{currentWord.toUpperCase()}"!
               </h3>
-              <p className="text-green-700 text-lg">
+              <p className="text-green-700 text-lg mb-4">
                 You're becoming a word building champion!
               </p>
+              
+              {/* NEW: Show phonemic pattern recognition */}
+              <div className="text-sm text-green-600 mt-2">
+                <p>🎯 You just learned these sound patterns:</p>
+                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                  {breakWordIntoChunks(currentWord).map((chunk, index) => (
+                    <span key={index} className="bg-green-200 text-green-800 px-2 py-1 rounded text-sm font-bold">
+                      {chunk}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -349,7 +367,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         {/* Accessibility Information */}
         <div className="sr-only">
           <p>
-            You are building the word "{currentWord}" using word chunks. 
+            You are building the word "{currentWord}" using phonemic word chunks. 
             Click on available chunks to add them to your word, or click arranged chunks to remove them.
             Use the hint button if you need help, or the reset button to start over.
           </p>
