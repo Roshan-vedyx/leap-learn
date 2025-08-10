@@ -3,6 +3,9 @@ import { Router, Route, Switch, Link } from 'wouter'
 import { accessibility, preferences } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { CalmCornerModal } from '@/components/ui/Modal'
+import { Card, CardContent } from '@/components/ui/Card'
+import { useLocation } from 'wouter'
+
 
 // Import page components
 import BrainCheckPage from './pages/BrainCheckPage'
@@ -12,6 +15,7 @@ import CelebratePage from './pages/CelebratePage'
 import NotFoundPage from './pages/NotFoundPage'
 import InterestSelectionPage from './pages/InterestSelectionPage'
 import StoryGenerationPage from '@/pages/StoryGenerationPage'
+import TodayIWantToPage from './pages/TodayIWantToPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -218,8 +222,45 @@ function App() {
               <InterestSelectionPage />
             </Route>
 
+            {/* New: Today I Want To page */}
+            <Route path="/today-i-want-to">
+              <TodayIWantToPage />
+            </Route>
+
             <Route path="/story-generate">
               <StoryGenerationPage />
+            </Route>
+
+            {/* Math activities placeholder (for future implementation) */}
+            <Route path="/math-activities">
+              <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 p-4 flex items-center justify-center">
+                <Card className="text-center p-8">
+                  <CardContent>
+                    <div className="text-6xl mb-4">🔢</div>
+                    <h1 className="text-3xl font-bold mb-4">Math Adventures Coming Soon!</h1>
+                    <p className="text-lg mb-6">We're building awesome number activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')}>
+                      Back to Today I Want To
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </Route>
+
+            {/* Gentle activities placeholder (for future implementation) */}
+            <Route path="/gentle-activities">
+              <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 p-4 flex items-center justify-center">
+                <Card className="text-center p-8">
+                  <CardContent>
+                    <div className="text-6xl mb-4">🌸</div>
+                    <h1 className="text-3xl font-bold mb-4">Gentle Activities Coming Soon!</h1>
+                    <p className="text-lg mb-6">We're creating peaceful, calming activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')}>
+                      Back to Today I Want To
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             </Route>
 
             {/* 404 Not Found - catch all other routes */}
