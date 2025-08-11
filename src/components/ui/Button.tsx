@@ -5,30 +5,30 @@ import { cn } from "@/lib/utils"
 
 // Button variants optimized for neurodivergent accessibility
 const buttonVariants = cva(
-  // Base styles with accessibility features
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-h-touch min-w-touch cursor-pointer",
+  // Base styles with accessibility features - Updated for professional look
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-base font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-deep-ocean-blue focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-h-touch min-w-touch cursor-pointer font-primary",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/80",
+          "bg-deep-ocean-blue text-white shadow-soft hover:bg-deep-ocean-blue/90 active:bg-deep-ocean-blue/80",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 active:bg-destructive/80",
         outline:
-          "border-2 border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
+          "border border-gray-300 bg-transparent text-warm-charcoal shadow-sm hover:bg-gray-50 hover:border-gray-400 active:bg-gray-100",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:bg-secondary/70",
+          "bg-white border border-gray-200 text-warm-charcoal shadow-sm hover:bg-gray-50 active:bg-gray-100",
         ghost: 
-          "hover:bg-accent hover:text-accent-foreground active:bg-accent/80",
+          "hover:bg-gray-100 hover:text-warm-charcoal active:bg-gray-200",
         link: 
-          "text-primary underline-offset-4 hover:underline focus:underline min-h-auto min-w-auto",
-        // Neurodivergent-specific variants
+          "text-deep-ocean-blue underline-offset-4 hover:underline focus:underline min-h-auto min-w-auto",
+        // Updated Neurodivergent-specific variants with professional styling
         calm:
-          "bg-autism-calm-mint text-autism-primary border-2 border-autism-primary hover:bg-autism-calm-sky active:bg-autism-calm-sage shadow-gentle",
+          "bg-gradient-to-br from-soft-lavender/20 to-soft-lavender/10 text-deep-ocean-blue border border-soft-lavender/30 hover:bg-soft-lavender/30 active:bg-soft-lavender/40 shadow-gentle",
         'high-contrast':
           "bg-contrast-high text-contrast-low border-2 border-contrast-low hover:bg-gray-800 active:bg-gray-900 font-semibold",
         celebration:
-          "bg-gradient-to-r from-autism-secondary to-autism-primary text-white shadow-lg hover:shadow-xl active:shadow-md transform hover:scale-105 active:scale-95",
+          "bg-gradient-to-r from-sage-green to-deep-ocean-blue text-white shadow-lg hover:shadow-xl active:shadow-md transform hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-12 px-6 py-3 text-base",
@@ -40,12 +40,12 @@ const buttonVariants = cva(
         'extra-large': "h-18 px-12 py-6 text-xl",
         icon: "h-12 w-12 p-0", // Square for icons, minimum touch target
       },
-      // Emotional regulation support
+      // Emotional regulation support - Updated for professional look
       mood: {
         neutral: "",
-        energetic: "animate-gentle-bounce",
-        calm: "shadow-calm",
-        focused: "ring-2 ring-autism-primary ring-offset-2",
+        energetic: "animate-subtle-bounce",
+        calm: "shadow-gentle",
+        focused: "ring-2 ring-deep-ocean-blue ring-offset-2",
       }
     },
     defaultVariants: {

@@ -1,7 +1,8 @@
-/* Vedyx Leap V2.0 - Neurodivergent-Friendly Design System */
+/* Vedyx Leap V2.0 - Professional Neurodivergent-Friendly Design System */
 
-/* Load dyslexia-friendly fonts */
+/* Load professional fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
 
 /* Detect user preferences */
@@ -18,29 +19,69 @@
   }
 }
 
-/* Core CSS Variables for Neurodivergent Accessibility */
+/* Core CSS Variables - Professional Neurodivergent Design */
 :root {
-  /* Base theme colors */
-  --background: 210 40% 98%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  /* NEW PROFESSIONAL COLOR PALETTE */
+  /* Primary Colors */
+  --deep-ocean-blue: #2563EB;
+  --sage-green: #059669;
+  --warm-charcoal: #374151;
+  
+  /* Secondary/Accent Colors */
+  --soft-lavender: #A78BFA;
+  --muted-coral: #FB7185;
+  --cool-mint: #34D399;
+  
+  /* Background Gradients */
+  --card-bg-from: #F8FAFC;
+  --card-bg-to: #F1F5F9;
+  --page-bg: #FFFFFF;
+  --page-section-bg: #F9FAFB;
+  
+  /* Typography Colors */
+  --header-primary: #1F2937;
+  --header-secondary: #374151;
+  --body-text: #4B5563;
+  --card-text: #6B7280;
+  
+  /* Professional Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.10);
+
+  /* Base theme colors (updated to use new palette) */
+  --background: 0 0% 100%; /* Pure white */
+  --foreground: 220 13% 25%; /* Warm charcoal */
+  --card: 220 14% 97%; /* Card background from palette */
+  --card-foreground: 220 13% 25%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
+  --popover-foreground: 220 13% 25%;
+  --primary: 220 98% 61%; /* Deep Ocean Blue */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 158 64% 52%; /* Sage Green */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 220 14% 96%;
+  --accent-foreground: 220 13% 25%;
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 220 98% 61%; /* Deep Ocean Blue */
   --radius: 0.75rem;
+
+  /* Typography System */
+  --font-primary: 'Inter', 'Nunito Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --text-h1: 28px;
+  --text-h2: 22px;
+  --text-body: 18px;
+  --text-card: 16px;
+  --weight-bold: 700;
+  --weight-semibold: 600;
+  --weight-medium: 500;
+  --weight-normal: 400;
 
   /* ADHD-Friendly High Contrast Variables */
   --adhd-bg: 0 0% 0%;
@@ -59,14 +100,14 @@
   --dyslexia-text: 36 100% 12%;
   --dyslexia-cream: 44 100% 97%;
   
-  /* Autism-Friendly Calming Colors */
-  --autism-calm-mint: 152 68% 92%;
-  --autism-calm-lavender: 267 100% 92%;
-  --autism-calm-sage: 120 43% 92%;
-  --autism-calm-sky: 205 100% 92%;
-  --autism-primary: 209 100% 57%;
-  --autism-secondary: 77 100% 57%;
-  --autism-neutral: 210 17% 98%;
+  /* Updated Autism-Friendly Calming Colors (Professional) */
+  --autism-calm-mint: rgba(52, 211, 153, 0.1); /* Cool mint at 10% */
+  --autism-calm-lavender: rgba(167, 139, 250, 0.1); /* Soft lavender at 10% */
+  --autism-calm-sage: rgba(5, 150, 105, 0.1); /* Sage green at 10% */
+  --autism-calm-sky: rgba(37, 99, 235, 0.1); /* Deep ocean blue at 10% */
+  --autism-primary: var(--deep-ocean-blue);
+  --autism-secondary: var(--sage-green);
+  --autism-neutral: var(--page-bg);
   
   /* Animation & Motion */
   --animation-duration: 300ms;
@@ -82,7 +123,7 @@
   /* Focus and interaction states */
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
-  --focus-ring-color: var(--autism-primary);
+  --focus-ring-color: var(--primary);
   
   /* Spacing for motor accessibility */
   --spacing-xs: 0.25rem;
@@ -154,7 +195,7 @@
   --secondary: var(--autism-secondary);
 }
 
-/* Base accessibility styles */
+/* Professional Typography Defaults */
 * {
   box-sizing: border-box;
 }
@@ -179,13 +220,56 @@ html {
 }
 
 body {
-  font-family: var(--dyslexia-font-secondary);
+  font-family: var(--font-primary);
   line-height: 1.6;
   letter-spacing: 0.025em;
   word-spacing: 0.1em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  color: hsl(var(--body-text));
+}
+
+/* Professional Typography Scale */
+h1 { 
+  font-size: var(--text-h1); 
+  font-weight: var(--weight-bold); 
+  color: var(--header-primary);
+  font-family: var(--font-primary);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h2 { 
+  font-size: var(--text-h2); 
+  font-weight: var(--weight-semibold); 
+  color: var(--header-secondary);
+  font-family: var(--font-primary);
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: var(--weight-semibold);
+  color: var(--header-secondary);
+  font-family: var(--font-primary);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+p, div, span {
+  font-size: var(--text-body); 
+  font-weight: var(--weight-normal); 
+  color: var(--body-text);
+  font-family: var(--font-primary);
+  line-height: 1.6;
+}
+
+/* Card text styling */
+.card-text {
+  font-size: var(--text-card);
+  color: var(--card-text);
 }
 
 /* High contrast mode support */
@@ -250,6 +334,7 @@ textarea {
   border-radius: var(--radius);
   font-size: 1.125rem; /* 18px minimum */
   line-height: 1.6;
+  font-family: var(--font-primary);
 }
 
 /* Accessible text selection */
@@ -327,7 +412,7 @@ textarea {
   cursor: not-allowed;
 }
 
-/* Gentle animations for neurodivergent users */
+/* Professional animations for neurodivergent users */
 @keyframes gentle-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
@@ -344,6 +429,18 @@ textarea {
   }
 }
 
+@keyframes subtle-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-2px);
+  }
+  60% {
+    transform: translateY(-1px);
+  }
+}
+
 .gentle-animation {
   animation: gentle-pulse 3s infinite;
 }
@@ -351,6 +448,61 @@ textarea {
 .calm-enter {
   animation: calm-slide-in 0.5s var(--gentle-easing);
 }
+
+.gentle-bounce {
+  animation: subtle-bounce 2s infinite;
+}
+
+/* Professional shadow utilities */
+.shadow-soft {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-gentle {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-premium {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Professional gradient utilities */
+.gradient-card {
+  background: linear-gradient(to bottom, var(--card-bg-from), var(--card-bg-to));
+}
+
+.gradient-calm {
+  background: linear-gradient(135deg, var(--autism-calm-mint), var(--autism-calm-lavender));
+}
+
+.gradient-focus {
+  background: linear-gradient(135deg, var(--autism-calm-sage), var(--autism-calm-sky));
+}
+
+/* Utility classes for new color system */
+.text-deep-ocean-blue { color: var(--deep-ocean-blue); }
+.text-sage-green { color: var(--sage-green); }
+.text-warm-charcoal { color: var(--warm-charcoal); }
+.text-soft-lavender { color: var(--soft-lavender); }
+.text-muted-coral { color: var(--muted-coral); }
+.text-cool-mint { color: var(--cool-mint); }
+
+.bg-deep-ocean-blue { background-color: var(--deep-ocean-blue); }
+.bg-sage-green { background-color: var(--sage-green); }
+.bg-warm-charcoal { background-color: var(--warm-charcoal); }
+.bg-soft-lavender { background-color: var(--soft-lavender); }
+.bg-muted-coral { background-color: var(--muted-coral); }
+.bg-cool-mint { background-color: var(--cool-mint); }
+
+.border-deep-ocean-blue { border-color: var(--deep-ocean-blue); }
+.border-sage-green { border-color: var(--sage-green); }
+.border-soft-lavender { border-color: var(--soft-lavender); }
+.border-muted-coral { border-color: var(--muted-coral); }
+.border-cool-mint { border-color: var(--cool-mint); }
 
 /* Print styles for accessibility */
 @media print {

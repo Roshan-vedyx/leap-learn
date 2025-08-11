@@ -1,14 +1,28 @@
-// src/pages/BrainCheckPage.tsx - Updated to route to TodayIWantToPage
+// src/pages/BrainCheckPage.tsx - Updated to route to TodayIWantToPage with Lucide icons
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
+import { 
+  Zap, 
+  Target, 
+  Moon, 
+  Sparkles, 
+  Waves, 
+  Search, 
+  BookOpen, 
+  Star,
+  Bot,
+  Rocket,
+  Smile,
+  Eye
+} from 'lucide-react'
 
 // Brain state options redesigned for warmth and relatability
 interface BrainState {
   id: string
   label: string
-  emoji: string
+  icon: React.ComponentType<{ className?: string; 'aria-label'?: string }>
   description: string
   color: string
   mood: 'calm' | 'energetic' | 'focused' | 'neutral'
@@ -19,54 +33,54 @@ const brainStates: BrainState[] = [
   {
     id: 'energetic',
     label: 'Bouncy & Ready',
-    emoji: '⚡',
+    icon: Zap,
     description: "I've got energy to spare and I'm ready to move!",
-    color: 'bg-gradient-to-br from-yellow-50 to-orange-100 border-yellow-300',
+    color: 'mood-energetic', // Uses new card variant
     mood: 'energetic',
     encouragement: "Let's find you an action-packed adventure!"
   },
   {
     id: 'focused',
     label: 'Calm & Ready',
-    emoji: '🎯',
+    icon: Target,
     description: "I'm feeling settled and ready to dive into a story.",
-    color: 'bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-300',
+    color: 'mood-focused', // Uses new card variant
     mood: 'focused',
     encouragement: "Perfect! I have some great focused reading for you."
   },
   {
     id: 'tired',
     label: 'Sleepy Cozy',
-    emoji: '🌙',
+    icon: Moon,
     description: "I'm feeling mellow and want something gentle.",
-    color: 'bg-gradient-to-br from-purple-50 to-pink-100 border-purple-300',
+    color: 'mood-calm', // Uses new card variant
     mood: 'calm',
     encouragement: "Let's find something soothing and easy to follow."
   },
   {
     id: 'excited',
     label: 'Super Excited',
-    emoji: '🤩',
+    icon: Sparkles,
     description: "I'm pumped up and ready for anything awesome!",
-    color: 'bg-gradient-to-br from-green-50 to-emerald-100 border-green-300',
+    color: 'mood-energetic', // Uses new card variant
     mood: 'energetic',
     encouragement: "Your enthusiasm is contagious! Let's go on an epic journey."
   },
   {
     id: 'overwhelmed',
     label: 'Need Some Calm',
-    emoji: '🌊',
+    icon: Waves,
     description: "Things feel a bit much right now, I need gentle vibes.",
-    color: 'bg-gradient-to-br from-teal-50 to-cyan-100 border-teal-300',
+    color: 'calm', // Uses professional calm variant
     mood: 'calm',
     encouragement: "I've got you covered with something peaceful and stress-free."
   },
   {
     id: 'curious',
     label: 'Mystery Detective',
-    emoji: '🔍',
+    icon: Search,
     description: "I want to explore and discover cool new things!",
-    color: 'bg-gradient-to-br from-orange-50 to-amber-100 border-orange-300',
+    color: 'mood-focused', // Uses new card variant
     mood: 'focused',
     encouragement: "Excellent! I know some stories with amazing discoveries."
   }
@@ -115,44 +129,47 @@ const BrainCheckPage: React.FC = () => {
   const displayStates = showAllOptions ? brainStates : primaryStates
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
+    <div className="min-h-screen bg-white p-4">
       <div className="max-w-4xl mx-auto py-8">
         
         {/* Warm, Friendly Header */}
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4">📚✨</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-indigo-900 mb-4">
+          <div className="flex justify-center gap-4 mb-4">
+            <BookOpen className="w-16 h-16 text-indigo-600" />
+            <Star className="w-16 h-16 text-purple-500" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-header-primary mb-4">
             What's Your Vibe Today?
           </h1>
-          <p className="text-xl text-indigo-700 leading-relaxed max-w-2xl mx-auto mb-6">
+          <p className="text-xl text-body-text leading-relaxed max-w-2xl mx-auto">
             Hey there, story explorer! Every day our brains feel different - sometimes bouncy, 
             sometimes chill, sometimes ready to focus. I just want to match you with a story 
             that feels right for YOUR brain today.
           </p>
           <div className="inline-flex items-center gap-2 bg-indigo-100 px-4 py-2 rounded-full text-indigo-800">
             <span className="text-sm font-medium">No wrong answers here!</span>
-            <span className="text-lg">😊</span>
+            <Smile className="w-5 h-5" />
           </div>
         </div>
 
-        {/* Brain State Selection - Progressive Disclosure */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {/* Brain State Selection Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {displayStates.map((state) => (
             <Card
               key={state.id}
+              variant={state.color} // Now uses professional variants like 'mood-energetic'
+              interactive="full"
               className={`
-                cursor-pointer transition-all duration-300 h-full border-2 overflow-hidden
+                cursor-pointer transition-all duration-200 h-full
                 ${selectedState === state.id 
-                  ? 'border-indigo-400 shadow-lg transform scale-105 ring-2 ring-indigo-200' 
-                  : 'hover:scale-102 hover:shadow-md border-gray-200'
+                  ? 'ring-4 ring-deep-ocean-blue ring-offset-2 scale-105' 
+                  : 'hover:scale-102'
                 }
-                ${state.color}
               `}
               onClick={() => handleStateSelect(state.id)}
               role="button"
               tabIndex={0}
               aria-pressed={selectedState === state.id}
-              aria-label={`Choose ${state.label}: ${state.description}`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
@@ -160,21 +177,17 @@ const BrainCheckPage: React.FC = () => {
                 }
               }}
             >
-              <CardContent className="p-6 text-center h-full flex flex-col justify-center relative">
-                {/* Selection Indicator */}
-                {selectedState === state.id && (
-                  <div className="absolute top-3 right-3 w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                    ✓
-                  </div>
-                )}
-                
-                <div className="text-5xl mb-4" role="img" aria-label={state.label}>
-                  {state.emoji}
+              <CardContent className="p-6 text-center h-full flex flex-col justify-center">
+                <div className="mb-4 flex justify-center">
+                  <state.icon 
+                    className="w-16 h-16 text-indigo-600" 
+                    aria-label={state.label}
+                  />
                 </div>
-                <h3 className="text-xl font-bold text-indigo-900 mb-3">
+                <h3 className="text-xl font-semibold text-header-primary mb-3">
                   {state.label}
                 </h3>
-                <p className="text-indigo-700 leading-relaxed text-base">
+                <p className="text-body-text leading-relaxed text-base">
                   {state.description}
                 </p>
               </CardContent>
@@ -188,9 +201,9 @@ const BrainCheckPage: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => setShowAllOptions(true)}
-              className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50"
+              className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 flex items-center gap-2"
             >
-              🔍 See more options
+              <Eye className="w-4 h-4" /> See more options
             </Button>
           </div>
         )}
@@ -199,7 +212,9 @@ const BrainCheckPage: React.FC = () => {
         {selectedBrainState && (
           <Card className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-300 border-2 shadow-md">
             <CardContent className="p-6 text-center">
-              <div className="text-4xl mb-3">{selectedBrainState.emoji}</div>
+              <div className="flex justify-center mb-3">
+                <selectedBrainState.icon className="w-12 h-12 text-indigo-600" />
+              </div>
               <h3 className="text-2xl font-bold text-indigo-900 mb-3">
                 {selectedBrainState.encouragement}
               </h3>
@@ -218,13 +233,21 @@ const BrainCheckPage: React.FC = () => {
             disabled={!selectedState}
             variant={selectedState ? "default" : "secondary"}
             size="lg"
-            className={`text-xl px-8 py-4 min-h-[56px] font-semibold transition-all duration-300 ${
+            className={`text-xl px-8 py-4 min-h-[56px] font-semibold transition-all duration-300 flex items-center gap-3 ${
               selectedState 
                 ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1' 
                 : 'bg-gray-300 text-gray-500'
             }`}
           >
-            {selectedState ? "Next: What Do You Feel Like Doing? 🚀" : "Choose your vibe first 😊"}
+            {selectedState ? (
+              <>
+                Next: What Do You Feel Like Doing? <Rocket className="w-5 h-5" />
+              </>
+            ) : (
+              <>
+                Choose your vibe first <Smile className="w-5 h-5" />
+              </>
+            )}
           </Button>
         </div>
 
@@ -241,7 +264,9 @@ const BrainCheckPage: React.FC = () => {
         {/* Character Message */}
         <div className="mt-12 text-center">
           <div className="inline-block bg-white rounded-2xl p-6 shadow-sm border border-indigo-100 max-w-md">
-            <div className="text-3xl mb-2">🤖</div>
+            <div className="flex justify-center mb-2">
+              <Bot className="w-8 h-8 text-indigo-600" />
+            </div>
             <p className="text-sm text-indigo-800 font-medium">
               "Hi! I'm your learning buddy. I'm here to help you find activities that feel just right 
               for however your amazing brain is working today!"

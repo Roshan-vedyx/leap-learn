@@ -4,16 +4,20 @@ import { cn } from "@/lib/utils"
 
 // Card variants for different neurodivergent needs
 const cardVariants = cva(
-  "rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-200",
+  "rounded-xl border bg-card text-card-foreground shadow-soft transition-all duration-200",
   {
     variants: {
       variant: {
-        default: "border-border",
-        outline: "border-2 border-border",
-        elevated: "shadow-md hover:shadow-lg",
-        calm: "bg-autism-calm-mint border-autism-primary border-2 shadow-calm",
+        default: "border-border gradient-card",
+        outline: "border-2 border-gray-200",
+        elevated: "shadow-gentle hover:shadow-elevated border-gray-100",
+        calm: "bg-gradient-to-br from-soft-lavender/10 to-soft-lavender/5 border-soft-lavender/30 shadow-gentle",
         'high-contrast': "bg-contrast-low border-contrast-high border-3 shadow-lg",
-        celebration: "bg-gradient-to-br from-autism-calm-mint to-autism-calm-sky border-autism-primary border-2 shadow-gentle",
+        celebration: "bg-gradient-to-br from-cool-mint/10 to-sage-green/5 border-sage-green/30 shadow-gentle",
+        // New professional mood variants
+        'mood-energetic': "bg-gradient-to-br from-muted-coral/10 to-muted-coral/5 border-muted-coral/30 shadow-gentle",
+        'mood-focused': "bg-gradient-to-br from-cool-mint/10 to-cool-mint/5 border-cool-mint/30 shadow-gentle",
+        'mood-calm': "bg-gradient-to-br from-soft-lavender/10 to-soft-lavender/5 border-soft-lavender/30 shadow-gentle",
       },
       padding: {
         none: "p-0",
@@ -21,12 +25,13 @@ const cardVariants = cva(
         default: "p-6",
         lg: "p-8",
         comfortable: "p-8", // Extra comfortable spacing
+        spacious: "p-10", // Even more generous spacing
       },
       interactive: {
         none: "",
-        hover: "hover:shadow-md hover:scale-[1.01] cursor-pointer",
-        focus: "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
-        full: "hover:shadow-md hover:scale-[1.01] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 cursor-pointer",
+        hover: "hover:shadow-gentle hover:scale-[1.01] cursor-pointer",
+        focus: "focus-within:ring-2 focus-within:ring-deep-ocean-blue focus-within:ring-offset-2",
+        full: "hover:shadow-gentle hover:scale-[1.01] focus-within:ring-2 focus-within:ring-deep-ocean-blue focus-within:ring-offset-2 cursor-pointer",
       }
     },
     defaultVariants: {

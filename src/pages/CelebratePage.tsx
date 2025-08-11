@@ -1,9 +1,31 @@
-// src/pages/CelebratePage.tsx - Simplified for MVP
+// src/pages/CelebratePage.tsx - Simplified for MVP with Lucide icons
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { useSessionStore } from '@/stores/sessionStore'
+import {
+  Zap,
+  Target,
+  Moon,
+  ArrowRight,
+  Smile,
+  Sparkles,
+  Waves,
+  Dove,
+  Search,
+  PartyPopper,
+  BookOpen,
+  Brain,
+  Palette,
+  Star,
+  Trophy,
+  Rocket,
+  Wand2,
+  Check,
+  Heart,
+  X
+} from 'lucide-react'
 
 const CelebratePage: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false)
@@ -34,27 +56,33 @@ const CelebratePage: React.FC = () => {
 
   const celebrationMessages = {
     energetic: {
-      title: "You channeled that energy perfectly! ⚡",
+      title: "You channeled that energy perfectly!",
+      titleIcon: Zap,
       message: "Your brain was full of energy today and you used it to power through an amazing reading session!"
     },
     focused: {
-      title: "Your focus was incredible! 🎯",
+      title: "Your focus was incredible!",
+      titleIcon: Target,
       message: "You stayed concentrated and really connected with the story. That's some serious brain power!"
     },
     tired: {
-      title: "You pushed through beautifully! 😴➡️😊",
+      title: "You pushed through beautifully!",
+      titleIcon: Moon,
       message: "Even when you were feeling low-energy, you still engaged with the story. That shows real determination!"
     },
     excited: {
-      title: "Your excitement made this amazing! 🤩",
+      title: "Your excitement made this amazing!",
+      titleIcon: Sparkles,
       message: "Your enthusiasm for learning really shined through. You brought such positive energy to reading!"
     },
     overwhelmed: {
-      title: "You found your calm and succeeded! 🌊➡️🕊️",
+      title: "You found your calm and succeeded!",
+      titleIcon: Waves,
       message: "Despite feeling overwhelmed, you took it step by step and completed a whole reading session. That's strength!"
     },
     curious: {
-      title: "Your curiosity led to discovery! 🔍",
+      title: "Your curiosity led to discovery!",
+      titleIcon: Search,
       message: "You asked great questions and really explored the story deeply. Your curiosity is a superpower!"
     }
   }
@@ -64,12 +92,12 @@ const CelebratePage: React.FC = () => {
     : celebrationMessages.focused
 
   const achievements = [
-    { icon: '📚', text: 'Completed a full story', achieved: true },
-    { icon: '🧠', text: 'Practiced phonics skills', achieved: true },
-    { icon: '🎨', text: 'Created original response', achieved: !!creativeResponse },
-    { icon: '⭐', text: 'Stayed engaged throughout', achieved: true },
-    { icon: '🎯', text: 'Made personal connections', achieved: !!creativeResponse },
-    { icon: '🚀', text: `Adapted to ${currentBrainState?.label || 'your'} energy`, achieved: !!currentBrainState }
+    { icon: BookOpen, text: 'Completed a full story', achieved: true },
+    { icon: Brain, text: 'Practiced phonics skills', achieved: true },
+    { icon: Palette, text: 'Created original response', achieved: !!creativeResponse },
+    { icon: Star, text: 'Stayed engaged throughout', achieved: true },
+    { icon: Target, text: 'Made personal connections', achieved: !!creativeResponse },
+    { icon: Rocket, text: `Adapted to ${currentBrainState?.label || 'your'} energy`, achieved: !!currentBrainState }
   ]
 
   const handleContinue = () => {
@@ -114,11 +142,14 @@ const CelebratePage: React.FC = () => {
       <div className="max-w-4xl mx-auto py-8 relative z-10">
         {/* Main Celebration */}
         <div className="text-center mb-8">
-          <div className="text-8xl mb-6 animate-bounce">🎉</div>
+          <div className="mb-6 flex justify-center">
+            <PartyPopper className="w-20 h-20 text-primary animate-bounce" />
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">
             Amazing Work!
           </h1>
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-6">
+          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-6 flex items-center justify-center gap-3">
+            <currentCelebration.titleIcon className="w-8 h-8" />
             {currentCelebration.title}
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
@@ -131,15 +162,21 @@ const CelebratePage: React.FC = () => {
           <Card className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-primary border-2 shadow-lg">
             <CardContent className="p-6 text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
-                <span className="text-3xl">{currentBrainState.emoji}</span>
+                <currentBrainState.icon className="w-8 h-8 text-primary" />
                 <h3 className="text-xl font-semibold text-primary">
                   Your Brain Journey Today
                 </h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
-                Started feeling <strong>{currentBrainState.label.toLowerCase()}</strong> 
-                {creativeResponse && <span> → Created something amazing</span>}
-                <span> → Celebrated your success!</span>
+              <p className="text-muted-foreground leading-relaxed flex items-center justify-center flex-wrap gap-2">
+                <span>Started feeling <strong>{currentBrainState.label.toLowerCase()}</strong></span>
+                {creativeResponse && (
+                  <>
+                    <ArrowRight className="w-4 h-4" />
+                    <span>Created something amazing</span>
+                  </>
+                )}
+                <ArrowRight className="w-4 h-4" />
+                <span>Celebrated your success!</span>
               </p>
             </CardContent>
           </Card>
@@ -148,8 +185,8 @@ const CelebratePage: React.FC = () => {
         {/* Achievements Grid */}
         <Card className="mb-8 bg-card border-primary border-2 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-center text-2xl text-primary">
-              🏆 What You Accomplished Today
+            <CardTitle className="text-center text-2xl text-primary flex items-center justify-center gap-3">
+              <Trophy className="w-8 h-8" /> What You Accomplished Today
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -163,8 +200,12 @@ const CelebratePage: React.FC = () => {
                       : 'bg-muted border-muted-foreground/20 opacity-50'
                   }`}
                 >
-                  <span className="text-2xl" role="img" aria-hidden="true">
-                    {achievement.achieved ? achievement.icon : '⭕'}
+                  <span className="flex-shrink-0">
+                    {achievement.achieved ? (
+                      <achievement.icon className="w-6 h-6 text-primary" />
+                    ) : (
+                      <X className="w-6 h-6 text-muted-foreground" />
+                    )}
                   </span>
                   <span className={`font-medium ${
                     achievement.achieved ? 'text-primary' : 'text-muted-foreground'
@@ -172,7 +213,7 @@ const CelebratePage: React.FC = () => {
                     {achievement.text}
                   </span>
                   {achievement.achieved && (
-                    <span className="ml-auto text-green-600 font-bold">✓</span>
+                    <Check className="ml-auto w-5 h-5 text-green-600 font-bold" />
                   )}
                 </div>
               ))}
@@ -184,8 +225,8 @@ const CelebratePage: React.FC = () => {
         {creativeResponse && (
           <Card className="mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 border-2 shadow-lg">
             <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4 text-center">
-                🎨 Your Creative Masterpiece
+              <h3 className="text-xl font-semibold text-primary mb-4 text-center flex items-center justify-center gap-3">
+                <Palette className="w-6 h-6" /> Your Creative Masterpiece
               </h3>
               <div className="bg-card rounded-lg p-4 border border-border">
                 <p className="text-sm text-muted-foreground mb-2">
@@ -195,8 +236,8 @@ const CelebratePage: React.FC = () => {
                   "{creativeResponse.response}"
                 </p>
               </div>
-              <p className="text-center text-sm text-muted-foreground mt-3">
-                Your creativity and thoughts make stories come alive! 🌟
+              <p className="text-center text-sm text-muted-foreground mt-3 flex items-center justify-center gap-2">
+                Your creativity and thoughts make stories come alive! <Star className="w-4 h-4" />
               </p>
             </CardContent>
           </Card>
@@ -205,15 +246,16 @@ const CelebratePage: React.FC = () => {
         {/* Personal Message */}
         <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-primary border-2 shadow-lg">
           <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-semibold text-primary mb-4">
-              🌟 You're Building Real Skills
+            <h3 className="text-2xl font-semibold text-primary mb-4 flex items-center justify-center gap-3">
+              <Star className="w-8 h-8" /> You're Building Real Skills
             </h3>
             <p className="text-lg text-muted-foreground leading-relaxed mb-4">
               Every time you read, you're getting stronger at understanding words, 
               making connections, and expressing your ideas. That's not just reading - 
               that's becoming a more powerful thinker!
             </p>
-            <p className="text-base text-muted-foreground italic">
+            <p className="text-base text-muted-foreground italic flex items-center justify-center gap-2">
+              <Heart className="w-4 h-4" />
               "Reading is not just about words on a page. It's about building worlds in your mind."
             </p>
           </CardContent>
@@ -225,18 +267,18 @@ const CelebratePage: React.FC = () => {
             variant="default"
             size="lg"
             onClick={handleContinue}
-            className="text-xl px-8 py-4 min-h-[56px] shadow-lg"
+            className="text-xl px-8 py-4 min-h-[56px] shadow-lg flex items-center gap-3"
           >
-            🚀 Read Another Story!
+            <Rocket className="w-6 h-6" /> Read Another Story!
           </Button>
           
           <Button
             variant="outline"
             size="lg"
             onClick={handleFinish}
-            className="text-lg px-6 py-4 min-h-[56px]"
+            className="text-lg px-6 py-4 min-h-[56px] flex items-center gap-3"
           >
-            ✨ I'm Done for Now
+            <Wand2 className="w-5 h-5" /> I'm Done for Now
           </Button>
         </div>
 
@@ -256,6 +298,9 @@ const CelebratePage: React.FC = () => {
             another story or finish for now.
           </p>
         </div>
+
+        {/* Hidden announcements area for screen readers */}
+        <div id="accessibility-announcements" className="sr-only" aria-live="polite"></div>
       </div>
 
       {/* CSS for Confetti Animation */}

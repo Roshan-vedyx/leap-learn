@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/Button'
 import { CalmCornerModal } from '@/components/ui/Modal'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useLocation } from 'wouter'
-
+import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
 
 // Import page components
 import BrainCheckPage from './pages/BrainCheckPage'
-import PracticeReadingPage from './pages/PracticeReadingPage'           // ADD THIS LINE
-import WordInterestSelectionPage from './pages/WordInterestSelectionPage' // ADD THIS LINE
-import WordBuildingGamePage from './pages/WordBuildingGamePage'         // ADD THIS LINE
-import SentenceBuildingPage from './pages/SentenceBuildingPage'         // ADD THIS LINE
+import PracticeReadingPage from './pages/PracticeReadingPage'
+import WordInterestSelectionPage from './pages/WordInterestSelectionPage'
+import WordBuildingGamePage from './pages/WordBuildingGamePage'
+import SentenceBuildingPage from './pages/SentenceBuildingPage'
 import StoryPage from './pages/StoryPage'
 import CreatePage from './pages/CreatePage'
 import CelebratePage from './pages/CelebratePage'
@@ -28,11 +28,46 @@ import { useSessionStore } from '@/stores/sessionStore'
 type AccessibilityMode = 'default' | 'adhd' | 'dyslexia' | 'autism'
 type FontSize = 'default' | 'large' | 'extra-large'
 
+// Professional Footer Component
+const Footer = () => (
+  <footer className="bg-page-section-bg border-t border-gray-100 py-8 mt-16">
+    <div className="max-w-6xl mx-auto px-6">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-6 text-sm text-gray-500">
+          <span className="flex items-center gap-2">
+            <Brain className="w-4 h-4" />
+            Neurodivergent Designed
+          </span>
+          <span className="flex items-center gap-2">
+            <Target className="w-4 h-4" />
+            Evidence-Based
+          </span>
+          <span className="flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Accessibility First
+          </span>
+        </div>
+        
+        <div className="flex items-center gap-4 text-sm text-gray-500">
+          <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy</Link>
+          <Link href="/support" className="hover:text-gray-700 transition-colors">Support</Link>
+          <Link href="/about" className="hover:text-gray-700 transition-colors">About</Link>
+        </div>
+      </div>
+      
+      <div className="text-center text-sm text-gray-400 mt-4">
+        Built for neurodivergent learners | UDL Aligned | Research-Based Design
+      </div>
+    </div>
+  </footer>
+)
+
 function App() {
   const [accessibilityMode, setAccessibilityMode] = useState<AccessibilityMode>('default')
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [showCalmCorner, setShowCalmCorner] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [location, setLocation] = useLocation()
 
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
@@ -115,78 +150,178 @@ function App() {
         Skip to main content
       </a>
 
-      {/* Global Navigation */}
-      <nav className="bg-card border-b border-border p-4" role="navigation" aria-label="Main navigation">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          {/* Logo/Home Link */}
-          <Link href="/">
-            <Button variant="ghost" className="text-2xl font-bold">
-              <span className="text-primary">Vedyx</span> Leap
-            </Button>
-          </Link>
-
-          {/* Session Progress Indicator */}
-          {sessionProgress.step > 0 && (
-            <div className="hidden md:flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">
-                Session Progress
-              </span>
-              <div className="w-32 bg-muted rounded-full h-2">
-                <div 
-                  className="bg-primary h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${sessionProgress.progressPercent}%` }}
+      {/* Professional Header - Redesigned */}
+      <nav className="bg-white border-b border-gray-200 shadow-gentle" role="navigation" aria-label="Main navigation">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            {/* Logo Section - Enhanced */}
+            <div className="flex items-center gap-4">
+              <Link href="/" className="flex items-center hover:opacity-90 transition-opacity group">
+                <img 
+                  src="/logo_xl.png" 
+                  alt="Vedyx Leap - Stories that match your brilliant brain" 
+                  className="h-16 w-auto md:h-20 lg:h-24 object-contain"
                 />
+              </Link>
+              
+              {/* Tagline and Credibility */}
+              <div className="hidden md:flex flex-col gap-1">
+                
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full">
+                    <CheckCircle className="w-3 h-3 text-sage-green" />
+                    <span className="text-xs font-medium text-sage-green">UDL Aligned</span>
+                  </div>
+                  <div className="flex items-center gap-1 bg-deep-ocean-blue/10 px-2 py-1 rounded-full">
+                    <Brain className="w-3 h-3 text-deep-ocean-blue" />
+                    <span className="text-xs font-medium text-deep-ocean-blue">Neurodivergent Designed</span>
+                  </div>
+                </div>
               </div>
-              <span className="text-sm text-muted-foreground">
-                {sessionProgress.step}/{sessionProgress.totalSteps}
-              </span>
             </div>
-          )}
 
-          {/* Navigation Actions */}
-          <div className="flex items-center gap-4">
-            {/* Calm Corner Button - Always Accessible */}
-            <Button
-              variant="calm"
-              onClick={handleCalmCornerToggle}
-              aria-label="Open calm corner for emotional regulation"
-              className={`no-print ${isInCalmCorner ? 'ring-2 ring-primary' : ''}`}
-            >
-              🕊️ Calm Corner
-            </Button>
+            {/* Session Progress - Center positioned for desktop */}
+            {sessionProgress.step > 0 && (
+              <div className="hidden xl:flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg">
+                <span className="text-sm font-medium text-warm-charcoal">
+                  Session Progress
+                </span>
+                <div className="w-32 bg-gray-200 rounded-full h-2.5">
+                  <div 
+                    className="bg-deep-ocean-blue h-2.5 rounded-full transition-all duration-500 shadow-sm"
+                    style={{ width: `${sessionProgress.progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold text-deep-ocean-blue">
+                  {sessionProgress.step}/{sessionProgress.totalSteps}
+                </span>
+              </div>
+            )}
 
-            {/* Accessibility Settings */}
-            <div className="flex items-center gap-2">
-              <label htmlFor="accessibility-mode" className="sr-only">
-                Choose accessibility mode
-              </label>
-              <select
-                id="accessibility-mode"
-                value={accessibilityMode}
-                onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
-                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm min-w-[120px]"
-                aria-describedby="accessibility-mode-help"
+            {/* Right Actions - Refined */}
+            <div className="flex items-center gap-3">
+              {/* Calm Corner - Enhanced */}
+              <Button 
+                variant="outline" 
+                size="comfortable" 
+                onClick={handleCalmCornerToggle}
+                className={`
+                  border-2 border-soft-lavender/40 text-soft-lavender bg-soft-lavender/5 
+                  hover:bg-soft-lavender/15 hover:border-soft-lavender/60 
+                  font-medium shadow-soft transition-all duration-200
+                  ${isInCalmCorner ? 'ring-2 ring-deep-ocean-blue bg-soft-lavender/20' : ''}
+                `}
+                aria-label="Open calm corner for emotional regulation"
               >
-                <option value="default">Default</option>
-                <option value="adhd">ADHD Mode</option>
-                <option value="dyslexia">Dyslexia Mode</option>
-                <option value="autism">Autism Mode</option>
-              </select>
+                <Heart className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Calm Corner</span>
+                <span className="sm:hidden">Calm</span>
+              </Button>
+              
+              {/* Accessibility Settings - Styled as professional controls */}
+              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="relative">
+                    <label htmlFor="accessibility-mode" className="sr-only">
+                      Choose accessibility mode
+                    </label>
+                    <select
+                      id="accessibility-mode"
+                      value={accessibilityMode}
+                      onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
+                      className="
+                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                        min-w-[110px] font-primary cursor-pointer
+                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                        appearance-none pr-8
+                      "
+                      aria-describedby="accessibility-mode-help"
+                    >
+                      <option value="default">Default</option>
+                      <option value="adhd">ADHD</option>
+                      <option value="dyslexia">Dyslexia</option>
+                      <option value="autism">Autism</option>
+                    </select>
+                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
 
-              <label htmlFor="font-size" className="sr-only">
-                Choose font size
-              </label>
-              <select
-                id="font-size"
-                value={fontSize}
-                onChange={(e) => handleFontSizeChange(e.target.value as FontSize)}
-                className="rounded-md border-2 border-input bg-background px-3 py-2 text-sm min-w-[100px]"
-                aria-describedby="font-size-help"
+                  <div className="relative">
+                    <label htmlFor="font-size" className="sr-only">
+                      Choose font size
+                    </label>
+                    <select
+                      id="font-size"
+                      value={fontSize}
+                      onChange={(e) => handleFontSizeChange(e.target.value as FontSize)}
+                      className="
+                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                        min-w-[90px] font-primary cursor-pointer
+                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                        appearance-none pr-8
+                      "
+                      aria-describedby="font-size-help"
+                    >
+                      <option value="default">Default</option>
+                      <option value="large">Large</option>
+                      <option value="extra-large">X-Large</option>
+                    </select>
+                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Settings Button - Professional */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="
+                  text-warm-charcoal hover:text-deep-ocean-blue 
+                  hover:bg-gray-100 rounded-lg p-2
+                  transition-all duration-200
+                "
               >
-                <option value="default">Default Size</option>
-                <option value="large">Large Text</option>
-                <option value="extra-large">Extra Large Text</option>
-              </select>
+                <Settings className="w-5 h-5" />
+                <span className="sr-only">Settings</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Session Progress & Credentials */}
+          <div className="mt-4 space-y-3">
+            {/* Mobile Session Progress */}
+            {sessionProgress.step > 0 && (
+              <div className="xl:hidden flex items-center gap-3 bg-gray-50 px-3 py-2 rounded-lg">
+                <span className="text-sm font-medium text-warm-charcoal">
+                  Progress
+                </span>
+                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-deep-ocean-blue h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${sessionProgress.progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-sm font-semibold text-deep-ocean-blue">
+                  {sessionProgress.step}/{sessionProgress.totalSteps}
+                </span>
+              </div>
+            )}
+
+            {/* Mobile Credentials */}
+            <div className="md:hidden flex flex-wrap items-center justify-center gap-2">
+              <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full">
+                <CheckCircle className="w-3 h-3 text-sage-green" />
+                <span className="text-xs font-medium text-sage-green">UDL Aligned</span>
+              </div>
+              <div className="flex items-center gap-1 bg-deep-ocean-blue/10 px-2 py-1 rounded-full">
+                <Brain className="w-3 h-3 text-deep-ocean-blue" />
+                <span className="text-xs font-medium text-deep-ocean-blue">Neurodivergent Designed</span>
+              </div>
+              <div className="flex items-center gap-1 bg-cool-mint/10 px-2 py-1 rounded-full">
+                <Target className="w-3 h-3 text-cool-mint" />
+                <span className="text-xs font-medium text-cool-mint">Evidence-Based</span>
+              </div>
             </div>
           </div>
         </div>
@@ -242,7 +377,7 @@ function App() {
               <InterestSelectionPage />
             </Route>
 
-            {/* New: Today I Want To page */}
+            {/* Today I Want To page */}
             <Route path="/today-i-want-to">
               <TodayIWantToPage />
             </Route>
@@ -251,15 +386,15 @@ function App() {
               <StoryGenerationPage />
             </Route>
 
-            {/* Math activities placeholder (for future implementation) */}
+            {/* Math activities placeholder */}
             <Route path="/math-activities">
-              <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 p-4 flex items-center justify-center">
-                <Card className="text-center p-8">
-                  <CardContent>
+              <div className="min-h-screen bg-white p-4 flex items-center justify-center">
+                <Card className="text-center shadow-gentle">
+                  <CardContent className="p-8">
                     <div className="text-6xl mb-4">🔢</div>
-                    <h1 className="text-3xl font-bold mb-4">Math Adventures Coming Soon!</h1>
-                    <p className="text-lg mb-6">We're building awesome number activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')}>
+                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
+                    <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
                       Back to Today I Want To
                     </Button>
                   </CardContent>
@@ -267,15 +402,15 @@ function App() {
               </div>
             </Route>
 
-            {/* Gentle activities placeholder (for future implementation) */}
+            {/* Gentle activities placeholder */}
             <Route path="/gentle-activities">
-              <div className="min-h-screen bg-gradient-to-b from-green-50 to-blue-50 p-4 flex items-center justify-center">
-                <Card className="text-center p-8">
-                  <CardContent>
+              <div className="min-h-screen bg-white p-4 flex items-center justify-center">
+                <Card className="text-center shadow-gentle">
+                  <CardContent className="p-8">
                     <div className="text-6xl mb-4">🌸</div>
-                    <h1 className="text-3xl font-bold mb-4">Gentle Activities Coming Soon!</h1>
-                    <p className="text-lg mb-6">We're creating peaceful, calming activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')}>
+                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
+                    <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
                       Back to Today I Want To
                     </Button>
                   </CardContent>
@@ -291,6 +426,9 @@ function App() {
         </Router>
       </main>
 
+      {/* Professional Footer */}
+      <Footer />
+
       {/* Calm Corner Modal */}
       <CalmCornerModal
         open={showCalmCorner}
@@ -301,17 +439,14 @@ function App() {
           }
         }}
         onBreathingExercise={() => {
-          // TODO: Implement breathing exercise
           console.log('Starting breathing exercise')
           announceToScreenReader('Starting breathing exercise')
         }}
         onCalmMusic={() => {
-          // TODO: Implement calm music
           console.log('Playing calm music')
           announceToScreenReader('Playing calm music')
         }}
         onSafeSpace={() => {
-          // TODO: Implement safe space visualization
           console.log('Opening safe space')
           announceToScreenReader('Opening safe space visualization')
         }}
@@ -346,7 +481,7 @@ function App() {
         </div>
       </div>
 
-      {/* Dynamic CSS for accessibility modes */}
+      {/* Updated Dynamic CSS for Professional Design */}
       <style dangerouslySetInnerHTML={{
         __html: `
           /* Skip Link Styles */
@@ -354,12 +489,14 @@ function App() {
             position: absolute;
             top: -40px;
             left: 6px;
-            background: var(--primary);
+            background: var(--deep-ocean-blue);
             color: white;
-            padding: 8px;
+            padding: 8px 12px;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 8px;
             z-index: 1000;
+            font-weight: 500;
+            box-shadow: var(--shadow-md);
           }
           
           .skip-link:focus {
@@ -390,6 +527,11 @@ function App() {
             border-color: white !important;
           }
 
+          .adhd-mode nav {
+            background-color: black !important;
+            border-color: white !important;
+          }
+
           /* Dyslexia Mode Styles */
           .dyslexia-mode {
             font-family: 'OpenDyslexic', 'Comic Sans MS', cursive !important;
@@ -409,10 +551,10 @@ function App() {
 
           /* Autism Mode Styles */
           .autism-mode {
-            --background: 152 68% 92%;
-            --card: 210 17% 98%;
-            --primary: 209 100% 57%;
-            --secondary: 77 100% 57%;
+            --background: var(--autism-calm-mint);
+            --card: var(--autism-neutral);
+            --primary: var(--autism-primary);
+            --secondary: var(--autism-secondary);
             --muted: 152 40% 85%;
             --muted-foreground: 209 50% 30%;
           }
@@ -448,11 +590,31 @@ function App() {
             }
           ` : ''}
 
-          /* Focus Management */
+          /* Professional Focus Management */
           :focus-visible {
-            outline: 2px solid var(--primary);
+            outline: 2px solid var(--deep-ocean-blue);
             outline-offset: 2px;
+            border-radius: 6px;
           }
+
+          /* Professional Color Utilities */
+          .text-deep-ocean-blue { color: var(--deep-ocean-blue); }
+          .text-sage-green { color: var(--sage-green); }
+          .text-warm-charcoal { color: var(--warm-charcoal); }
+          .text-soft-lavender { color: var(--soft-lavender); }
+          .text-header-primary { color: var(--header-primary); }
+          .text-body-text { color: var(--body-text); }
+
+          .bg-deep-ocean-blue { background-color: var(--deep-ocean-blue); }
+          .bg-sage-green { background-color: var(--sage-green); }
+          .bg-page-section-bg { background-color: var(--page-section-bg); }
+
+          .border-deep-ocean-blue { border-color: var(--deep-ocean-blue); }
+          .border-soft-lavender { border-color: var(--soft-lavender); }
+
+          /* Shadow utilities */
+          .shadow-soft { box-shadow: var(--shadow-sm); }
+          .shadow-gentle { box-shadow: var(--shadow-md); }
 
           /* High Contrast for Better Accessibility */
           @media (prefers-contrast: high) {
