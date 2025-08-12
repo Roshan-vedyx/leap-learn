@@ -11,7 +11,21 @@ const StoryGenerationPage: React.FC = () => {
   const [, setLocation] = useLocation()
 
   // Get user selections from localStorage
-  const brainState = localStorage.getItem('current-brain-state') || 'focused'
+  const getBrainStateInfo = () => {
+    const storedState = localStorage.getItem('current-brain-state')
+    if (storedState) {
+      try {
+        const parsedState = JSON.parse(storedState)
+        return parsedState
+      } catch (error) {
+        console.error('Error parsing brain state:', error)
+        return { id: 'focused', label: 'Focused', emoji: '🎯' }
+      }
+    }
+    return { id: 'focused', label: 'Focused', emoji: '🎯' }
+  }
+  
+  const brainStateInfo = getBrainStateInfo()
   const selectedInterests = JSON.parse(localStorage.getItem('selected-interests') || '[]')
 
   // Generation steps for user feedback
@@ -20,7 +34,7 @@ const StoryGenerationPage: React.FC = () => {
       step: 0,
       title: "Reading your mood and interests...",
       emoji: "🧠",
-      description: `You're feeling ${brainState} and interested in ${selectedInterests.slice(0, 2).join(' + ')}!`
+      description: `You're feeling ${brainStateInfo.label} and interested in ${selectedInterests.slice(0, 2).join(' + ')}!`
     },
     {
       step: 1,
@@ -63,10 +77,10 @@ const StoryGenerationPage: React.FC = () => {
           await new Promise(resolve => setTimeout(resolve, i === 0 ? 1000 : 1500))
         }
 
-        // Generate the actual story
+        // Generate the actual story - FIXED: use brainStateInfo.id instead of brainState
         const story = await StoryGenerationService.generateStory(
           selectedInterests,
-          brainState
+          brainStateInfo.id
         )
 
         // Store the generated story
@@ -87,7 +101,7 @@ const StoryGenerationPage: React.FC = () => {
     }
 
     generateStory()
-  }, [selectedInterests, brainState, setLocation])
+  }, [selectedInterests, brainStateInfo.id, setLocation]) // FIXED: use brainStateInfo.id in dependencies
 
   const handleRetry = () => {
     setError(null)
@@ -167,14 +181,8 @@ const StoryGenerationPage: React.FC = () => {
               <div className="text-center">
                 <h3 className="font-semibold text-autism-primary mb-2">Today's Brain State:</h3>
                 <div className="inline-flex items-center gap-2 bg-autism-calm-lavender px-4 py-2 rounded-full">
-                  <span className="text-2xl">
-                    {brainState === 'energetic' ? '⚡' : 
-                     brainState === 'focused' ? '🎯' : 
-                     brainState === 'tired' ? '😴' : 
-                     brainState === 'excited' ? '🤩' : 
-                     brainState === 'overwhelmed' ? '🌊' : '🔍'}
-                  </span>
-                  <span className="font-medium text-autism-primary capitalize">{brainState}</span>
+                <span className="text-2xl">{brainStateInfo.emoji || '🎯'}</span>
+                <span className="font-semibold">{brainStateInfo.label}</span>
                 </div>
               </div>
               <div className="text-center">

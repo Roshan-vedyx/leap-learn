@@ -312,6 +312,36 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
           )}
         </div>
 
+        {/* Story Difficulty - Now Outside Settings */}
+        {isMultiVersion && (
+          <div className="mb-6 bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+            <label className="block text-sm text-gray-600 mb-3">Story Difficulty</label>
+            <div className="flex gap-2 flex-wrap">
+              {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => {
+                const info = complexityLabels[level]
+                const isActive = complexityLevel === level
+                
+                return (
+                  <button
+                    key={level}
+                    onClick={() => handleComplexityChange(level)}
+                    className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                      isActive 
+                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-300' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    aria-pressed={isActive}
+                    title={info.description}
+                  >
+                    {info.emoji} {info.label}
+                  </button>
+                )
+              })}
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Switch anytime to match how you're feeling</p>
+          </div>
+        )}
+
         {/* Navigation - Clean and Simple */}
         <div className="flex justify-between items-center mb-6">
           <button
@@ -343,50 +373,20 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
           </button>
         </div>
 
-        {/* Settings Toggle - Hidden by Default */}
+        {/* More Reading Choices Toggle - Updated Name */}
         <div className="text-center">
           <button
             onClick={() => setShowSettings(!showSettings)}
             className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            ⚙️ {showSettings ? 'Hide' : 'Settings'}
+            ⚙️ {showSettings ? 'Hide' : 'More reading choices'}
           </button>
         </div>
 
         {/* Settings Panel - Only When Requested - Progressive Disclosure */}
         {showSettings && (
           <div className="mt-4 bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
-            <h3 className="font-semibold text-gray-800 mb-4">Reading Options</h3>
-            
-            {/* Complexity Level - Only show for multi-version stories */}
-            {isMultiVersion && (
-              <div className="mb-4">
-                <label className="block text-sm text-gray-600 mb-2">Story Difficulty</label>
-                <div className="flex gap-2 flex-wrap">
-                  {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => {
-                    const info = complexityLabels[level]
-                    const isActive = complexityLevel === level
-                    
-                    return (
-                      <button
-                        key={level}
-                        onClick={() => handleComplexityChange(level)}
-                        className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                          isActive 
-                            ? 'bg-blue-100 text-blue-800 border-2 border-blue-300' 
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                        aria-pressed={isActive}
-                        title={info.description}
-                      >
-                        {info.emoji} {info.label}
-                      </button>
-                    )
-                  })}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Switch anytime to match how you're feeling</p>
-              </div>
-            )}
+            <h3 className="font-semibold text-gray-800 mb-4">More Reading Options</h3>
             
             {/* Reading Mode */}
             <div className="mb-4">
