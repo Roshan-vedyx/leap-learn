@@ -145,10 +145,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Skip Navigation Link for Keyboard Users */}
+      {/* Skip Navigation Link for Keyboard Users 
       <a href="#main-content" className="skip-link">
         Skip to main content
-      </a>
+      </a> */}
 
       {/* Professional Header - Redesigned */}
       <nav className="bg-white border-b border-gray-200 shadow-gentle" role="navigation" aria-label="Main navigation">

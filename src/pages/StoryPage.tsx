@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { audio, storage } from '@/lib/utils'
-import { ComplexityLevel, MultiVersionStory } from '@/types'
+import type { ComplexityLevel, MultiVersionStory } from '@/types'
 
 interface StoryPageProps {
   storyId?: string

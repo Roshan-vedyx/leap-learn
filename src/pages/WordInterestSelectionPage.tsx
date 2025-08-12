@@ -1,56 +1,52 @@
-// src/pages/WordInterestSelectionPage.tsx
+// src/pages/WordInterestSelectionPage.tsx - Viewport Optimized 2x2 Grid
 import React from 'react'
 import { useLocation } from 'wouter'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { EmotionalCard } from '@/components/ui/Card'
+import { PawPrint, Rocket, Pizza, Car } from 'lucide-react'
 
-// Word theme options
+// Word theme options with Lucide icons
 interface WordTheme {
   id: string
   label: string
-  emoji: string
+  icon: React.ComponentType<{ className?: string }>
   description: string
   color: string
   mood: 'calm' | 'energetic' | 'focused' | 'neutral'
-  sampleWords: string[]
 }
 
 const wordThemes: WordTheme[] = [
   {
     id: 'animals',
     label: 'Amazing Animals',
-    emoji: '🐾',
+    icon: PawPrint,
     description: "Build words about cute and wild animals!",
     color: 'bg-green-100 border-green-400',
-    mood: 'focused',
-    sampleWords: ['CAT', 'ELEPHANT', 'TIGER']
+    mood: 'focused'
   },
   {
     id: 'space',
     label: 'Space Adventure',
-    emoji: '🚀',
+    icon: Rocket,
     description: "Explore the galaxy with space words!",
     color: 'bg-purple-100 border-purple-400',
-    mood: 'energetic',
-    sampleWords: ['ROCKET', 'PLANET', 'GALAXY']
+    mood: 'energetic'
   },
   {
     id: 'food',
     label: 'Yummy Food',
-    emoji: '🍕',
+    icon: Pizza,
     description: "Discover delicious food words!",
     color: 'bg-orange-100 border-orange-400',
-    mood: 'focused',
-    sampleWords: ['PIZZA', 'COOKIE', 'BANANA']
+    mood: 'focused'
   },
   {
     id: 'vehicles',
     label: 'Cool Vehicles',
-    emoji: '🚗',
+    icon: Car,
     description: "Build words about cars, planes, and more!",
     color: 'bg-blue-100 border-blue-400',
-    mood: 'energetic',
-    sampleWords: ['AIRPLANE', 'MOTORCYCLE', 'SUBMARINE']
+    mood: 'energetic'
   }
 ]
 
@@ -65,116 +61,90 @@ const WordInterestSelectionPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky p-4">
-      <div className="max-w-4xl mx-auto py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-autism-primary mb-4">
-            What Words Do You Want to Build?
-          </h1>
-          <p className="text-xl text-autism-primary/80 leading-relaxed max-w-2xl mx-auto">
-            Pick a theme that excites you! We'll build awesome words together and you'll discover 
-            patterns that make reading even more fun. Just click on your choice to get started!
-          </p>
-        </div>
+    <div className="page-container bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky">
+      <div className="container">
+        <div className="content-area">
+          
+          {/* Compact Header */}
+          <div className="text-center pt-2 pb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-autism-primary mb-3">
+              What Words Do You Want to Build?
+            </h1>
+            <p className="text-base md:text-lg text-autism-primary/80 leading-relaxed max-w-3xl mx-auto">
+              Pick a theme that excites you! We'll build awesome words together and you'll discover 
+              patterns that make reading even more fun.
+            </p>
+          </div>
 
-        {/* Theme Selection Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {wordThemes.map((theme) => (
-            <EmotionalCard
-              key={theme.id}
-              mood={theme.mood}
-              interactive="full"
-              className={`
-                cursor-pointer transition-all duration-200 h-full
-                hover:scale-105 hover:shadow-lg
-                ${theme.color}
-              `}
-              onClick={() => handleThemeClick(theme)}
-              role="button"
-              tabIndex={0}
-              aria-label={`Start word building with ${theme.label} - ${theme.description}`}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  handleThemeClick(theme)
-                }
-              }}
-            >
-              <CardContent className="p-8 h-full flex flex-col">
-                <div className="text-center flex-1 flex flex-col justify-center">
-                  <div className="text-8xl mb-6" role="img" aria-label={theme.label}>
-                    {theme.emoji}
-                  </div>
-                  <h3 className="text-2xl font-semibold text-autism-primary mb-4">
-                    {theme.label}
-                  </h3>
-                  <p className="text-autism-primary/80 leading-relaxed text-lg mb-6">
-                    {theme.description}
-                  </p>
-
-                  {/* Sample Words Preview */}
-                  <div className="bg-white/50 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-autism-primary/70 mb-2">
-                      <strong>Sample words you'll build:</strong>
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {theme.sampleWords.map((word, index) => (
-                        <span 
-                          key={index}
-                          className="bg-autism-secondary text-gray-800 px-3 py-1 rounded-full text-sm font-semibold"
-                        >
-                          {word}
-                        </span>
-                      ))}
+          {/* Theme Selection Grid - 2x2 Layout */}
+          <div className="flex-1 flex items-center justify-center">
+            <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-6 w-full max-w-4xl">
+              {wordThemes.map((theme) => (
+                <EmotionalCard
+                  key={theme.id}
+                  mood={theme.mood}
+                  interactive="full"
+                  className={`
+                    cursor-pointer transition-all duration-300 h-full
+                    hover:scale-102 hover:shadow-xl
+                    ${theme.color}
+                  `}
+                  onClick={() => handleThemeClick(theme)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Start word building with ${theme.label} - ${theme.description}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleThemeClick(theme)
+                    }
+                  }}
+                >
+                  <CardContent className="p-3 md:p-4 lg:p-6 h-full flex flex-col justify-center">
+                    
+                    {/* Icon and Title - Perfectly Aligned */}
+                    <div className="text-center">
+                      <div className="flex flex-col items-center justify-center space-y-2 md:space-y-3">
+                        <div className="bg-white/50 rounded-full p-2 md:p-3">
+                          <theme.icon className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-autism-primary" />
+                        </div>
+                        <h3 className="text-sm md:text-base lg:text-xl font-semibold text-autism-primary leading-tight">
+                          {theme.label}
+                        </h3>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {/* Click indicator */}
-                <div className="text-center pt-4 border-t border-autism-primary/20">
-                  <p className="text-sm text-autism-primary/70 font-semibold">
-                    Click to start building! 🔧
-                  </p>
-                </div>
-              </CardContent>
-            </EmotionalCard>
-          ))}
-        </div>
+                    {/* Description */}
+                    <div className="text-center mt-2 md:mt-3">
+                      <p className="text-xs md:text-sm lg:text-base text-autism-primary/80 leading-relaxed">
+                        {theme.description}
+                      </p>
+                    </div>
 
-        {/* Help Text */}
-        <div className="text-center mt-8">
-          <p className="text-autism-primary/60 text-sm leading-relaxed">
-            Don't worry about picking the "right" one - you can always come back and try different themes!
-          </p>
-        </div>
-
-        {/* Fun Fact */}
-        <Card className="mt-8 bg-autism-calm-lavender border-autism-secondary">
-          <CardHeader>
-            <CardTitle className="text-center text-xl text-autism-primary">
-              🧠 Word Building Magic
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center">
-              <p className="text-autism-primary/80 leading-relaxed">
-                When you build words piece by piece, you're training your brain to see patterns that make 
-                reading faster and easier. It's like learning the secret code of language!
-              </p>
+                  </CardContent>
+                </EmotionalCard>
+              ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Accessibility Information */}
-        <div className="sr-only">
-          <p>
-            This page helps you choose what type of words you want to practice building.
-            Choose one of the four theme options by clicking or pressing Enter. Each theme
-            contains words at different difficulty levels that you'll learn to build step by step.
-            Click on any tile to start building words immediately.
-          </p>
+          {/* Compact Footer Message */}
+          <div className="text-center pt-3 pb-2">
+            <p className="text-sm md:text-base text-autism-primary/60 leading-relaxed">
+              Don't worry about picking the "right" one - you can always come back and try different themes!
+            </p>
+          </div>
+
         </div>
+      </div>
+
+      {/* Accessibility Information */}
+      <div className="sr-only">
+        <p>
+          This page helps you choose what type of words you want to practice building.
+          Choose one of the four theme options by clicking or pressing Enter. Each theme
+          contains words at different difficulty levels that you'll learn to build step by step.
+          Click on any tile to start building words immediately.
+        </p>
       </div>
     </div>
   )

@@ -12,7 +12,6 @@ import {
   Smile,
   Sparkles,
   Waves,
-  Dove,
   Search,
   PartyPopper,
   BookOpen,

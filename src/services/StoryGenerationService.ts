@@ -1,23 +1,4 @@
-import { Story, StoryContent } from '@/types'
-
-// Extended Story interface for multi-version stories
-export interface MultiVersionStory extends Omit<Story, 'content'> {
-  concept: string
-  interests: string[]
-  versions: {
-    simple: StoryVersion
-    full: StoryVersion
-    challenge: StoryVersion
-  }
-}
-
-export interface StoryVersion {
-  content: StoryContent[]
-  readingTime: string
-  vocabulary: 'basic' | 'standard' | 'advanced'
-  averageWordsPerSentence: number
-  phonicsComplexity: 'basic' | 'intermediate' | 'advanced'
-}
+import * as Types from '@/types'
 
 export class StoryGenerationService {
   
