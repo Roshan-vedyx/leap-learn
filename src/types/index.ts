@@ -19,12 +19,15 @@ export interface UserPreferences {
   audioSettings: AudioSettings
 }
 
+export type TtsAccent = 'US' | 'GB' | 'IN'
+
 export interface AudioSettings {
   rate: number
   pitch: number
   volume: number
-  voiceName: string
-  enabled: boolean
+  voice?: SpeechSynthesisVoice
+  lang?: string
+  accent?: TtsAccent
 }
 
 // Story and Content Types
@@ -248,6 +251,7 @@ export const STORAGE_KEYS = {
   USER_PREFERENCES: 'user-preferences',
   ACCESSIBILITY_MODE: 'accessibility-mode',
   FONT_SIZE: 'font-size',
+  TTS_ACCENT: 'tts-accent', // Add this line
   AUDIO_PREFERENCES: 'audio-preferences',
   CURRENT_BRAIN_STATE: 'current-brain-state',
   CREATIVE_RESPONSE: 'creative-response',

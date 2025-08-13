@@ -2,7 +2,8 @@
 // Save as src/hooks/useSpeechHighlighting.ts
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { cn, audio, accessibility } from '@/lib/utils'
+import { cn, audio, accessibility, storage } from '@/lib/utils'
+import type { TtsAccent } from '@/types'
 
 interface UseSpeechHighlightingOptions {
   rate?: number
@@ -41,7 +42,7 @@ export const useSpeechHighlighting = (
   const originalContentRef = useRef<string>('')
   const currentElementRef = useRef<string>('')
 
-  // Check if speech synthesis is supported - use audio instead of audioEnhanced
+  // Check if speech synthesis is supported
   const isSupported = audio.isSpeechSynthesisSupported()
 
   // Load available voices
@@ -52,10 +53,12 @@ export const useSpeechHighlighting = (
       const voices = audio.getVoices()
       setAvailableVoices(voices)
       
-      // Auto-select child-friendly voice if available
-      const childVoices = audio.getChildVoices()
-      if (childVoices.length > 0 && !selectedVoice) {
-        setSelectedVoice(childVoices[0])
+      // Get current accent preference and select appropriate voice
+      const savedAccent = storage.get('tts-accent', 'US') as TtsAccent
+      const calmVoices = audio.getCalmVoicesByAccent(savedAccent)
+      
+      if (calmVoices.length > 0 && !selectedVoice) {
+        setSelectedVoice(calmVoices[0])
       } else if (voices.length > 0 && !selectedVoice) {
         setSelectedVoice(voices[0])
       }
@@ -122,6 +125,9 @@ export const useSpeechHighlighting = (
     setCurrentWordIndex(-1)
     currentElementRef.current = elementId
 
+    // Get current accent preference
+    const savedAccent = storage.get('tts-accent', 'US') as TtsAccent
+
     // Store original content for reset
     const element = document.getElementById(elementId)
     if (element) {
@@ -131,9 +137,11 @@ export const useSpeechHighlighting = (
     try {
       options.onSpeechStart?.()
 
+      // Get the best calm voice for selected accent
+      const bestVoice = audio.getBestCalmVoice(savedAccent) || selectedVoice
+
       // Use the existing audio.speak method with highlighting simulation
       const words = text.split(/\s+/)
-      let currentIndex = 0
 
       const speakWord = async (word: string, index: number): Promise<void> => {
         return new Promise((resolve, reject) => {
@@ -143,20 +151,20 @@ export const useSpeechHighlighting = (
           // Highlight current word
           highlightWord(elementId, index, true)
 
-          // Create utterance for single word
+          // Create utterance for single word with accent-specific voice
           const utterance = new SpeechSynthesisUtterance(word)
-          utterance.voice = selectedVoice
-          utterance.rate = options.rate ?? 0.8
-          utterance.pitch = options.pitch ?? 1.1
+          utterance.voice = bestVoice
+          utterance.rate = options.rate ?? 0.65 // Extra slow for neurodivergent children
+          utterance.pitch = options.pitch ?? 0.9 // Calm pitch
           utterance.volume = options.volume ?? 0.8
 
           utterance.onend = () => {
-            // Remove highlight
+            // Remove highlight with longer pause for processing
             setTimeout(() => {
               highlightWord(elementId, index, false)
               options.onWordEnd?.(word, index)
               resolve()
-            }, options.pauseBetweenWords ?? 200)
+            }, options.pauseBetweenWords ?? 250) // Slightly longer pauses
           }
 
           utterance.onerror = (event) => {
@@ -255,15 +263,15 @@ export const useAdaptiveHighlighting = (brainState: string) => {
     switch (brainState) {
       case 'energetic':
       case 'excited':
-        return 0.9 // Slightly faster for energetic users
+        return 0.75 // Still slower than before for neurodivergent users
       case 'overwhelmed':
       case 'tired':
-        return 0.6 // Much slower for calm reading
+        return 0.5 // Much slower for calm reading
       case 'focused':
       case 'curious':
-        return 0.8 // Standard rate
+        return 0.65 // Standard slow rate
       default:
-        return 0.8
+        return 0.65
     }
   }, [brainState])
 

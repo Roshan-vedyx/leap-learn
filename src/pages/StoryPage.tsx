@@ -106,18 +106,19 @@ const StoryPage: React.FC<StoryPageProps> = ({ storyId }) => {
   const handleReadAloud = async (textToRead?: string) => {
     if (!audio.isSpeechSynthesisSupported()) return
     
+    // Get current accent preference
+    const currentAccent = storage.get('tts-accent', 'US') as 'US' | 'GB' | 'IN'
+    
     // Use provided text or current section text
     const text = textToRead || getCurrentDisplayText()
     
     setIsReading(true)
     try {
-      const voices = audio.getChildVoices()
-      const selectedVoice = voices[0] || audio.getVoices()[0]
-      
+      // FIXED: Actually pass the accent to the speak function
       await audio.speak(text, {
-        voice: selectedVoice,
-        rate: 0.8, // Slower for comprehension
-        pitch: 1.1 // Slightly higher for child-friendly
+        accent: currentAccent,  // This is the key fix!
+        rate: 0.8,
+        pitch: 1.1
       })
     } catch (error) {
       console.error('Text-to-speech error:', error)

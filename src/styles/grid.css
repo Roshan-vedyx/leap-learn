@@ -821,3 +821,25 @@
         page-break-inside: avoid;
     }
 }
+
+/* =============================================================================
+   TEMPORARY FOOTER FIX
+   ============================================================================= */
+
+/* Temporarily disable all footer elements */
+footer, 
+.viewport-footer {
+    display: none !important;
+}
+
+/* Fix viewport container that's cutting off content */
+.page-container {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+}
+
+.content-area {
+    min-height: auto !important;
+    overflow: visible !important;
+}

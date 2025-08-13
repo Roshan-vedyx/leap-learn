@@ -49,6 +49,7 @@ export const accessibility = {
 }
 
 // Enhanced Audio utilities for Web Speech API with TTS support
+
 export const audio = {
   // Check if speech synthesis is supported
   isSpeechSynthesisSupported: (): boolean => {
@@ -61,7 +62,7 @@ export const audio = {
     return speechSynthesis.getVoices()
   },
 
-  // Get child-friendly voices (enhanced filtering)
+  // Original working getChildVoices
   getChildVoices: (): SpeechSynthesisVoice[] => {
     const voices = audio.getVoices()
     return voices.filter(voice => 
@@ -73,7 +74,85 @@ export const audio = {
     )
   },
 
-  // Enhanced speak function with better error handling and options
+  // FIXED: Actually filter voices by accent
+  getVoicesForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice[] => {
+    const allVoices = audio.getVoices()
+    
+    // Get all English voices first
+    const englishVoices = allVoices.filter(voice => 
+      voice.lang.toLowerCase().startsWith('en')
+    )
+    
+    // Define clearer language patterns for each accent
+    let accentVoices: SpeechSynthesisVoice[] = []
+    
+    if (accent === 'US') {
+      accentVoices = englishVoices.filter(voice => {
+        const lang = voice.lang.toLowerCase()
+        const name = voice.name.toLowerCase()
+        return lang.includes('en-us') || 
+               lang.includes('en_us') ||
+               name.includes('us ') ||
+               name.includes('american') ||
+               (!lang.includes('gb') && !lang.includes('uk') && !lang.includes('in') && lang.startsWith('en'))
+      })
+    } else if (accent === 'GB') {
+      accentVoices = englishVoices.filter(voice => {
+        const lang = voice.lang.toLowerCase()
+        const name = voice.name.toLowerCase()
+        return lang.includes('en-gb') || 
+               lang.includes('en-uk') ||
+               lang.includes('en_gb') ||
+               name.includes('uk ') ||
+               name.includes('british') ||
+               name.includes('daniel') ||
+               name.includes('kate')
+      })
+    } else if (accent === 'IN') {
+      accentVoices = englishVoices.filter(voice => {
+        const lang = voice.lang.toLowerCase()
+        const name = voice.name.toLowerCase()
+        return lang.includes('en-in') || 
+               lang.includes('hi-in') ||
+               lang.includes('en_in') ||
+               name.includes('indian') ||
+               name.includes('rishi')
+      })
+    }
+    
+    // If we found accent-specific voices, return them
+    // Otherwise return all English voices as fallback
+    return accentVoices.length > 0 ? accentVoices : englishVoices
+  },
+
+  // Get the best voice for accent with your original quality preferences
+  getBestVoiceForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice | null => {
+    const accentVoices = audio.getVoicesForAccent(accent)
+    
+    if (accentVoices.length === 0) return null
+    
+    // Apply your original child-friendly filtering to the accent voices
+    const friendlyVoices = accentVoices.filter(voice => {
+      const name = voice.name.toLowerCase()
+      return name.includes('female') ||
+             name.includes('child') ||
+             name.includes('kid') ||
+             name.includes('young') ||
+             name.includes('natural') ||
+             name.includes('premium') ||
+             name.includes('enhanced')
+    })
+    
+    // If we found friendly voices in this accent, use the first one
+    if (friendlyVoices.length > 0) {
+      return friendlyVoices[0]
+    }
+    
+    // Otherwise, use the first voice from this accent
+    return accentVoices[0]
+  },
+
+  // Updated speak function that ACTUALLY uses the accent
   speak: async (
     text: string, 
     options: {
@@ -82,6 +161,7 @@ export const audio = {
       volume?: number
       voice?: SpeechSynthesisVoice
       lang?: string
+      accent?: 'US' | 'GB' | 'IN'
     } = {}
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -92,14 +172,29 @@ export const audio = {
 
       const utterance = new SpeechSynthesisUtterance(text)
       
-      // Default settings optimized for neurodivergent users
-      utterance.rate = options.rate ?? 0.8 // Slightly slower for better comprehension
+      // Your original working settings
+      utterance.rate = options.rate ?? 0.8
       utterance.pitch = options.pitch ?? 1
       utterance.volume = options.volume ?? 0.8
       utterance.lang = options.lang ?? 'en-US'
       
+      // FIXED: Actually use the accent to select voice
       if (options.voice) {
         utterance.voice = options.voice
+      } else if (options.accent) {
+        const accentVoice = audio.getBestVoiceForAccent(options.accent)
+        if (accentVoice) {
+          utterance.voice = accentVoice
+          console.log(`🎤 Using ${options.accent} voice: ${accentVoice.name}`)
+        } else {
+          console.log(`⚠️ No ${options.accent} voice found, using default`)
+        }
+      } else {
+        // Fallback to your original method
+        const childVoices = audio.getChildVoices()
+        if (childVoices.length > 0) {
+          utterance.voice = childVoices[0]
+        }
       }
 
       utterance.onend = () => resolve()
@@ -109,7 +204,7 @@ export const audio = {
     })
   },
 
-  // Simple speak function (alternative interface matching your requested code)
+  // Original speakSimple
   speakSimple: async (text: string, options: any = {}): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (!audio.isSpeechSynthesisSupported()) {
@@ -125,7 +220,7 @@ export const audio = {
     })
   },
 
-  // Stop current speech
+  // Original stop
   stop: (): void => {
     if (audio.isSpeechSynthesisSupported()) {
       speechSynthesis.cancel()

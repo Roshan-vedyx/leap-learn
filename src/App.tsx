@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Router, Route, Switch, Link } from 'wouter'
-import { accessibility, preferences } from '@/lib/utils'
+import { accessibility, preferences, storage } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { CalmCornerModal } from '@/components/ui/Modal'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
+
+import type { TtsAccent } from './types'
 
 // Import page components
 import BrainCheckPage from './pages/BrainCheckPage'
@@ -71,6 +73,9 @@ function App() {
 
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
+  const [ttsAccent, setTtsAccent] = useState<TtsAccent>(() => 
+    storage.get('tts-accent', 'US') as TtsAccent
+  )
 
   // Load preferences on app start
   useEffect(() => {
@@ -132,6 +137,11 @@ function App() {
         announcer.textContent = ''
       }, 1000)
     }
+  }
+
+  const handleTtsAccentChange = (newAccent: TtsAccent) => {
+    setTtsAccent(newAccent)
+    storage.set('tts-accent', newAccent)
   }
 
   // Handle calm corner toggle
@@ -219,11 +229,11 @@ function App() {
               </Button>
               
               {/* Accessibility Settings - Styled as professional controls */}
-              <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
-                <div className="flex flex-col sm:flex-row gap-2">
+              <div className="hidden sm:flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                   <div className="relative">
                     <label htmlFor="accessibility-mode" className="sr-only">
-                      Choose accessibility mode
+                      Choose accessibility mode for your neurodivergent needs
                     </label>
                     <select
                       id="accessibility-mode"
@@ -238,7 +248,7 @@ function App() {
                       "
                       aria-describedby="accessibility-mode-help"
                     >
-                      <option value="default">Default</option>
+                      <option value="none">Screen Mode</option>
                       <option value="adhd">ADHD</option>
                       <option value="dyslexia">Dyslexia</option>
                       <option value="autism">Autism</option>
@@ -246,9 +256,9 @@ function App() {
                     <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
-                  <div className="relative">
+                  {/*<div className="relative">
                     <label htmlFor="font-size" className="sr-only">
-                      Choose font size
+                      Choose font size for comfortable reading
                     </label>
                     <select
                       id="font-size"
@@ -266,6 +276,33 @@ function App() {
                       <option value="default">Default</option>
                       <option value="large">Large</option>
                       <option value="extra-large">X-Large</option>
+                    </select>
+                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  </div>*/}
+
+                  {/* NEW: TTS Accent Dropdown */}
+                  <div className="relative">
+                    <label htmlFor="tts-accent" className="sr-only">
+                      Choose voice accent for text-to-speech reading
+                    </label>
+                    <select
+                      id="tts-accent"
+                      value={ttsAccent}
+                      onChange={(e) => handleTtsAccentChange(e.target.value as TtsAccent)}
+                      className="
+                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                        min-w-[80px] font-primary cursor-pointer
+                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                        appearance-none pr-8
+                      "
+                      aria-describedby="tts-accent-help"
+                      title="Choose voice accent for reading aloud"
+                    >
+                      <option value="none">Switch Accent</option>
+                      <option value="US">🇺🇸 US</option>
+                      <option value="GB">🇬🇧 UK</option>
+                      <option value="IN">🇮🇳 India</option>
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
@@ -474,6 +511,9 @@ function App() {
         </div>
         <div id="font-size-help">
           Adjust text size for comfortable reading
+        </div>
+        <div id="tts-accent-help">
+          Choose the voice accent for text-to-speech reading. All voices are optimized to be calm and slow for better comprehension.
         </div>
       </div>
 
