@@ -30,7 +30,7 @@ type FontSize = 'default' | 'large' | 'extra-large'
 
 // Professional Footer Component
 const Footer = () => (
-  <footer className="bg-page-section-bg border-t border-gray-100 py-8 mt-16">
+  <footer className="bg-page-section-bg border-t border-gray-100 py-4">
     <div className="max-w-6xl mx-auto px-6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-6 text-sm text-gray-500">
@@ -55,7 +55,7 @@ const Footer = () => (
         </div>
       </div>
       
-      <div className="text-center text-sm text-gray-400 mt-4">
+      <div className="text-center text-sm text-gray-400 mt-2">
         Built for neurodivergent learners | UDL Aligned | Research-Based Design
       </div>
     </div>
@@ -144,14 +144,14 @@ function App() {
   const sessionProgress = getSessionProgress()
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Skip Navigation Link for Keyboard Users 
-      <a href="#main-content" className="skip-link">
+    <div className="page-container">
+      {/* Skip Navigation Link for Keyboard Users */}
+      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded">
         Skip to main content
-      </a> */}
+      </a>
 
       {/* Professional Header - Redesigned */}
-      <nav className="bg-white border-b border-gray-200 shadow-gentle" role="navigation" aria-label="Main navigation">
+      <nav className="bg-white border-b border-gray-200 shadow-gentle flex-shrink-0" role="navigation" aria-label="Main navigation">
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             {/* Logo Section - Enhanced */}
@@ -327,8 +327,8 @@ function App() {
         </div>
       </nav>
 
-      {/* Main Content Area */}
-      <main id="main-content" className="flex-1">
+      {/* Main Content Area - Now uses content-area class for flex: 1 */}
+      <main id="main-content" className="content-area">
         <Router>
           <Switch>
             {/* Default route - Brain Check-in */}
@@ -388,33 +388,29 @@ function App() {
 
             {/* Math activities placeholder */}
             <Route path="/math-activities">
-              <div className="min-h-screen bg-white p-4 flex items-center justify-center">
-                <Card className="text-center shadow-gentle">
-                  <CardContent className="p-8">
-                    <div className="text-6xl mb-4">🔢</div>
-                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
-                    <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
-                      Back to Today I Want To
-                    </Button>
-                  </CardContent>
-                </Card>
+              <div className="container">
+                <div className="viewport-header">
+                  <div className="text-6xl mb-4">🔢</div>
+                  <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
+                  <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
+                  <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                    Back to Today I Want To
+                  </Button>
+                </div>
               </div>
             </Route>
 
             {/* Gentle activities placeholder */}
             <Route path="/gentle-activities">
-              <div className="min-h-screen bg-white p-4 flex items-center justify-center">
-                <Card className="text-center shadow-gentle">
-                  <CardContent className="p-8">
-                    <div className="text-6xl mb-4">🌸</div>
-                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
-                    <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
-                      Back to Today I Want To
-                    </Button>
-                  </CardContent>
-                </Card>
+              <div className="container">
+                <div className="viewport-header">
+                  <div className="text-6xl mb-4">🌸</div>
+                  <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
+                  <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
+                  <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                    Back to Today I Want To
+                  </Button>
+                </div>
               </div>
             </Route>
 
@@ -426,7 +422,7 @@ function App() {
         </Router>
       </main>
 
-      {/* Professional Footer */}
+      {/* Professional Footer - Now inside the page-container */}
       <Footer />
 
       {/* Calm Corner Modal */}

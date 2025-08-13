@@ -118,6 +118,40 @@
 }
 
 /* =============================================================================
+   FOOTER STYLING FOR VIEWPORT SYSTEM
+   ============================================================================= */
+/* Footer within viewport system */
+.page-container footer {
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    margin-top: 0; /* Remove the mt-16 margin since it's now controlled by flex layout */
+    padding: 1rem 0; /* Reduce padding to be more compact */
+}
+
+/* Responsive footer adjustments */
+@media (max-height: 768px) {
+    .page-container footer {
+        padding: 0.5rem 0; /* Even more compact on shorter screens */
+        font-size: 0.875rem; /* Slightly smaller text */
+    }
+    
+    .page-container footer .flex {
+        gap: 0.75rem; /* Reduce gaps */
+    }
+}
+
+@media (max-height: 600px) {
+    .page-container footer {
+        padding: 0.25rem 0; /* Very compact on very short screens */
+        font-size: 0.75rem; /* Smaller text */
+    }
+    
+    /* Hide some footer content on very short screens */
+    .page-container footer .text-center {
+        display: none;
+    }
+}
+
+/* =============================================================================
    GRID SYSTEM - ACCESSIBLE AND TOUCH-FRIENDLY
    ============================================================================= */
 
