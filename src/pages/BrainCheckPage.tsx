@@ -108,7 +108,7 @@ const BrainCheckPage: React.FC = () => {
       }
 
       // Navigate directly to the "Today I Want To" page
-      setLocation('/today-i-want-to')
+      setLocation('/practice-reading')
     }
   }
 

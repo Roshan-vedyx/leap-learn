@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Router, Route, Switch, Link } from 'wouter'
 import { accessibility, preferences, storage } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
-import { CalmCornerModal } from '@/components/ui/Modal'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
+// CHANGE THIS LINE - import EnhancedCalmCorner instead of CalmCorner
+import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
 
 import type { TtsAccent } from './types'
 
@@ -67,7 +68,6 @@ const Footer = () => (
 function App() {
   const [accessibilityMode, setAccessibilityMode] = useState<AccessibilityMode>('default')
   const [fontSize, setFontSize] = useState<FontSize>('default')
-  const [showCalmCorner, setShowCalmCorner] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [location, setLocation] = useLocation()
 
@@ -144,9 +144,8 @@ function App() {
     storage.set('tts-accent', newAccent)
   }
 
-  // Handle calm corner toggle
+  // FIXED: Handle calm corner toggle - simplified to just use toggleCalmCorner
   const handleCalmCornerToggle = () => {
-    setShowCalmCorner(!showCalmCorner)
     toggleCalmCorner()
   }
 
@@ -255,30 +254,6 @@ function App() {
                     </select>
                     <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
-
-                  {/*<div className="relative">
-                    <label htmlFor="font-size" className="sr-only">
-                      Choose font size for comfortable reading
-                    </label>
-                    <select
-                      id="font-size"
-                      value={fontSize}
-                      onChange={(e) => handleFontSizeChange(e.target.value as FontSize)}
-                      className="
-                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                        min-w-[90px] font-primary cursor-pointer
-                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
-                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
-                        appearance-none pr-8
-                      "
-                      aria-describedby="font-size-help"
-                    >
-                      <option value="default">Default</option>
-                      <option value="large">Large</option>
-                      <option value="extra-large">X-Large</option>
-                    </select>
-                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  </div>*/}
 
                   {/* NEW: TTS Accent Dropdown */}
                   <div className="relative">
@@ -462,28 +437,8 @@ function App() {
       {/* Professional Footer - Now inside the page-container */}
       <Footer />
 
-      {/* Calm Corner Modal */}
-      <CalmCornerModal
-        open={showCalmCorner}
-        onOpenChange={(open) => {
-          setShowCalmCorner(open)
-          if (!open && isInCalmCorner) {
-            toggleCalmCorner()
-          }
-        }}
-        onBreathingExercise={() => {
-          console.log('Starting breathing exercise')
-          announceToScreenReader('Starting breathing exercise')
-        }}
-        onCalmMusic={() => {
-          console.log('Playing calm music')
-          announceToScreenReader('Playing calm music')
-        }}
-        onSafeSpace={() => {
-          console.log('Opening safe space')
-          announceToScreenReader('Opening safe space visualization')
-        }}
-      />
+      {/* FIXED: Use EnhancedCalmCorner instead of CalmCorner */}
+      <EnhancedCalmCorner />
 
       {/* Screen Reader Announcements */}
       <div 

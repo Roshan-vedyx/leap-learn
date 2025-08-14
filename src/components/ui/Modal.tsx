@@ -15,13 +15,14 @@ const DialogClose = DialogPrimitive.Close
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & {
-    variant?: 'default' | 'calm' | 'minimal'
+    variant?: 'default' | 'calm' | 'minimal' | 'sensory-regulation'
   }
 >(({ className, variant = 'default', ...props }, ref) => {
   const variants = {
     default: "bg-background/80 backdrop-blur-sm",
     calm: "bg-autism-calm-mint/90 backdrop-blur-sm",
-    minimal: "bg-background/60"
+    minimal: "bg-background/60",
+    'sensory-regulation': "bg-[#8BA888]" // Soft sage green - configurable later
   }
 
   return (
@@ -41,7 +42,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    variant?: 'default' | 'calm' | 'high-contrast' | 'celebration'
+    variant?: 'default' | 'calm' | 'high-contrast' | 'celebration' | 'sensory-regulation'
     size?: 'sm' | 'default' | 'lg' | 'xl' | 'full'
     showCloseButton?: boolean
   }
@@ -50,7 +51,8 @@ const DialogContent = React.forwardRef<
     default: "border bg-background text-foreground",
     calm: "border-autism-primary bg-autism-calm-mint text-autism-primary border-2",
     'high-contrast': "border-contrast-high bg-contrast-low text-contrast-high border-3",
-    celebration: "bg-gradient-to-br from-autism-calm-mint to-autism-calm-sky border-autism-primary border-2"
+    celebration: "bg-gradient-to-br from-autism-calm-mint to-autism-calm-sky border-autism-primary border-2",
+    'sensory-regulation': "bg-transparent border-0 shadow-none" // Full screen, no container styling
   }
 
   const sizes = {
@@ -61,24 +63,26 @@ const DialogContent = React.forwardRef<
     full: "max-w-[95vw] max-h-[95vh]"
   }
 
+  // For sensory regulation, we want full screen with no container constraints
+  const contentClassName = variant === 'sensory-regulation' 
+    ? "fixed inset-0 w-screen h-screen flex items-center justify-center"
+    : cn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-lg p-6",
+        variants[variant],
+        sizes[size],
+        className
+      )
+
   return (
     <DialogPortal>
-      <DialogOverlay variant={variant === 'calm' ? 'calm' : 'default'} />
+      <DialogOverlay variant={variant === 'sensory-regulation' ? 'sensory-regulation' : (variant === 'calm' ? 'calm' : 'default')} />
       <DialogPrimitive.Content
         ref={ref}
-        className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
-          "rounded-lg p-6",
-          // Enhanced accessibility
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          variants[variant],
-          sizes[size],
-          className
-        )}
+        className={contentClassName}
         {...props}
       >
         {children}
-        {showCloseButton && (
+        {showCloseButton && variant !== 'sensory-regulation' && (
           <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
             <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
@@ -96,7 +100,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-2 text-center sm:text-left",
+      "flex flex-col space-y-1.5 text-center sm:text-left",
       className
     )}
     {...props}
@@ -110,7 +114,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 gap-2",
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className
     )}
     {...props}
@@ -126,8 +130,6 @@ const DialogTitle = React.forwardRef<
     ref={ref}
     className={cn(
       "text-lg font-semibold leading-none tracking-tight",
-      // Enhanced readability
-      "text-xl md:text-2xl leading-relaxed",
       className
     )}
     {...props}
@@ -141,29 +143,21 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn(
-      "text-sm text-muted-foreground",
-      // Enhanced readability
-      "text-base leading-relaxed",
-      className
-    )}
+    className={cn("text-sm text-muted-foreground", className)}
     {...props}
   />
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 
-// Enhanced Modal with neurodivergent-specific features
-export interface ModalProps {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+// Keep your existing Modal interface
+interface ModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
   title?: string
   description?: string
-  variant?: 'default' | 'calm' | 'high-contrast' | 'celebration'
+  children: React.ReactNode
+  variant?: 'default' | 'calm' | 'high-contrast' | 'celebration' | 'sensory-regulation'
   size?: 'sm' | 'default' | 'lg' | 'xl' | 'full'
-  showCloseButton?: boolean
-  closeOnOverlayClick?: boolean
-  closeOnEscape?: boolean
   primaryAction?: {
     label: string
     onClick: () => void
@@ -174,36 +168,37 @@ export interface ModalProps {
     label: string
     onClick: () => void
   }
+  closeOnOverlayClick?: boolean
+  closeOnEscape?: boolean
+  className?: string
 }
 
 const Modal: React.FC<ModalProps> = ({
   open,
   onOpenChange,
-  children,
   title,
   description,
+  children,
   variant = 'default',
   size = 'default',
-  showCloseButton = true,
+  primaryAction,
+  secondaryAction,
   closeOnOverlayClick = true,
   closeOnEscape = true,
-  primaryAction,
-  secondaryAction
+  className
 }) => {
   return (
-    <Dialog 
-      open={open} 
-      onOpenChange={onOpenChange}
-      modal={true}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        className={className}
         variant={variant}
         size={size}
-        showCloseButton={showCloseButton}
+        showCloseButton={variant !== 'sensory-regulation'}
         onPointerDownOutside={closeOnOverlayClick ? undefined : (e) => e.preventDefault()}
         onEscapeKeyDown={closeOnEscape ? undefined : (e) => e.preventDefault()}
       >
-        {(title || description) && (
+        {/* Only show header for non-sensory regulation modals */}
+        {variant !== 'sensory-regulation' && (title || description) && (
           <DialogHeader>
             {title && (
               <DialogTitle>{title}</DialogTitle>
@@ -214,11 +209,13 @@ const Modal: React.FC<ModalProps> = ({
           </DialogHeader>
         )}
 
-        <div className="py-4">
+        {/* Content area - full screen for sensory regulation */}
+        <div className={variant === 'sensory-regulation' ? "w-full h-full" : "py-4"}>
           {children}
         </div>
 
-        {(primaryAction || secondaryAction) && (
+        {/* Only show footer for non-sensory regulation modals */}
+        {variant !== 'sensory-regulation' && (primaryAction || secondaryAction) && (
           <DialogFooter>
             {secondaryAction && (
               <Button
@@ -245,7 +242,7 @@ const Modal: React.FC<ModalProps> = ({
   )
 }
 
-// Specialized modals for different emotional states
+// Keep your existing specialized modal types
 export interface EmotionalModalProps extends Omit<ModalProps, 'variant'> {
   mood?: 'calm' | 'celebration' | 'focus' | 'neutral'
   accessibilityMode?: 'adhd' | 'dyslexia' | 'autism' | 'default'
@@ -266,83 +263,82 @@ const EmotionalModal: React.FC<EmotionalModalProps> = ({
   return <Modal {...props} variant={getVariant()} />
 }
 
-// Calm Corner Modal - special modal for emotional regulation
+// Updated CalmCornerModal - simplified for sensory regulation
 export interface CalmCornerModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onBreathingExercise?: () => void
-  onCalmMusic?: () => void
-  onSafeSpace?: () => void
+  onHeavy?: () => void
+  onRock?: () => void
+  onQuiet?: () => void
 }
 
 const CalmCornerModal: React.FC<CalmCornerModalProps> = ({
   open,
   onOpenChange,
-  onBreathingExercise,
-  onCalmMusic,
-  onSafeSpace
+  onHeavy,
+  onRock,
+  onQuiet
 }) => {
   return (
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      variant="calm"
-      title="Calm Corner"
-      description="Take a moment to center yourself. What would help you feel better right now?"
+      variant="sensory-regulation"
       closeOnOverlayClick={false}
       closeOnEscape={false}
     >
-      <div className="grid gap-4">
-        {onBreathingExercise && (
-          <Button
-            variant="calm"
-            size="comfortable"
-            onClick={() => {
-              onBreathingExercise()
-              onOpenChange(false)
-            }}
-            className="w-full justify-start"
-          >
-            🫁 Breathing Exercise
-          </Button>
-        )}
-        
-        {onCalmMusic && (
-          <Button
-            variant="calm"
-            size="comfortable"
-            onClick={() => {
-              onCalmMusic()
-              onOpenChange(false)
-            }}
-            className="w-full justify-start"
-          >
-            🎵 Calm Sounds
-          </Button>
-        )}
-        
-        {onSafeSpace && (
-          <Button
-            variant="calm"
-            size="comfortable"
-            onClick={() => {
-              onSafeSpace()
-              onOpenChange(false)
-            }}
-            className="w-full justify-start"
-          >
-            🏠 Safe Space
-          </Button>
-        )}
-        
-        <Button
-          variant="outline"
-          size="comfortable"
+      {/* Full screen sensory regulation interface */}
+      <div className="relative w-full h-full flex flex-col items-center justify-center">
+        {/* Temporary exit button for testing - will be replaced with proper timer logic */}
+        <button
           onClick={() => onOpenChange(false)}
-          className="w-full"
+          className="absolute top-8 right-8 bg-white/20 hover:bg-white/30 rounded-full p-3 text-white text-xl transition-colors z-10"
+          aria-label="Exit calm corner"
         >
-          I'm feeling better now
-        </Button>
+          ✕
+        </button>
+
+        {/* Three regulation options */}
+        <div className="flex items-center justify-center gap-12 flex-wrap">
+          {/* HEAVY option */}
+          <button
+            onClick={() => {
+              console.log('HEAVY selected')
+              onHeavy?.()
+            }}
+            className="flex flex-col items-center justify-center w-32 h-32 bg-white/10 hover:bg-white/20 rounded-2xl transition-all text-white border-2 border-white/20 hover:border-white/40"
+            aria-label="Heavy pressure regulation"
+          >
+            <div className="text-6xl mb-2">🤗</div>
+            <div className="text-lg font-semibold">HEAVY</div>
+          </button>
+
+          {/* ROCK option */}
+          <button
+            onClick={() => {
+              console.log('ROCK selected')
+              onRock?.()
+            }}
+            className="flex flex-col items-center justify-center w-32 h-32 bg-white/10 hover:bg-white/20 rounded-2xl transition-all text-white border-2 border-white/20 hover:border-white/40"
+            aria-label="Rocking movement regulation"
+          >
+            <div className="text-6xl mb-2">🌊</div>
+            <div className="text-lg font-semibold">ROCK</div>
+          </button>
+
+          {/* QUIET option */}
+          <button
+            onClick={() => {
+              console.log('QUIET selected')
+              onQuiet?.()
+            }}
+            className="flex flex-col items-center justify-center w-32 h-32 bg-white/10 hover:bg-white/20 rounded-2xl transition-all text-white border-2 border-white/20 hover:border-white/40"
+            aria-label="Quiet sensory reduction"
+          >
+            <div className="text-6xl mb-2">🌙</div>
+            <div className="text-lg font-semibold">QUIET</div>
+          </button>
+        </div>
       </div>
     </Modal>
   )
