@@ -1,0 +1,1918 @@
+{
+    "metadata": {
+      "total_words": 200,
+      "easy_count": 48,
+      "regular_count": 76,
+      "challenge_count": 76,
+      "version": "2.0",
+      "description": "Comprehensive middle school word building database with phonics patterns and alternative chunking strategies"
+    },
+    "words": {
+      "easy": [
+        {
+          "word": "cat",
+          "chunks": ["cat"],
+          "alternative_chunks": ["c", "at"],
+          "phonics_pattern": "cvc",
+          "syllables": 1,
+          "themes": ["animals"],
+          "teaching_notes": "Foundation CVC pattern"
+        },
+        {
+          "word": "dog",
+          "chunks": ["dog"],
+          "alternative_chunks": ["d", "og"],
+          "phonics_pattern": "cvc",
+          "syllables": 1,
+          "themes": ["animals"],
+          "teaching_notes": "Foundation CVC pattern"
+        },
+        {
+          "word": "run",
+          "chunks": ["run"],
+          "alternative_chunks": ["r", "un"],
+          "phonics_pattern": "cvc",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "Foundation CVC pattern"
+        },
+        {
+          "word": "big",
+          "chunks": ["big"],
+          "alternative_chunks": ["b", "ig"],
+          "phonics_pattern": "cvc",
+          "syllables": 1,
+          "themes": ["descriptive"],
+          "teaching_notes": "Foundation CVC pattern"
+        },
+        {
+          "word": "sun",
+          "chunks": ["sun"],
+          "alternative_chunks": ["s", "un"],
+          "phonics_pattern": "cvc",
+          "syllables": 1,
+          "themes": ["space", "nature"],
+          "teaching_notes": "Foundation CVC pattern"
+        },
+        {
+          "word": "fish",
+          "chunks": ["fish"],
+          "alternative_chunks": ["f", "ish"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["animals", "ocean"],
+          "teaching_notes": "SH digraph pattern"
+        },
+        {
+          "word": "ship",
+          "chunks": ["ship"],
+          "alternative_chunks": ["sh", "ip"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["vehicles", "ocean"],
+          "teaching_notes": "SH digraph pattern"
+        },
+        {
+          "word": "duck",
+          "chunks": ["duck"],
+          "alternative_chunks": ["d", "uck"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["animals"],
+          "teaching_notes": "CK ending pattern"
+        },
+        {
+          "word": "jump",
+          "chunks": ["jump"],
+          "alternative_chunks": ["j", "ump"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "MP ending blend"
+        },
+        {
+          "word": "stop",
+          "chunks": ["stop"],
+          "alternative_chunks": ["st", "op"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "ST beginning blend"
+        },
+        {
+          "word": "tree",
+          "chunks": ["tree"],
+          "alternative_chunks": ["tr", "ee"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["nature"],
+          "teaching_notes": "TR blend + EE vowel team"
+        },
+        {
+          "word": "book",
+          "chunks": ["book"],
+          "alternative_chunks": ["b", "ook"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["school"],
+          "teaching_notes": "OO vowel team"
+        },
+        {
+          "word": "look",
+          "chunks": ["look"],
+          "alternative_chunks": ["l", "ook"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "OO vowel team"
+        },
+        {
+          "word": "moon",
+          "chunks": ["moon"],
+          "alternative_chunks": ["m", "oon"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["space", "nature"],
+          "teaching_notes": "OO vowel team"
+        },
+        {
+          "word": "star",
+          "chunks": ["star"],
+          "alternative_chunks": ["st", "ar"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 1,
+          "themes": ["space", "nature"],
+          "teaching_notes": "AR r-controlled vowel"
+        },
+        {
+          "word": "car",
+          "chunks": ["car"],
+          "alternative_chunks": ["c", "ar"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 1,
+          "themes": ["vehicles"],
+          "teaching_notes": "AR r-controlled vowel"
+        },
+        {
+          "word": "make",
+          "chunks": ["make"],
+          "alternative_chunks": ["m", "ake"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "Magic E pattern - long A"
+        },
+        {
+          "word": "bike",
+          "chunks": ["bike"],
+          "alternative_chunks": ["b", "ike"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["vehicles"],
+          "teaching_notes": "Magic E pattern - long I"
+        },
+        {
+          "word": "cake",
+          "chunks": ["cake"],
+          "alternative_chunks": ["c", "ake"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["food"],
+          "teaching_notes": "Magic E pattern - long A"
+        },
+        {
+          "word": "home",
+          "chunks": ["home"],
+          "alternative_chunks": ["h", "ome"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["places"],
+          "teaching_notes": "Magic E pattern - long O"
+        },
+        {
+          "word": "game",
+          "chunks": ["game"],
+          "alternative_chunks": ["g", "ame"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["activities"],
+          "teaching_notes": "Magic E pattern - long A"
+        },
+        {
+          "word": "name",
+          "chunks": ["name"],
+          "alternative_chunks": ["n", "ame"],
+          "phonics_pattern": "magic_e",
+          "syllables": 1,
+          "themes": ["people"],
+          "teaching_notes": "Magic E pattern - long A"
+        },
+        {
+          "word": "blue",
+          "chunks": ["blue"],
+          "alternative_chunks": ["bl", "ue"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["colors"],
+          "teaching_notes": "BL blend + UE ending"
+        },
+        {
+          "word": "play",
+          "chunks": ["play"],
+          "alternative_chunks": ["pl", "ay"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action", "activities"],
+          "teaching_notes": "PL blend + AY vowel team"
+        },
+        {
+          "word": "train",
+          "chunks": ["train"],
+          "alternative_chunks": ["tr", "ain"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["vehicles"],
+          "teaching_notes": "AI vowel team"
+        },
+        {
+          "word": "rain",
+          "chunks": ["rain"],
+          "alternative_chunks": ["r", "ain"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["nature"],
+          "teaching_notes": "AI vowel team"
+        },
+        {
+          "word": "snow",
+          "chunks": ["snow"],
+          "alternative_chunks": ["sn", "ow"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["nature"],
+          "teaching_notes": "SN blend + OW diphthong"
+        },
+        {
+          "word": "grow",
+          "chunks": ["grow"],
+          "alternative_chunks": ["gr", "ow"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action", "nature"],
+          "teaching_notes": "GR blend + OW diphthong"
+        },
+        {
+          "word": "milk",
+          "chunks": ["milk"],
+          "alternative_chunks": ["m", "ilk"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["food"],
+          "teaching_notes": "LK ending blend"
+        },
+        {
+          "word": "help",
+          "chunks": ["help"],
+          "alternative_chunks": ["h", "elp"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "LP ending blend"
+        },
+        {
+          "word": "fast",
+          "chunks": ["fast"],
+          "alternative_chunks": ["f", "ast"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["descriptive"],
+          "teaching_notes": "ST ending blend"
+        },
+        {
+          "word": "swim",
+          "chunks": ["swim"],
+          "alternative_chunks": ["sw", "im"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action", "ocean"],
+          "teaching_notes": "SW beginning blend"
+        },
+        {
+          "word": "fly",
+          "chunks": ["fly"],
+          "alternative_chunks": ["fl", "y"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action", "animals"],
+          "teaching_notes": "FL beginning blend"
+        },
+        {
+          "word": "sky",
+          "chunks": ["sky"],
+          "alternative_chunks": ["sk", "y"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["space", "nature"],
+          "teaching_notes": "SK beginning blend"
+        },
+        {
+          "word": "try",
+          "chunks": ["try"],
+          "alternative_chunks": ["tr", "y"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "TR beginning blend"
+        },
+        {
+          "word": "green",
+          "chunks": ["green"],
+          "alternative_chunks": ["gr", "een"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["colors", "nature"],
+          "teaching_notes": "EE vowel team"
+        },
+        {
+          "word": "sleep",
+          "chunks": ["sleep"],
+          "alternative_chunks": ["sl", "eep"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "EE vowel team"
+        },
+        {
+          "word": "three",
+          "chunks": ["three"],
+          "alternative_chunks": ["thr", "ee"],
+          "phonics_pattern": "consonant_blend",
+          "syllables": 1,
+          "themes": ["numbers"],
+          "teaching_notes": "THR triple blend + EE"
+        },
+        {
+          "word": "when",
+          "chunks": ["when"],
+          "alternative_chunks": ["wh", "en"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["question_words"],
+          "teaching_notes": "WH digraph"
+        },
+        {
+          "word": "what",
+          "chunks": ["what"],
+          "alternative_chunks": ["wh", "at"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["question_words"],
+          "teaching_notes": "WH digraph"
+        },
+        {
+          "word": "where",
+          "chunks": ["where"],
+          "alternative_chunks": ["wh", "ere"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["question_words"],
+          "teaching_notes": "WH digraph"
+        },
+        {
+          "word": "their",
+          "chunks": ["their"],
+          "alternative_chunks": ["th", "eir"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["sight_words"],
+          "teaching_notes": "TH digraph + EIR pattern"
+        },
+        {
+          "word": "night",
+          "chunks": ["night"],
+          "alternative_chunks": ["n", "ight"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["time"],
+          "teaching_notes": "GH silent letters"
+        },
+        {
+          "word": "light",
+          "chunks": ["light"],
+          "alternative_chunks": ["l", "ight"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["science"],
+          "teaching_notes": "GH silent letters"
+        },
+        {
+          "word": "right",
+          "chunks": ["right"],
+          "alternative_chunks": ["r", "ight"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 1,
+          "themes": ["directions"],
+          "teaching_notes": "GH silent letters"
+        },
+        {
+          "word": "eight",
+          "chunks": ["eight"],
+          "alternative_chunks": ["eigh", "t"],
+          "phonics_pattern": "vowel_team",
+          "syllables": 1,
+          "themes": ["numbers"],
+          "teaching_notes": "EIGH vowel team"
+        },
+        {
+          "word": "king",
+          "chunks": ["king"],
+          "alternative_chunks": ["k", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 1,
+          "themes": ["people"],
+          "teaching_notes": "ING ending as noun"
+        },
+        {
+          "word": "ring",
+          "chunks": ["ring"],
+          "alternative_chunks": ["r", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 1,
+          "themes": ["objects"],
+          "teaching_notes": "ING ending as noun"
+        },
+        {
+          "word": "thing",
+          "chunks": ["thing"],
+          "alternative_chunks": ["th", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 1,
+          "themes": ["objects"],
+          "teaching_notes": "TH + ING pattern"
+        }
+      ],
+      "regular": [
+        {
+          "word": "happy",
+          "chunks": ["hap", "py"],
+          "alternative_chunks": ["h", "ap", "py"],
+          "phonics_pattern": "suffix_y",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "Y suffix changing meaning"
+        },
+        {
+          "word": "funny",
+          "chunks": ["fun", "ny"],
+          "alternative_chunks": ["f", "un", "ny"],
+          "phonics_pattern": "suffix_y",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "Double N + Y suffix"
+        },
+        {
+          "word": "pretty",
+          "chunks": ["pret", "ty"],
+          "alternative_chunks": ["pr", "et", "ty"],
+          "phonics_pattern": "suffix_y",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "Double T + Y suffix"
+        },
+        {
+          "word": "running",
+          "chunks": ["run", "ning"],
+          "alternative_chunks": ["r", "un", "n", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "Double N + ING suffix"
+        },
+        {
+          "word": "jumping",
+          "chunks": ["jump", "ing"],
+          "alternative_chunks": ["j", "ump", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "ING suffix - present progressive"
+        },
+        {
+          "word": "playing",
+          "chunks": ["play", "ing"],
+          "alternative_chunks": ["pl", "ay", "ing"],
+          "phonics_pattern": "suffix_ing",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "ING suffix - present progressive"
+        },
+        {
+          "word": "walked",
+          "chunks": ["walk", "ed"],
+          "alternative_chunks": ["w", "alk", "ed"],
+          "phonics_pattern": "suffix_ed",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "ED suffix - past tense"
+        },
+        {
+          "word": "jumped",
+          "chunks": ["jump", "ed"],
+          "alternative_chunks": ["j", "ump", "ed"],
+          "phonics_pattern": "suffix_ed",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "ED suffix - past tense"
+        },
+        {
+          "word": "played",
+          "chunks": ["play", "ed"],
+          "alternative_chunks": ["pl", "ay", "ed"],
+          "phonics_pattern": "suffix_ed",
+          "syllables": 1,
+          "themes": ["action"],
+          "teaching_notes": "ED suffix - past tense"
+        },
+        {
+          "word": "bigger",
+          "chunks": ["big", "ger"],
+          "alternative_chunks": ["b", "ig", "g", "er"],
+          "phonics_pattern": "suffix_er",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "Double G + ER comparative"
+        },
+        {
+          "word": "smaller",
+          "chunks": ["small", "er"],
+          "alternative_chunks": ["sm", "all", "er"],
+          "phonics_pattern": "suffix_er",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "ER comparative suffix"
+        },
+        {
+          "word": "teacher",
+          "chunks": ["teach", "er"],
+          "alternative_chunks": ["t", "each", "er"],
+          "phonics_pattern": "suffix_er",
+          "syllables": 2,
+          "themes": ["people", "school"],
+          "teaching_notes": "ER as person who does"
+        },
+        {
+          "word": "player",
+          "chunks": ["play", "er"],
+          "alternative_chunks": ["pl", "ay", "er"],
+          "phonics_pattern": "suffix_er",
+          "syllables": 2,
+          "themes": ["people", "activities"],
+          "teaching_notes": "ER as person who does"
+        },
+        {
+          "word": "helper",
+          "chunks": ["help", "er"],
+          "alternative_chunks": ["h", "elp", "er"],
+          "phonics_pattern": "suffix_er",
+          "syllables": 2,
+          "themes": ["people"],
+          "teaching_notes": "ER as person who does"
+        },
+        {
+          "word": "birds",
+          "chunks": ["birds"],
+          "alternative_chunks": ["b", "ird", "s"],
+          "phonics_pattern": "suffix_s",
+          "syllables": 1,
+          "themes": ["animals"],
+          "teaching_notes": "S plural suffix"
+        },
+        {
+          "word": "games",
+          "chunks": ["games"],
+          "alternative_chunks": ["g", "ame", "s"],
+          "phonics_pattern": "suffix_s",
+          "syllables": 1,
+          "themes": ["activities"],
+          "teaching_notes": "S plural suffix"
+        },
+        {
+          "word": "boxes",
+          "chunks": ["box", "es"],
+          "alternative_chunks": ["b", "ox", "es"],
+          "phonics_pattern": "suffix_es",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ES plural after X"
+        },
+        {
+          "word": "wishes",
+          "chunks": ["wish", "es"],
+          "alternative_chunks": ["w", "ish", "es"],
+          "phonics_pattern": "suffix_es",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "ES plural after SH"
+        },
+        {
+          "word": "glasses",
+          "chunks": ["glass", "es"],
+          "alternative_chunks": ["gl", "ass", "es"],
+          "phonics_pattern": "suffix_es",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ES plural after SS"
+        },
+        {
+          "word": "rainbow",
+          "chunks": ["rain", "bow"],
+          "alternative_chunks": ["r", "ain", "b", "ow"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["nature"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "snowman",
+          "chunks": ["snow", "man"],
+          "alternative_chunks": ["sn", "ow", "m", "an"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["nature", "people"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "sunshine",
+          "chunks": ["sun", "shine"],
+          "alternative_chunks": ["s", "un", "sh", "ine"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["nature"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "bedroom",
+          "chunks": ["bed", "room"],
+          "alternative_chunks": ["b", "ed", "r", "oom"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "football",
+          "chunks": ["foot", "ball"],
+          "alternative_chunks": ["f", "oot", "b", "all"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["sports"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "airplane",
+          "chunks": ["air", "plane"],
+          "alternative_chunks": ["air", "pl", "ane"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["vehicles"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "outside",
+          "chunks": ["out", "side"],
+          "alternative_chunks": ["out", "s", "ide"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "inside",
+          "chunks": ["in", "side"],
+          "alternative_chunks": ["in", "s", "ide"],
+          "phonics_pattern": "compound_word",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "Two words combined"
+        },
+        {
+          "word": "water",
+          "chunks": ["wa", "ter"],
+          "alternative_chunks": ["w", "a", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["nature"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "sister",
+          "chunks": ["sis", "ter"],
+          "alternative_chunks": ["s", "is", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["family"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "brother",
+          "chunks": ["broth", "er"],
+          "alternative_chunks": ["br", "oth", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["family"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "father",
+          "chunks": ["fa", "ther"],
+          "alternative_chunks": ["f", "a", "th", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["family"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "mother",
+          "chunks": ["moth", "er"],
+          "alternative_chunks": ["m", "oth", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["family"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "flower",
+          "chunks": ["flow", "er"],
+          "alternative_chunks": ["fl", "ow", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["nature"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "under",
+          "chunks": ["un", "der"],
+          "alternative_chunks": ["u", "n", "d", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["position"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "over",
+          "chunks": ["o", "ver"],
+          "alternative_chunks": ["o", "v", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["position"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "after",
+          "chunks": ["af", "ter"],
+          "alternative_chunks": ["a", "f", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["time"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "winter",
+          "chunks": ["win", "ter"],
+          "alternative_chunks": ["w", "in", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["seasons"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "summer",
+          "chunks": ["sum", "mer"],
+          "alternative_chunks": ["s", "um", "m", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["seasons"],
+          "teaching_notes": "Double M + ER"
+        },
+        {
+          "word": "letter",
+          "chunks": ["let", "ter"],
+          "alternative_chunks": ["l", "et", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["school"],
+          "teaching_notes": "Double T + ER"
+        },
+        {
+          "word": "butter",
+          "chunks": ["but", "ter"],
+          "alternative_chunks": ["b", "ut", "t", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["food"],
+          "teaching_notes": "Double T + ER"
+        },
+        {
+          "word": "spider",
+          "chunks": ["spi", "der"],
+          "alternative_chunks": ["sp", "i", "d", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["animals"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "tiger",
+          "chunks": ["ti", "ger"],
+          "alternative_chunks": ["t", "i", "g", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["animals"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "paper",
+          "chunks": ["pa", "per"],
+          "alternative_chunks": ["p", "a", "p", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["school"],
+          "teaching_notes": "ER r-controlled vowel"
+        },
+        {
+          "word": "corner",
+          "chunks": ["cor", "ner"],
+          "alternative_chunks": ["c", "or", "n", "er"],
+          "phonics_pattern": "r_controlled",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "OR + ER r-controlled"
+        },
+        {
+          "word": "rocket",
+          "chunks": ["rock", "et"],
+          "alternative_chunks": ["r", "ock", "et"],
+          "phonics_pattern": "suffix_et",
+          "syllables": 2,
+          "themes": ["space", "vehicles"],
+          "teaching_notes": "ET suffix pattern"
+        },
+        {
+          "word": "planet",
+          "chunks": ["plan", "et"],
+          "alternative_chunks": ["pl", "an", "et"],
+          "phonics_pattern": "suffix_et",
+          "syllables": 2,
+          "themes": ["space"],
+          "teaching_notes": "ET suffix pattern"
+        },
+        {
+          "word": "basket",
+          "chunks": ["bas", "ket"],
+          "alternative_chunks": ["b", "as", "k", "et"],
+          "phonics_pattern": "suffix_et",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ET suffix pattern"
+        },
+        {
+          "word": "market",
+          "chunks": ["mar", "ket"],
+          "alternative_chunks": ["m", "ar", "k", "et"],
+          "phonics_pattern": "suffix_et",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "ET suffix pattern"
+        },
+        {
+          "word": "purple",
+          "chunks": ["pur", "ple"],
+          "alternative_chunks": ["p", "ur", "p", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["colors"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "apple",
+          "chunks": ["ap", "ple"],
+          "alternative_chunks": ["a", "pp", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["food"],
+          "teaching_notes": "Double P + LE"
+        },
+        {
+          "word": "little",
+          "chunks": ["lit", "tle"],
+          "alternative_chunks": ["l", "it", "t", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "Double T + LE"
+        },
+        {
+          "word": "middle",
+          "chunks": ["mid", "dle"],
+          "alternative_chunks": ["m", "id", "d", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["position"],
+          "teaching_notes": "Double D + LE"
+        },
+        {
+          "word": "table",
+          "chunks": ["ta", "ble"],
+          "alternative_chunks": ["t", "a", "b", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "circle",
+          "chunks": ["cir", "cle"],
+          "alternative_chunks": ["c", "ir", "c", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["shapes"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "uncle",
+          "chunks": ["un", "cle"],
+          "alternative_chunks": ["u", "n", "c", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["family"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "people",
+          "chunks": ["peo", "ple"],
+          "alternative_chunks": ["p", "eo", "p", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["people"],
+          "teaching_notes": "EO vowel team + LE"
+        },
+        {
+          "word": "simple",
+          "chunks": ["sim", "ple"],
+          "alternative_chunks": ["s", "im", "p", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "gentle",
+          "chunks": ["gen", "tle"],
+          "alternative_chunks": ["g", "en", "t", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LE ending pattern"
+        },
+        {
+          "word": "pickle",
+          "chunks": ["pick", "le"],
+          "alternative_chunks": ["p", "ick", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["food"],
+          "teaching_notes": "CK + LE pattern"
+        },
+        {
+          "word": "turtle",
+          "chunks": ["tur", "tle"],
+          "alternative_chunks": ["t", "ur", "t", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["animals"],
+          "teaching_notes": "UR + LE pattern"
+        },
+        {
+          "word": "bottle",
+          "chunks": ["bot", "tle"],
+          "alternative_chunks": ["b", "ot", "t", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "Double T + LE"
+        },
+        {
+          "word": "puzzle",
+          "chunks": ["puzz", "le"],
+          "alternative_chunks": ["p", "u", "zz", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["activities"],
+          "teaching_notes": "Double Z + LE"
+        },
+        {
+          "word": "castle",
+          "chunks": ["cas", "tle"],
+          "alternative_chunks": ["c", "as", "t", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "ST + LE cluster"
+        },
+        {
+          "word": "handle",
+          "chunks": ["han", "dle"],
+          "alternative_chunks": ["h", "an", "d", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ND + LE cluster"
+        },
+        {
+          "word": "candle",
+          "chunks": ["can", "dle"],
+          "alternative_chunks": ["c", "an", "d", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ND + LE cluster"
+        },
+        {
+          "word": "bundle",
+          "chunks": ["bun", "dle"],
+          "alternative_chunks": ["b", "un", "d", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["objects"],
+          "teaching_notes": "ND + LE cluster"
+        },
+        {
+          "word": "jungle",
+          "chunks": ["jun", "gle"],
+          "alternative_chunks": ["j", "un", "g", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["nature"],
+          "teaching_notes": "NG + LE cluster"
+        },
+        {
+          "word": "single",
+          "chunks": ["sin", "gle"],
+          "alternative_chunks": ["s", "in", "g", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["numbers"],
+          "teaching_notes": "NG + LE cluster"
+        },
+        {
+          "word": "mingle",
+          "chunks": ["min", "gle"],
+          "alternative_chunks": ["m", "in", "g", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "NG + LE cluster"
+        },
+        {
+          "word": "twinkle",
+          "chunks": ["twin", "kle"],
+          "alternative_chunks": ["tw", "in", "k", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["action", "space"],
+          "teaching_notes": "NK + LE cluster"
+        },
+        {
+          "word": "wrinkle",
+          "chunks": ["wrin", "kle"],
+          "alternative_chunks": ["wr", "in", "k", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "NK + LE cluster"
+        },
+        {
+          "word": "sparkle",
+          "chunks": ["spar", "kle"],
+          "alternative_chunks": ["sp", "ar", "k", "le"],
+          "phonics_pattern": "consonant_le",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RK + LE cluster"
+        }
+      ],
+      "challenge": [
+        {
+          "word": "understand",
+          "chunks": ["un", "der", "stand"],
+          "alternative_chunks": ["u", "n", "d", "er", "st", "and"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 3,
+          "themes": ["action", "school"],
+          "teaching_notes": "UN prefix + compound"
+        },
+        {
+          "word": "elephant",
+          "chunks": ["el", "e", "phant"],
+          "alternative_chunks": ["e", "l", "e", "ph", "ant"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 3,
+          "themes": ["animals"],
+          "teaching_notes": "PH digraph in middle"
+        },
+        {
+          "word": "telephone",
+          "chunks": ["tel", "e", "phone"],
+          "alternative_chunks": ["t", "el", "e", "ph", "one"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 3,
+          "themes": ["technology"],
+          "teaching_notes": "PH digraph + magic E"
+        },
+        {
+          "word": "paragraph",
+          "chunks": ["par", "a", "graph"],
+          "alternative_chunks": ["p", "ar", "a", "gr", "aph"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 3,
+          "themes": ["school"],
+          "teaching_notes": "PH digraph at end"
+        },
+        {
+          "word": "photograph",
+          "chunks": ["pho", "to", "graph"],
+          "alternative_chunks": ["ph", "o", "t", "o", "gr", "aph"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 3,
+          "themes": ["technology"],
+          "teaching_notes": "PH digraph twice"
+        },
+        {
+          "word": "dolphin",
+          "chunks": ["dol", "phin"],
+          "alternative_chunks": ["d", "ol", "ph", "in"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 2,
+          "themes": ["animals", "ocean"],
+          "teaching_notes": "PH digraph"
+        },
+        {
+          "word": "alphabet",
+          "chunks": ["al", "pha", "bet"],
+          "alternative_chunks": ["a", "l", "ph", "a", "b", "et"],
+          "phonics_pattern": "consonant_digraph",
+          "syllables": 3,
+          "themes": ["school"],
+          "teaching_notes": "PH digraph in middle"
+        },
+        {
+          "word": "wonderful",
+          "chunks": ["won", "der", "ful"],
+          "alternative_chunks": ["w", "on", "d", "er", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 3,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix meaning 'full of'"
+        },
+        {
+          "word": "beautiful",
+          "chunks": ["beau", "ti", "ful"],
+          "alternative_chunks": ["b", "eau", "t", "i", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 3,
+          "themes": ["emotions"],
+          "teaching_notes": "BEAU + FUL suffix"
+        },
+        {
+          "word": "powerful",
+          "chunks": ["pow", "er", "ful"],
+          "alternative_chunks": ["p", "ow", "er", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 3,
+          "themes": ["descriptive"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "helpful",
+          "chunks": ["help", "ful"],
+          "alternative_chunks": ["h", "elp", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "careful",
+          "chunks": ["care", "ful"],
+          "alternative_chunks": ["c", "are", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "colorful",
+          "chunks": ["col", "or", "ful"],
+          "alternative_chunks": ["c", "ol", "or", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 3,
+          "themes": ["descriptive"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "peaceful",
+          "chunks": ["peace", "ful"],
+          "alternative_chunks": ["p", "ea", "ce", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "thoughtful",
+          "chunks": ["thought", "ful"],
+          "alternative_chunks": ["th", "ough", "t", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "OUGH + FUL"
+        },
+        {
+          "word": "playful",
+          "chunks": ["play", "ful"],
+          "alternative_chunks": ["pl", "ay", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "graceful",
+          "chunks": ["grace", "ful"],
+          "alternative_chunks": ["gr", "a", "ce", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "hopeful",
+          "chunks": ["hope", "ful"],
+          "alternative_chunks": ["h", "o", "pe", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "fearful",
+          "chunks": ["fear", "ful"],
+          "alternative_chunks": ["f", "ear", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "thankful",
+          "chunks": ["thank", "ful"],
+          "alternative_chunks": ["th", "ank", "f", "ul"],
+          "phonics_pattern": "suffix_ful",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "FUL suffix"
+        },
+        {
+          "word": "homeless",
+          "chunks": ["home", "less"],
+          "alternative_chunks": ["h", "o", "me", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["places"],
+          "teaching_notes": "LESS suffix meaning 'without'"
+        },
+        {
+          "word": "helpless",
+          "chunks": ["help", "less"],
+          "alternative_chunks": ["h", "elp", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "hopeless",
+          "chunks": ["hope", "less"],
+          "alternative_chunks": ["h", "o", "pe", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "fearless",
+          "chunks": ["fear", "less"],
+          "alternative_chunks": ["f", "ear", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "careless",
+          "chunks": ["care", "less"],
+          "alternative_chunks": ["c", "are", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "useless",
+          "chunks": ["use", "less"],
+          "alternative_chunks": ["u", "se", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "endless",
+          "chunks": ["end", "less"],
+          "alternative_chunks": ["e", "nd", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "harmless",
+          "chunks": ["harm", "less"],
+          "alternative_chunks": ["h", "arm", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "painless",
+          "chunks": ["pain", "less"],
+          "alternative_chunks": ["p", "ain", "l", "ess"],
+          "phonics_pattern": "suffix_less",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "LESS suffix"
+        },
+        {
+          "word": "darkness",
+          "chunks": ["dark", "ness"],
+          "alternative_chunks": ["d", "ark", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "NESS suffix meaning 'state of'"
+        },
+        {
+          "word": "kindness",
+          "chunks": ["kind", "ness"],
+          "alternative_chunks": ["k", "ind", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "sadness",
+          "chunks": ["sad", "ness"],
+          "alternative_chunks": ["s", "ad", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "madness",
+          "chunks": ["mad", "ness"],
+          "alternative_chunks": ["m", "ad", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "goodness",
+          "chunks": ["good", "ness"],
+          "alternative_chunks": ["g", "ood", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "badness",
+          "chunks": ["bad", "ness"],
+          "alternative_chunks": ["b", "ad", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["emotions"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "softness",
+          "chunks": ["soft", "ness"],
+          "alternative_chunks": ["s", "oft", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "hardness",
+          "chunks": ["hard", "ness"],
+          "alternative_chunks": ["h", "ard", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "sickness",
+          "chunks": ["sick", "ness"],
+          "alternative_chunks": ["s", "ick", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["health"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "weakness",
+          "chunks": ["weak", "ness"],
+          "alternative_chunks": ["w", "eak", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "NESS suffix"
+        },
+        {
+          "word": "happiness",
+          "chunks": ["hap", "pi", "ness"],
+          "alternative_chunks": ["h", "ap", "p", "i", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 3,
+          "themes": ["emotions"],
+          "teaching_notes": "Y to I + NESS"
+        },
+        {
+          "word": "silliness",
+          "chunks": ["sil", "li", "ness"],
+          "alternative_chunks": ["s", "il", "l", "i", "n", "ess"],
+          "phonics_pattern": "suffix_ness",
+          "syllables": 3,
+          "themes": ["emotions"],
+          "teaching_notes": "Y to I + NESS"
+        },
+        {
+          "word": "unfair",
+          "chunks": ["un", "fair"],
+          "alternative_chunks": ["u", "n", "f", "air"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "UN prefix meaning 'not'"
+        },
+        {
+          "word": "undo",
+          "chunks": ["un", "do"],
+          "alternative_chunks": ["u", "n", "d", "o"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "UN prefix meaning 'reverse'"
+        },
+        {
+          "word": "untie",
+          "chunks": ["un", "tie"],
+          "alternative_chunks": ["u", "n", "t", "ie"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "UN prefix meaning 'reverse'"
+        },
+        {
+          "word": "unlock",
+          "chunks": ["un", "lock"],
+          "alternative_chunks": ["u", "n", "l", "ock"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "UN prefix meaning 'reverse'"
+        },
+        {
+          "word": "unpack",
+          "chunks": ["un", "pack"],
+          "alternative_chunks": ["u", "n", "p", "ack"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "UN prefix meaning 'reverse'"
+        },
+        {
+          "word": "unhappy",
+          "chunks": ["un", "hap", "py"],
+          "alternative_chunks": ["u", "n", "h", "ap", "p", "y"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 3,
+          "themes": ["emotions"],
+          "teaching_notes": "UN prefix meaning 'not'"
+        },
+        {
+          "word": "unable",
+          "chunks": ["un", "a", "ble"],
+          "alternative_chunks": ["u", "n", "a", "b", "le"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 3,
+          "themes": ["descriptive"],
+          "teaching_notes": "UN prefix + ABLE suffix"
+        },
+        {
+          "word": "unsafe",
+          "chunks": ["un", "safe"],
+          "alternative_chunks": ["u", "n", "s", "afe"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "UN prefix meaning 'not'"
+        },
+        {
+          "word": "unknown",
+          "chunks": ["un", "known"],
+          "alternative_chunks": ["u", "n", "kn", "own"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 2,
+          "themes": ["descriptive"],
+          "teaching_notes": "UN prefix + silent KN"
+        },
+        {
+          "word": "unlikely",
+          "chunks": ["un", "like", "ly"],
+          "alternative_chunks": ["u", "n", "l", "ike", "l", "y"],
+          "phonics_pattern": "prefix_un",
+          "syllables": 3,
+          "themes": ["descriptive"],
+          "teaching_notes": "UN prefix + LY suffix"
+        },
+        {
+          "word": "replay",
+          "chunks": ["re", "play"],
+          "alternative_chunks": ["r", "e", "pl", "ay"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "return",
+          "chunks": ["re", "turn"],
+          "alternative_chunks": ["r", "e", "t", "urn"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'back'"
+        },
+        {
+          "word": "rebuild",
+          "chunks": ["re", "build"],
+          "alternative_chunks": ["r", "e", "b", "uild"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "reread",
+          "chunks": ["re", "read"],
+          "alternative_chunks": ["r", "e", "r", "ead"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action", "school"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "rewrite",
+          "chunks": ["re", "write"],
+          "alternative_chunks": ["r", "e", "wr", "ite"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action", "school"],
+          "teaching_notes": "RE prefix + silent W"
+        },
+        {
+          "word": "remake",
+          "chunks": ["re", "make"],
+          "alternative_chunks": ["r", "e", "m", "ake"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "retell",
+          "chunks": ["re", "tell"],
+          "alternative_chunks": ["r", "e", "t", "ell"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "refresh",
+          "chunks": ["re", "fresh"],
+          "alternative_chunks": ["r", "e", "fr", "esh"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix meaning 'again'"
+        },
+        {
+          "word": "remember",
+          "chunks": ["re", "mem", "ber"],
+          "alternative_chunks": ["r", "e", "m", "em", "b", "er"],
+          "phonics_pattern": "prefix_re",
+          "syllables": 3,
+          "themes": ["action"],
+          "teaching_notes": "RE prefix + double M"
+        },
+        {
+          "word": "submarine",
+          "chunks": ["sub", "ma", "rine"],
+          "alternative_chunks": ["s", "ub", "m", "a", "r", "ine"],
+          "phonics_pattern": "prefix_sub",
+          "syllables": 3,
+          "themes": ["vehicles", "ocean"],
+          "teaching_notes": "SUB prefix meaning 'under'"
+        },
+        {
+          "word": "subway",
+          "chunks": ["sub", "way"],
+          "alternative_chunks": ["s", "ub", "w", "ay"],
+          "phonics_pattern": "prefix_sub",
+          "syllables": 2,
+          "themes": ["vehicles"],
+          "teaching_notes": "SUB prefix meaning 'under'"
+        },
+        {
+          "word": "subject",
+          "chunks": ["sub", "ject"],
+          "alternative_chunks": ["s", "ub", "j", "ect"],
+          "phonics_pattern": "prefix_sub",
+          "syllables": 2,
+          "themes": ["school"],
+          "teaching_notes": "SUB prefix"
+        },
+        {
+          "word": "subtract",
+          "chunks": ["sub", "tract"],
+          "alternative_chunks": ["s", "ub", "tr", "act"],
+          "phonics_pattern": "prefix_sub",
+          "syllables": 2,
+          "themes": ["math"],
+          "teaching_notes": "SUB prefix meaning 'take away'"
+        },
+        {
+          "word": "subtitle",
+          "chunks": ["sub", "ti", "tle"],
+          "alternative_chunks": ["s", "ub", "t", "i", "t", "le"],
+          "phonics_pattern": "prefix_sub",
+          "syllables": 3,
+          "themes": ["technology"],
+          "teaching_notes": "SUB prefix + TITLE"
+        },
+        {
+          "word": "preschool",
+          "chunks": ["pre", "school"],
+          "alternative_chunks": ["pr", "e", "sch", "ool"],
+          "phonics_pattern": "prefix_pre",
+          "syllables": 2,
+          "themes": ["school"],
+          "teaching_notes": "PRE prefix meaning 'before'"
+        },
+        {
+          "word": "preview",
+          "chunks": ["pre", "view"],
+          "alternative_chunks": ["pr", "e", "v", "iew"],
+          "phonics_pattern": "prefix_pre",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "PRE prefix meaning 'before'"
+        },
+        {
+          "word": "prepare",
+          "chunks": ["pre", "pare"],
+          "alternative_chunks": ["pr", "e", "p", "are"],
+          "phonics_pattern": "prefix_pre",
+          "syllables": 2,
+          "themes": ["action"],
+          "teaching_notes": "PRE prefix meaning 'before'"
+        },
+        {
+          "word": "predict",
+          "chunks": ["pre", "dict"],
+          "alternative_chunks": ["pr", "e", "d", "ict"],
+          "phonics_pattern": "prefix_pre",
+          "syllables": 2,
+          "themes": ["action", "school"],
+          "teaching_notes": "PRE prefix meaning 'before'"
+        },
+        {
+          "word": "prefix",
+          "chunks": ["pre", "fix"],
+          "alternative_chunks": ["pr", "e", "f", "ix"],
+          "phonics_pattern": "prefix_pre",
+          "syllables": 2,
+          "themes": ["school"],
+          "teaching_notes": "PRE prefix + word about prefixes!"
+        }
+      ]
+    },
+    "phonics_patterns": {
+      "cvc": {
+        "description": "Consonant-Vowel-Consonant pattern",
+        "examples": ["cat", "dog", "run"],
+        "teaching_focus": "Foundation decoding skill"
+      },
+      "magic_e": {
+        "description": "Silent E makes vowel say its name",
+        "examples": ["make", "bike", "cake"],
+        "teaching_focus": "Long vowel sounds"
+      },
+      "consonant_blend": {
+        "description": "Two consonants that blend together",
+        "examples": ["stop", "tree", "jump"],
+        "teaching_focus": "Blending sounds smoothly"
+      },
+      "consonant_digraph": {
+        "description": "Two letters that make one sound",
+        "examples": ["fish", "ship", "night"],
+        "teaching_focus": "Special letter combinations"
+      },
+      "vowel_team": {
+        "description": "Two vowels working together",
+        "examples": ["rain", "book", "green"],
+        "teaching_focus": "Vowel combinations"
+      },
+      "r_controlled": {
+        "description": "R changes the vowel sound",
+        "examples": ["star", "bird", "water"],
+        "teaching_focus": "R-controlled vowels"
+      },
+      "compound_word": {
+        "description": "Two words put together",
+        "examples": ["rainbow", "snowman", "airplane"],
+        "teaching_focus": "Word parts and meaning"
+      },
+      "consonant_le": {
+        "description": "Consonant + LE ending",
+        "examples": ["apple", "purple", "turtle"],
+        "teaching_focus": "Common word endings"
+      },
+      "suffix_ing": {
+        "description": "ING ending for action words",
+        "examples": ["running", "jumping", "playing"],
+        "teaching_focus": "Present progressive tense"
+      },
+      "suffix_ed": {
+        "description": "ED ending for past tense",
+        "examples": ["walked", "jumped", "played"],
+        "teaching_focus": "Past tense formation"
+      },
+      "suffix_er": {
+        "description": "ER ending for comparison or person",
+        "examples": ["bigger", "teacher", "helper"],
+        "teaching_focus": "Comparative and agent suffixes"
+      },
+      "suffix_est": {
+        "description": "EST ending for superlative",
+        "examples": ["biggest", "fastest", "smallest"],
+        "teaching_focus": "Superlative comparison"
+      },
+      "suffix_s": {
+        "description": "S ending for plurals",
+        "examples": ["cats", "dogs", "birds"],
+        "teaching_focus": "Plural formation"
+      },
+      "suffix_es": {
+        "description": "ES ending for special plurals",
+        "examples": ["boxes", "wishes", "glasses"],
+        "teaching_focus": "Plural after s, sh, ch, x, z"
+      },
+      "suffix_y": {
+        "description": "Y ending changing meaning",
+        "examples": ["happy", "funny", "pretty"],
+        "teaching_focus": "Adjective formation"
+      },
+      "suffix_ly": {
+        "description": "LY ending for adverbs",
+        "examples": ["quickly", "slowly", "nicely"],
+        "teaching_focus": "Adverb formation"
+      },
+      "suffix_ful": {
+        "description": "FUL ending meaning 'full of'",
+        "examples": ["helpful", "careful", "wonderful"],
+        "teaching_focus": "Descriptive adjectives"
+      },
+      "suffix_less": {
+        "description": "LESS ending meaning 'without'",
+        "examples": ["helpless", "homeless", "fearless"],
+        "teaching_focus": "Negative descriptives"
+      },
+      "suffix_ness": {
+        "description": "NESS ending for noun states",
+        "examples": ["kindness", "darkness", "happiness"],
+        "teaching_focus": "Abstract nouns"
+      },
+      "prefix_un": {
+        "description": "UN prefix meaning 'not' or 'reverse'",
+        "examples": ["unfair", "undo", "unhappy"],
+        "teaching_focus": "Negation and reversal"
+      },
+      "prefix_re": {
+        "description": "RE prefix meaning 'again' or 'back'",
+        "examples": ["replay", "return", "rebuild"],
+        "teaching_focus": "Repetition and return"
+      },
+      "prefix_pre": {
+        "description": "PRE prefix meaning 'before'",
+        "examples": ["preview", "preschool", "prepare"],
+        "teaching_focus": "Time sequence"
+      },
+      "prefix_sub": {
+        "description": "SUB prefix meaning 'under'",
+        "examples": ["submarine", "subway", "subtract"],
+        "teaching_focus": "Position and reduction"
+      }
+    },
+    "teaching_sequences": {
+      "phonics_progression": [
+        "cvc",
+        "consonant_blend", 
+        "consonant_digraph",
+        "magic_e",
+        "vowel_team",
+        "r_controlled",
+        "compound_word",
+        "consonant_le",
+        "suffix_s",
+        "suffix_es", 
+        "suffix_ing",
+        "suffix_ed",
+        "suffix_er",
+        "suffix_y",
+        "suffix_ful",
+        "suffix_less",
+        "suffix_ness",
+        "prefix_un",
+        "prefix_re",
+        "prefix_pre",
+        "prefix_sub"
+      ],
+      "difficulty_progression": [
+        "easy",
+        "regular", 
+        "challenge"
+      ]
+    },
+    "query_helpers": {
+      "by_pattern": {
+        "description": "Get words by phonics pattern",
+        "example": "getAllWordsByPattern('suffix_ing')"
+      },
+      "by_theme": {
+        "description": "Get words by theme",
+        "example": "getAllWordsByTheme('animals')"
+      },
+      "by_difficulty": {
+        "description": "Get words by difficulty level",
+        "example": "getAllWordsByDifficulty('regular')"
+      },
+      "magic_e_words": {
+        "description": "Get all magic E words for focused practice",
+        "filter": "phonics_pattern === 'magic_e'"
+      },
+      "ing_words": {
+        "description": "Get all ING words for verb tense practice", 
+        "filter": "phonics_pattern === 'suffix_ing'"
+      },
+      "compound_words": {
+        "description": "Get all compound words for morphology practice",
+        "filter": "phonics_pattern === 'compound_word'"
+      },
+      "prefix_words": {
+        "description": "Get all words with prefixes",
+        "filter": "phonics_pattern.startsWith('prefix_')"
+      },
+      "suffix_words": {
+        "description": "Get all words with suffixes",
+        "filter": "phonics_pattern.startsWith('suffix_')"
+      }
+    }
+  }

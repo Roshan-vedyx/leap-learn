@@ -1,20 +1,21 @@
-// src/pages/WordBuildingGamePage.tsx
-// Enhanced with choice-driven sentence transition and motor planning accessibility
-// ND-FRIENDLY VERSION: No scrolling required, viewport-optimized layout
-import React, { useState, useEffect } from 'react'
+// src/pages/AdaptiveWordBuildingGamePage.tsx
+// Enhanced word building game with invisible adaptive difficulty
+// POLISHED UX for neurodivergent children
+
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
-import { wordBank, breakWordIntoChunks, getWordsByThemeAndDifficulty } from '@/data/wordBank'
+import { AdaptiveWordBank, breakWordIntoChunks } from '@/data/wordBank'
 
 interface WordBuildingGamePageProps {
   theme: string
 }
 
 const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) => {
+  // Core game state
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
-  const [currentDifficulty, setCurrentDifficulty] = useState<'easy' | 'regular' | 'challenge'>('easy')
   const [arrangedChunks, setArrangedChunks] = useState<string[]>([])
   const [availableChunks, setAvailableChunks] = useState<string[]>([])
   const [isWordComplete, setIsWordComplete] = useState(false)
@@ -26,32 +27,70 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   const [isReading, setIsReading] = useState(false)
   const [wordFeedback, setWordFeedback] = useState<string>('')
   const [selectedChunkIndex, setSelectedChunkIndex] = useState<number | null>(null)
+  const [showWrongAttemptModal, setShowWrongAttemptModal] = useState(false)
   const [, setLocation] = useLocation()
 
-  // Get brain state for adaptive presentation
-  const brainState = storage.get('current-brain-state', 'focused')
+  // Performance tracking (invisible to user)
+  const [wordStartTime, setWordStartTime] = useState<number>(Date.now())
+  const [hintsUsed, setHintsUsed] = useState<number>(0)
+  const [resetsUsed, setResetsUsed] = useState<number>(0)
   
-  // Get words for current theme and difficulty
-  const currentWords = getWordsByThemeAndDifficulty(theme, currentDifficulty)
+  // Adaptive system
+  const adaptiveWordBank = useRef<AdaptiveWordBank | null>(null)
+  const [currentWords, setCurrentWords] = useState<string[]>([])
+  const [isInitialized, setIsInitialized] = useState(false)
+
+  // Initialize adaptive system
+  useEffect(() => {
+    const initializeAdaptiveSystem = async () => {
+      const userAge = storage.get('user-age', 10)
+      adaptiveWordBank.current = new AdaptiveWordBank(userAge)
+      
+      // Wait for word bank to load
+      await new Promise(resolve => setTimeout(resolve, 200))
+      
+      // Get initial words
+      const words = adaptiveWordBank.current.getWordsForTheme(theme)
+      setCurrentWords(words)
+      setIsInitialized(true)
+      
+      console.log(`🎯 Adaptive system initialized for age ${userAge}, starting with ${adaptiveWordBank.current.getCurrentDifficulty()} difficulty`)
+    }
+
+    initializeAdaptiveSystem()
+  }, [theme])
+
+  // Get current word
   const currentWord = currentWords[currentWordIndex] || 'CAT'
   
-  // Initialize word chunks when word changes
+  // Brain state for presentation
+  const brainState = storage.get('current-brain-state', 'focused')
+
+  // Initialize word chunks when word changes (FIXED: Only after initialization)
   useEffect(() => {
-    if (currentWord) {
-      // Use the enhanced phonemic chunking
-      const chunks = breakWordIntoChunks(currentWord)
+    if (currentWord && adaptiveWordBank.current && isInitialized) {
+      // Clear any previous feedback first
+      setWordFeedback('')
+      setShowWrongAttemptModal(false)
+      setIsWordComplete(false)
+      setShowCelebration(false)
+      
+      // Use enhanced chunking from JSON or fallback to phonemic analysis
+      const chunks = adaptiveWordBank.current.getWordChunks(currentWord)
       
       // Shuffle chunks for the game
       const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
       setAvailableChunks(shuffledChunks)
       setArrangedChunks([])
-      setIsWordComplete(false)
-      setShowCelebration(false)
       setSelectedChunkIndex(null)
-      setWordFeedback('')
       setShowPatternRecognition(false)
+      
+      // Reset performance tracking for new word
+      setWordStartTime(Date.now())
+      setHintsUsed(0)
+      setResetsUsed(0)
     }
-  }, [currentWord])
+  }, [currentWord, isInitialized])
 
   // Check for sentence choice trigger
   useEffect(() => {
@@ -61,357 +100,420 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }, [wordsCompleted.length, sentenceChoiceDismissed, showSentenceChoice])
 
   const handleReadAloud = async (textToRead?: string) => {
-    if (!audio.isSpeechSynthesisSupported()) return
-    
-    const text = textToRead || currentWord
+    if (isReading) return
     setIsReading(true)
     
-    try {
-      const voices = audio.getChildVoices()
-      const selectedVoice = voices[0] || audio.getVoices()[0]
-      
-      await audio.speak(text, {
-        voice: selectedVoice,
-        rate: 0.8,
-        pitch: 1.1
-      })
-    } catch (error) {
-      console.error('Text-to-speech error:', error)
-    } finally {
-      setIsReading(false)
-    }
+    const text = textToRead || currentWord
+    await audio.speak(text, { 
+      rate: brainState === 'excited' ? 1.2 : 0.9,
+      pitch: 1.1 
+    })
+    
+    setTimeout(() => setIsReading(false), 1000)
   }
 
-  const handleChunkClick = (clickedChunk: string, fromAvailable: boolean) => {
-    if (fromAvailable) {
-      // Move from available to arranged
-      setArrangedChunks(prev => [...prev, clickedChunk])
-      setAvailableChunks(prev => prev.filter(chunk => chunk !== clickedChunk))
-      
-      // Check if word is complete
-      const newArrangedChunks = [...arrangedChunks, clickedChunk]
-      const assembledWord = newArrangedChunks.join('').toUpperCase()
-      
-      if (assembledWord === currentWord.toUpperCase()) {
-        setIsWordComplete(true)
-        setWordFeedback("🎉 Perfect! You built the word correctly!")
-        
-        // Add to completed words after short delay
-        setTimeout(() => {
-          setWordsCompleted(prev => [...prev, currentWord])
-          setShowCelebration(true)
-        }, 1000)
-      } else if (newArrangedChunks.length === breakWordIntoChunks(currentWord).length) {
-        setWordFeedback("🤔 Oops! The chunks are all there, but try a different order.")
-      }
-    } else {
-      // Move from arranged back to available
-      setArrangedChunks(prev => prev.filter(chunk => chunk !== clickedChunk))
-      setAvailableChunks(prev => [...prev, clickedChunk])
-      setWordFeedback('')
-      setIsWordComplete(false)
+  // FIXED: Added TTS when moving chunks
+  const handleChunkClick = async (chunkIndex: number) => {
+    const chunk = availableChunks[chunkIndex]
+    
+    // Play TTS for the chunk
+    if (!isReading) {
+      setIsReading(true)
+      await audio.speak(chunk, { 
+        rate: 1.0,
+        pitch: 1.2 
+      })
+      setTimeout(() => setIsReading(false), 800)
     }
+    
+    setArrangedChunks(prev => [...prev, chunk])
+    setAvailableChunks(prev => prev.filter((_, index) => index !== chunkIndex))
+    setSelectedChunkIndex(null)
+    setWordFeedback('')
+    setShowWrongAttemptModal(false)
+  }
+
+  const handleRemoveChunk = (arrangedIndex: number) => {
+    const chunk = arrangedChunks[arrangedIndex]
+    setAvailableChunks(prev => [...prev, chunk])
+    setArrangedChunks(prev => prev.filter((_, index) => index !== arrangedIndex))
+    setWordFeedback('')
+    setShowWrongAttemptModal(false)
   }
 
   const handleSmartHint = () => {
+    setHintsUsed(prev => prev + 1)
+    
     if (arrangedChunks.length === 0) {
-      const correctChunks = breakWordIntoChunks(currentWord)
+      const correctChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
       const firstChunk = correctChunks[0]
-      if (availableChunks.includes(firstChunk)) {
-        handleChunkClick(firstChunk, true)
-        setWordFeedback(`💡 Good start! "${firstChunk}" is the first part of ${currentWord}.`)
+      const chunkIndex = availableChunks.findIndex(chunk => chunk === firstChunk)
+      
+      if (chunkIndex !== -1) {
+        handleChunkClick(chunkIndex)
+        setWordFeedback(`💡 Great start! "${firstChunk}" comes first.`)
       }
     } else {
-      const correctChunks = breakWordIntoChunks(currentWord)
-      const nextNeededChunk = correctChunks[arrangedChunks.length]
-      if (nextNeededChunk && availableChunks.includes(nextNeededChunk)) {
-        setWordFeedback(`💡 Try adding "${nextNeededChunk}" next!`)
+      const correctChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
+      const nextCorrectChunk = correctChunks[arrangedChunks.length]
+      
+      if (nextCorrectChunk) {
+        setWordFeedback(`💡 Next piece: Look for "${nextCorrectChunk}"`)
       }
     }
   }
 
   const handleResetWord = () => {
-    const chunks = breakWordIntoChunks(currentWord)
+    setResetsUsed(prev => prev + 1)
+    
+    const chunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
     const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
     setAvailableChunks(shuffledChunks)
     setArrangedChunks([])
-    setIsWordComplete(false)
-    setWordFeedback('')
+    setWordFeedback('🔄 Reset! Try building the word again.')
     setSelectedChunkIndex(null)
+    setShowWrongAttemptModal(false)
+  }
+
+  // FIXED: Better wrong attempt handling + word completion TTS
+  const handleCheckWord = async () => {
+    const builtWord = arrangedChunks.join('')
+    const isCorrect = builtWord === currentWord
+    
+    if (isCorrect) {
+      setIsWordComplete(true)
+      setWordFeedback("🎉 Perfect! You built the word correctly!")
+      
+      // FIXED: Read the completed word aloud
+      await handleReadAloud(currentWord)
+      
+      // Record successful completion
+      recordWordPerformance(true)
+      
+      setTimeout(() => {
+        setWordsCompleted(prev => [...prev, currentWord])
+        setShowCelebration(true)
+      }, 1500) // Give time for TTS
+    } else {
+      // FIXED: Show gentle error modal instead of harsh feedback
+      setShowWrongAttemptModal(true)
+      setWordFeedback('')
+    }
+  }
+
+  // INVISIBLE PERFORMANCE TRACKING
+  const recordWordPerformance = (completed: boolean) => {
+    if (!adaptiveWordBank.current) return
+    
+    const timeSpent = Date.now() - wordStartTime
+    
+    adaptiveWordBank.current.recordWordPerformance({
+      timePerWord: timeSpent,
+      hintsUsed,
+      resets: resetsUsed,
+      completed
+    })
+    
+    // Check if difficulty changed and refresh word list
+    const newWords = adaptiveWordBank.current.getWordsForTheme(theme)
+    if (newWords !== currentWords) {
+      setCurrentWords(newWords)
+      console.log('🔄 Word list refreshed after difficulty adaptation')
+    }
   }
 
   const handleNextWord = () => {
-    if (currentWordIndex < currentWords.length - 1) {
-      setCurrentWordIndex(currentWordIndex + 1)
-      setShowCelebration(false)
-    } else {
-      // Level up or move to sentences
-      if (currentDifficulty === 'easy') {
-        setCurrentDifficulty('regular')
-        setCurrentWordIndex(0)
-      } else if (currentDifficulty === 'regular') {
-        setCurrentDifficulty('challenge')
-        setCurrentWordIndex(0)
-      } else {
-        // Move to sentence building
-        setLocation(`/sentence-building/${theme}`)
-      }
-      setShowCelebration(false)
+    // Record performance if word was abandoned
+    if (!isWordComplete) {
+      recordWordPerformance(false)
     }
-  }
-
-  const handleSentenceChoice = (choice: 'continue' | 'sentences') => {
-    setSentenceChoiceDismissed(true)
-    setShowSentenceChoice(false)
     
-    if (choice === 'sentences') {
-      setLocation(`/sentence-building/${theme}`)
+    if (currentWordIndex === currentWords.length - 1) {
+      const difficulty = adaptiveWordBank.current?.getCurrentDifficulty() || 'regular'
+      
+      if (difficulty === 'challenge') {
+        setLocation(`/sentence-building/${theme}`)
+      } else {
+        // Level up - get new words for next difficulty
+        const newWords = adaptiveWordBank.current?.getWordsForTheme(theme) || []
+        setCurrentWords(newWords)
+        setCurrentWordIndex(0)
+      }
+    } else {
+      setCurrentWordIndex(prev => prev + 1)
     }
-    // If 'continue', just dismiss the choice and keep building words
+    
+    setShowCelebration(false)
+    setShowPatternRecognition(false)
   }
 
   const getDifficultyLabel = () => {
-    switch (currentDifficulty) {
-      case 'easy': return 'Getting Started'
-      case 'regular': return 'Building Skills'
-      case 'challenge': return 'Word Expert'
-      default: return 'Learning'
+    const difficulty = adaptiveWordBank.current?.getCurrentDifficulty() || 'regular'
+    switch (difficulty) {
+      case 'easy': return 'Building Confidence'
+      case 'regular': return 'Getting Stronger'
+      case 'challenge': return 'Challenge Mode'
     }
   }
 
+  // Add pattern recognition celebration
+  const triggerPatternRecognition = () => {
+    if (wordsCompleted.length >= 3 && !showPatternRecognition) {
+      setShowPatternRecognition(true)
+    }
+  }
+
+  useEffect(() => {
+    if (showCelebration) {
+      triggerPatternRecognition()
+    }
+  }, [showCelebration, wordsCompleted.length])
+
+  // Don't render until initialized
+  if (!isInitialized) {
+    return (
+      <div className="page-container bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky">
+        <div className="container">
+          <div className="content-area flex items-center justify-center">
+            <p className="text-lg text-autism-primary">Loading your words...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="page-container">
-      <div className="content-area">
-        {/* Combined Header and Audio Controls */}
-        <Card className="mb-2 bg-green-100 border-2 border-autism-primary mx-auto max-w-2xl">
-          <CardContent className="text-center p-3">
-            <h1 className="text-2xl font-bold text-autism-primary mb-1">
-              🎯 Build this word: <span className="text-3xl font-mono text-autism-secondary">{currentWord.toUpperCase()}</span>
-            </h1>
-            <p className="text-sm text-autism-primary/80 mb-3">
-              {getDifficultyLabel()} • Word {currentWordIndex + 1} of {currentWords.length}
-              {wordsCompleted.length > 0 && ` • 🏆 ${wordsCompleted.length} mastered`}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+    <div className="page-container bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky">
+      <div className="container">
+        <div className="content-area">
+          
+          {/* Compact Header */}
+          <div className="text-center pt-2 pb-3">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-autism-primary">
+                Build: {currentWord}
+              </h1>
               <Button
-                variant="outline"
-                onClick={() => handleReadAloud(currentWord)}
+                onClick={() => handleReadAloud()}
                 disabled={isReading}
-                className="text-sm bg-white text-autism-primary border-autism-primary hover:bg-gray-50"
-              >
-                {isReading ? '🗣️ Saying...' : '🔊 Hear the word'}
-              </Button>
-              <Button
+                size="sm"
                 variant="outline"
-                onClick={() => handleReadAloud(currentWord.split('').join(' '))}
-                disabled={isReading}
-                className="text-sm bg-white text-autism-primary border-autism-primary hover:bg-gray-50"
+                className="text-xs px-2 py-1 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
               >
-                🔤 Hear it spelled out
+                🔊 {isReading ? '...' : 'Say it'}
               </Button>
             </div>
-          </CardContent>
-        </Card>
+            
+            <p className="text-sm text-autism-primary/70 leading-relaxed">
+              Drag the word pieces together in the right order
+            </p>
+          </div>
 
-        {/* Sentence Choice */}
-        {showSentenceChoice && (
-          <Card className="mb-2 bg-blue-100 border-blue-400 border-2 mx-auto max-w-2xl">
-            <CardContent className="text-center p-3">
-              <div className="text-2xl mb-2">🎯</div>
-              <h3 className="text-lg font-bold text-blue-800 mb-2">You're becoming a word expert!</h3>
-              <p className="text-sm text-blue-700 mb-3">
-                You've built <strong>{wordsCompleted.length} amazing words</strong>! What sounds more fun?
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                <Button 
-                  onClick={() => handleSentenceChoice('continue')}
-                  variant="outline"
-                  className="text-sm px-4 py-2 bg-white text-blue-800 border-blue-400 hover:bg-blue-50"
-                >
-                  📚 Build More Words!
-                </Button>
-                <Button 
-                  onClick={() => handleSentenceChoice('sentences')}
-                  className="text-sm px-4 py-2 bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
-                >
-                  ✍️ Make Sentences!
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Word Building Area - MOVED UP */}
-        <Card className="flex-1 bg-blue-50 border-autism-secondary border-2 mx-auto max-w-2xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-center text-lg text-autism-primary">
-              🔧 Your Word Builder
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {/* Word Feedback */}
-            {wordFeedback && (
-              <div className={`text-center mb-2 p-3 rounded-lg border-2 ${
-                wordFeedback.includes('🎉') 
-                  ? 'bg-green-100 border-green-400 shadow-lg' 
-                  : wordFeedback.includes('Oops') 
-                  ? 'bg-orange-50 border-orange-300' 
-                  : 'bg-yellow-50 border-yellow-300'
-              }`}>
-                <p className={`text-sm font-bold ${
-                  wordFeedback.includes('🎉') 
-                    ? 'text-green-800 text-base' 
-                    : wordFeedback.includes('Oops') 
-                    ? 'text-orange-800' 
-                    : 'text-yellow-800'
-                }`}>
-                  {wordFeedback}
-                </p>
-                {(isWordComplete || showCelebration) && (
-                  <Button
-                    onClick={() => handleReadAloud(currentWord)}
-                    disabled={isReading}
-                    className="mt-2 text-sm px-4 py-2 bg-green-600 text-white border-2 border-green-600 hover:bg-green-700"
-                  >
-                    {isReading ? '🗣️ Playing...' : '🔊 Hear My Word Again!'}
-                  </Button>
-                )}
-              </div>
-            )}
-
-            {/* Arranged Chunks Display */}
-            <div className="mb-3">
-              <p className="text-center text-xs text-autism-primary/70 mb-1">
-                Your word so far:
-              </p>
-              <div className="min-h-[60px] border-2 border-dashed border-autism-primary/30 rounded-lg p-3 bg-autism-calm-mint/20">
-                <div className="flex flex-wrap justify-center gap-2 items-center min-h-[40px]">
+          {/* Word Building Area */}
+          <Card className="mx-auto max-w-2xl border-2 border-autism-primary bg-white/90 backdrop-blur-sm mb-4">
+            <CardContent className="p-4">
+              
+              {/* Arranged Chunks Area */}
+              <div className="mb-4">
+                <div className="text-center mb-2">
+                  <span className="text-sm font-medium text-autism-primary">Your Word:</span>
+                </div>
+                <div className="min-h-[60px] p-3 bg-autism-neutral rounded-lg border-2 border-dashed border-autism-secondary flex flex-wrap gap-2 justify-center items-center">
                   {arrangedChunks.length === 0 ? (
-                    <div className="text-autism-primary/50 text-sm italic">
-                      Click chunks below to build your word!
-                    </div>
+                    <span className="text-autism-primary/50 text-sm">Drop word pieces here</span>
                   ) : (
                     arrangedChunks.map((chunk, index) => (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          handleChunkClick(chunk, false)
-                          handleReadAloud(chunk)
-                        }}
-                        className="bg-autism-secondary text-autism-primary px-3 py-2 rounded-lg font-bold cursor-pointer 
-                                   hover:bg-autism-secondary/80 transition-all duration-200 hover:scale-105
-                                   border-2 border-autism-secondary shadow-sm text-sm relative"
-                        title="Click to remove and hear sound"
+                      <button
+                        key={`arranged-${index}`}
+                        onClick={() => handleRemoveChunk(index)}
+                        className="px-3 py-2 bg-autism-secondary text-white rounded-lg font-bold text-lg border-2 border-autism-secondary hover:bg-autism-secondary/80 transition-colors"
                       >
                         {chunk}
-                        <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 text-[10px] text-autism-primary/60 whitespace-nowrap">
-                          🔊
-                        </div>
-                      </div>
+                      </button>
                     ))
                   )}
                 </div>
               </div>
-              {arrangedChunks.length > 0 && (
-                <p className="text-center text-[10px] text-autism-primary/60 mt-1">
-                  Click to remove tile and hear sound
-                </p>
-              )}
-            </div>
 
-            {/* Available Chunks */}
-            <div>
-              <p className="text-center text-xs text-autism-primary/70 mb-1">
-                Available chunks:
-              </p>
-              <div className="flex flex-wrap justify-center gap-2 min-h-[40px]">
-                {availableChunks.map((chunk, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      handleChunkClick(chunk, true)
-                      handleReadAloud(chunk)
-                    }}
-                    className="bg-autism-calm-mint text-autism-primary px-3 py-2 rounded-lg font-bold 
-                               cursor-pointer hover:bg-autism-calm-mint/70 transition-all duration-200 
-                               hover:scale-105 border-2 border-autism-primary/30 shadow-sm text-sm"
-                    title="Click to add and hear sound"
-                  >
-                    {chunk}
-                  </div>
-                ))}
+              {/* Available Chunks - FIXED: Better text contrast */}
+              <div className="mb-4">
+                <div className="text-center mb-2">
+                  <span className="text-sm font-medium text-autism-primary">Word Pieces:</span>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {availableChunks.map((chunk, index) => (
+                    <button
+                      key={`available-${index}`}
+                      onClick={() => handleChunkClick(index)}
+                      className={`px-3 py-2 bg-white border-2 rounded-lg font-bold text-lg transition-all hover:scale-105 text-gray-700 ${
+                        selectedChunkIndex === index
+                          ? 'border-autism-secondary bg-autism-secondary/10'
+                          : 'border-autism-primary/30 hover:border-autism-primary hover:text-autism-primary'
+                      }`}
+                    >
+                      {chunk}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Action Buttons */}
-        <div className="flex gap-2 justify-center mb-2">
-          <Button
-            onClick={handleSmartHint}
-            variant="outline"
-            className="text-sm px-3 py-2 bg-white text-autism-primary border-autism-primary hover:bg-gray-50"
-          >
-            💡 Smart Hint
-          </Button>
-          <Button
-            onClick={handleResetWord}
-            variant="outline"
-            className="text-sm px-3 py-2 bg-white text-autism-primary border-autism-primary hover:bg-gray-50"
-          >
-            🔄 Reset Word
-          </Button>
-          <Button
-            onClick={() => {
-              const assembledWord = arrangedChunks.join('').toUpperCase()
-              if (assembledWord === currentWord.toUpperCase()) {
-                setIsWordComplete(true)
-                setWordFeedback("🎉 Perfect! You built the word correctly!")
-                setTimeout(() => {
-                  setWordsCompleted(prev => [...prev, currentWord])
-                  setShowCelebration(true)
-                }, 1000)
-              } else {
-                setWordFeedback("🤔 Not quite right. Try rearranging the chunks!")
-              }
-            }}
-            disabled={arrangedChunks.length === 0}
-            className="text-sm px-3 py-2 bg-blue-600 text-white border-2 border-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:bg-gray-400"
-          >
-            ✓ Check My Word
-          </Button>
-          {(isWordComplete || showCelebration) && (
+              {/* Feedback */}
+              {wordFeedback && (
+                <div className="text-center mb-3 p-2 bg-autism-calm-mint rounded-lg">
+                  <p className="text-sm text-autism-primary">{wordFeedback}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Action Buttons - FIXED: Updated styling for accessibility */}
+          <div className="flex justify-center gap-3 mb-4 flex-wrap">
             <Button
-              onClick={handleNextWord}
-              className="text-sm px-4 py-2 bg-green-600 text-white border-2 border-green-600 hover:bg-green-700"
+              onClick={handleSmartHint}
+              className="text-sm px-3 py-2 bg-yellow-500 text-white border-2 border-yellow-500 hover:bg-yellow-600"
             >
-              {currentWordIndex === currentWords.length - 1 ? 
-                currentDifficulty === 'challenge' ? 
-                  "Build Sentences! 🎯" :
-                  "Level Up! →" :
-                "Next Word! →"
-              }
+              💡 Smart Hint
             </Button>
-          )}
-        </div>
-
-        {/* Compact Progress Indicator */}
-        <div className="text-center bg-autism-neutral rounded-lg p-2 border-2 border-autism-primary mx-auto max-w-md">
-          <div className="flex justify-center gap-1 mb-1">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <div
-                key={index}
-                className={`w-3 h-3 rounded-full ${
-                  index < wordsCompleted.length 
-                    ? 'bg-autism-secondary' 
-                    : 'bg-gray-300'
-                }`}
-              />
-            ))}
+            <Button
+              onClick={handleResetWord}
+              className="text-sm px-3 py-2 bg-white text-gray-700 border-2 border-gray-400 hover:bg-gray-50 hover:border-gray-500"
+            >
+              🔄 Reset
+            </Button>
+            <Button
+              onClick={handleCheckWord}
+              disabled={arrangedChunks.length === 0}
+              className="text-sm px-3 py-2 bg-white text-gray-700 border-2 border-gray-400 hover:bg-gray-50 hover:border-gray-500 disabled:opacity-50 disabled:bg-gray-200"
+            >
+              ✓ Check My Word
+            </Button>
+            {(isWordComplete || showCelebration) && (
+              <Button
+                onClick={handleNextWord}
+                className="text-sm px-4 py-2 bg-green-600 text-white border-2 border-green-600 hover:bg-green-700"
+              >
+                {currentWordIndex === currentWords.length - 1 ? 
+                  adaptiveWordBank.current?.getCurrentDifficulty() === 'challenge' ? 
+                    "Build Sentences! 🎯" :
+                    "Level Up! →" :
+                  "Next Word! →"
+                }
+              </Button>
+            )}
           </div>
-          <p className="text-xs text-autism-primary/70">
-            Progress: {wordsCompleted.length}/8 words • {getDifficultyLabel()}
-          </p>
+
+          {/* Compact Progress Indicator */}
+          <div className="text-center bg-autism-neutral rounded-lg p-2 border-2 border-autism-primary mx-auto max-w-md">
+            <div className="flex justify-center gap-1 mb-1">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-3 h-3 rounded-full ${
+                    index < wordsCompleted.length 
+                      ? 'bg-autism-secondary' 
+                      : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-autism-primary/70">
+              Progress: {wordsCompleted.length}/8 words • {getDifficultyLabel()}
+            </p>
+          </div>
+
+          {/* FIXED: Gentle Wrong Attempt Modal */}
+          {showWrongAttemptModal && (
+            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-orange-400 bg-orange-50 backdrop-blur-sm max-w-md mx-auto">
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-lg text-orange-700">🤔 Almost There!</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center pt-0">
+                <p className="text-sm text-orange-700 mb-4">
+                  Oops, all the word parts are there, but you could try again. 
+                  You've got this! 💪
+                </p>
+                <Button
+                  onClick={() => setShowWrongAttemptModal(false)}
+                  className="bg-orange-500 hover:bg-orange-600 text-white"
+                >
+                  Try Again! 🎯
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Pattern Recognition Celebration */}
+          {showPatternRecognition && (
+            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-lg text-autism-primary">🎯 Pattern Detective!</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center pt-0">
+                <p className="text-sm text-autism-primary mb-3">
+                  You're getting great at spotting word patterns! Keep going to unlock more challenges.
+                </p>
+                <Button
+                  onClick={() => setShowPatternRecognition(false)}
+                  className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
+                >
+                  Keep Building! 🚀
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Sentence Choice Modal */}
+          {showSentenceChoice && (
+            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-lg text-autism-primary">🎉 Amazing Work!</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center pt-0">
+                <p className="text-sm text-autism-primary mb-4">
+                  You've built so many words! Ready to put them together into sentences?
+                </p>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={() => setLocation(`/sentence-building/${theme}`)}
+                    className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
+                  >
+                    Build Sentences! 📝
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setShowSentenceChoice(false)
+                      setSentenceChoiceDismissed(true)
+                    }}
+                    variant="outline"
+                    className="border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
+                  >
+                    Keep Building Words
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Celebration Modal */}
+          {showCelebration && (
+            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-lg text-autism-primary">🎉 Fantastic!</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center pt-0">
+                <p className="text-sm text-autism-primary mb-3">
+                  You built "{currentWord}" perfectly! 
+                  {wordsCompleted.length >= 3 && " You're becoming a word-building expert!"}
+                </p>
+                <Button
+                  onClick={() => setShowCelebration(false)}
+                  className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
+                >
+                  {currentWordIndex === currentWords.length - 1 ? "Continue! 🚀" : "Next Word! 🎯"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

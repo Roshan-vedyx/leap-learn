@@ -1,0 +1,177 @@
+{
+    "noun": {
+      "easy": {
+        "universal": ["cat", "dog", "sun", "moon", "book", "ball", "tree", "car", "home", "bed"],
+        "ocean": ["fish", "wave", "sand", "boat", "shell", "crab", "sea"],
+        "animals": ["cat", "dog", "bird", "cow", "pig", "duck", "bee"],
+        "emotions": ["joy", "fun", "love", "hope", "care", "calm"],
+        "adventure": ["trip", "path", "map", "cave", "hill", "trail"],
+        "friendship": ["pal", "team", "club", "game", "help", "kind"],
+        "magic": ["wish", "star", "gem", "wand", "gift", "dream"],
+        "tech": ["robot", "game", "phone", "screen", "code", "app"],
+        "space": ["star", "moon", "ship", "rock", "sky", "sun"]
+      },
+      "regular": {
+        "universal": ["person", "family", "school", "teacher", "student", "friend", "nature", "weather", "season", "holiday"],
+        "ocean": ["dolphin", "turtle", "whale", "coral", "current", "depth", "surface", "marine", "lagoon", "coastline"],
+        "animals": ["creature", "habitat", "species", "wildlife", "mammal", "reptile", "amphibian", "ecosystem", "conservation", "migration"],
+        "emotions": ["happiness", "excitement", "curiosity", "wonder", "confidence", "determination", "kindness", "courage", "patience", "gratitude"],
+        "adventure": ["journey", "exploration", "discovery", "expedition", "quest", "challenge", "mystery", "treasure", "obstacle", "destination"],
+        "friendship": ["companion", "loyalty", "trust", "support", "understanding", "cooperation", "teamwork", "respect", "honesty", "empathy"],
+        "magic": ["enchantment", "sorcery", "spell", "potion", "crystal", "fairy", "wizard", "unicorn", "dragon", "castle"],
+        "tech": ["computer", "invention", "technology", "innovation", "programming", "artificial", "digital", "virtual", "database", "network"],
+        "space": ["galaxy", "planet", "asteroid", "comet", "satellite", "astronaut", "spacecraft", "universe", "cosmos", "telescope"]
+      },
+      "challenge": {
+        "universal": ["individual", "community", "environment", "civilization", "institution", "phenomenon", "characteristic", "capability", "opportunity", "responsibility"],
+        "ocean": ["oceanographer", "biodiversity", "ecosystem", "conservation", "marine biology", "aquaculture", "bathysphere", "hydrothermal", "phytoplankton", "bioluminescence"],
+        "animals": ["zoologist", "ethologist", "ornithologist", "entomologist", "herpetologist", "primatologist", "conservation", "biodiversity", "taxonomy", "evolutionary"],
+        "emotions": ["psychological", "temperament", "disposition", "personality", "introspection", "self-awareness", "emotional intelligence", "resilience", "empathy", "compassion"],
+        "adventure": ["expedition", "reconnaissance", "exploration", "investigation", "archaeological", "anthropological", "geographical", "cartographic", "topographical", "orienteering"],
+        "friendship": ["companionship", "camaraderie", "solidarity", "allegiance", "fellowship", "collaboration", "cooperation", "mutual respect", "interpersonal", "social dynamics"],
+        "magic": ["supernatural", "mystical", "metaphysical", "otherworldly", "transcendent", "ethereal", "enchantment", "sorcery", "alchemy", "divination"],
+        "tech": ["technological", "computational", "algorithmic", "cybernetic", "artificial intelligence", "nanotechnology", "biotechnology", "telecommunications", "automation", "digitization"],
+        "space": ["astronomical", "astrophysical", "cosmological", "interstellar", "extraterrestrial", "galactic", "celestial", "observatory", "spectrometer", "gravitational"]
+      }
+    },
+    "verb": {
+      "easy": {
+        "universal": ["go", "see", "get", "run", "walk", "look", "find", "help", "play", "work"],
+        "ocean": ["swim", "dive", "float", "splash", "sail", "fish", "surf"],
+        "animals": ["run", "jump", "fly", "hop", "crawl", "climb", "hunt"],
+        "emotions": ["feel", "love", "care", "hope", "smile", "laugh", "cry"],
+        "adventure": ["go", "find", "seek", "hunt", "climb", "walk", "run"],
+        "friendship": ["help", "share", "care", "play", "talk", "give", "hug"],
+        "magic": ["wish", "cast", "glow", "shine", "fly", "change", "turn"],
+        "tech": ["code", "type", "click", "scan", "send", "save", "load"],
+        "space": ["fly", "land", "orbit", "blast", "zoom", "float", "glow"]
+      },
+      "regular": {
+        "universal": ["explore", "discover", "investigate", "examine", "observe", "analyze", "understand", "appreciate", "demonstrate", "communicate"],
+        "ocean": ["navigate", "submerge", "surface", "migrate", "school", "breach", "current", "circulate", "evaporate", "precipitate"],
+        "animals": ["migrate", "hibernate", "camouflage", "adapt", "evolve", "communicate", "territorial", "forage", "predator", "symbiotic"],
+        "emotions": ["experience", "express", "empathize", "sympathize", "encourage", "motivate", "inspire", "comfort", "reassure", "celebrate"],
+        "adventure": ["embark", "venture", "traverse", "ascend", "descend", "navigate", "orientate", "pioneer", "survey", "chronicle"],
+        "friendship": ["collaborate", "cooperate", "support", "encourage", "communicate", "understand", "respect", "appreciate", "celebrate", "console"],
+        "magic": ["enchant", "bewitch", "transform", "materialize", "vanish", "levitate", "teleport", "conjure", "illuminate", "mystify"],
+        "tech": ["program", "compute", "process", "analyze", "optimize", "automate", "digitize", "interface", "integrate", "synchronize"],
+        "space": ["navigate", "orbit", "gravitational", "accelerate", "decelerate", "maneuver", "communicate", "transmit", "receive", "telescope"]
+      },
+      "challenge": {
+        "universal": ["conceptualize", "hypothesize", "theorize", "synthesize", "systematize", "categorize", "differentiate", "authenticate", "substantiate", "corroborate"],
+        "ocean": ["oceanographic", "hydrodynamic", "bioaccumulate", "photosynthesis", "chemosynthesis", "biogeochemical", "thermohaline", "upwelling", "eutrophication", "acidification"],
+        "animals": ["ethological", "morphological", "physiological", "evolutionary", "taxonomic", "phylogenetic", "ecological", "behavioral", "reproductive", "territorial"],
+        "emotions": ["psychological", "introspective", "contemplative", "philosophical", "empathetic", "compassionate", "therapeutic", "rehabilitative", "transformative", "transcendent"],
+        "adventure": ["reconnaissance", "archaeological", "anthropological", "geographical", "cartographic", "topographical", "geological", "meteorological", "astronomical", "pioneering"],
+        "friendship": ["interpersonal", "collaborative", "cooperative", "diplomatic", "communicative", "empathetic", "supportive", "encouraging", "mentoring", "facilitating"],
+        "magic": ["supernatural", "metaphysical", "transcendental", "otherworldly", "mystical", "alchemical", "divination", "clairvoyant", "telepathic", "precognitive"],
+        "tech": ["technological", "computational", "algorithmic", "programming", "engineering", "innovative", "revolutionary", "sophisticated", "automated", "cybernetic"],
+        "space": ["astronomical", "astrophysical", "cosmological", "interstellar", "extraterrestrial", "gravitational", "electromagnetic", "spectroscopic", "telescopic", "navigational"]
+      }
+    },
+    "adjective": {
+      "easy": {
+        "universal": ["big", "small", "good", "bad", "hot", "cold", "fast", "slow", "new", "old"],
+        "ocean": ["blue", "deep", "wet", "salty", "cool", "calm", "rough", "clear"],
+        "animals": ["big", "small", "fast", "slow", "soft", "hard", "wild", "tame"],
+        "emotions": ["happy", "sad", "mad", "glad", "calm", "kind", "nice", "mean"],
+        "adventure": ["fun", "wild", "brave", "bold", "quick", "safe", "hard", "easy"],
+        "friendship": ["nice", "kind", "good", "true", "loyal", "sweet", "warm", "close"],
+        "magic": ["bright", "dark", "shiny", "pretty", "strange", "odd", "cool", "neat"],
+        "tech": ["new", "cool", "smart", "quick", "fast", "bright", "neat", "fun"],
+        "space": ["bright", "dark", "far", "huge", "round", "hot", "cold", "fast"]
+      },
+      "regular": {
+        "universal": ["amazing", "wonderful", "terrible", "beautiful", "dangerous", "peaceful", "exciting", "interesting", "important", "creative"],
+        "ocean": ["mysterious", "magnificent", "turbulent", "serene", "crystalline", "tropical", "arctic", "pristine", "polluted", "teeming"],
+        "animals": ["magnificent", "graceful", "powerful", "gentle", "fierce", "intelligent", "instinctive", "territorial", "social", "solitary"],
+        "emotions": ["enthusiastic", "confident", "curious", "determined", "patient", "generous", "compassionate", "optimistic", "resilient", "grateful"],
+        "adventure": ["thrilling", "challenging", "dangerous", "exciting", "mysterious", "treacherous", "rewarding", "unforgettable", "breathtaking", "legendary"],
+        "friendship": ["loyal", "trustworthy", "supportive", "understanding", "caring", "honest", "reliable", "encouraging", "respectful", "empathetic"],
+        "magic": ["enchanted", "mystical", "supernatural", "otherworldly", "ethereal", "luminous", "iridescent", "shimmering", "sparkling", "glowing"],
+        "tech": ["innovative", "advanced", "sophisticated", "intelligent", "automated", "digital", "virtual", "interactive", "programmable", "revolutionary"],
+        "space": ["cosmic", "galactic", "stellar", "planetary", "orbital", "gravitational", "electromagnetic", "astronomical", "infinite", "mysterious"]
+      },
+      "challenge": {
+        "universal": ["extraordinary", "magnificent", "unprecedented", "revolutionary", "transformative", "comprehensive", "multifaceted", "sophisticated", "intricate", "phenomenal"],
+        "ocean": ["biogeochemical", "oceanographic", "hydrodynamic", "bathypelagic", "abyssopelagic", "hadal", "benthic", "pelagic", "littoral", "estuarine"],
+        "animals": ["evolutionary", "taxonomic", "phylogenetic", "morphological", "physiological", "behavioral", "ecological", "ethological", "reproductive", "migratory"],
+        "emotions": ["psychological", "introspective", "contemplative", "philosophical", "empathetic", "compassionate", "therapeutic", "transformative", "transcendent", "enlightening"],
+        "adventure": ["archaeological", "anthropological", "geographical", "cartographic", "topographical", "geological", "meteorological", "reconnaissance", "expeditionary", "pioneering"],
+        "friendship": ["interpersonal", "collaborative", "cooperative", "diplomatic", "communicative", "empathetic", "supportive", "encouraging", "mentoring", "facilitating"],
+        "magic": ["supernatural", "metaphysical", "transcendental", "otherworldly", "mystical", "alchemical", "divination", "clairvoyant", "telepathic", "precognitive"],
+        "tech": ["technological", "computational", "algorithmic", "cybernetic", "artificial", "innovative", "revolutionary", "sophisticated", "automated", "digitized"],
+        "space": ["astronomical", "astrophysical", "cosmological", "interstellar", "extraterrestrial", "gravitational", "electromagnetic", "spectroscopic", "telescopic", "celestial"]
+      }
+    },
+    "adverb": {
+      "easy": {
+        "universal": ["fast", "slow", "high", "low", "near", "far", "up", "down", "here", "there"],
+        "ocean": ["deep", "down", "up", "out", "in", "over", "under", "around"],
+        "animals": ["quick", "slow", "quiet", "loud", "soft", "hard", "smooth", "rough"],
+        "emotions": ["well", "bad", "good", "nice", "kind", "sweet", "calm", "wild"],
+        "adventure": ["bold", "brave", "quick", "slow", "safe", "wild", "far", "near"],
+        "friendship": ["nice", "kind", "well", "close", "true", "loyal", "sweet", "warm"],
+        "magic": ["bright", "dark", "quick", "slow", "high", "low", "soft", "loud"],
+        "tech": ["quick", "fast", "smart", "new", "cool", "neat", "bright", "clear"],
+        "space": ["far", "near", "high", "low", "fast", "slow", "bright", "dark"]
+      },
+      "regular": {
+        "universal": ["carefully", "quickly", "slowly", "quietly", "loudly", "gently", "roughly", "smoothly", "easily", "difficultly"],
+        "ocean": ["gracefully", "powerfully", "smoothly", "turbulently", "peacefully", "mysteriously", "deeply", "surfacing", "diving", "flowing"],
+        "animals": ["instinctively", "gracefully", "powerfully", "gently", "fiercely", "intelligently", "socially", "territorially", "migratory", "seasonally"],
+        "emotions": ["enthusiastically", "confidently", "curiously", "determinedly", "patiently", "generously", "compassionately", "optimistically", "resiliently", "gratefully"],
+        "adventure": ["courageously", "boldly", "carefully", "strategically", "methodically", "persistently", "adventurously", "exploratory", "pioneering", "daringly"],
+        "friendship": ["loyally", "trustworthy", "supportively", "understandingly", "caringly", "honestly", "reliably", "encouragingly", "respectfully", "empathetically"],
+        "magic": ["magically", "mystically", "supernaturally", "otherworldly", "ethereally", "luminously", "iridescently", "shimmeringly", "sparklingly", "glowingly"],
+        "tech": ["innovatively", "technologically", "digitally", "virtually", "interactively", "automatically", "systematically", "efficiently", "precisely", "revolutionarily"],
+        "space": ["cosmically", "galactically", "stellarly", "planetarily", "orbitally", "gravitationally", "electromagnetically", "astronomically", "infinitely", "mysteriously"]
+      },
+      "challenge": {
+        "universal": ["extraordinarily", "magnificently", "unprecedentedly", "revolutionarily", "transformatively", "comprehensively", "sophisticatedly", "intricately", "phenomenally", "systematically"],
+        "ocean": ["oceanographically", "hydrodynamically", "biogeochemically", "bathypelagically", "abyssopelagically", "benthically", "pelagically", "littorally", "estuarinely", "tidally"],
+        "animals": ["evolutionarily", "taxonomically", "phylogenetically", "morphologically", "physiologically", "behaviorally", "ecologically", "ethologically", "reproductively", "migratorily"],
+        "emotions": ["psychologically", "introspectively", "contemplatively", "philosophically", "empathetically", "compassionately", "therapeutically", "transformatively", "transcendently", "enlighteningly"],
+        "adventure": ["archaeologically", "anthropologically", "geographically", "cartographically", "topographically", "geologically", "meteorologically", "reconnaissance", "expeditionary", "pioneeringly"],
+        "friendship": ["interpersonally", "collaboratively", "cooperatively", "diplomatically", "communicatively", "empathetically", "supportively", "encouragingly", "mentoringly", "facilitatingly"],
+        "magic": ["supernaturally", "metaphysically", "transcendentally", "otherworldly", "mystically", "alchemically", "divinationally", "clairvoyantly", "telepathically", "precognitively"],
+        "tech": ["technologically", "computationally", "algorithmically", "cyberneticially", "artificially", "innovatively", "revolutionarily", "sophisticatedly", "automatically", "digitally"],
+        "space": ["astronomically", "astrophysically", "cosmologically", "interstellarly", "extraterrestrially", "gravitationally", "electromagnetically", "spectroscopically", "telescopically", "celestially"]
+      }
+    },
+    "interjection": {
+      "easy": {
+        "universal": ["Wow", "Oh", "Hey", "Look", "Yes", "No", "Hi", "Bye", "Cool", "Nice"],
+        "ocean": ["Splash", "Ahoy", "Wow", "Look", "Cool", "Nice", "Oh", "Hey"],
+        "animals": ["Wow", "Look", "Cool", "Nice", "Oh", "Hey", "Aww", "Cute"],
+        "emotions": ["Yay", "Wow", "Oh", "Aww", "Nice", "Cool", "Great", "Super"],
+        "adventure": ["Wow", "Cool", "Yes", "Go", "Look", "Hey", "Whoa", "Nice"],
+        "friendship": ["Hi", "Hey", "Yay", "Cool", "Nice", "Aww", "Sweet", "Great"],
+        "magic": ["Wow", "Whoa", "Cool", "Magic", "Ta-da", "Poof", "Zap", "Shine"],
+        "tech": ["Beep", "Click", "Wow", "Cool", "Nice", "Great", "Super", "Tech"],
+        "space": ["Zoom", "Blast", "Wow", "Cool", "Space", "Star", "Moon", "Sun"]
+      },
+      "regular": {
+        "universal": ["Amazing", "Incredible", "Fantastic", "Wonderful", "Excellent", "Marvelous", "Spectacular", "Outstanding", "Remarkable", "Extraordinary"],
+        "ocean": ["Magnificent", "Breathtaking", "Incredible", "Amazing", "Spectacular", "Wonderful", "Marvelous", "Outstanding", "Remarkable", "Extraordinary"],
+        "animals": ["Incredible", "Amazing", "Magnificent", "Wonderful", "Spectacular", "Marvelous", "Outstanding", "Remarkable", "Extraordinary", "Fantastic"],
+        "emotions": ["Fantastic", "Wonderful", "Amazing", "Incredible", "Marvelous", "Spectacular", "Outstanding", "Remarkable", "Extraordinary", "Excellent"],
+        "adventure": ["Incredible", "Amazing", "Fantastic", "Spectacular", "Marvelous", "Outstanding", "Remarkable", "Extraordinary", "Wonderful", "Excellent"],
+        "friendship": ["Wonderful", "Amazing", "Fantastic", "Incredible", "Marvelous", "Spectacular", "Outstanding", "Remarkable", "Extraordinary", "Excellent"],
+        "magic": ["Enchanting", "Mystical", "Magical", "Spellbinding", "Bewitching", "Mesmerizing", "Captivating", "Fascinating", "Entrancing", "Charming"],
+        "tech": ["Innovative", "Revolutionary", "Advanced", "Sophisticated", "Cutting-edge", "State-of-the-art", "High-tech", "Futuristic", "Digital", "Technological"],
+        "space": ["Cosmic", "Galactic", "Stellar", "Astronomical", "Celestial", "Universal", "Infinite", "Boundless", "Limitless", "Vast"]
+      },
+      "challenge": {
+        "universal": ["Extraordinary", "Unprecedented", "Revolutionary", "Transformative", "Phenomenal", "Magnificent", "Spectacular", "Outstanding", "Remarkable", "Incomparable"],
+        "ocean": ["Oceanographic", "Magnificent", "Breathtaking", "Extraordinary", "Unprecedented", "Spectacular", "Outstanding", "Remarkable", "Incomparable", "Awe-inspiring"],
+        "animals": ["Evolutionary", "Magnificent", "Extraordinary", "Unprecedented", "Spectacular", "Outstanding", "Remarkable", "Incomparable", "Awe-inspiring", "Breathtaking"],
+        "emotions": ["Psychological", "Extraordinary", "Unprecedented", "Transformative", "Phenomenal", "Spectacular", "Outstanding", "Remarkable", "Incomparable", "Awe-inspiring"],
+        "adventure": ["Archaeological", "Extraordinary", "Unprecedented", "Revolutionary", "Transformative", "Spectacular", "Outstanding", "Remarkable", "Incomparable", "Awe-inspiring"],
+        "friendship": ["Interpersonal", "Extraordinary", "Unprecedented", "Transformative", "Phenomenal", "Spectacular", "Outstanding", "Remarkable", "Incomparable", "Awe-inspiring"],
+        "magic": ["Supernatural", "Metaphysical", "Transcendental", "Otherworldly", "Mystical", "Enchanting", "Spellbinding", "Mesmerizing", "Captivating", "Bewitching"],
+        "tech": ["Technological", "Revolutionary", "Unprecedented", "Transformative", "Innovative", "Sophisticated", "Advanced", "Cutting-edge", "Futuristic", "Cybernetic"],
+        "space": ["Astronomical", "Cosmic", "Galactic", "Stellar", "Celestial", "Universal", "Infinite", "Boundless", "Limitless", "Transcendent"]
+      }
+    }
+  }

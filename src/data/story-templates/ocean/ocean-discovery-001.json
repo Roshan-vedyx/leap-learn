@@ -1,0 +1,1158 @@
+{
+  "id": "ocean_discovery_001",
+  "title": "Ocean Discovery Adventure",
+  "themes": ["ocean", "animals", "adventure", "discovery"],
+  "complexity_levels": ["simple", "full", "challenge"],
+  "structure": {
+    "simple": {
+      "beginning": {
+        "text_template": "[CHARACTER] loved the [LOCATION]. Today felt [ADJECTIVE]. Something [ADJECTIVE] was about to happen.",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "easy",
+            "word_hints": ["child", "person", "name", "sam", "alex", "maya", "friend"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "easy",
+            "word_hints": ["beach", "water", "shore", "ocean", "sea"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "easy",
+            "word_hints": ["different", "special", "new"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "easy",
+            "word_hints": ["exciting", "amazing", "cool"]
+          }
+        ],
+        "target_word_count": 15,
+        "phonics_emphasis": ["simple_vowels", "consonant_blends"],
+        "target_pattern_count": 2,
+        "section_type": "intro"
+      },
+      "middle": {
+        "text_template": "[CHARACTER] saw a [ADJECTIVE] [CREATURE] in the [LOCATION]. \"[EXCLAMATION]!\" said [CHARACTER]. \"I want to [ACTION] with it!\"",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "easy",
+            "word_hints": ["child", "person", "name", "sam", "alex", "maya", "friend"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "animals"],
+            "complexity": "easy",
+            "word_hints": ["big", "colorful", "friendly"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "easy",
+            "word_hints": ["fish", "crab", "seal", "dolphin", "whale"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "easy",
+            "word_hints": ["beach", "water", "shore", "ocean", "sea"]
+          },
+          {
+            "slot_name": "EXCLAMATION",
+            "themes": ["universal"],
+            "complexity": "easy",
+            "word_hints": ["Wow", "Look", "Cool"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal", "ocean"],
+            "complexity": "easy",
+            "word_hints": ["play", "swim", "explore"]
+          }
+        ],
+        "target_word_count": 20,
+        "phonics_emphasis": ["simple_patterns", "cvc_patterns"],
+        "target_pattern_count": 3,
+        "section_type": "problem"
+      },
+      "end": {
+        "text_template": "[CHARACTER] and the [CREATURE] became [ADJECTIVE] friends. They [ACTION] together all day. This was the [ADJECTIVE] day ever!",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "easy",
+            "word_hints": ["child", "person", "name", "sam", "alex", "maya", "friend"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "easy",
+            "word_hints": ["fish", "crab", "seal", "dolphin", "whale"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "easy",
+            "word_hints": ["good", "great", "best"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal", "ocean"],
+            "complexity": "easy",
+            "word_hints": ["played", "swam", "explored"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "easy",
+            "word_hints": ["best", "fun", "great"]
+          }
+        ],
+        "target_word_count": 18,
+        "phonics_emphasis": ["simple_vowels", "ending_patterns"],
+        "target_pattern_count": 2,
+        "section_type": "conclusion"
+      }
+    },
+    "full": {
+      "beginning": {
+        "text_template": "[CHARACTER] had always been [ADJECTIVE] by the [LOCATION], but today something felt [ADJECTIVE]. The [ADJECTIVE] [NOUN] seemed to [ACTION] with possibility.",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["child", "person", "explorer"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["fascinated", "interested", "drawn"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "regular",
+            "word_hints": ["ocean", "sea", "waters"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["different", "unusual", "strange"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "universal"],
+            "complexity": "regular",
+            "word_hints": ["salty", "cool", "fresh"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["ocean", "universal"],
+            "complexity": "regular",
+            "word_hints": ["air", "breeze", "water"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["buzz", "hum", "flow"]
+          }
+        ],
+        "target_word_count": 25,
+        "phonics_emphasis": ["suffixes", "vowel_teams", "compound_words"],
+        "target_pattern_count": 4,
+        "section_type": "intro"
+      },
+      "setup": {
+        "text_template": "\"[EXCLAMATION]!\" called [CHARACTER], [CHARACTER]'s [ADJECTIVE] friend since [TIME_PERIOD]. \"There's something [ADJECTIVE] [DIRECTION] that [ACTION] wasn't there [TIME_REFERENCE]!\"",
+        "word_slots": [
+          {
+            "slot_name": "EXCLAMATION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["Check this out", "Look here", "Come see"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["friend", "companion", "buddy"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["friend", "companion", "buddy"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["closest", "trusted", "loyal"]
+          },
+          {
+            "slot_name": "TIME_PERIOD",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["childhood", "school", "summer"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["unusual", "strange", "mysterious"]
+          },
+          {
+            "slot_name": "DIRECTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["over there", "nearby", "ahead"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["definitely", "certainly", "surely"]
+          },
+          {
+            "slot_name": "TIME_REFERENCE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["yesterday", "before", "last time"]
+          }
+        ],
+        "target_word_count": 22,
+        "phonics_emphasis": ["consonant_blends", "digraphs"],
+        "target_pattern_count": 3,
+        "section_type": "setup"
+      },
+      "problem": {
+        "text_template": "They [ACTION] [ADJECTIVE], their [EMOTION] [ACTION] with each [NOUN]. What they [ACTION] would [ACTION] everything they [ACTION] they knew about their [ADJECTIVE] [LOCATION].",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["approached", "moved", "walked"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["cautiously", "carefully", "slowly"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["curiosity", "excitement", "wonder"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["growing", "increasing", "building"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["step", "moment", "breath"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["discovered", "found", "saw"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["change", "transform", "alter"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["thought", "believed", "assumed"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["familiar", "peaceful", "quiet"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean", "universal"],
+            "complexity": "regular",
+            "word_hints": ["coastline", "beach", "shoreline"]
+          }
+        ],
+        "target_word_count": 26,
+        "phonics_emphasis": ["suffixes", "vowel_patterns"],
+        "target_pattern_count": 4,
+        "section_type": "problem"
+      },
+      "solution": {
+        "text_template": "As they [ACTION] closer, they [ACTION] an [ADJECTIVE] [CREATURE] [ACTION] in the [LOCATION]. The [CREATURE] looked [ADJECTIVE] and [ACTION] them [ADJECTIVE] with its [ADJECTIVE] [BODY_PART].",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["moved", "stepped", "swam"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["spotted", "noticed", "saw"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["injured", "trapped", "lost"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["dolphin", "turtle", "whale"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["struggling", "swimming", "floating"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "regular",
+            "word_hints": ["tide pool", "shallow water", "lagoon"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["dolphin", "turtle", "whale"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["friendly", "curious", "gentle"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["watched", "observed", "studied"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["carefully", "kindly", "gently"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["wise", "ancient", "knowing"]
+          },
+          {
+            "slot_name": "BODY_PART",
+            "themes": ["animals", "universal"],
+            "complexity": "regular",
+            "word_hints": ["eyes", "gaze", "expression"]
+          }
+        ],
+        "target_word_count": 28,
+        "phonics_emphasis": ["vowel_teams", "consonant_blends"],
+        "target_pattern_count": 4,
+        "section_type": "solution"
+      },
+      "reflection": {
+        "text_template": "Working together, they [ACTION] the [CREATURE] back to [ADJECTIVE] [LOCATION]. [CHARACTER] [ACTION] that [ACTION] others was the most [ADJECTIVE] [NOUN] of all.",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["guided", "helped", "led"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "regular",
+            "word_hints": ["dolphin", "turtle", "whale"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean"],
+            "complexity": "regular",
+            "word_hints": ["deeper", "safer", "calmer"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "regular",
+            "word_hints": ["waters", "depths", "home"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["child", "person", "explorer"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["realized", "learned", "understood"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["helping", "caring for", "protecting"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["important", "meaningful", "special"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["discovery", "adventure", "treasure"]
+          }
+        ],
+        "target_word_count": 22,
+        "phonics_emphasis": ["consonant_blends", "suffixes"],
+        "target_pattern_count": 3,
+        "section_type": "reflection"
+      },
+      "end": {
+        "text_template": "From that day forward, [CHARACTER] [ACTION] the [LOCATION] with [ADJECTIVE] [EMOTION], knowing that every [NOUN] held the [NOUN] for [ADJECTIVE] [NOUN].",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["child", "person", "explorer"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["visited", "explored", "treasured"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "regular",
+            "word_hints": ["ocean", "sea", "waters"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["new", "deeper", "greater"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "regular",
+            "word_hints": ["respect", "wonder", "appreciation"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["wave", "tide", "moment"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["potential", "possibility", "chance"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["amazing", "wonderful", "unexpected"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "regular",
+            "word_hints": ["discoveries", "adventures", "friendships"]
+          }
+        ],
+        "target_word_count": 24,
+        "phonics_emphasis": ["vowel_teams", "compound_words"],
+        "target_pattern_count": 3,
+        "section_type": "conclusion"
+      }
+    },
+    "challenge": {
+      "beginning": {
+        "text_template": "[CHARACTER] had [ACTION] an [ADJECTIVE] [EMOTION] with the [ADJECTIVE] [LOCATION] for as long as anyone could [ACTION], but today's [NOUN] seemed [ACTION] with an almost [ADJECTIVE] sense of [NOUN].",
+        "word_slots": [
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["young explorer", "marine enthusiast", "adventurous student"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["harbored", "maintained", "cultivated"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["inexplicable", "undeniable", "irresistible"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["fascination", "obsession", "enchantment"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["mysterious", "magnificent", "boundless"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["coastline", "seashore", "waterfront"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["remember", "recall", "imagine"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["atmosphere", "environment", "ambiance"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["permeated", "saturated", "infused"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["palpable", "tangible", "overwhelming"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["anticipation", "expectation", "possibility"]
+          }
+        ],
+        "target_word_count": 35,
+        "phonics_emphasis": ["multisyllabic", "prefixes", "suffixes"],
+        "target_pattern_count": 6,
+        "section_type": "intro"
+      },
+      "setup": {
+        "text_template": "\"You must [ACTION] this [ADJECTIVE]!\" [ACTION] [CHARACTER], [CHARACTER]'s [ADJECTIVE] [NOUN] since their [ADJECTIVE] days, [ACTION] [ADJECTIVE] toward an [ADJECTIVE] [NOUN] that had [ADJECTIVE] [ACTION] overnight.",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["witness", "observe", "examine"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["immediately", "urgently", "instantly"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["exclaimed", "proclaimed", "declared"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["companion", "colleague", "confidant"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["companion", "colleague", "confidant"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["steadfast", "unwavering", "dependable"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["companion", "associate", "partner"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["kindergarten", "elementary", "childhood"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["gesturing", "pointing", "indicating"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["emphatically", "dramatically", "enthusiastically"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["anomalous", "unusual", "extraordinary"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["ocean", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["formation", "structure", "phenomenon"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["mysteriously", "inexplicably", "suddenly"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["materialized", "manifested", "crystallized"]
+          }
+        ],
+        "target_word_count": 28,
+        "phonics_emphasis": ["multisyllabic", "prefixes", "suffixes"],
+        "target_pattern_count": 5,
+        "section_type": "setup"
+      },
+      "problem": {
+        "text_template": "They [ACTION] with [ADJECTIVE] [NOUN], their [ADJECTIVE] [NOUN] [ACTION] [ADJECTIVE] with each [ADJECTIVE] [NOUN] toward what would [ADJECTIVE] [ACTION] their [ADJECTIVE] [NOUN] of their [ADJECTIVE] [LOCATION].",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["approached", "advanced", "proceeded"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["calculated", "methodical", "systematic"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["deliberation", "consideration", "preparation"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["intellectual", "scientific", "scholarly"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["curiosity", "fascination", "investigation"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["intensifying", "escalating", "amplifying"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["exponentially", "dramatically", "significantly"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["measured", "deliberate", "purposeful"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["stride", "movement", "progression"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["inevitably", "ultimately", "eventually"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["revolutionize", "transform", "metamorphose"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["fundamental", "essential", "comprehensive"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["understanding", "comprehension", "perspective"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["familiar", "accustomed", "traditional"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["neighborhood", "environment", "surroundings"]
+          }
+        ],
+        "target_word_count": 32,
+        "phonics_emphasis": ["multisyllabic", "prefixes", "suffixes"],
+        "target_pattern_count": 7,
+        "section_type": "problem"
+      },
+      "solution": {
+        "text_template": "Upon [ADJECTIVE] [NOUN], they [ACTION] a [ADJECTIVE] [CREATURE] [ACTION] within the [ADJECTIVE] [LOCATION], its [ADJECTIVE] [NOUN] [ACTION] an [ADJECTIVE] [NOUN] of both [EMOTION] and [EMOTION].",
+        "word_slots": [
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["closer", "detailed", "thorough"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["investigation", "examination", "exploration"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["encountered", "discovered", "identified"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "animals"],
+            "complexity": "challenge",
+            "word_hints": ["magnificent", "extraordinary", "remarkable"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "challenge",
+            "word_hints": ["cetacean", "leviathan", "organism"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["ocean", "animals"],
+            "complexity": "challenge",
+            "word_hints": ["maneuvering", "navigating", "undulating"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["crystalline", "translucent", "iridescent"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["sanctuary", "habitat", "ecosystem"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["animals"],
+            "complexity": "challenge",
+            "word_hints": ["expressive", "intelligent", "penetrating"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["animals", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["countenance", "demeanor", "presence"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["communicating", "conveying", "emanating"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["unmistakable", "profound", "compelling"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["combination", "synthesis", "amalgamation"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["vulnerability", "desperation", "uncertainty"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["determination", "resilience", "hope"]
+          }
+        ],
+        "target_word_count": 28,
+        "phonics_emphasis": ["multisyllabic", "complex_patterns", "prefixes"],
+        "target_pattern_count": 6,
+        "section_type": "solution"
+      },
+      "reflection": {
+        "text_template": "[ACTION] [ADJECTIVE], they [ACTION] a [ADJECTIVE] [NOUN] to [ACTION] the [ADJECTIVE] [CREATURE] to its [ADJECTIVE] [LOCATION], [ACTION] that [ADJECTIVE] [NOUN] often [ACTION] the most [ADJECTIVE] [NOUN].",
+        "word_slots": [
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["collaborating", "coordinating", "synchronizing"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["meticulously", "systematically", "harmoniously"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["orchestrated", "implemented", "executed"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["sophisticated", "elaborate", "comprehensive"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["methodology", "strategy", "operation"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["transport", "escort", "accompany"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean", "animals"],
+            "complexity": "challenge",
+            "word_hints": ["magnificent", "vulnerable", "remarkable"]
+          },
+          {
+            "slot_name": "CREATURE",
+            "themes": ["ocean", "animals"],
+            "complexity": "challenge",
+            "word_hints": ["cetacean", "leviathan", "organism"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["natural", "pristine", "optimal"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["environment", "sanctuary", "territory"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["discovering", "recognizing", "understanding"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["compassionate", "altruistic", "humanitarian"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["intervention", "assistance", "contribution"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["represents", "constitutes", "embodies"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["extraordinary", "transcendent", "transformative"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["accomplishment", "achievement", "revelation"]
+          }
+        ],
+        "target_word_count": 30,
+        "phonics_emphasis": ["multisyllabic", "prefixes", "suffixes"],
+        "target_pattern_count": 8,
+        "section_type": "reflection"
+      },
+      "end": {
+        "text_template": "From that [ADJECTIVE] day forward, [CHARACTER] [ACTION] the [ADJECTIVE] [LOCATION] with [ADJECTIVE] [EMOTION], [ACTION] that every [ADJECTIVE] [NOUN] [ACTION] the [ADJECTIVE] [NOUN] for [ADJECTIVE] [NOUN] and [ADJECTIVE] [NOUN].",
+        "word_slots": [
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["transformative", "extraordinary", "monumental"]
+          },
+          {
+            "slot_name": "CHARACTER",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["young explorer", "marine enthusiast", "adventurous student"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["approached", "regarded", "contemplated"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["magnificent", "mysterious", "incomparable"]
+          },
+          {
+            "slot_name": "LOCATION",
+            "themes": ["ocean"],
+            "complexity": "challenge",
+            "word_hints": ["coastline", "seashore", "waterfront"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["profound", "renewed", "unprecedented"]
+          },
+          {
+            "slot_name": "EMOTION",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["reverence", "appreciation", "understanding"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["comprehending", "acknowledging", "recognizing"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["individual", "singular", "distinctive"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["ocean", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["encounter", "interaction", "experience"]
+          },
+          {
+            "slot_name": "ACTION",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["contained", "harbored", "possessed"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["unlimited", "extraordinary", "immeasurable"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["potential", "possibility", "opportunity"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["emotions", "universal"],
+            "complexity": "challenge",
+            "word_hints": ["meaningful", "significant", "transformative"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["relationships", "connections", "discoveries"]
+          },
+          {
+            "slot_name": "ADJECTIVE",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["environmental", "ecological", "conservation-minded"]
+          },
+          {
+            "slot_name": "NOUN",
+            "themes": ["universal"],
+            "complexity": "challenge",
+            "word_hints": ["stewardship", "responsibility", "guardianship"]
+          }
+        ],
+        "target_word_count": 35,
+        "phonics_emphasis": ["multisyllabic", "prefixes", "suffixes"],
+        "target_pattern_count": 8,
+        "section_type": "conclusion"
+      }
+    }
+  },
+  "required_word_tags": ["ocean", "animals", "emotions", "universal", "adventure"],
+  "phonics_progression": {
+    "simple": ["cvc_pattern", "consonant_blends", "simple_vowels", "ending_patterns"],
+    "full": ["digraphs", "suffixes", "compound_words", "vowel_teams", "consonant_blends"],
+    "challenge": ["multisyllabic", "prefixes", "suffixes", "complex_patterns", "morphemes"]
+  },
+  "metadata": {
+    "author": "Template System v1.0",
+    "created_date": "2025-08-14",
+    "target_age_range": "8-12 years",
+    "estimated_completion_time": {
+      "simple": "3-4 minutes",
+      "full": "6-8 minutes", 
+      "challenge": "10-12 minutes"
+    }
+  },
+  "story_structure_notes": {
+    "simple": {
+      "sections": 3,
+      "pattern": "intro -> problem -> solution",
+      "target_word_count": "50-60",
+      "sentence_complexity": "Short, simple sentences with familiar vocabulary"
+    },
+    "full": {
+      "sections": 6,
+      "pattern": "intro -> setup -> problem -> solution -> reflection -> conclusion",
+      "target_word_count": "120-150",
+      "sentence_complexity": "Moderate complexity with varied sentence structure"
+    },
+    "challenge": {
+      "sections": 6,
+      "pattern": "intro -> setup -> problem -> solution -> reflection -> conclusion",
+      "target_word_count": "180-220",
+      "sentence_complexity": "Complex sentences with advanced vocabulary and subordinate clauses"
+    }
+  },
+  "phonics_integration": {
+    "placement_strategy": "Insert phonics moments after sections containing target patterns",
+    "frequency": {
+      "simple": "1 phonics moment per 2 sections",
+      "full": "1 phonics moment per 2-3 sections", 
+      "challenge": "1 phonics moment per 3-4 sections"
+    },
+    "instruction_style": {
+      "simple": "These words have letter teams that work together!",
+      "full": "Notice how these words share similar patterns and sounds.",
+      "challenge": "Analyze the morphological structure and phonetic patterns in these words."
+    }
+  },
+  "quality_assurance": {
+    "narrative_coherence": "Each section must logically connect to create a complete story arc",
+    "character_consistency": "CHARACTER slots must maintain the same identity throughout",
+    "thematic_unity": "All word selections must support the ocean discovery theme",
+    "age_appropriateness": "Content and vocabulary must match target complexity level"
+  }
+}

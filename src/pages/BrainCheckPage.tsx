@@ -1,4 +1,4 @@
-// src/pages/BrainCheckPage.tsx - Viewport-First Design with Direct Navigation
+// src/pages/BrainCheckPage.tsx - With MVP Age Mock
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent } from '@/components/ui/Card'
@@ -12,8 +12,7 @@ import {
   Search, 
   BookOpen, 
   Star,
-  Bot,
-  Eye
+  Bot
 } from 'lucide-react'
 
 // Brain state options redesigned for warmth and relatability
@@ -87,10 +86,20 @@ const brainStates: BrainState[] = [
 const BrainCheckPage: React.FC = () => {
   const [, setLocation] = useLocation()
 
-  // Reset any previous session data when starting fresh
+  // MVP: Mock user age setup
   useEffect(() => {
+    // Clear any previous session data when starting fresh
     localStorage.removeItem('current-brain-state')
     localStorage.removeItem('today-choice')
+    
+    // STEP 4: Mock user age (for MVP)
+    // Set to 10 years old (9-11 age group for MVP)
+    localStorage.setItem('user-age', '10')
+    
+    // Optional: Set additional mock user data for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log('MVP: Setting mock user age to 10 (9-11 age group)')
+    }
   }, [])
 
   // Handle direct navigation when mood card is clicked
@@ -130,54 +139,8 @@ const BrainCheckPage: React.FC = () => {
               What's Your Vibe Today?
             </h1>
             <p className="text-lg text-body-text leading-relaxed max-w-2xl mx-auto mb-3">
-            Your brain works differently every day - sometimes it's buzzing with energy, sometimes it wants to chill.
-            I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
-            </p>
-          </div>
-
-          {/* Brain State Selection Grid - Optimized for Viewport */}
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="viewport-grid gap-comfortable">
-              {displayStates.map((state) => (
-                <Card
-                  key={state.id}
-                  variant={state.color}
-                  interactive="full"
-                  className="viewport-card cursor-pointer transition-all duration-200 hover:scale-102 hover:shadow-lg focus-within:ring-4 focus-within:ring-deep-ocean-blue focus-within:ring-offset-2"
-                  onClick={() => handleStateSelect(state.id)}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`Choose ${state.label}: ${state.description}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      handleStateSelect(state.id)
-                    }
-                  }}
-                >
-                  <CardContent className="p-3 md:p-4 text-center h-full flex flex-col justify-center">
-                    <div className="mb-2 md:mb-3 flex justify-center">
-                      <state.icon 
-                        className="w-8 h-8 md:w-10 md:h-10 text-indigo-600" 
-                        aria-label={state.label}
-                      />
-                    </div>
-                    <h3 className="text-sm md:text-base lg:text-lg font-semibold text-header-primary mb-1 md:mb-2">
-                      {state.label}
-                    </h3>
-                    <p className="text-xs md:text-sm text-body-text leading-relaxed hidden sm:block">
-                      {state.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Compact Footer */}
-          <div className="viewport-footer">
-            <p className="viewport-text-sm text-indigo-600 leading-relaxed">
-            Your brain changes all the time - that's completely normal. You can always come back and pick something different if your mood shifts. 
+              Your brain works differently every day - sometimes it's buzzing with energy, sometimes it wants to chill.
+              I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
             </p>
             
             {/* Character Message - Compact */}
@@ -191,6 +154,57 @@ const BrainCheckPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Brain State Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
+            {displayStates.map((state) => {
+              const IconComponent = state.icon
+              return (
+                <Card 
+                  key={state.id}
+                  className="brain-state-card cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:border-indigo-300"
+                  onClick={() => handleStateSelect(state.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      handleStateSelect(state.id)
+                    }
+                  }}
+                  aria-label={`Select ${state.label}: ${state.description}`}
+                >
+                  <CardContent className="p-6 text-center h-full flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex justify-center">
+                        <IconComponent 
+                          className={`w-12 h-12 ${state.color === 'mood-energetic' ? 'text-orange-500' : 
+                                     state.color === 'mood-focused' ? 'text-blue-500' : 
+                                     'text-green-500'}`}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <h3 className="text-xl font-bold text-header-primary">
+                        {state.label}
+                      </h3>
+                      <p className="text-body-text leading-relaxed text-sm">
+                        {state.description}
+                      </p>
+                    </div>
+                    <div className="mt-4 text-xs text-indigo-600 font-medium">
+                      {state.encouragement}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+
+          {/* Footer Info */}
+          <div className="mt-8 text-center">
+            <p className="text-sm text-body-text opacity-75 max-w-md mx-auto">
+              You can always come back and pick something different if your mood shifts. 
+            </p>
+          </div>
         </div>
       </div>
 
