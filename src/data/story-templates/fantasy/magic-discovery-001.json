@@ -1,0 +1,842 @@
+{
+    "id": "magic_discovery_001",
+    "title": "Finding Magic",
+    "themes": ["magic", "fantasy", "discovery", "adventure"],
+    "complexity_levels": ["simple", "full", "challenge"],
+    "structure": {
+      "simple": {
+        "beginning": {
+          "text_template": "[CHARACTER] found a [ADJECTIVE] [OBJECT] in the [LOCATION]. It felt [ADJECTIVE] and [ACTION] in their hands.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE", 
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["glowing", "shiny", "weird", "cool"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["stone", "coin", "key", "ring"]
+            },
+            {
+              "slot_name": "LOCATION",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["yard", "park", "woods", "garden"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["warm", "tingly", "strange"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["hummed", "buzzed", "glowed"]
+            }
+          ],
+          "target_word_count": 18,
+          "phonics_emphasis": ["simple_vowels", "consonant_blends"],
+          "target_pattern_count": 2,
+          "section_type": "intro"
+        },
+        "middle": {
+          "text_template": "When [CHARACTER] [ACTION] the [OBJECT], something [ADJECTIVE] happened. A [CREATURE] [ACTION] and said, \"[GREETING]!\"",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["touched", "held", "picked up"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["stone", "coin", "key", "ring"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "easy", 
+              "word_hints": ["amazing", "cool", "magic"]
+            },
+            {
+              "slot_name": "CREATURE",
+              "themes": ["fantasy"],
+              "complexity": "easy",
+              "word_hints": ["fairy", "dragon", "cat", "bird"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["appeared", "showed up", "came"]
+            },
+            {
+              "slot_name": "GREETING",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Hello", "Hi there", "Hey"]
+            }
+          ],
+          "target_word_count": 16,
+          "phonics_emphasis": ["ending_patterns", "consonant_blends"],
+          "target_pattern_count": 3,
+          "section_type": "problem"
+        },
+        "end": {
+          "text_template": "[CHARACTER] and the [CREATURE] became [ADJECTIVE]. They had [ADJECTIVE] adventures together. \"This is [ADJECTIVE],\" said [CHARACTER].",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "CREATURE",
+              "themes": ["fantasy"],
+              "complexity": "easy",
+              "word_hints": ["fairy", "dragon", "cat", "bird"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "easy",
+              "word_hints": ["friends", "buddies", "pals"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["fun", "cool", "amazing"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "easy",
+              "word_hints": ["awesome", "great", "the best"]
+            }
+          ],
+          "target_word_count": 16,
+          "phonics_emphasis": ["cvc_pattern", "simple_vowels"],
+          "target_pattern_count": 2,
+          "section_type": "conclusion"
+        }
+      },
+      "full": {
+        "beginning": {
+          "text_template": "[CHARACTER] was exploring the old [LOCATION] behind their house when something [ADJECTIVE] caught their eye. Half-buried under some [PLURAL_NOUN] was a [ADJECTIVE] [OBJECT] that seemed to [ACTION] with its own light.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "LOCATION",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["garden", "forest", "clearing", "grove"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["unusual", "mysterious", "strange", "magical"]
+            },
+            {
+              "slot_name": "PLURAL_NOUN",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["leaves", "rocks", "branches", "vines"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["crystal", "silver", "ancient", "glowing"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["pendant", "compass", "mirror", "sphere"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["pulse", "shimmer", "flicker", "dance"]
+            }
+          ],
+          "target_word_count": 29,
+          "phonics_emphasis": ["consonant_blends", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "intro"
+        },
+        "setup": {
+          "text_template": "As [CHARACTER] carefully [ACTION] the [OBJECT], they felt a [ADJECTIVE] sensation travel up their arm. The world around them suddenly looked [ADJECTIVE], as if they were seeing it through [ADJECTIVE] eyes.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["lifted", "touched", "grasped", "picked up"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["pendant", "compass", "mirror", "sphere"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular", 
+              "word_hints": ["tingling", "electric", "warm", "buzzing"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["different", "brighter", "sharper", "clearer"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["magical", "new", "special", "enchanted"]
+            }
+          ],
+          "target_word_count": 26,
+          "phonics_emphasis": ["digraphs", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "setup"
+        },
+        "problem": {
+          "text_template": "That's when [CHARACTER] heard a [ADJECTIVE] voice behind them. \"You found it!\" A small [CREATURE] with [ADJECTIVE] wings was [ACTION] nearby, looking both [ADJECTIVE] and [ADJECTIVE].",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["tiny", "clear", "musical", "gentle"]
+            },
+            {
+              "slot_name": "CREATURE",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["pixie", "sprite", "dragon", "phoenix"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["shimmering", "iridescent", "rainbow", "crystal"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["hovering", "floating", "perched", "flying"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["excited", "relieved", "happy", "eager"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["worried", "nervous", "concerned", "anxious"]
+            }
+          ],
+          "target_word_count": 22,
+          "phonics_emphasis": ["compound_words", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "problem"
+        },
+        "solution": {
+          "text_template": "\"I'm [CHARACTER_NAME], guardian of this [LOCATION],\" the [CREATURE] explained. \"That [OBJECT] has been waiting for someone who could [ACTION] its magic. Will you help me [ACTION] it?\"",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER_NAME",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["Zara", "Nova", "Sage", "Luna", "Star", "Ember"]
+            },
+            {
+              "slot_name": "LOCATION",
+              "themes": ["fantasy"],
+              "complexity": "regular", 
+              "word_hints": ["realm", "grove", "sanctuary", "garden"]
+            },
+            {
+              "slot_name": "CREATURE",
+              "themes": ["fantasy"],
+              "complexity": "regular",
+              "word_hints": ["pixie", "sprite", "dragon", "phoenix"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["pendant", "compass", "mirror", "sphere"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["unlock", "awaken", "channel", "control"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["protect", "restore", "strengthen", "heal"]
+            }
+          ],
+          "target_word_count": 24,
+          "phonics_emphasis": ["consonant_blends", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "solution"
+        },
+        "reflection": {
+          "text_template": "As [CHARACTER] agreed to help, they felt something [ADJECTIVE] shift inside them. Maybe they'd always had [NOUN] but just needed the right [OBJECT] to [ACTION] it.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["wonderful", "powerful", "amazing", "special"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["magic", "power", "abilities", "gifts"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["key", "tool", "guide", "spark"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["unlock", "awaken", "discover", "release"]
+            }
+          ],
+          "target_word_count": 22,
+          "phonics_emphasis": ["digraphs", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "reflection"
+        },
+        "end": {
+          "text_template": "Together, [CHARACTER] and [CHARACTER_NAME] began their first [ADJECTIVE] lesson. The [OBJECT] [ACTION] brighter as [CHARACTER] learned that magic was about [NOUN] and [NOUN], not just power.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "CHARACTER_NAME",
+              "themes": ["fantasy"],
+              "complexity": "regular", 
+              "word_hints": ["Zara", "Nova", "Sage", "Luna", "Star", "Ember"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["magic", "enchantment", "spell", "charm"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["pendant", "compass", "mirror", "sphere"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["glowed", "pulsed", "shimmered", "sparkled"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["kindness", "courage", "wisdom", "caring"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["magic"],
+              "complexity": "regular",
+              "word_hints": ["friendship", "trust", "understanding", "heart"]
+            }
+          ],
+          "target_word_count": 25,
+          "phonics_emphasis": ["compound_words", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "conclusion"
+        }
+      },
+      "challenge": {
+        "beginning": {
+          "text_template": "[CHARACTER] had always suspected there was something [ADJECTIVE] about the [ADJECTIVE] [LOCATION] where their grandmother used to tell stories. Today, drawn by an [ADJECTIVE] curiosity, they decided to [ACTION] its [ADJECTIVE] corners more thoroughly.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["extraordinary", "mysterious", "enchanted", "otherworldly"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["ancient", "forgotten", "hidden", "secluded"]
+            },
+            {
+              "slot_name": "LOCATION",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["meadow", "grove", "sanctuary", "glade"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["irresistible", "compelling", "overwhelming", "magnetic"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["explore", "investigate", "examine", "discover"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["shadowed", "concealed", "mysterious", "untouched"]
+            }
+          ],
+          "target_word_count": 31,
+          "phonics_emphasis": ["multisyllabic", "prefixes"],
+          "target_pattern_count": 5,
+          "section_type": "intro"
+        },
+        "setup": {
+          "text_template": "Beneath a [ADJECTIVE] oak tree, partially [ACTION] by [ADJECTIVE] moss, [CHARACTER] discovered an [ADJECTIVE] [OBJECT] that seemed to [ACTION] with [ADJECTIVE] energy, as if it had been [ACTION] for exactly this moment.",
+          "word_slots": [
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["magnificent", "towering", "majestic", "enormous"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["concealed", "obscured", "hidden", "veiled"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge", 
+              "word_hints": ["luminescent", "silvery", "emerald", "crystalline"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["intricate", "elaborate", "ornate", "delicate"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["amulet", "talisman", "artifact", "relic"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["resonate", "vibrate", "hum", "thrum"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["dormant", "slumbering", "potential", "contained"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["waiting", "dormant", "slumbering", "preparing"]
+            }
+          ],
+          "target_word_count": 28,
+          "phonics_emphasis": ["multisyllabic", "suffixes"],
+          "target_pattern_count": 6,
+          "section_type": "setup"
+        },
+        "problem": {
+          "text_template": "The moment [CHARACTER]'s fingers [ACTION] the [OBJECT], reality seemed to [ACTION] around them. A [ADJECTIVE] voice resonated through the air: \"Finally, a [NOUN] capable of [ACTION] the [ADJECTIVE] magic.\"",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["grazed", "brushed", "contacted", "encountered"]
+            },
+            {
+              "slot_name": "OBJECT",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["amulet", "talisman", "artifact", "relic"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["shimmer", "ripple", "transform", "shift"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["melodious", "ethereal", "haunting", "resonant"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["soul", "spirit", "heart", "mind"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["wielding", "channeling", "harnessing", "commanding"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["ancient", "forgotten", "primordial", "elemental"]
+            }
+          ],
+          "target_word_count": 24,
+          "phonics_emphasis": ["complex_patterns", "multisyllabic"],
+          "target_pattern_count": 5,
+          "section_type": "problem"
+        },
+        "attempt": {
+          "text_template": "From the [ADJECTIVE] light emerged [CHARACTER_NAME], a [ADJECTIVE] guardian whose [ADJECTIVE] form seemed to be [ACTION] of pure starlight and [ADJECTIVE] wisdom. \"I have been [ACTION] for someone worthy,\" they [ACTION].",
+          "word_slots": [
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["swirling", "cascading", "spiraling", "undulating"]
+            },
+            {
+              "slot_name": "CHARACTER_NAME",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["Celestine", "Aurelia", "Meridian", "Solaris"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["luminous", "radiant", "ethereal", "transcendent"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["shimmering", "translucent", "opalescent", "gossamer"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["woven", "crafted", "forged", "composed"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["timeless", "infinite", "boundless", "eternal"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["searching", "seeking", "watching", "waiting"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["whispered", "murmured", "intoned", "proclaimed"]
+            }
+          ],
+          "target_word_count": 26,
+          "phonics_emphasis": ["prefixes", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "attempt"
+        },
+        "solution": {
+          "text_template": "[CHARACTER] felt an [ADJECTIVE] understanding [ACTION] through them as [CHARACTER_NAME] explained the [ADJECTIVE] responsibility that came with such power - to [ACTION] the [ADJECTIVE] balance between the [ADJECTIVE] and [ADJECTIVE] worlds.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["profound", "overwhelming", "incredible", "extraordinary"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["flowing", "washing", "cascading", "surging"]
+            },
+            {
+              "slot_name": "CHARACTER_NAME",
+              "themes": ["fantasy"],
+              "complexity": "challenge",
+              "word_hints": ["Celestine", "Aurelia", "Meridian", "Solaris"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["sacred", "tremendous", "weighty", "solemn"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["preserve", "maintain", "protect", "safeguard"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["delicate", "crucial", "essential", "vital"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["mortal", "human", "earthly", "physical"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["mystical", "supernatural", "enchanted", "otherworldly"]
+            }
+          ],
+          "target_word_count": 28,
+          "phonics_emphasis": ["multisyllabic", "complex_patterns"],
+          "target_pattern_count": 7,
+          "section_type": "solution"
+        },
+        "end": {
+          "text_template": "As [CHARACTER] accepted this [ADJECTIVE] destiny, they realized that true magic wasn't about [ACTION] power over others, but about [ACTION] the [ADJECTIVE] connections that [ACTION] all living things in ways both [ADJECTIVE] and [ADJECTIVE].",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["extraordinary", "transformative", "remarkable", "unprecedented"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge", 
+              "word_hints": ["wielding", "exercising", "commanding", "controlling"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["understanding", "nurturing", "honoring", "celebrating"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["invisible", "profound", "mysterious", "sacred"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["unite", "bind", "weave", "link"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["subtle", "gentle", "quiet", "tender"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["magic"],
+              "complexity": "challenge",
+              "word_hints": ["magnificent", "powerful", "extraordinary", "wondrous"]
+            }
+          ],
+          "target_word_count": 32,
+          "phonics_emphasis": ["multisyllabic", "morphemes"],
+          "target_pattern_count": 6,
+          "section_type": "conclusion"
+        }
+      }
+    },
+    "required_word_tags": ["magic", "fantasy", "discovery", "universal"],
+    "phonics_progression": {
+      "simple": ["cvc_pattern", "consonant_blends", "simple_vowels", "ending_patterns"],
+      "full": ["digraphs", "suffixes", "compound_words", "vowel_teams", "consonant_blends"],
+      "challenge": ["multisyllabic", "prefixes", "suffixes", "complex_patterns", "morphemes"]
+    },
+    "metadata": {
+      "author": "ND-Experienced Teacher v1.0",
+      "created_date": "2025-08-16",
+      "target_age_range": "8-12 years",
+      "estimated_completion_time": {
+        "simple": "3-4 minutes",
+        "full": "6-8 minutes", 
+        "challenge": "10-12 minutes"
+      }
+    },
+    "story_structure_notes": {
+      "simple": {
+        "sections": 3,
+        "pattern": "discovery -> magical encounter -> friendship",
+        "target_word_count": "50-60",
+        "sentence_complexity": "Simple, wonder-filled sentences that 8-year-olds would use when excited about magic"
+      },
+      "full": {
+        "sections": 6,
+        "pattern": "exploration -> discovery -> magical encounter -> partnership -> learning -> acceptance",
+        "target_word_count": "120-150", 
+        "sentence_complexity": "More detailed magical descriptions while maintaining natural 10-year-old storytelling voice"
+      },
+      "challenge": {
+        "sections": 6,
+        "pattern": "mysterious calling -> magical awakening -> profound encounter -> understanding responsibility -> acceptance of destiny -> wisdom about true magic",
+        "target_word_count": "180-220",
+        "sentence_complexity": "Sophisticated magical concepts expressed in authentic 12-year-old language with natural complexity"
+      }
+    },
+    "phonics_integration": {
+      "placement_strategy": "Insert phonics moments after sections containing target patterns",
+      "frequency": {
+        "simple": "1 phonics moment per 2 sections",
+        "full": "1 phonics moment per 2-3 sections", 
+        "challenge": "1 phonics moment per 3-4 sections"
+      },
+      "instruction_style": {
+        "simple": "These magical words have special letter patterns!",
+        "full": "Notice how these enchanted words share similar patterns and sounds.",
+        "challenge": "Explore how these mystical words combine roots and patterns to create powerful meanings."
+      }
+    },
+    "quality_assurance": {
+      "narrative_coherence": "Story moves naturally from discovery to magical partnership through believable character growth",
+      "character_consistency": "Protagonist maintains relatable motivations while growing into magical responsibility",
+      "thematic_unity": "All word selections support the magic discovery and responsibility theme",
+      "age_appropriateness": "Fantasy elements are wondrous but not overwhelming; magic has meaningful purpose",
+      "magical_authenticity": "Magic feels special and earned, not arbitrary or overpowered"
+    },
+    "nd_considerations": {
+      "sensory_awareness": "Magical sensations described in ways that feel exciting rather than overwhelming",
+      "agency_respect": "Character chooses to engage with magic; magical mentor guides but doesn't control",
+      "responsibility_framing": "Magic comes with responsibility but not burden; empowering rather than pressuring",
+      "wonder_preservation": "Maintains sense of awe and discovery without making magic feel chaotic or unpredictable",
+      "identity_affirming": "Character's unique qualities make them worthy of magic; celebrates individual strengths"
+    }
+  }

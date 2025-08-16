@@ -1,0 +1,710 @@
+{
+    "id": "friendship_connection_001",
+    "title": "Making a Friend",
+    "themes": ["friendship", "school", "feelings", "connection"],
+    "complexity_levels": ["simple", "full", "challenge"],
+    "structure": {
+      "simple": {
+        "beginning": {
+          "text_template": "[CHARACTER] sat [LOCATION] at lunch. [CHARACTER] felt [EMOTION]. All the [PLURAL_NOUN] looked [ADJECTIVE].",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "LOCATION", 
+              "themes": ["school"],
+              "complexity": "easy",
+              "word_hints": ["alone", "by myself", "in the corner"]
+            },
+            {
+              "slot_name": "EMOTION",
+              "themes": ["emotions"],
+              "complexity": "easy", 
+              "word_hints": ["lonely", "sad", "left out"]
+            },
+            {
+              "slot_name": "PLURAL_NOUN",
+              "themes": ["school"],
+              "complexity": "easy",
+              "word_hints": ["kids", "tables", "groups"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "easy",
+              "word_hints": ["far away", "busy", "full"]
+            }
+          ],
+          "target_word_count": 18,
+          "phonics_emphasis": ["simple_vowels", "consonant_blends"],
+          "target_pattern_count": 2,
+          "section_type": "intro"
+        },
+        "middle": {
+          "text_template": "Then [CHARACTER] saw someone [ACTION] alone too. \"[GREETING],\" said [CHARACTER]. \"Want to [ACTION] together?\"",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["sitting", "reading", "drawing"]
+            },
+            {
+              "slot_name": "GREETING",
+              "themes": ["universal"],
+              "complexity": "easy", 
+              "word_hints": ["Hi", "Hey", "Hello"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["friendship"],
+              "complexity": "easy",
+              "word_hints": ["sit", "eat", "talk", "play"]
+            }
+          ],
+          "target_word_count": 16,
+          "phonics_emphasis": ["ending_patterns", "consonant_blends"],
+          "target_pattern_count": 3,
+          "section_type": "problem"
+        },
+        "end": {
+          "text_template": "They [ACTION] and [ACTION]. [CHARACTER] felt [EMOTION]. \"This is [ADJECTIVE],\" [CHARACTER] thought.",
+          "word_slots": [
+            {
+              "slot_name": "ACTION",
+              "themes": ["friendship"],
+              "complexity": "easy",
+              "word_hints": ["laughed", "talked", "shared"]
+            },
+            {
+              "slot_name": "ACTION", 
+              "themes": ["friendship"],
+              "complexity": "easy",
+              "word_hints": ["smiled", "played", "giggled"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "easy",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "EMOTION",
+              "themes": ["emotions"],
+              "complexity": "easy",
+              "word_hints": ["happy", "good", "better"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "easy",
+              "word_hints": ["nice", "fun", "great", "cool"]
+            }
+          ],
+          "target_word_count": 16,
+          "phonics_emphasis": ["cvc_pattern", "simple_vowels"],
+          "target_pattern_count": 2,
+          "section_type": "conclusion"
+        }
+      },
+      "full": {
+        "beginning": {
+          "text_template": "[CHARACTER] walked into the cafeteria feeling [EMOTION]. Everyone else seemed to have their [PLURAL_NOUN] already. [CHARACTER] grabbed a [NOUN] and looked around for somewhere to sit.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "EMOTION",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["nervous", "awkward", "uncomfortable", "shy"]
+            },
+            {
+              "slot_name": "PLURAL_NOUN",
+              "themes": ["friendship"],
+              "complexity": "regular",
+              "word_hints": ["friends", "groups", "spots", "people"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["school"],
+              "complexity": "regular",
+              "word_hints": ["tray", "lunch", "sandwich", "apple"]
+            }
+          ],
+          "target_word_count": 25,
+          "phonics_emphasis": ["consonant_blends", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "intro"
+        },
+        "setup": {
+          "text_template": "The [ADJECTIVE] table near the window caught [CHARACTER]'s eye. But sitting there meant [ACTION] past all the [ADJECTIVE] tables where kids were [ACTION] and having fun.",
+          "word_slots": [
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["empty", "quiet", "small", "corner"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["walking", "going", "moving"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "regular", 
+              "word_hints": ["crowded", "loud", "busy", "popular"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["friendship"],
+              "complexity": "regular",
+              "word_hints": ["laughing", "chatting", "joking", "talking"]
+            }
+          ],
+          "target_word_count": 24,
+          "phonics_emphasis": ["digraphs", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "setup"
+        },
+        "problem": {
+          "text_template": "Just as [CHARACTER] reached the table, someone else [ACTION] there too. It was [CHARACTER_2], who looked just as [EMOTION] as [CHARACTER] felt.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["arrived", "showed up", "got", "came"]
+            },
+            {
+              "slot_name": "CHARACTER_2",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "EMOTION",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["uncertain", "hesitant", "unsure", "nervous"]
+            }
+          ],
+          "target_word_count": 21,
+          "phonics_emphasis": ["compound_words", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "problem"
+        },
+        "solution": {
+          "text_template": "\"Mind if I sit here?\" [CHARACTER] asked. [CHARACTER_2] [ACTION] and said, \"I was hoping someone would ask that.\" They both [ACTION] as they sat down.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "CHARACTER_2",
+              "themes": ["universal"],
+              "complexity": "regular", 
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["grinned", "smiled", "brightened", "relaxed"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["laughed", "smiled", "grinned", "chuckled"]
+            }
+          ],
+          "target_word_count": 24,
+          "phonics_emphasis": ["consonant_blends", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "solution"
+        },
+        "reflection": {
+          "text_template": "As they [ACTION] their lunch, [CHARACTER] realized that sometimes the best [PLURAL_NOUN] happen when you're [ADJECTIVE] enough to [ACTION] first.",
+          "word_slots": [
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["shared", "ate", "enjoyed", "finished"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "PLURAL_NOUN",
+              "themes": ["friendship"],
+              "complexity": "regular",
+              "word_hints": ["friendships", "connections", "moments", "things"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["brave", "kind", "friendly", "willing"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["speak up", "try", "reach out", "ask"]
+            }
+          ],
+          "target_word_count": 22,
+          "phonics_emphasis": ["digraphs", "vowel_teams"],
+          "target_pattern_count": 3,
+          "section_type": "reflection"
+        },
+        "end": {
+          "text_template": "By the time the bell rang, [CHARACTER] and [CHARACTER_2] were [ACTION] like old friends. \"Same time tomorrow?\" [CHARACTER_2] asked. [CHARACTER] nodded [ADVERB].",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "CHARACTER_2", 
+              "themes": ["universal"],
+              "complexity": "regular",
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["friendship"],
+              "complexity": "regular",
+              "word_hints": ["talking", "joking", "laughing", "chatting"]
+            },
+            {
+              "slot_name": "ADVERB",
+              "themes": ["emotions"],
+              "complexity": "regular",
+              "word_hints": ["eagerly", "happily", "quickly", "enthusiastically"]
+            }
+          ],
+          "target_word_count": 23,
+          "phonics_emphasis": ["compound_words", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "conclusion"
+        }
+      },
+      "challenge": {
+        "beginning": {
+          "text_template": "[CHARACTER] surveyed the bustling cafeteria with a familiar knot of [EMOTION] in their stomach. The [ADJECTIVE] maze of lunch tables stretched ahead, each one [ACTION] with established groups that seemed [ADJECTIVE] to outsiders.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "EMOTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["anxiety", "uncertainty", "apprehension", "nervousness"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["complicated", "overwhelming", "intimidating", "confusing"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["occupied", "filled", "claimed", "surrounded"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["unwelcoming", "impenetrable", "exclusive", "closed off"]
+            }
+          ],
+          "target_word_count": 28,
+          "phonics_emphasis": ["multisyllabic", "prefixes"],
+          "target_pattern_count": 5,
+          "section_type": "intro"
+        },
+        "setup": {
+          "text_template": "Balancing their lunch tray [ADVERB], [CHARACTER] noticed the [ADJECTIVE] rhythm of cafeteria [NOUN] - the way conversations [ACTION] and [ACTION], creating an [ADJECTIVE] soundtrack of belonging that [CHARACTER] desperately wanted to [ACTION].",
+          "word_slots": [
+            {
+              "slot_name": "ADVERB",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["carefully", "nervously", "tentatively", "uncertainly"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge", 
+              "word_hints": ["complex", "intricate", "layered", "sophisticated"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["school"],
+              "complexity": "challenge",
+              "word_hints": ["dynamics", "interactions", "relationships", "connections"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["flowed", "shifted", "danced", "wove"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["merged", "blended", "intertwined", "overlapped"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["invisible", "magnetic", "powerful", "compelling"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["join", "enter", "become part of", "contribute to"]
+            }
+          ],
+          "target_word_count": 32,
+          "phonics_emphasis": ["multisyllabic", "suffixes"],
+          "target_pattern_count": 6,
+          "section_type": "setup"
+        },
+        "problem": {
+          "text_template": "That's when [CHARACTER] spotted another [ADJECTIVE] figure hovering near the [LOCATION] - [CHARACTER_2], clutching their lunch and [ACTION] the same [ADJECTIVE] dance of [NOUN] that [CHARACTER] knew all too well.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["hesitant", "uncertain", "isolated", "solitary"]
+            },
+            {
+              "slot_name": "LOCATION",
+              "themes": ["school"],
+              "complexity": "challenge",
+              "word_hints": ["windows", "corner tables", "empty spaces", "quiet area"]
+            },
+            {
+              "slot_name": "CHARACTER_2",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["performing", "executing", "navigating", "attempting"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["awkward", "uncomfortable", "delicate", "precarious"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["belonging", "acceptance", "inclusion", "connection"]
+            }
+          ],
+          "target_word_count": 26,
+          "phonics_emphasis": ["complex_patterns", "multisyllabic"],
+          "target_pattern_count": 5,
+          "section_type": "problem"
+        },
+        "attempt": {
+          "text_template": "[CHARACTER] [ACTION] for a moment, recognizing a [ADJECTIVE] opportunity. Taking a [ADJECTIVE] breath, they [ACTION] their shoulders and [ACTION] toward [CHARACTER_2] with [ADJECTIVE] determination.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["paused", "hesitated", "considered", "reflected"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["perfect", "golden", "unexpected", "mutual"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["steadying", "calming", "fortifying", "centering"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["straightened", "squared", "adjusted", "set"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["approached", "headed", "moved", "walked"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["quiet", "gentle", "careful", "respectful"]
+            }
+          ],
+          "target_word_count": 24,
+          "phonics_emphasis": ["prefixes", "suffixes"],
+          "target_pattern_count": 4,
+          "section_type": "attempt"
+        },
+        "solution": {
+          "text_template": "\"Would you like some company?\" [CHARACTER] asked softly, [ACTION] that [CHARACTER_2] might appreciate the [NOUN] as much as they did. [CHARACTER_2]'s face [ACTION] with [ADJECTIVE] relief, and they both [ACTION] the [ADJECTIVE] realization that neither had to navigate lunch alone.",
+          "word_slots": [
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["sensing", "hoping", "suspecting", "understanding"]
+            },
+            {
+              "slot_name": "CHARACTER_2",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["friendship"],
+              "complexity": "challenge",
+              "word_hints": ["invitation", "gesture", "kindness", "connection"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["brightened", "transformed", "softened", "lit up"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["genuine", "visible", "obvious", "unmistakable"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["shared", "experienced", "felt", "discovered"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["wonderful", "comforting", "reassuring", "liberating"]
+            }
+          ],
+          "target_word_count": 34,
+          "phonics_emphasis": ["multisyllabic", "complex_patterns"],
+          "target_pattern_count": 7,
+          "section_type": "solution"
+        },
+        "end": {
+          "text_template": "As the lunch period [ACTION] to its end, [CHARACTER] and [CHARACTER_2] had [ACTION] something [ADJECTIVE] - not just a shared meal, but the [NOUN] of a friendship built on [ADJECTIVE] understanding and the [ADJECTIVE] courage to reach out when it mattered most.",
+          "word_slots": [
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["drew", "came", "moved", "progressed"]
+            },
+            {
+              "slot_name": "CHARACTER",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["Sam", "Alex", "Maya", "Jordan", "Riley", "Casey"]
+            },
+            {
+              "slot_name": "CHARACTER_2",
+              "themes": ["universal"],
+              "complexity": "challenge", 
+              "word_hints": ["Taylor", "Morgan", "Avery", "Drew", "Sage", "River"]
+            },
+            {
+              "slot_name": "ACTION",
+              "themes": ["universal"],
+              "complexity": "challenge",
+              "word_hints": ["discovered", "created", "found", "built"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["meaningful", "special", "valuable", "important"]
+            },
+            {
+              "slot_name": "NOUN",
+              "themes": ["friendship"],
+              "complexity": "challenge",
+              "word_hints": ["foundation", "beginning", "seeds", "roots"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["mutual", "shared", "natural", "instant"]
+            },
+            {
+              "slot_name": "ADJECTIVE",
+              "themes": ["emotions"],
+              "complexity": "challenge",
+              "word_hints": ["simple", "small", "necessary", "essential"]
+            }
+          ],
+          "target_word_count": 32,
+          "phonics_emphasis": ["multisyllabic", "morphemes"],
+          "target_pattern_count": 6,
+          "section_type": "conclusion"
+        }
+      }
+    },
+    "required_word_tags": ["friendship", "emotions", "school", "universal"],
+    "phonics_progression": {
+      "simple": ["cvc_pattern", "consonant_blends", "simple_vowels", "ending_patterns"],
+      "full": ["digraphs", "suffixes", "compound_words", "vowel_teams", "consonant_blends"],
+      "challenge": ["multisyllabic", "prefixes", "suffixes", "complex_patterns", "morphemes"]
+    },
+    "metadata": {
+      "author": "ND-Experienced Teacher v1.0",
+      "created_date": "2025-08-16",
+      "target_age_range": "8-12 years",
+      "estimated_completion_time": {
+        "simple": "3-4 minutes",
+        "full": "6-8 minutes", 
+        "challenge": "10-12 minutes"
+      }
+    },
+    "story_structure_notes": {
+      "simple": {
+        "sections": 3,
+        "pattern": "lonely -> connection -> friendship",
+        "target_word_count": "50-60",
+        "sentence_complexity": "Short, direct sentences that 8-year-olds would naturally use"
+      },
+      "full": {
+        "sections": 6,
+        "pattern": "setup -> hesitation -> recognition -> attempt -> success -> reflection",
+        "target_word_count": "120-150", 
+        "sentence_complexity": "More detailed but still natural - how 10-year-olds tell stories"
+      },
+      "challenge": {
+        "sections": 6,
+        "pattern": "complex setup -> internal conflict -> recognition -> brave action -> meaningful connection -> deeper understanding",
+        "target_word_count": "180-220",
+        "sentence_complexity": "Sophisticated vocabulary and structure while maintaining authentic 12-year-old voice"
+      }
+    },
+    "phonics_integration": {
+      "placement_strategy": "Insert phonics moments after sections containing target patterns",
+      "frequency": {
+        "simple": "1 phonics moment per 2 sections",
+        "full": "1 phonics moment per 2-3 sections", 
+        "challenge": "1 phonics moment per 3-4 sections"
+      },
+      "instruction_style": {
+        "simple": "These words work together in cool ways!",
+        "full": "Notice how these words share similar patterns and sounds.",
+        "challenge": "Look at how these word parts combine to create meaning and sound patterns."
+      }
+    },
+    "quality_assurance": {
+      "narrative_coherence": "Story moves naturally from isolation to connection through realistic social interaction",
+      "character_consistency": "Both characters maintain relatable, age-appropriate motivations throughout",
+      "thematic_unity": "All word selections support the friendship and belonging theme",
+      "age_appropriateness": "Language complexity matches what kids actually say, not adult assumptions about kid language",
+      "emotional_authenticity": "Friendship challenges are real and relatable, not sanitized or overly simple"
+    },
+    "nd_considerations": {
+      "sensory_awareness": "Cafeteria setting acknowledges overwhelming sensory environment many ND kids experience",
+      "social_anxiety": "Recognizes genuine social challenges without pathologizing or oversimplifying",
+      "agency_respect": "Characters make their own choices and solve their own problems",
+      "success_scaffolding": "Each level provides achievable challenge without overwhelming cognitive load",
+      "identity_affirming": "Shows that being different or having social challenges doesn't diminish worth or intelligence"
+    }
+  }
