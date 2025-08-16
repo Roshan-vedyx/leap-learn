@@ -1,5 +1,5 @@
-// src/data/enhancedWordBank.ts
-// BACKWARD COMPATIBLE: Keeps all existing exports + adds adaptive features
+// src/data/wordBank.ts - FIXED VERSION
+// Enhanced word database with proper theme filtering and JSON loading
 
 export interface PerformanceMetrics {
   timePerWord: number
@@ -33,240 +33,31 @@ export interface WordBank {
   [theme: string]: WordBankEntry
 }
 
-// KEEP EXISTING WORD BANK (your original data)
+// FIXED: Updated word bank with proper theme words
 export const wordBank: WordBank = {
   animals: {
-    easy: ["cat", "dog", "pig", "cow", "hen", "fish", "duck", "frog"],
-    regular: ["tiger", "horse", "sheep", "bird", "snake", "shark", "whale"],
-    challenge: ["elephant", "giraffe", "penguin", "dolphin", "cheetah"]
+    easy: ["cat", "dog", "pig", "cow", "hen", "fish", "duck", "frog", "bird", "bee"],
+    regular: ["tiger", "horse", "sheep", "snake", "shark", "whale", "turtle", "rabbit"],
+    challenge: ["elephant", "giraffe", "penguin", "dolphin", "cheetah", "kangaroo"]
   },
   space: {
-    easy: ["sun", "moon", "star", "sky", "rock", "ship"],
-    regular: ["planet", "rocket", "comet", "orbit", "solar", "lunar"],
-    challenge: ["astronaut", "telescope", "satellite", "universe", "galaxy"]
+    easy: ["sun", "moon", "star", "sky", "rock", "ship", "mars", "earth"],
+    regular: ["planet", "rocket", "comet", "orbit", "solar", "lunar", "galaxy", "alien"],
+    challenge: ["astronaut", "telescope", "satellite", "universe", "spacecraft", "nebula"]
   },
   food: {
-    easy: ["pie", "cake", "milk", "egg", "jam", "nuts", "corn", "rice"],
-    regular: ["pizza", "bread", "apple", "grape", "orange", "carrot"],
-    challenge: ["spaghetti", "hamburger", "strawberry", "sandwich", "broccoli"]
+    easy: ["pie", "cake", "milk", "egg", "jam", "nuts", "corn", "rice", "bread", "soup"],
+    regular: ["pizza", "apple", "grape", "orange", "carrot", "banana", "cookie", "pasta"],
+    challenge: ["spaghetti", "hamburger", "strawberry", "sandwich", "broccoli", "spaghetti"]
   },
   vehicles: {
-    easy: ["car", "bus", "bike", "boat", "train", "truck"],
-    regular: ["airplane", "scooter", "rocket", "ferry", "subway"],
-    challenge: ["helicopter", "motorcycle", "submarine", "ambulance", "bulldozer"]
+    easy: ["car", "bus", "bike", "boat", "train", "truck", "van", "taxi"],
+    regular: ["airplane", "scooter", "rocket", "ferry", "subway", "tractor", "jeep"],
+    challenge: ["helicopter", "motorcycle", "submarine", "ambulance", "bulldozer", "limousine"]
   }
 }
 
-// KEEP EXISTING PHONEMIC CHUNKING (your original function)
-export const breakWordIntoChunks = (word: string): string[] => {
-  const upperWord = word.toUpperCase()
-  
-  const phoneticPatterns = [
-    'TCH', 'DGE', 'IGH',
-    'ING', 'TION', 'SION', 'NESS', 'MENT', 'ABLE', 'IBLE', 'TURE', 'SURE',
-    'UN', 'RE', 'PRE', 'DIS', 'MIS', 'NON', 'OVER', 'UNDER', 'OUT', 'SUB',
-    'AI', 'AY', 'EE', 'EA', 'IE', 'OA', 'OW', 'OU', 'UI', 'UE', 'OO', 'AU', 'AW', 'EW', 'OI', 'OY', 'EI', 'EY',
-    'AR', 'ER', 'IR', 'OR', 'UR', 'EAR', 'AIR', 'OOR',
-    'ST', 'SP', 'SC', 'SK', 'SM', 'SN', 'SW', 'SL', 'STR', 'SPR', 'SCR',
-    'TR', 'BR', 'CR', 'DR', 'FR', 'GR', 'PR', 'PL', 'BL', 'CL', 'FL', 'GL',
-    'NT', 'ND', 'MP', 'LK', 'LT', 'LF', 'NK',
-    'TH', 'CH', 'SH', 'PH', 'WH', 'CK', 'NG'
-  ]
-  
-  const sortedPatterns = phoneticPatterns.sort((a, b) => b.length - a.length)
-  
-  let remainingWord = upperWord
-  const chunks: string[] = []
-  
-  while (remainingWord.length > 0) {
-    let patternFound = false
-    
-    for (const pattern of sortedPatterns) {
-      if (remainingWord.startsWith(pattern)) {
-        chunks.push(pattern)
-        remainingWord = remainingWord.slice(pattern.length)
-        patternFound = true
-        break
-      }
-    }
-    
-    if (!patternFound) {
-      for (const pattern of sortedPatterns) {
-        const patternIndex = remainingWord.indexOf(pattern)
-        if (patternIndex > 0 && patternIndex <= 2) {
-          chunks.push(remainingWord.slice(0, patternIndex))
-          chunks.push(pattern)
-          remainingWord = remainingWord.slice(patternIndex + pattern.length)
-          patternFound = true
-          break
-        }
-      }
-    }
-    
-    if (!patternFound) {
-      if (remainingWord.length <= 2) {
-        chunks.push(remainingWord)
-        break
-      } else {
-        const vowels = 'AEIOU'
-        let splitPoint = 1
-        
-        for (let i = 1; i < remainingWord.length - 1; i++) {
-          const prev = remainingWord[i - 1]
-          const curr = remainingWord[i]
-          const next = remainingWord[i + 1]
-          
-          if (vowels.includes(prev) && !vowels.includes(curr) && vowels.includes(next)) {
-            splitPoint = i + 1
-            break
-          }
-          
-          if (curr === next && !vowels.includes(curr)) {
-            splitPoint = i + 1
-            break
-          }
-        }
-        
-        chunks.push(remainingWord.slice(0, splitPoint))
-        remainingWord = remainingWord.slice(splitPoint)
-      }
-    }
-  }
-  
-  const finalChunks = chunks.filter(chunk => chunk.length > 0)
-  
-  if (finalChunks.length > 4) {
-    const consolidated: string[] = []
-    let i = 0
-    
-    while (i < finalChunks.length && consolidated.length < 4) {
-      if (i === finalChunks.length - 1) {
-        consolidated.push(finalChunks[i])
-        i++
-      } else if (finalChunks[i].length === 1 && finalChunks[i + 1].length === 1) {
-        consolidated.push(finalChunks[i] + finalChunks[i + 1])
-        i += 2
-      } else {
-        consolidated.push(finalChunks[i])
-        i++
-      }
-    }
-    
-    while (i < finalChunks.length) {
-      consolidated[consolidated.length - 1] += finalChunks[i]
-      i++
-    }
-    
-    return consolidated
-  }
-  
-  return finalChunks
-}
-
-// KEEP EXISTING API (unchanged - this is what SentenceBuildingPage imports)
-export const getWordsByThemeAndDifficulty = (theme: string, difficulty: 'easy' | 'regular' | 'challenge'): string[] => {
-  return wordBank[theme]?.[difficulty] || []
-}
-
-// KEEP EXISTING API
-export const getAllThemes = (): string[] => {
-  return Object.keys(wordBank)
-}
-
-// KEEP EXISTING SENTENCE TEMPLATES (your original data)
-export const sentenceTemplates = {
-  animals: [
-    { 
-      template: "THE [ANIMAL] IS [ADJECTIVE]", 
-      blanks: ["ANIMAL", "ADJECTIVE"],
-      adjectives: ["BIG", "SMALL", "FAST", "CUTE", "FUNNY", "SMART", "WILD", "TAME"],
-      hint: "Describe what the animal is like!"
-    },
-    { 
-      template: "I SEE A [ADJECTIVE] [ANIMAL]", 
-      blanks: ["ADJECTIVE", "ANIMAL"],
-      adjectives: ["HUGE", "TINY", "HAPPY", "SLEEPY", "HUNGRY", "PLAYFUL"],
-      hint: "What kind of animal do you see?"
-    },
-    { 
-      template: "THE [ANIMAL] CAN [ACTION]", 
-      blanks: ["ANIMAL", "ACTION"],
-      actions: ["RUN", "JUMP", "SWIM", "FLY", "CLIMB", "HUNT", "SLEEP", "PLAY"],
-      hint: "What can the animal do?"
-    },
-    { 
-      template: "MY [COLOR] [ANIMAL] LIKES TO [ACTION]", 
-      blanks: ["COLOR", "ANIMAL", "ACTION"],
-      colors: ["RED", "BLUE", "GREEN", "BLACK", "WHITE", "BROWN", "GRAY"],
-      actions: ["PLAY", "SLEEP", "EAT", "RUN", "HIDE", "SING"],
-      hint: "Tell us about your pet!"
-    }
-  ],
-  space: [
-    { 
-      template: "THE [SPACE] IS [ADJECTIVE]", 
-      blanks: ["SPACE", "ADJECTIVE"],
-      adjectives: ["BRIGHT", "HUGE", "HOT", "COLD", "DISTANT", "AMAZING"],
-      hint: "Describe something in space!"
-    },
-    { 
-      template: "I FLY TO THE [SPACE]", 
-      blanks: ["SPACE"],
-      hint: "Where will you travel in space?"
-    },
-    { 
-      template: "THE [SPACE] HAS [NUMBER] [OBJECT]", 
-      blanks: ["SPACE", "NUMBER", "OBJECT"],
-      numbers: ["TWO", "THREE", "MANY", "ZERO", "FIVE"],
-      objects: ["RINGS", "MOONS", "STARS", "ROCKS", "CRATERS"],
-      hint: "Count the objects in space!"
-    }
-  ],
-  food: [
-    { 
-      template: "THE [FOOD] IS [TASTE]", 
-      blanks: ["FOOD", "TASTE"],
-      tastes: ["SWEET", "SOUR", "SPICY", "SALTY", "BITTER", "YUMMY"],
-      hint: "How does the food taste?"
-    },
-    { 
-      template: "I EAT [FOOD] FOR [MEAL]", 
-      blanks: ["FOOD", "MEAL"],
-      meals: ["BREAKFAST", "LUNCH", "DINNER", "SNACK"],
-      hint: "When do you eat this food?"
-    },
-    { 
-      template: "MY [TEMPERATURE] [FOOD] IS [ADJECTIVE]", 
-      blanks: ["TEMPERATURE", "FOOD", "ADJECTIVE"],
-      temperatures: ["HOT", "COLD", "WARM", "FROZEN"],
-      adjectives: ["GOOD", "GREAT", "SOFT", "HARD"],
-      hint: "Describe your food!"
-    }
-  ],
-  vehicles: [
-    { 
-      template: "THE [VEHICLE] IS [SPEED]", 
-      blanks: ["VEHICLE", "SPEED"],
-      speeds: ["FAST", "SLOW", "QUICK"],
-      hint: "How fast does it go?"
-    },
-    { 
-      template: "I RIDE THE [VEHICLE] TO [PLACE]", 
-      blanks: ["VEHICLE", "PLACE"],
-      places: ["SCHOOL", "HOME", "STORE", "PARK"],
-      hint: "Where are you going?"
-    },
-    { 
-      template: "THE [VEHICLE] HAS [NUMBER] [PART]", 
-      blanks: ["VEHICLE", "NUMBER", "PART"],
-      numbers: ["TWO", "FOUR", "SIX", "MANY"],
-      parts: ["WHEELS", "DOORS", "WINDOWS", "SEATS"],
-      hint: "What parts does it have?"
-    }
-  ]
-}
-
-// NEW: JSON word bank structure for your wordBank.json
+// JSON word bank structure
 interface WordEntry {
   word: string
   chunks: string[]
@@ -275,7 +66,6 @@ interface WordEntry {
   syllables: number
   themes: string[]
   teaching_notes: string
-  use_context: string
 }
 
 interface EnhancedWordBankData {
@@ -294,7 +84,7 @@ interface EnhancedWordBankData {
   }
 }
 
-// NEW: Adaptive system (invisible to existing code)
+// FIXED: Adaptive system with proper theme filtering
 export class AdaptiveWordBank {
   private enhancedWordBank: EnhancedWordBankData | null = null
   private session: AdaptiveSession
@@ -302,6 +92,7 @@ export class AdaptiveWordBank {
   private readonly SUCCESS_THRESHOLD = 3
   private readonly STRUGGLE_TIME_THRESHOLD = 30000
   private readonly HINT_STRUGGLE_THRESHOLD = 2
+  private isJsonLoaded = false
 
   constructor(age: number = 10) {
     this.session = this.initializeSession(age)
@@ -330,53 +121,83 @@ export class AdaptiveWordBank {
 
   private async loadEnhancedWordBank(): Promise<void> {
     try {
+      console.log('🔍 Attempting to load wordBank.json...')
       const response = await fetch('/wordBank.json')
+      
       if (response.ok) {
         this.enhancedWordBank = await response.json()
-        console.log(`📚 Enhanced WordBank loaded: ${this.enhancedWordBank?.metadata.total_words} total words (v${this.enhancedWordBank?.metadata.version})`)
+        this.isJsonLoaded = true
+        console.log(`✅ Enhanced WordBank loaded: ${this.enhancedWordBank?.metadata.total_words} total words (v${this.enhancedWordBank?.metadata.version})`)
       } else {
-        throw new Error('Enhanced WordBank file not found')
+        throw new Error(`HTTP ${response.status}: Enhanced WordBank file not found`)
       }
     } catch (error) {
-      console.log('📝 Using existing hardcoded word bank (no JSON file needed)')
+      console.log('⚠️ JSON wordBank.json not found, using hardcoded fallback words')
+      console.log('Error details:', error)
+      this.isJsonLoaded = false
     }
   }
 
-  // NEW API: Get words using adaptive system + optional JSON enhancement
+  // FIXED: Get words with proper theme filtering
   getWordsForTheme(theme: string): string[] {
-    // If we have enhanced word bank, use it with filtering
-    if (this.enhancedWordBank) {
+    console.log(`🎯 Getting words for theme: ${theme}, difficulty: ${this.session.currentDifficulty}`)
+    
+    // If we have enhanced word bank and it's loaded, use it with filtering
+    if (this.enhancedWordBank && this.isJsonLoaded) {
       const difficultyWords = this.enhancedWordBank.words[this.session.currentDifficulty]
-      const filteredWords = theme === 'all' ? 
-        difficultyWords : 
-        difficultyWords.filter(wordEntry => wordEntry.themes.includes(theme))
+      
+      // FIXED: Proper theme filtering
+      const filteredWords = difficultyWords.filter(wordEntry => {
+        // Check if any of the word's themes match the requested theme
+        const matchesTheme = wordEntry.themes.includes(theme) || 
+                           wordEntry.themes.includes('universal') ||
+                           (theme === 'all')
+        
+        return matchesTheme
+      })
       
       const wordStrings = filteredWords.map(entry => entry.word.toUpperCase())
-      console.log(`🎯 Got ${wordStrings.length} ${this.session.currentDifficulty} words for theme: ${theme} (from JSON)`)
+      console.log(`✅ Found ${wordStrings.length} ${this.session.currentDifficulty} words for theme: ${theme} (from JSON)`)
+      console.log('Words:', wordStrings)
       return wordStrings
     }
 
-    // Fallback to existing hardcoded word bank
-    const words = getWordsByThemeAndDifficulty(theme, this.session.currentDifficulty)
-    console.log(`🎯 Got ${words.length} ${this.session.currentDifficulty} words for theme: ${theme} (from hardcoded)`)
+    // FIXED: Fallback to properly filtered hardcoded word bank
+    const themeWords = wordBank[theme]
+    if (!themeWords) {
+      console.log(`⚠️ Theme '${theme}' not found in hardcoded wordBank, using animals as fallback`)
+      const fallbackWords = wordBank['animals'][this.session.currentDifficulty]
+      return fallbackWords.map(w => w.toUpperCase())
+    }
+    
+    const words = themeWords[this.session.currentDifficulty] || []
+    console.log(`✅ Found ${words.length} ${this.session.currentDifficulty} words for theme: ${theme} (from hardcoded)`)
+    console.log('Words:', words)
     return words.map(w => w.toUpperCase())
   }
 
-  // NEW API: Get chunks (enhanced or fallback)
+  // FIXED: Get chunks with enhanced or fallback chunking
   getWordChunks(word: string): string[] {
-    if (this.enhancedWordBank) {
+    if (this.enhancedWordBank && this.isJsonLoaded) {
       const currentWords = this.enhancedWordBank.words[this.session.currentDifficulty]
       const wordEntry = currentWords.find(entry => 
         entry.word.toUpperCase() === word.toUpperCase()
       )
 
       if (wordEntry) {
+        console.log(`📝 Using JSON chunks for ${word}:`, wordEntry.chunks)
         return wordEntry.chunks.map(chunk => chunk.toUpperCase())
       }
     }
 
     // Fallback to existing phonemic chunking
+    console.log(`📝 Using fallback chunking for ${word}`)
     return breakWordIntoChunks(word)
+  }
+
+  // Get current difficulty
+  getCurrentDifficulty(): 'easy' | 'regular' | 'challenge' {
+    return this.session.currentDifficulty
   }
 
   // Performance tracking
@@ -429,66 +250,232 @@ export class AdaptiveWordBank {
 
     if (triggers.successesInRow >= this.SUCCESS_THRESHOLD) {
       if (currentDifficulty === 'easy') {
-        this.adaptDifficulty('regular', 'Great job! Moving to regular difficulty')
+        this.adaptDifficulty('regular', 'Great job! Moving to regular words')
       } else if (currentDifficulty === 'regular') {
         this.adaptDifficulty('challenge', 'Excellent! Moving to challenge words')
       }
     }
   }
 
-  private adaptDifficulty(newDifficulty: 'easy' | 'regular' | 'challenge', reason: string): void {
-    const oldDifficulty = this.session.currentDifficulty
+  private adaptDifficulty(newDifficulty: 'easy' | 'regular' | 'challenge', message: string): void {
     this.session.currentDifficulty = newDifficulty
-    this.session.adaptationTriggers.lastAdaptation = Date.now()
     this.session.adaptationTriggers.strugglesInRow = 0
     this.session.adaptationTriggers.successesInRow = 0
-
-    console.log(`🎯 ADAPTATION: ${oldDifficulty} → ${newDifficulty}. ${reason}`)
+    this.session.adaptationTriggers.lastAdaptation = Date.now()
+    
+    console.log(`🎯 ${message}`)
   }
 
   private logPerformanceInsights(metrics: PerformanceMetrics, struggled: boolean): void {
-    const timeMsg = `⏱️ Time: ${Math.round(metrics.timePerWord / 1000)}s`
-    const hintsMsg = `💡 Hints: ${metrics.hintsUsed}`
-    const resetsMsg = `🔄 Resets: ${metrics.resets}`
-    const difficultyMsg = `📊 Difficulty: ${metrics.difficulty}`
-    const statusMsg = struggled ? '❌ Struggled' : '✅ Success'
+    const timeInSeconds = Math.round(metrics.timePerWord / 1000)
+    console.log(`📊 Word completed in ${timeInSeconds}s, hints: ${metrics.hintsUsed}, resets: ${metrics.resets}, struggled: ${struggled}`)
+  }
+}
+
+// ENHANCED: Phonemic chunking function (keeping existing logic)
+export const breakWordIntoChunks = (word: string): string[] => {
+  const upperWord = word.toUpperCase()
+  
+  // Handle very short words
+  if (upperWord.length <= 2) {
+    return [upperWord]
+  }
+  
+  // Handle common short words that shouldn't be split
+  const commonWholeWords = ['THE', 'AND', 'FOR', 'ARE', 'BUT', 'NOT', 'YOU', 'ALL', 'CAN', 'HER', 'WAS', 'ONE', 'OUR', 'HAD', 'BY', 'HOT', 'WHO', 'DID', 'YES', 'HIS', 'HAS', 'HAD']
+  if (commonWholeWords.includes(upperWord)) {
+    return [upperWord]
+  }
+  
+  // Research-based phoneme patterns
+  const patterns = [
+    // Consonant blends at start
+    { pattern: /^(BL|BR|CL|CR|DR|FL|FR|GL|GR|PL|PR|SC|SK|SL|SM|SN|SP|ST|SW|TR|TW|TH|SH|CH|WH)(.+)/, split: true },
     
-    console.log(`${statusMsg} | ${timeMsg} | ${hintsMsg} | ${resetsMsg} | ${difficultyMsg}`)
-  }
-
-  getCurrentDifficulty(): 'easy' | 'regular' | 'challenge' {
-    return this.session.currentDifficulty
-  }
-
-  getSessionAnalytics(): {
-    totalWords: number
-    averageTime: number
-    totalHints: number
-    successRate: number
-    currentDifficulty: string
-  } {
-    const metrics = this.session.sessionMetrics
-    if (metrics.length === 0) {
-      return {
-        totalWords: 0,
-        averageTime: 0,
-        totalHints: 0,
-        successRate: 0,
-        currentDifficulty: this.session.currentDifficulty
+    // Ending patterns
+    { pattern: /(.+)(ING|TION|SION|NESS|MENT|ABLE|IBLE|ED|ER|EST|LY)$/, split: true },
+    
+    // Double consonants - split between
+    { pattern: /(.+?)([BCDFGHJKLMNPQRSTVWXYZ])\2(.+)/, split: true },
+    
+    // Magic E pattern
+    { pattern: /(.+)([BCDFGHJKLMNPQRSTVWXYZ])E$/, split: false },
+    
+    // Common prefixes
+    { pattern: /^(UN|RE|IN|DIS|EN|NON|OVER|MIS|SUB|PRE|INTER|FORE|DE|OVER)(.+)/, split: true }
+  ]
+  
+  // Check for specific chunking patterns
+  for (const { pattern, split } of patterns) {
+    const match = upperWord.match(pattern)
+    if (match && split) {
+      if (match.length === 3) {
+        return [match[1], match[2]].filter(chunk => chunk.length > 0)
+      } else if (match.length === 4) {
+        // For double consonant pattern
+        return [match[1] + match[2], match[2] + match[3]].filter(chunk => chunk.length > 0)
       }
     }
-
-    return {
-      totalWords: metrics.length,
-      averageTime: Math.round(metrics.reduce((sum, m) => sum + m.timePerWord, 0) / metrics.length / 1000),
-      totalHints: metrics.reduce((sum, m) => sum + m.hintsUsed, 0),
-      successRate: Math.round((metrics.filter(m => m.completed).length / metrics.length) * 100),
-      currentDifficulty: this.session.currentDifficulty
+  }
+  
+  // Syllable-based chunking for longer words
+  if (upperWord.length > 4) {
+    const vowels = 'AEIOU'
+    const chunks: string[] = []
+    let currentChunk = ''
+    let lastWasVowel = false
+    
+    for (let i = 0; i < upperWord.length; i++) {
+      const char = upperWord[i]
+      const isVowel = vowels.includes(char)
+      
+      currentChunk += char
+      
+      // Split after vowel-consonant-vowel pattern
+      if (lastWasVowel && !isVowel && i < upperWord.length - 1 && vowels.includes(upperWord[i + 1])) {
+        chunks.push(currentChunk)
+        currentChunk = ''
+      }
+      
+      lastWasVowel = isVowel
+    }
+    
+    if (currentChunk) {
+      chunks.push(currentChunk)
+    }
+    
+    if (chunks.length > 1 && chunks.length <= 4) {
+      return chunks
     }
   }
-
-  setDifficulty(difficulty: 'easy' | 'regular' | 'challenge'): void {
-    this.session.currentDifficulty = difficulty
-    console.log(`🎯 Manual difficulty set to: ${difficulty}`)
+  
+  // Simple fallback: split roughly in half for longer words
+  if (upperWord.length > 6) {
+    const midPoint = Math.ceil(upperWord.length / 2)
+    return [upperWord.slice(0, midPoint), upperWord.slice(midPoint)]
   }
+  
+  // For 3-6 letter words, try to split intelligently
+  if (upperWord.length >= 3) {
+    const vowels = 'AEIOU'
+    
+    // Find a good split point (prefer after consonant, before vowel)
+    for (let i = 1; i < upperWord.length - 1; i++) {
+      const curr = upperWord[i]
+      const next = upperWord[i + 1]
+      
+      if (!vowels.includes(curr) && vowels.includes(next)) {
+        return [upperWord.slice(0, i + 1), upperWord.slice(i + 1)]
+      }
+    }
+    
+    // Fallback: split in middle
+    const mid = Math.ceil(upperWord.length / 2)
+    return [upperWord.slice(0, mid), upperWord.slice(mid)]
+  }
+  
+  return [upperWord]
+}
+
+// Get words by theme and difficulty (backward compatibility)
+export const getWordsByThemeAndDifficulty = (theme: string, difficulty: 'easy' | 'regular' | 'challenge'): string[] => {
+  return wordBank[theme]?.[difficulty] || []
+}
+
+// Get all themes (backward compatibility)
+export const getAllThemes = (): string[] => {
+  return Object.keys(wordBank)
+}
+
+// MISSING EXPORT: Sentence templates for SentenceBuildingPage
+export const sentenceTemplates = {
+  animals: [
+    { 
+      template: "THE [ANIMAL] IS [ADJECTIVE]", 
+      blanks: ["ANIMAL", "ADJECTIVE"],
+      adjectives: ["BIG", "SMALL", "FAST", "CUTE", "FUNNY", "SMART", "WILD", "TAME"],
+      hint: "Describe what the animal is like!"
+    },
+    { 
+      template: "I SEE A [ADJECTIVE] [ANIMAL]", 
+      blanks: ["ADJECTIVE", "ANIMAL"],
+      adjectives: ["HUGE", "TINY", "HAPPY", "SLEEPY", "HUNGRY", "PLAYFUL"],
+      hint: "What kind of animal do you see?"
+    },
+    { 
+      template: "THE [ANIMAL] CAN [ACTION]", 
+      blanks: ["ANIMAL", "ACTION"],
+      actions: ["RUN", "JUMP", "SWIM", "FLY", "CLIMB", "HUNT", "SLEEP", "PLAY"],
+      hint: "What can the animal do?"
+    },
+    { 
+      template: "MY [COLOR] [ANIMAL] LIKES TO [ACTION]", 
+      blanks: ["COLOR", "ANIMAL", "ACTION"],
+      colors: ["RED", "BLUE", "GREEN", "BLACK", "WHITE", "BROWN", "GRAY"],
+      actions: ["PLAY", "SLEEP", "EAT", "RUN", "HIDE", "SING"],
+      hint: "Tell us about your pet!"
+    }
+  ],
+  space: [
+    { 
+      template: "THE [SPACE] IS [ADJECTIVE]", 
+      blanks: ["SPACE", "ADJECTIVE"],
+      adjectives: ["BRIGHT", "DARK", "HUGE", "ROUND", "FAR", "CLOSE", "HOT", "COLD"],
+      hint: "Describe what you see in space!"
+    },
+    { 
+      template: "I FLY TO THE [SPACE] IN MY [VEHICLE]", 
+      blanks: ["SPACE", "VEHICLE"],
+      vehicles: ["ROCKET", "SPACESHIP", "SHUTTLE", "UFO"],
+      hint: "How do you travel through space?"
+    },
+    { 
+      template: "THE [SPACE] HAS [NUMBER] [OBJECT]", 
+      blanks: ["SPACE", "NUMBER", "OBJECT"],
+      numbers: ["ONE", "TWO", "MANY", "NO"],
+      objects: ["MOONS", "RINGS", "ROCKS", "ALIENS", "STARS"],
+      hint: "What can you count in space?"
+    }
+  ],
+  food: [
+    { 
+      template: "I EAT [ADJECTIVE] [FOOD]", 
+      blanks: ["ADJECTIVE", "FOOD"],
+      adjectives: ["YUMMY", "SWEET", "HOT", "COLD", "FRESH", "CRUNCHY", "SOFT"],
+      hint: "What kind of food do you like?"
+    },
+    { 
+      template: "FOR [MEAL] I WANT [FOOD]", 
+      blanks: ["MEAL", "FOOD"],
+      meals: ["BREAKFAST", "LUNCH", "DINNER", "SNACK"],
+      hint: "When do you eat this food?"
+    },
+    { 
+      template: "THE [FOOD] TASTES [TASTE]", 
+      blanks: ["FOOD", "TASTE"],
+      tastes: ["SWEET", "SOUR", "SALTY", "SPICY", "GOOD", "GREAT"],
+      hint: "How does the food taste?"
+    }
+  ],
+  vehicles: [
+    { 
+      template: "THE [VEHICLE] IS [ADJECTIVE]", 
+      blanks: ["VEHICLE", "ADJECTIVE"],
+      adjectives: ["FAST", "SLOW", "BIG", "SMALL", "RED", "BLUE", "NEW", "OLD"],
+      hint: "Describe the vehicle!"
+    },
+    { 
+      template: "I RIDE THE [VEHICLE] TO [PLACE]", 
+      blanks: ["VEHICLE", "PLACE"],
+      places: ["SCHOOL", "HOME", "STORE", "PARK", "BEACH", "CITY"],
+      hint: "Where are you going?"
+    },
+    { 
+      template: "THE [VEHICLE] HAS [NUMBER] [PART]", 
+      blanks: ["VEHICLE", "NUMBER", "PART"],
+      numbers: ["TWO", "FOUR", "SIX", "MANY"],
+      parts: ["WHEELS", "DOORS", "WINDOWS", "SEATS", "LIGHTS"],
+      hint: "What parts does it have?"
+    }
+  ]
 }

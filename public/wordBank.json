@@ -1,43 +1,58 @@
 {
   "metadata": {
-    "total_words": 200,
-    "easy_count": 40,
-    "regular_count": 80, 
-    "challenge_count": 80,
-    "version": "3.0-UDL-Compatible",
-    "description": "UDL-aligned word bank maintaining current code compatibility"
+    "total_words": 90,
+    "easy_count": 30,
+    "regular_count": 30,
+    "challenge_count": 30,
+    "version": "1.0.0",
+    "description": "Enhanced word bank with proper theme filtering for neurodivergent literacy app"
   },
   "words": {
     "easy": [
       {
-        "word": "pet",
-        "chunks": ["pet"],
-        "alternative_chunks": ["p", "et"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "My pet is soft"
-      },
-      {
         "word": "cat",
         "chunks": ["cat"],
         "alternative_chunks": ["c", "at"],
-        "phonics_pattern": "cvc",
+        "phonics_pattern": "cvc_pattern",
         "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "The cat is sleeping"
+        "teaching_notes": "Simple CVC pattern"
       },
       {
         "word": "dog",
         "chunks": ["dog"],
         "alternative_chunks": ["d", "og"],
-        "phonics_pattern": "cvc",
+        "phonics_pattern": "cvc_pattern", 
         "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "My dog runs fast"
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "pig",
+        "chunks": ["pig"],
+        "alternative_chunks": ["p", "ig"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["animals"],
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "cow",
+        "chunks": ["cow"],
+        "alternative_chunks": ["c", "ow"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 1,
+        "themes": ["animals"],
+        "teaching_notes": "OW diphthong"
+      },
+      {
+        "word": "hen",
+        "chunks": ["hen"],
+        "alternative_chunks": ["h", "en"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["animals"],
+        "teaching_notes": "Simple CVC pattern"
       },
       {
         "word": "fish",
@@ -46,258 +61,25 @@
         "phonics_pattern": "consonant_digraph",
         "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "SH digraph pattern",
-        "use_context": "The fish swims"
+        "teaching_notes": "SH digraph"
       },
       {
-        "word": "bird",
-        "chunks": ["bird"],
-        "alternative_chunks": ["b", "ird"],
-        "phonics_pattern": "r_controlled",
+        "word": "duck",
+        "chunks": ["duck"],
+        "alternative_chunks": ["d", "uck"],
+        "phonics_pattern": "cvc_pattern",
         "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "IR r-controlled vowel",
-        "use_context": "The bird can fly"
+        "teaching_notes": "Simple CVC pattern"
       },
       {
-        "word": "run",
-        "chunks": ["run"],
-        "alternative_chunks": ["r", "un"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "Animals run fast"
-      },
-      {
-        "word": "jump",
-        "chunks": ["jump"],
-        "alternative_chunks": ["j", "ump"],
+        "word": "frog",
+        "chunks": ["frog"],
+        "alternative_chunks": ["fr", "og"],
         "phonics_pattern": "consonant_blend",
         "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "MP ending blend",
-        "use_context": "Cats can jump high"
-      },
-      {
-        "word": "swim",
-        "chunks": ["swim"],
-        "alternative_chunks": ["sw", "im"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "SW beginning blend",
-        "use_context": "Fish swim in water"
-      },
-      {
-        "word": "big",
-        "chunks": ["big"],
-        "alternative_chunks": ["b", "ig"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "That's a big dog"
-      },
-      {
-        "word": "small",
-        "chunks": ["small"],
-        "alternative_chunks": ["sm", "all"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "SM blend + ALL",
-        "use_context": "The mouse is small"
-      },
-      {
-        "word": "sun",
-        "chunks": ["sun"],
-        "alternative_chunks": ["s", "un"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "The sun gives us light"
-      },
-      {
-        "word": "moon",
-        "chunks": ["moon"],
-        "alternative_chunks": ["m", "oon"],
-        "phonics_pattern": "vowel_team",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "OO vowel team",
-        "use_context": "I see the moon at night"
-      },
-      {
-        "word": "star",
-        "chunks": ["star"],
-        "alternative_chunks": ["st", "ar"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "AR r-controlled vowel",
-        "use_context": "Stars shine in the dark"
-      },
-      {
-        "word": "ship",
-        "chunks": ["ship"],
-        "alternative_chunks": ["sh", "ip"],
-        "phonics_pattern": "consonant_digraph",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "SH digraph pattern",
-        "use_context": "The space ship is fast"
-      },
-      {
-        "word": "fly",
-        "chunks": ["fly"],
-        "alternative_chunks": ["fl", "y"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "FL beginning blend",
-        "use_context": "Rockets fly to space"
-      },
-      {
-        "word": "hot",
-        "chunks": ["hot"],
-        "alternative_chunks": ["h", "ot"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["space", "food"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "The sun is very hot"
-      },
-      {
-        "word": "cold",
-        "chunks": ["cold"],
-        "alternative_chunks": ["c", "old"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["space", "food"],
-        "teaching_notes": "LD ending blend",
-        "use_context": "Space is cold and dark"
-      },
-      {
-        "word": "far",
-        "chunks": ["far"],
-        "alternative_chunks": ["f", "ar"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "AR r-controlled vowel",
-        "use_context": "The stars are far away"
-      },
-      {
-        "word": "up",
-        "chunks": ["up"],
-        "alternative_chunks": ["u", "p"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "Rockets blast up high"
-      },
-      {
-        "word": "blue",
-        "chunks": ["blue"],
-        "alternative_chunks": ["bl", "ue"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["space"],
-        "teaching_notes": "BL blend + UE ending",
-        "use_context": "Earth looks blue from space"
-      },
-      {
-        "word": "eat",
-        "chunks": ["eat"],
-        "alternative_chunks": ["e", "at"],
-        "phonics_pattern": "vowel_team",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "EA vowel team",
-        "use_context": "I eat lunch at school"
-      },
-      {
-        "word": "cut",
-        "chunks": ["cut"],
-        "alternative_chunks": ["c", "ut"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "Please cut my apple"
-      },
-      {
-        "word": "mix",
-        "chunks": ["mix"],
-        "alternative_chunks": ["m", "ix"],
-        "phonics_pattern": "cvc",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "Mix the ingredients together"
-      },
-      {
-        "word": "egg",
-        "chunks": ["egg"],
-        "alternative_chunks": ["e", "gg"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "Double G pattern",
-        "use_context": "I crack the egg carefully"
-      },
-      {
-        "word": "milk",
-        "chunks": ["milk"],
-        "alternative_chunks": ["m", "ilk"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "LK ending blend",
-        "use_context": "Pour milk in my cereal"
-      },
-      {
-        "word": "sweet",
-        "chunks": ["sweet"],
-        "alternative_chunks": ["sw", "eet"],
-        "phonics_pattern": "vowel_team",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "EE vowel team",
-        "use_context": "Cookies taste sweet"
-      },
-      {
-        "word": "sour",
-        "chunks": ["sour"],
-        "alternative_chunks": ["s", "our"],
-        "phonics_pattern": "vowel_team",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "OUR vowel pattern",
-        "use_context": "Lemons are very sour"
-      },
-      {
-        "word": "soft",
-        "chunks": ["soft"],
-        "alternative_chunks": ["s", "oft"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "FT ending blend",
-        "use_context": "The bread feels soft"
-      },
-      {
-        "word": "fresh",
-        "chunks": ["fresh"],
-        "alternative_chunks": ["fr", "esh"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["food"],
-        "teaching_notes": "FR beginning blend + SH",
-        "use_context": "We buy fresh vegetables"
+        "teaching_notes": "FR blend"
       },
       {
         "word": "car",
@@ -306,300 +88,468 @@
         "phonics_pattern": "r_controlled",
         "syllables": 1,
         "themes": ["vehicles"],
-        "teaching_notes": "AR r-controlled vowel",
-        "use_context": "The red car is fast"
+        "teaching_notes": "AR r-controlled vowel"
       },
       {
         "word": "bus",
         "chunks": ["bus"],
         "alternative_chunks": ["b", "us"],
-        "phonics_pattern": "cvc",
+        "phonics_pattern": "cvc_pattern",
         "syllables": 1,
         "themes": ["vehicles"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "I ride the school bus"
+        "teaching_notes": "Simple CVC pattern"
       },
       {
-        "word": "go",
-        "chunks": ["go"],
-        "alternative_chunks": ["g", "o"],
-        "phonics_pattern": "cv",
+        "word": "bike",
+        "chunks": ["bike"],
+        "alternative_chunks": ["b", "ike"],
+        "phonics_pattern": "magic_e",
         "syllables": 1,
         "themes": ["vehicles"],
-        "teaching_notes": "Open syllable",
-        "use_context": "Let's go for a ride"
+        "teaching_notes": "Magic E - long I"
       },
       {
-        "word": "stop",
-        "chunks": ["stop"],
-        "alternative_chunks": ["st", "op"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["vehicles"],
-        "teaching_notes": "ST beginning blend",
-        "use_context": "The bus will stop here"
-      },
-      {
-        "word": "fast",
-        "chunks": ["fast"],
-        "alternative_chunks": ["f", "ast"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["vehicles"],
-        "teaching_notes": "ST ending blend",
-        "use_context": "Race cars go very fast"
-      },
-      {
-        "word": "slow",
-        "chunks": ["slow"],
-        "alternative_chunks": ["sl", "ow"],
-        "phonics_pattern": "consonant_blend",
-        "syllables": 1,
-        "themes": ["vehicles"],
-        "teaching_notes": "SL blend + OW diphthong",
-        "use_context": "The truck moves slow uphill"
-      },
-      {
-        "word": "turn",
-        "chunks": ["turn"],
-        "alternative_chunks": ["t", "urn"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 1,
-        "themes": ["vehicles"],
-        "teaching_notes": "UR r-controlled vowel",
-        "use_context": "Turn left at the corner"
-      },
-      {
-        "word": "park",
-        "chunks": ["park"],
-        "alternative_chunks": ["p", "ark"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 1,
-        "themes": ["vehicles"],
-        "teaching_notes": "AR r-controlled vowel",
-        "use_context": "Park the car carefully"
-      },
-      {
-        "word": "road",
-        "chunks": ["road"],
-        "alternative_chunks": ["r", "oad"],
+        "word": "boat",
+        "chunks": ["boat"],
+        "alternative_chunks": ["b", "oat"],
         "phonics_pattern": "vowel_team",
         "syllables": 1,
         "themes": ["vehicles"],
-        "teaching_notes": "OA vowel team",
-        "use_context": "The road leads to town"
+        "teaching_notes": "OA vowel team"
       },
       {
-        "word": "gas",
-        "chunks": ["gas"],
-        "alternative_chunks": ["g", "as"],
-        "phonics_pattern": "cvc",
+        "word": "train",
+        "chunks": ["train"],
+        "alternative_chunks": ["tr", "ain"],
+        "phonics_pattern": "vowel_team",
         "syllables": 1,
         "themes": ["vehicles"],
-        "teaching_notes": "Foundation CVC pattern",
-        "use_context": "Cars need gas to run"
+        "teaching_notes": "AI vowel team"
+      },
+      {
+        "word": "truck",
+        "chunks": ["truck"],
+        "alternative_chunks": ["tr", "uck"],
+        "phonics_pattern": "consonant_blend",
+        "syllables": 1,
+        "themes": ["vehicles"],
+        "teaching_notes": "TR blend"
+      },
+      {
+        "word": "van",
+        "chunks": ["van"],
+        "alternative_chunks": ["v", "an"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["vehicles"],
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "taxi",
+        "chunks": ["tax", "i"],
+        "alternative_chunks": ["t", "ax", "i"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 2,
+        "themes": ["vehicles"],
+        "teaching_notes": "Two syllables"
+      },
+      {
+        "word": "sun",
+        "chunks": ["sun"],
+        "alternative_chunks": ["s", "un"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "moon",
+        "chunks": ["moon"],
+        "alternative_chunks": ["m", "oon"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "OO vowel team"
+      },
+      {
+        "word": "star",
+        "chunks": ["star"],
+        "alternative_chunks": ["st", "ar"],
+        "phonics_pattern": "r_controlled",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "AR r-controlled vowel"
+      },
+      {
+        "word": "sky",
+        "chunks": ["sky"],
+        "alternative_chunks": ["sk", "y"],
+        "phonics_pattern": "consonant_blend",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "SK blend"
+      },
+      {
+        "word": "rock",
+        "chunks": ["rock"],
+        "alternative_chunks": ["r", "ock"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "ship",
+        "chunks": ["ship"],
+        "alternative_chunks": ["sh", "ip"],
+        "phonics_pattern": "consonant_digraph",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "SH digraph"
+      },
+      {
+        "word": "mars",
+        "chunks": ["mars"],
+        "alternative_chunks": ["m", "ars"],
+        "phonics_pattern": "r_controlled",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "AR r-controlled vowel"
+      },
+      {
+        "word": "earth",
+        "chunks": ["earth"],
+        "alternative_chunks": ["ear", "th"],
+        "phonics_pattern": "r_controlled",
+        "syllables": 1,
+        "themes": ["space"],
+        "teaching_notes": "EAR r-controlled vowel"
+      },
+      {
+        "word": "pie",
+        "chunks": ["pie"],
+        "alternative_chunks": ["p", "ie"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "IE vowel team"
+      },
+      {
+        "word": "cake",
+        "chunks": ["cake"],
+        "alternative_chunks": ["c", "ake"],
+        "phonics_pattern": "magic_e",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "Magic E - long A"
+      },
+      {
+        "word": "milk",
+        "chunks": ["milk"],
+        "alternative_chunks": ["m", "ilk"],
+        "phonics_pattern": "consonant_blend",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "LK ending blend"
+      },
+      {
+        "word": "egg",
+        "chunks": ["egg"],
+        "alternative_chunks": ["e", "gg"],
+        "phonics_pattern": "double_consonant",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "Double G"
+      },
+      {
+        "word": "jam",
+        "chunks": ["jam"],
+        "alternative_chunks": ["j", "am"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "Simple CVC pattern"
+      },
+      {
+        "word": "nuts",
+        "chunks": ["nuts"],
+        "alternative_chunks": ["n", "uts"],
+        "phonics_pattern": "cvc_pattern",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "Simple CVC pattern with S plural"
       }
     ],
     "regular": [
       {
-        "word": "snake",
-        "chunks": ["sn", "ake"],
-        "alternative_chunks": ["s", "n", "a", "ke"],
-        "phonics_pattern": "magic_e",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "Magic E pattern - long A",
-        "use_context": "The snake slides on rocks"
-      },
-      {
-        "word": "horse",
-        "chunks": ["hor", "se"],
-        "alternative_chunks": ["h", "or", "s", "e"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 1,
-        "themes": ["animals"],
-        "teaching_notes": "OR r-controlled vowel",
-        "use_context": "I ride the brown horse"
-      },
-      {
         "word": "tiger",
         "chunks": ["ti", "ger"],
         "alternative_chunks": ["t", "i", "g", "er"],
+        "phonics_pattern": "two_syllable",
+        "syllables": 2,
+        "themes": ["animals"],
+        "teaching_notes": "Two syllables with ER ending"
+      },
+      {
+        "word": "horse",
+        "chunks": ["horse"],
+        "alternative_chunks": ["h", "or", "se"],
         "phonics_pattern": "r_controlled",
-        "syllables": 2,
+        "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "ER r-controlled vowel",
-        "use_context": "The tiger has stripes"
+        "teaching_notes": "OR r-controlled vowel"
       },
       {
-        "word": "water",
-        "chunks": ["wa", "ter"],
-        "alternative_chunks": ["w", "a", "t", "er"],
+        "word": "sheep",
+        "chunks": ["sheep"],
+        "alternative_chunks": ["sh", "eep"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 1,
+        "themes": ["animals"],
+        "teaching_notes": "EE vowel team"
+      },
+      {
+        "word": "snake",
+        "chunks": ["snake"],
+        "alternative_chunks": ["sn", "ake"],
+        "phonics_pattern": "magic_e",
+        "syllables": 1,
+        "themes": ["animals"],
+        "teaching_notes": "Magic E - long A"
+      },
+      {
+        "word": "shark",
+        "chunks": ["shark"],
+        "alternative_chunks": ["sh", "ark"],
         "phonics_pattern": "r_controlled",
-        "syllables": 2,
+        "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "ER r-controlled vowel",
-        "use_context": "Animals need fresh water"
+        "teaching_notes": "AR r-controlled vowel"
       },
       {
-        "word": "corner",
-        "chunks": ["cor", "ner"],
-        "alternative_chunks": ["c", "or", "n", "er"],
-        "phonics_pattern": "r_controlled",
-        "syllables": 2,
+        "word": "whale",
+        "chunks": ["whale"],
+        "alternative_chunks": ["wh", "ale"],
+        "phonics_pattern": "magic_e",
+        "syllables": 1,
         "themes": ["animals"],
-        "teaching_notes": "OR + ER r-controlled",
-        "use_context": "The cat hides in the corner"
+        "teaching_notes": "Magic E - long A"
       },
       {
-        "word": "helping",
-        "chunks": ["help", "ing"],
-        "alternative_chunks": ["h", "elp", "ing"],
-        "phonics_pattern": "suffix_ing",
+        "word": "turtle",
+        "chunks": ["tur", "tle"],
+        "alternative_chunks": ["t", "ur", "t", "le"],
+        "phonics_pattern": "consonant_le",
         "syllables": 2,
         "themes": ["animals"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "I'm helping feed the animals"
+        "teaching_notes": "UR + LE pattern"
       },
       {
-        "word": "walking",
-        "chunks": ["walk", "ing"],
-        "alternative_chunks": ["w", "alk", "ing"],
-        "phonics_pattern": "suffix_ing",
+        "word": "rabbit",
+        "chunks": ["rab", "bit"],
+        "alternative_chunks": ["r", "ab", "b", "it"],
+        "phonics_pattern": "double_consonant",
         "syllables": 2,
         "themes": ["animals"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "We're walking the dog"
+        "teaching_notes": "Double B"
       },
       {
-        "word": "faster",
-        "chunks": ["fast", "er"],
-        "alternative_chunks": ["f", "ast", "er"],
-        "phonics_pattern": "suffix_er",
-        "syllables": 2,
-        "themes": ["animals"],
-        "teaching_notes": "ER comparative suffix",
-        "use_context": "Cheetahs run faster than dogs"
-      },
-      {
-        "word": "into",
-        "chunks": ["in", "to"],
-        "alternative_chunks": ["i", "n", "t", "o"],
+        "word": "airplane",
+        "chunks": ["air", "plane"],
+        "alternative_chunks": ["air", "pl", "ane"],
         "phonics_pattern": "compound_word",
         "syllables": 2,
-        "themes": ["animals"],
-        "teaching_notes": "Preposition compound",
-        "use_context": "The rabbit hopped into its hole"
+        "themes": ["vehicles"],
+        "teaching_notes": "Compound word"
       },
       {
-        "word": "outside",
-        "chunks": ["out", "side"],
-        "alternative_chunks": ["out", "s", "ide"],
-        "phonics_pattern": "compound_word",
+        "word": "scooter",
+        "chunks": ["scoot", "er"],
+        "alternative_chunks": ["sc", "oot", "er"],
+        "phonics_pattern": "vowel_team",
         "syllables": 2,
-        "themes": ["animals"],
-        "teaching_notes": "Two words combined",
-        "use_context": "The animals play outside"
+        "themes": ["vehicles"],
+        "teaching_notes": "OO vowel team"
       },
       {
         "word": "rocket",
         "chunks": ["rock", "et"],
         "alternative_chunks": ["r", "ock", "et"],
-        "phonics_pattern": "suffix_et",
+        "phonics_pattern": "two_syllable",
         "syllables": 2,
-        "themes": ["space"],
-        "teaching_notes": "ET suffix pattern",
-        "use_context": "The rocket launches into space"
+        "themes": ["vehicles", "space"],
+        "teaching_notes": "Two syllables"
+      },
+      {
+        "word": "ferry",
+        "chunks": ["fer", "ry"],
+        "alternative_chunks": ["f", "er", "ry"],
+        "phonics_pattern": "double_consonant",
+        "syllables": 2,
+        "themes": ["vehicles"],
+        "teaching_notes": "Double R"
+      },
+      {
+        "word": "subway",
+        "chunks": ["sub", "way"],
+        "alternative_chunks": ["s", "ub", "w", "ay"],
+        "phonics_pattern": "compound_word",
+        "syllables": 2,
+        "themes": ["vehicles"],
+        "teaching_notes": "Compound word"
+      },
+      {
+        "word": "tractor",
+        "chunks": ["trac", "tor"],
+        "alternative_chunks": ["tr", "ac", "t", "or"],
+        "phonics_pattern": "two_syllable",
+        "syllables": 2,
+        "themes": ["vehicles"],
+        "teaching_notes": "Two syllables"
+      },
+      {
+        "word": "jeep",
+        "chunks": ["jeep"],
+        "alternative_chunks": ["j", "eep"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 1,
+        "themes": ["vehicles"],
+        "teaching_notes": "EE vowel team"
       },
       {
         "word": "planet",
         "chunks": ["plan", "et"],
         "alternative_chunks": ["pl", "an", "et"],
-        "phonics_pattern": "suffix_et",
+        "phonics_pattern": "two_syllable",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "ET suffix pattern",
-        "use_context": "Mars is a red planet"
+        "teaching_notes": "Two syllables"
       },
       {
-        "word": "circle",
-        "chunks": ["cir", "cle"],
-        "alternative_chunks": ["c", "ir", "c", "le"],
-        "phonics_pattern": "consonant_le",
+        "word": "comet",
+        "chunks": ["com", "et"],
+        "alternative_chunks": ["c", "om", "et"],
+        "phonics_pattern": "two_syllable",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "LE ending pattern",
-        "use_context": "Planets circle around the sun"
+        "teaching_notes": "Two syllables"
       },
       {
-        "word": "center",
-        "chunks": ["cen", "ter"],
-        "alternative_chunks": ["c", "en", "t", "er"],
+        "word": "orbit",
+        "chunks": ["or", "bit"],
+        "alternative_chunks": ["or", "b", "it"],
         "phonics_pattern": "r_controlled",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "ER r-controlled vowel",
-        "use_context": "The sun is at the center"
+        "teaching_notes": "OR r-controlled vowel"
       },
       {
-        "word": "power",
-        "chunks": ["pow", "er"],
-        "alternative_chunks": ["p", "ow", "er"],
+        "word": "solar",
+        "chunks": ["so", "lar"],
+        "alternative_chunks": ["s", "o", "l", "ar"],
         "phonics_pattern": "r_controlled",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "ER r-controlled vowel",
-        "use_context": "Rockets need lots of power"
+        "teaching_notes": "AR r-controlled vowel"
       },
       {
-        "word": "floating",
-        "chunks": ["float", "ing"],
-        "alternative_chunks": ["fl", "oat", "ing"],
-        "phonics_pattern": "suffix_ing",
+        "word": "lunar",
+        "chunks": ["lu", "nar"],
+        "alternative_chunks": ["l", "u", "n", "ar"],
+        "phonics_pattern": "r_controlled",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "Astronauts are floating in space"
+        "teaching_notes": "AR r-controlled vowel"
       },
       {
-        "word": "exploring",
-        "chunks": ["ex", "plor", "ing"],
-        "alternative_chunks": ["ex", "pl", "or", "ing"],
-        "phonics_pattern": "suffix_ing",
+        "word": "galaxy",
+        "chunks": ["gal", "ax", "y"],
+        "alternative_chunks": ["g", "al", "ax", "y"],
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "We're exploring the solar system"
+        "teaching_notes": "Three syllables"
       },
       {
-        "word": "brighter",
-        "chunks": ["bright", "er"],
-        "alternative_chunks": ["br", "ight", "er"],
-        "phonics_pattern": "suffix_er",
-        "syllables": 2,
+        "word": "alien",
+        "chunks": ["a", "li", "en"],
+        "alternative_chunks": ["a", "l", "i", "en"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "ER comparative suffix",
-        "use_context": "The sun is brighter than stars"
+        "teaching_notes": "Three syllables"
       },
       {
-        "word": "around",
-        "chunks": ["a", "round"],
-        "alternative_chunks": ["a", "r", "ound"],
+        "word": "pizza",
+        "chunks": ["piz", "za"],
+        "alternative_chunks": ["p", "iz", "z", "a"],
+        "phonics_pattern": "double_consonant",
+        "syllables": 2,
+        "themes": ["food"],
+        "teaching_notes": "Double Z"
+      },
+      {
+        "word": "apple",
+        "chunks": ["ap", "ple"],
+        "alternative_chunks": ["a", "pp", "le"],
+        "phonics_pattern": "consonant_le",
+        "syllables": 2,
+        "themes": ["food"],
+        "teaching_notes": "Double P + LE"
+      },
+      {
+        "word": "grape",
+        "chunks": ["grape"],
+        "alternative_chunks": ["gr", "ape"],
+        "phonics_pattern": "magic_e",
+        "syllables": 1,
+        "themes": ["food"],
+        "teaching_notes": "Magic E - long A"
+      },
+      {
+        "word": "orange",
+        "chunks": ["or", "ange"],
+        "alternative_chunks": ["or", "an", "ge"],
         "phonics_pattern": "r_controlled",
         "syllables": 2,
-        "themes": ["space"],
-        "teaching_notes": "OUN vowel pattern",
-        "use_context": "Moons go around planets"
+        "themes": ["food"],
+        "teaching_notes": "OR r-controlled vowel"
       },
       {
-        "word": "spaceship",
-        "chunks": ["space", "ship"],
-        "alternative_chunks": ["sp", "ace", "sh", "ip"],
-        "phonics_pattern": "compound_word",
+        "word": "carrot",
+        "chunks": ["car", "rot"],
+        "alternative_chunks": ["c", "ar", "r", "ot"],
+        "phonics_pattern": "r_controlled",
         "syllables": 2,
-        "themes": ["space"],
-        "teaching_notes": "Two words combined",
-        "use_context": "The spaceship landed safely"
+        "themes": ["food"],
+        "teaching_notes": "AR r-controlled vowel"
+      },
+      {
+        "word": "banana",
+        "chunks": ["ba", "na", "na"],
+        "alternative_chunks": ["b", "a", "n", "a", "n", "a"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["food"],
+        "teaching_notes": "Three syllables"
+      },
+      {
+        "word": "cookie",
+        "chunks": ["cook", "ie"],
+        "alternative_chunks": ["c", "ook", "ie"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 2,
+        "themes": ["food"],
+        "teaching_notes": "OO and IE vowel teams"
+      },
+      {
+        "word": "pasta",
+        "chunks": ["pas", "ta"],
+        "alternative_chunks": ["p", "as", "t", "a"],
+        "phonics_pattern": "two_syllable",
+        "syllables": 2,
+        "themes": ["food"],
+        "teaching_notes": "Two syllables"
       }
     ],
     "challenge": [
@@ -607,102 +557,210 @@
         "word": "elephant",
         "chunks": ["el", "e", "phant"],
         "alternative_chunks": ["e", "l", "e", "ph", "ant"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["animals"],
+        "teaching_notes": "Three syllables with PH digraph"
+      },
+      {
+        "word": "giraffe",
+        "chunks": ["gi", "raffe"],
+        "alternative_chunks": ["g", "i", "r", "aff", "e"],
+        "phonics_pattern": "double_consonant",
+        "syllables": 2,
+        "themes": ["animals"],
+        "teaching_notes": "Double F"
+      },
+      {
+        "word": "penguin",
+        "chunks": ["pen", "guin"],
+        "alternative_chunks": ["p", "en", "g", "uin"],
+        "phonics_pattern": "two_syllable",
+        "syllables": 2,
+        "themes": ["animals"],
+        "teaching_notes": "Two syllables"
+      },
+      {
+        "word": "dolphin",
+        "chunks": ["dol", "phin"],
+        "alternative_chunks": ["d", "ol", "ph", "in"],
         "phonics_pattern": "consonant_digraph",
-        "syllables": 3,
+        "syllables": 2,
         "themes": ["animals"],
-        "teaching_notes": "PH digraph in middle",
-        "use_context": "Elephants are gentle giants"
+        "teaching_notes": "PH digraph"
       },
       {
-        "word": "dangerous",
-        "chunks": ["dan", "ger", "ous"],
-        "alternative_chunks": ["d", "an", "g", "er", "ous"],
-        "phonics_pattern": "suffix_ous",
-        "syllables": 3,
+        "word": "cheetah",
+        "chunks": ["chee", "tah"],
+        "alternative_chunks": ["ch", "ee", "t", "ah"],
+        "phonics_pattern": "vowel_team",
+        "syllables": 2,
         "themes": ["animals"],
-        "teaching_notes": "OUS suffix meaning 'full of'",
-        "use_context": "Some wild animals are dangerous"
+        "teaching_notes": "CH digraph and EE vowel team"
       },
       {
-        "word": "wonderful",
-        "chunks": ["won", "der", "ful"],
-        "alternative_chunks": ["w", "on", "d", "er", "f", "ul"],
-        "phonics_pattern": "suffix_ful",
+        "word": "kangaroo",
+        "chunks": ["kan", "ga", "roo"],
+        "alternative_chunks": ["k", "an", "g", "a", "r", "oo"],
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
         "themes": ["animals"],
-        "teaching_notes": "FUL suffix meaning 'full of'",
-        "use_context": "The zoo animals are wonderful"
+        "teaching_notes": "Three syllables with OO vowel team"
       },
       {
-        "word": "protecting",
-        "chunks": ["pro", "tect", "ing"],
-        "alternative_chunks": ["pr", "o", "t", "ect", "ing"],
-        "phonics_pattern": "suffix_ing",
-        "syllables": 3,
-        "themes": ["animals"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "We're protecting endangered animals"
+        "word": "helicopter",
+        "chunks": ["hel", "i", "cop", "ter"],
+        "alternative_chunks": ["h", "el", "i", "c", "op", "t", "er"],
+        "phonics_pattern": "four_syllable",
+        "syllables": 4,
+        "themes": ["vehicles"],
+        "teaching_notes": "Four syllables"
       },
       {
-        "word": "unfriendly",
-        "chunks": ["un", "friend", "ly"],
-        "alternative_chunks": ["u", "n", "fr", "iend", "l", "y"],
-        "phonics_pattern": "prefix_un",
+        "word": "motorcycle",
+        "chunks": ["mo", "tor", "cy", "cle"],
+        "alternative_chunks": ["m", "o", "t", "or", "c", "y", "c", "le"],
+        "phonics_pattern": "four_syllable",
+        "syllables": 4,
+        "themes": ["vehicles"],
+        "teaching_notes": "Four syllables"
+      },
+      {
+        "word": "submarine",
+        "chunks": ["sub", "ma", "rine"],
+        "alternative_chunks": ["s", "ub", "m", "a", "r", "ine"],
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
-        "themes": ["animals"],
-        "teaching_notes": "UN prefix meaning 'not'",
-        "use_context": "That dog seems unfriendly"
+        "themes": ["vehicles"],
+        "teaching_notes": "Three syllables"
+      },
+      {
+        "word": "ambulance",
+        "chunks": ["am", "bu", "lance"],
+        "alternative_chunks": ["a", "m", "b", "u", "l", "an", "ce"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["vehicles"],
+        "teaching_notes": "Three syllables"
+      },
+      {
+        "word": "bulldozer",
+        "chunks": ["bull", "do", "zer"],
+        "alternative_chunks": ["b", "ull", "d", "o", "z", "er"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["vehicles"],
+        "teaching_notes": "Three syllables with double L"
+      },
+      {
+        "word": "limousine",
+        "chunks": ["lim", "ou", "sine"],
+        "alternative_chunks": ["l", "i", "m", "ou", "s", "ine"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["vehicles"],
+        "teaching_notes": "Three syllables with OU diphthong"
       },
       {
         "word": "astronaut",
         "chunks": ["as", "tro", "naut"],
         "alternative_chunks": ["a", "s", "tr", "o", "n", "aut"],
-        "phonics_pattern": "compound_word",
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "Greek root combination",
-        "use_context": "Astronauts work in space stations"
+        "teaching_notes": "Three syllables with AU diphthong"
       },
       {
         "word": "telescope",
         "chunks": ["tel", "e", "scope"],
         "alternative_chunks": ["t", "el", "e", "sc", "ope"],
-        "phonics_pattern": "compound_word",
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "Greek root combination",
-        "use_context": "Telescopes help us see distant galaxies"
+        "teaching_notes": "Three syllables"
+      },
+      {
+        "word": "satellite",
+        "chunks": ["sat", "el", "lite"],
+        "alternative_chunks": ["s", "at", "e", "l", "l", "ite"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["space"],
+        "teaching_notes": "Three syllables"
       },
       {
         "word": "universe",
         "chunks": ["u", "ni", "verse"],
         "alternative_chunks": ["u", "n", "i", "v", "er", "se"],
-        "phonics_pattern": "prefix_uni",
+        "phonics_pattern": "three_syllable",
         "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "UNI prefix meaning 'one'",
-        "use_context": "The universe is infinite and amazing"
+        "teaching_notes": "Three syllables"
       },
       {
-        "word": "launching",
-        "chunks": ["launch", "ing"],
-        "alternative_chunks": ["l", "aunch", "ing"],
-        "phonics_pattern": "suffix_ing",
+        "word": "spacecraft",
+        "chunks": ["space", "craft"],
+        "alternative_chunks": ["sp", "ace", "cr", "aft"],
+        "phonics_pattern": "compound_word",
         "syllables": 2,
         "themes": ["space"],
-        "teaching_notes": "ING suffix - present progressive",
-        "use_context": "We're launching a mission to Mars"
+        "teaching_notes": "Compound word"
       },
       {
-        "word": "impossible",
-        "chunks": ["im", "pos", "si", "ble"],
-        "alternative_chunks": ["i", "m", "p", "os", "s", "i", "b", "le"],
-        "phonics_pattern": "prefix_im",
-        "syllables": 4,
+        "word": "nebula",
+        "chunks": ["neb", "u", "la"],
+        "alternative_chunks": ["n", "eb", "u", "l", "a"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
         "themes": ["space"],
-        "teaching_notes": "IM prefix meaning 'not'",
-        "use_context": "Nothing is impossible in space exploration"
+        "teaching_notes": "Three syllables"
+      },
+      {
+        "word": "spaghetti",
+        "chunks": ["spa", "ghet", "ti"],
+        "alternative_chunks": ["sp", "a", "gh", "et", "t", "i"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["food"],
+        "teaching_notes": "Three syllables with GH digraph"
+      },
+      {
+        "word": "hamburger",
+        "chunks": ["ham", "bur", "ger"],
+        "alternative_chunks": ["h", "am", "b", "ur", "g", "er"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["food"],
+        "teaching_notes": "Three syllables with UR r-controlled"
+      },
+      {
+        "word": "strawberry",
+        "chunks": ["straw", "ber", "ry"],
+        "alternative_chunks": ["str", "aw", "b", "er", "ry"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["food"],
+        "teaching_notes": "Three syllables with STR blend"
+      },
+      {
+        "word": "sandwich",
+        "chunks": ["sand", "wich"],
+        "alternative_chunks": ["s", "and", "w", "ich"],
+        "phonics_pattern": "compound_word",
+        "syllables": 2,
+        "themes": ["food"],
+        "teaching_notes": "Compound word"
+      },
+      {
+        "word": "broccoli",
+        "chunks": ["broc", "co", "li"],
+        "alternative_chunks": ["br", "oc", "c", "o", "l", "i"],
+        "phonics_pattern": "three_syllable",
+        "syllables": 3,
+        "themes": ["food"],
+        "teaching_notes": "Three syllables with double C"
       }
+      
     ]
   }
 }

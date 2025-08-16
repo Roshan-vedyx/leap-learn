@@ -1,13 +1,11 @@
-// src/pages/AdaptiveWordBuildingGamePage.tsx
-// Enhanced word building game with invisible adaptive difficulty
-// POLISHED UX for neurodivergent children
-
+// src/pages/WordBuildingGamePage.tsx
+// FINAL VERSION: All issues fixed for neurodivergent children
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'wouter'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { audio, storage } from '@/lib/utils'
-import { AdaptiveWordBank, breakWordIntoChunks } from '@/data/wordBank'
+import { storage } from '@/lib/utils'
+import { AdaptiveWordBank } from '@/data/wordBank'
 
 interface WordBuildingGamePageProps {
   theme: string
@@ -20,14 +18,9 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   const [availableChunks, setAvailableChunks] = useState<string[]>([])
   const [isWordComplete, setIsWordComplete] = useState(false)
   const [showCelebration, setShowCelebration] = useState(false)
+  const [showWrongOrderMessage, setShowWrongOrderMessage] = useState(false)
   const [wordsCompleted, setWordsCompleted] = useState<string[]>([])
-  const [showPatternRecognition, setShowPatternRecognition] = useState(false)
-  const [showSentenceChoice, setShowSentenceChoice] = useState(false)
-  const [sentenceChoiceDismissed, setSentenceChoiceDismissed] = useState(false)
   const [isReading, setIsReading] = useState(false)
-  const [wordFeedback, setWordFeedback] = useState<string>('')
-  const [selectedChunkIndex, setSelectedChunkIndex] = useState<number | null>(null)
-  const [showWrongAttemptModal, setShowWrongAttemptModal] = useState(false)
   const [, setLocation] = useLocation()
 
   // Performance tracking (invisible to user)
@@ -40,6 +33,10 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   const [currentWords, setCurrentWords] = useState<string[]>([])
   const [isInitialized, setIsInitialized] = useState(false)
 
+  // Speech queue for preventing interruptions
+  const speechQueueRef = useRef<string[]>([])
+  const isSpeakingRef = useRef(false)
+
   // Initialize adaptive system
   useEffect(() => {
     const initializeAdaptiveSystem = async () => {
@@ -47,14 +44,16 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       adaptiveWordBank.current = new AdaptiveWordBank(userAge)
       
       // Wait for word bank to load
-      await new Promise(resolve => setTimeout(resolve, 200))
+      await new Promise(resolve => setTimeout(resolve, 500))
       
-      // Get initial words
+      // Get initial words for the specified theme
       const words = adaptiveWordBank.current.getWordsForTheme(theme)
+      console.log(`🎯 Loading words for theme: ${theme}`, words)
+      
       setCurrentWords(words)
       setIsInitialized(true)
       
-      console.log(`🎯 Adaptive system initialized for age ${userAge}, starting with ${adaptiveWordBank.current.getCurrentDifficulty()} difficulty`)
+      console.log(`🎯 Adaptive system initialized for age ${userAge}`)
     }
 
     initializeAdaptiveSystem()
@@ -63,497 +62,555 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   // Get current word
   const currentWord = currentWords[currentWordIndex] || 'CAT'
   
-  // Brain state for presentation
-  const brainState = storage.get('current-brain-state', 'focused')
-
-  // Initialize word chunks when word changes (FIXED: Only after initialization)
+  // Initialize word chunks when word changes
   useEffect(() => {
-    if (currentWord && adaptiveWordBank.current && isInitialized) {
-      // Clear any previous feedback first
-      setWordFeedback('')
-      setShowWrongAttemptModal(false)
-      setIsWordComplete(false)
-      setShowCelebration(false)
+    if (currentWord && adaptiveWordBank.current) {
+      // Use adaptive word bank's enhanced chunking
+      let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
       
-      // Use enhanced chunking from JSON or fallback to phonemic analysis
-      const chunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      // FIXED: Ensure we get proper phonetic chunks for gameplay too
+      if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
+        chunks = getPhoneticChunks(currentWord)
+      }
+      
+      console.log(`📝 Word: ${currentWord}, Phonetic Chunks:`, chunks)
       
       // Shuffle chunks for the game
       const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
       setAvailableChunks(shuffledChunks)
       setArrangedChunks([])
-      setSelectedChunkIndex(null)
-      setShowPatternRecognition(false)
-      
-      // Reset performance tracking for new word
+      setIsWordComplete(false)
+      setShowCelebration(false)
+      setShowWrongOrderMessage(false)
       setWordStartTime(Date.now())
       setHintsUsed(0)
       setResetsUsed(0)
     }
-  }, [currentWord, isInitialized])
+  }, [currentWord])
 
-  // Check for sentence choice trigger
+  // Check if word is correctly arranged
   useEffect(() => {
-    if (wordsCompleted.length >= 6 && !sentenceChoiceDismissed && !showSentenceChoice) {
-      setShowSentenceChoice(true)
-    }
-  }, [wordsCompleted.length, sentenceChoiceDismissed, showSentenceChoice])
-
-  const handleReadAloud = async (textToRead?: string) => {
-    if (isReading) return
-    setIsReading(true)
-    
-    const text = textToRead || currentWord
-    await audio.speak(text, { 
-      rate: brainState === 'excited' ? 1.2 : 0.9,
-      pitch: 1.1 
-    })
-    
-    setTimeout(() => setIsReading(false), 1000)
-  }
-
-  // FIXED: Added TTS when moving chunks
-  const handleChunkClick = async (chunkIndex: number) => {
-    const chunk = availableChunks[chunkIndex]
-    
-    // Play TTS for the chunk
-    if (!isReading) {
-      setIsReading(true)
-      await audio.speak(chunk, { 
-        rate: 1.0,
-        pitch: 1.2 
-      })
-      setTimeout(() => setIsReading(false), 800)
-    }
-    
-    setArrangedChunks(prev => [...prev, chunk])
-    setAvailableChunks(prev => prev.filter((_, index) => index !== chunkIndex))
-    setSelectedChunkIndex(null)
-    setWordFeedback('')
-    setShowWrongAttemptModal(false)
-  }
-
-  const handleRemoveChunk = (arrangedIndex: number) => {
-    const chunk = arrangedChunks[arrangedIndex]
-    setAvailableChunks(prev => [...prev, chunk])
-    setArrangedChunks(prev => prev.filter((_, index) => index !== arrangedIndex))
-    setWordFeedback('')
-    setShowWrongAttemptModal(false)
-  }
-
-  const handleSmartHint = () => {
-    setHintsUsed(prev => prev + 1)
-    
-    if (arrangedChunks.length === 0) {
-      const correctChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
-      const firstChunk = correctChunks[0]
-      const chunkIndex = availableChunks.findIndex(chunk => chunk === firstChunk)
+    const checkWordCompletion = () => {
+      // Only check if we have chunks arranged
+      if (arrangedChunks.length === 0) return
       
-      if (chunkIndex !== -1) {
-        handleChunkClick(chunkIndex)
-        setWordFeedback(`💡 Great start! "${firstChunk}" comes first.`)
+      const arrangedWord = arrangedChunks.join('').toUpperCase()
+      const targetWord = currentWord.toUpperCase()
+      
+      // Get the correct chunks in order (using same phonetic chunking)
+      let correctChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || []
+      if (correctChunks.length > 3 || correctChunks.some(chunk => chunk.length === 1)) {
+        correctChunks = getPhoneticChunks(currentWord)
       }
-    } else {
-      const correctChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
-      const nextCorrectChunk = correctChunks[arrangedChunks.length]
+      const isCorrectOrder = arrangedChunks.length === correctChunks.length && 
+                            arrangedChunks.every((chunk, index) => chunk.toUpperCase() === correctChunks[index].toUpperCase())
       
-      if (nextCorrectChunk) {
-        setWordFeedback(`💡 Next piece: Look for "${nextCorrectChunk}"`)
-      }
-    }
-  }
-
-  const handleResetWord = () => {
-    setResetsUsed(prev => prev + 1)
-    
-    const chunks = adaptiveWordBank.current?.getWordChunks(currentWord) || breakWordIntoChunks(currentWord)
-    const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
-    setAvailableChunks(shuffledChunks)
-    setArrangedChunks([])
-    setWordFeedback('🔄 Reset! Try building the word again.')
-    setSelectedChunkIndex(null)
-    setShowWrongAttemptModal(false)
-  }
-
-  // FIXED: Better wrong attempt handling + word completion TTS
-  const handleCheckWord = async () => {
-    const builtWord = arrangedChunks.join('')
-    const isCorrect = builtWord === currentWord
-    
-    if (isCorrect) {
-      setIsWordComplete(true)
-      setWordFeedback("🎉 Perfect! You built the word correctly!")
-      
-      // FIXED: Read the completed word aloud
-      await handleReadAloud(currentWord)
-      
-      // Record successful completion
-      recordWordPerformance(true)
-      
-      setTimeout(() => {
-        setWordsCompleted(prev => [...prev, currentWord])
+      if (arrangedWord === targetWord && isCorrectOrder) {
+        setIsWordComplete(true)
         setShowCelebration(true)
-      }, 1500) // Give time for TTS
-    } else {
-      // FIXED: Show gentle error modal instead of harsh feedback
-      setShowWrongAttemptModal(true)
-      setWordFeedback('')
-    }
-  }
-
-  // INVISIBLE PERFORMANCE TRACKING
-  const recordWordPerformance = (completed: boolean) => {
-    if (!adaptiveWordBank.current) return
-    
-    const timeSpent = Date.now() - wordStartTime
-    
-    adaptiveWordBank.current.recordWordPerformance({
-      timePerWord: timeSpent,
-      hintsUsed,
-      resets: resetsUsed,
-      completed
-    })
-    
-    // Check if difficulty changed and refresh word list
-    const newWords = adaptiveWordBank.current.getWordsForTheme(theme)
-    if (newWords !== currentWords) {
-      setCurrentWords(newWords)
-      console.log('🔄 Word list refreshed after difficulty adaptation')
-    }
-  }
-
-  const handleNextWord = () => {
-    // Record performance if word was abandoned
-    if (!isWordComplete) {
-      recordWordPerformance(false)
-    }
-    
-    if (currentWordIndex === currentWords.length - 1) {
-      const difficulty = adaptiveWordBank.current?.getCurrentDifficulty() || 'regular'
-      
-      if (difficulty === 'challenge') {
-        setLocation(`/sentence-building/${theme}`)
-      } else {
-        // Level up - get new words for next difficulty
-        const newWords = adaptiveWordBank.current?.getWordsForTheme(theme) || []
-        setCurrentWords(newWords)
-        setCurrentWordIndex(0)
+        setShowWrongOrderMessage(false)
+        
+        // TTS for completed word (with delay to let chunk sound finish)
+        setTimeout(() => {
+          handleWordCompletionTTS()
+        }, 500)
+        
+        // Add to completed words
+        setWordsCompleted(prev => [...prev, currentWord])
+        
+        // Record performance metrics
+        if (adaptiveWordBank.current) {
+          const timeSpent = Date.now() - wordStartTime
+          adaptiveWordBank.current.recordWordPerformance({
+            timePerWord: timeSpent,
+            hintsUsed,
+            resets: resetsUsed,
+            completed: true
+          })
+        }
+      } else if (arrangedChunks.length === correctChunks.length && arrangedWord === targetWord) {
+        // Right letters, wrong order
+        setShowWrongOrderMessage(true)
+        setTimeout(() => setShowWrongOrderMessage(false), 4000) // Auto-hide after 4 seconds
       }
-    } else {
-      setCurrentWordIndex(prev => prev + 1)
+    }
+
+    checkWordCompletion()
+  }, [arrangedChunks, currentWord, wordStartTime, hintsUsed, resetsUsed])
+
+  // FIXED: Child-friendly TTS with proper speed and voice selection
+  const speakText = async (text: string, isChunk = false): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (!('speechSynthesis' in window)) {
+        console.warn('Speech synthesis not supported')
+        resolve()
+        return
+      }
+
+      try {
+        setIsReading(true)
+        
+        // Stop any current speech gently
+        if (speechSynthesis.speaking) {
+          speechSynthesis.cancel()
+          // Small delay to ensure cancellation
+          setTimeout(() => proceedWithSpeech(), 100)
+        } else {
+          proceedWithSpeech()
+        }
+
+        function proceedWithSpeech() {
+          // Get saved accent preference
+          const savedAccent = storage.get('tts-accent', 'US')
+          console.log(`🎤 Using accent: ${savedAccent}`)
+          
+          // Create utterance
+          const utterance = new SpeechSynthesisUtterance(text)
+          
+          // FIXED: Child-friendly speech parameters
+          utterance.rate = isChunk ? 0.4 : 0.5  // Much slower for children
+          utterance.pitch = 1.1  // Slightly higher, friendlier pitch
+          utterance.volume = 0.8
+          
+          // Get child-friendly voice
+          const voices = speechSynthesis.getVoices()
+          let selectedVoice = null
+          
+          // Prioritize child-friendly voices
+          const childFriendlyVoices = voices.filter(voice => {
+            const name = voice.name.toLowerCase()
+            const lang = voice.lang.toLowerCase()
+            
+            // Filter by accent first
+            let matchesAccent = false
+            if (savedAccent === 'US') {
+              matchesAccent = lang.includes('en-us') || 
+                            (lang.startsWith('en') && !lang.includes('gb') && !lang.includes('in'))
+            } else if (savedAccent === 'GB') {
+              matchesAccent = lang.includes('en-gb') || lang.includes('en-uk')
+            } else if (savedAccent === 'IN') {
+              matchesAccent = lang.includes('en-in')
+            }
+            
+            // Then filter for child-friendly characteristics
+            const isChildFriendly = name.includes('female') ||
+                                   name.includes('woman') ||
+                                   name.includes('neural') ||
+                                   name.includes('natural') ||
+                                   !name.includes('male')
+            
+            return matchesAccent && isChildFriendly
+          })
+          
+          if (childFriendlyVoices.length > 0) {
+            // Prefer neural/natural voices if available
+            selectedVoice = childFriendlyVoices.find(voice => 
+              voice.name.toLowerCase().includes('neural') || 
+              voice.name.toLowerCase().includes('natural')
+            ) || childFriendlyVoices[0]
+          } else {
+            // Fallback to any English voice
+            selectedVoice = voices.find(voice => voice.lang.startsWith('en'))
+          }
+          
+          if (selectedVoice) {
+            utterance.voice = selectedVoice
+            console.log(`🗣️ Using child-friendly voice: ${selectedVoice.name} (${selectedVoice.lang})`)
+          }
+          
+          // Set up event handlers
+          utterance.onend = () => {
+            setIsReading(false)
+            resolve()
+          }
+          
+          utterance.onerror = (event) => {
+            console.error('Speech error:', event)
+            setIsReading(false)
+            resolve() // Resolve anyway to continue game flow
+          }
+          
+          // Speak
+          speechSynthesis.speak(utterance)
+        }
+        
+      } catch (error) {
+        console.error('TTS error:', error)
+        setIsReading(false)
+        resolve()
+      }
+    })
+  }
+
+  // FIXED: Sequential phonetic chunk speaking without interruption
+  const handleHearChunks = async () => {
+    if (adaptiveWordBank.current && !isReading) {
+      let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      
+      // FIXED: Ensure we get proper phonetic chunks, not individual letters
+      if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
+        // If we're getting too many single letters, use better chunking
+        chunks = getPhoneticChunks(currentWord)
+      }
+      
+      console.log('Speaking phonetic chunks sequentially:', chunks)
+      
+      setIsReading(true)
+      
+      try {
+        for (let i = 0; i < chunks.length; i++) {
+          console.log(`Speaking chunk ${i + 1}/${chunks.length}: ${chunks[i]}`)
+          await speakText(chunks[i], true)
+          
+          // Pause between chunks for processing
+          if (i < chunks.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 800))
+          }
+        }
+      } catch (error) {
+        console.error('Error in chunk sequence:', error)
+      } finally {
+        setIsReading(false)
+      }
+    }
+  }
+
+  // FIXED: Better phonetic chunking for TTS
+  const getPhoneticChunks = (word: string): string[] => {
+    const upperWord = word.toUpperCase()
+    
+    // Common word patterns that should stay together
+    const patterns = [
+      // Double consonant + LE endings
+      { pattern: /^(.+)(APPLE|BATTLE|LITTLE|BOTTLE|CATTLE)$/i, chunks: (match: string[]) => [match[1], match[2]] },
+      { pattern: /^(.+)(CKLE|FFLE|ZZLE|SSLE)$/i, chunks: (match: string[]) => [match[1], match[2]] },
+      
+      // Common endings
+      { pattern: /^(.+)(ING|TION|SION|NESS|MENT|ABLE)$/i, chunks: (match: string[]) => [match[1], match[2]] },
+      { pattern: /^(.+)(ED|ER|EST|LY)$/i, chunks: (match: string[]) => [match[1], match[2]] },
+      
+      // Magic E patterns
+      { pattern: /^(.+)([BCDFGHJKLMNPQRSTVWXYZ])E$/i, chunks: (match: string[]) => [match[1] + match[2][0], match[2][1]] },
+      
+      // Double consonants - split between them
+      { pattern: /^(.+?)([BCDFGHJKLMNPQRSTVWXYZ])\2(.+)$/i, chunks: (match: string[]) => [match[1] + match[2], match[2] + match[3]] },
+      
+      // Consonant blends at start
+      { pattern: /^(BL|BR|CL|CR|DR|FL|FR|GL|GR|PL|PR|SC|SK|SL|SM|SN|SP|ST|SW|TR|TW|TH|SH|CH|WH)(.+)$/i, chunks: (match: string[]) => [match[1], match[2]] }
+    ]
+    
+    // Try patterns first
+    for (const { pattern, chunks } of patterns) {
+      const match = upperWord.match(pattern)
+      if (match) {
+        const result = chunks(match)
+        if (result.every(chunk => chunk.length > 0)) {
+          return result
+        }
+      }
     }
     
-    setShowCelebration(false)
-    setShowPatternRecognition(false)
+    // For words like APPLE, use syllable-based chunking
+    if (upperWord.length >= 4) {
+      const vowels = 'AEIOU'
+      
+      // Special cases for common patterns
+      if (upperWord.endsWith('LE') && upperWord.length > 3) {
+        const beforeLE = upperWord.slice(0, -2)
+        const lastConsonant = upperWord.slice(-3, -2)
+        if (!vowels.includes(lastConsonant)) {
+          // ap-ple, bat-tle, etc.
+          return [beforeLE.slice(0, -1), lastConsonant + 'LE']
+        }
+      }
+      
+      // Look for vowel-consonant-vowel pattern
+      for (let i = 1; i < upperWord.length - 1; i++) {
+        const prev = upperWord[i - 1]
+        const curr = upperWord[i]
+        const next = upperWord[i + 1]
+        
+        if (vowels.includes(prev) && !vowels.includes(curr) && vowels.includes(next)) {
+          return [upperWord.slice(0, i + 1), upperWord.slice(i + 1)]
+        }
+      }
+      
+      // Simple split in middle for longer words
+      const mid = Math.ceil(upperWord.length / 2)
+      return [upperWord.slice(0, mid), upperWord.slice(mid)]
+    }
+    
+    // For short words, keep whole
+    return [upperWord]
   }
 
-  const getDifficultyLabel = () => {
-    const difficulty = adaptiveWordBank.current?.getCurrentDifficulty() || 'regular'
-    switch (difficulty) {
-      case 'easy': return 'Building Confidence'
-      case 'regular': return 'Getting Stronger'
-      case 'challenge': return 'Challenge Mode'
+  // FIXED: TTS for completed word
+  const handleWordCompletionTTS = async () => {
+    if (!isReading) {
+      await speakText(`Fantastic! You built the word: ${currentWord}`)
     }
   }
 
-  // Add pattern recognition celebration
-  const triggerPatternRecognition = () => {
-    if (wordsCompleted.length >= 3 && !showPatternRecognition) {
-      setShowPatternRecognition(true)
+  // FIXED: Chunk click handler - play sound before moving
+  const handleChunkClick = async (chunk: string, index: number, source: 'available' | 'arranged') => {
+    console.log(`Clicked chunk: ${chunk} from ${source}`)
+    
+    // Don't allow clicks during speech
+    if (isReading) return
+    
+    // First, play the TTS for the chunk
+    await speakText(chunk, true)
+    
+    // Then move the chunk
+    if (source === 'available') {
+      // Move from available to arranged
+      setAvailableChunks(prev => prev.filter((_, i) => i !== index))
+      setArrangedChunks(prev => [...prev, chunk])
+    } else {
+      // Move from arranged back to available
+      setArrangedChunks(prev => prev.filter((_, i) => i !== index))
+      setAvailableChunks(prev => [...prev, chunk])
     }
   }
 
-  useEffect(() => {
-    if (showCelebration) {
-      triggerPatternRecognition()
+  // Audio options
+  const handleHearWord = async () => {
+    if (!isReading) {
+      await speakText(currentWord)
     }
-  }, [showCelebration, wordsCompleted.length])
+  }
+
+  // Next word progression
+  const handleNextWord = () => {
+    if (currentWordIndex < currentWords.length - 1) {
+      setCurrentWordIndex(prev => prev + 1)
+      setShowCelebration(false)
+      setIsWordComplete(false)
+      setShowWrongOrderMessage(false)
+    } else {
+      // All words completed for this theme
+      setLocation('/word-interest-selection')
+    }
+  }
+
+  // Reset current word
+  const handleReset = () => {
+    if (adaptiveWordBank.current) {
+      let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
+        chunks = getPhoneticChunks(currentWord)
+      }
+      
+      const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
+      setAvailableChunks(shuffledChunks)
+      setArrangedChunks([])
+      setIsWordComplete(false)
+      setShowCelebration(false)
+      setShowWrongOrderMessage(false)
+      setResetsUsed(prev => prev + 1)
+    }
+  }
+
+  // Get hint
+  const handleHint = () => {
+    if (adaptiveWordBank.current && arrangedChunks.length < currentWord.length) {
+      let correctChunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      if (correctChunks.length > 3 || correctChunks.some(chunk => chunk.length === 1)) {
+        correctChunks = getPhoneticChunks(currentWord)
+      }
+      
+      const nextChunk = correctChunks[arrangedChunks.length]
+      
+      if (nextChunk && availableChunks.includes(nextChunk)) {
+        const chunkIndex = availableChunks.findIndex(chunk => chunk === nextChunk)
+        handleChunkClick(nextChunk, chunkIndex, 'available')
+        setHintsUsed(prev => prev + 1)
+      }
+    }
+  }
+
+  // Dismiss wrong order message
+  const handleTryAgain = () => {
+    setShowWrongOrderMessage(false)
+    handleReset()
+  }
 
   // Don't render until initialized
   if (!isInitialized) {
     return (
-      <div className="page-container bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky">
-        <div className="container">
-          <div className="content-area flex items-center justify-center">
-            <p className="text-lg text-autism-primary">Loading your words...</p>
-          </div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky flex items-center justify-center">
+        <p className="text-lg text-autism-primary">Loading your words...</p>
       </div>
     )
   }
 
   return (
-    <div className="page-container bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky">
-      <div className="container">
-        <div className="content-area">
+    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky p-4">
+      <div className="max-w-4xl mx-auto">
+        
+        {/* Header with Audio Options */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-autism-primary mb-4">
+            Build: {currentWord}
+          </h1>
           
-          {/* Compact Header */}
-          <div className="text-center pt-2 pb-3">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-autism-primary">
-                Build: {currentWord}
-              </h1>
-              <Button
-                onClick={() => handleReadAloud()}
-                disabled={isReading}
-                size="sm"
-                variant="outline"
-                className="text-xs px-2 py-1 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
-              >
-                🔊 {isReading ? '...' : 'Say it'}
-              </Button>
-            </div>
-            
-            <p className="text-sm text-autism-primary/70 leading-relaxed">
-              Drag the word pieces together in the right order
-            </p>
+          {/* Audio buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+            <Button
+              onClick={handleHearWord}
+              disabled={isReading}
+              variant="outline"
+              className="px-4 py-2 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
+            >
+              🔊 {isReading ? 'Playing...' : 'Hear Word'}
+            </Button>
+            <Button
+              onClick={handleHearChunks}
+              disabled={isReading}
+              variant="outline" 
+              className="px-4 py-2 border-autism-secondary text-autism-secondary hover:bg-autism-secondary hover:text-white"
+            >
+              🎵 {isReading ? 'Playing...' : 'Hear Chunks'}
+            </Button>
           </div>
+          
+          <p className="text-sm text-autism-primary/70">
+            Tap word pieces to hear them, then build the word!
+          </p>
+        </div>
 
-          {/* Word Building Area */}
-          <Card className="mx-auto max-w-2xl border-2 border-autism-primary bg-white/90 backdrop-blur-sm mb-4">
-            <CardContent className="p-4">
-              
-              {/* Arranged Chunks Area */}
-              <div className="mb-4">
-                <div className="text-center mb-2">
-                  <span className="text-sm font-medium text-autism-primary">Your Word:</span>
-                </div>
-                <div className="min-h-[60px] p-3 bg-autism-neutral rounded-lg border-2 border-dashed border-autism-secondary flex flex-wrap gap-2 justify-center items-center">
-                  {arrangedChunks.length === 0 ? (
-                    <span className="text-autism-primary/50 text-sm">Drop word pieces here</span>
-                  ) : (
-                    arrangedChunks.map((chunk, index) => (
-                      <button
-                        key={`arranged-${index}`}
-                        onClick={() => handleRemoveChunk(index)}
-                        className="px-3 py-2 bg-autism-secondary text-white rounded-lg font-bold text-lg border-2 border-autism-secondary hover:bg-autism-secondary/80 transition-colors"
-                      >
-                        {chunk}
-                      </button>
-                    ))
-                  )}
-                </div>
+        {/* FIXED: Wrong Order Message */}
+        {showWrongOrderMessage && (
+          <div className="mb-6">
+            <Card className="bg-orange-50 border-2 border-orange-300 animate-pulse">
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl mb-2">🤔</div>
+                <h3 className="text-lg font-medium text-orange-800 mb-2">Oops!</h3>
+                <p className="text-orange-700 mb-3">
+                  The word parts don't seem to be in the right order. 
+                </p>
+                <Button
+                  onClick={handleTryAgain}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2"
+                >
+                  Try Again 🔄
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Word Building Area */}
+        <Card className="mb-6 border-2 border-autism-primary bg-white/90">
+          <CardContent className="p-6">
+            
+            {/* Arranged Chunks Area - Word being built */}
+            <div className="mb-6">
+              <div className="text-center mb-3">
+                <span className="text-lg font-medium text-autism-primary">Your Word:</span>
               </div>
-
-              {/* Available Chunks - FIXED: Better text contrast */}
-              <div className="mb-4">
-                <div className="text-center mb-2">
-                  <span className="text-sm font-medium text-autism-primary">Word Pieces:</span>
-                </div>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {availableChunks.map((chunk, index) => (
+              <div className="min-h-[80px] p-4 bg-autism-neutral rounded-lg border-2 border-dashed border-autism-secondary flex flex-wrap gap-3 justify-center items-center">
+                {arrangedChunks.length === 0 ? (
+                  <span className="text-autism-primary/50 text-lg">Tap word pieces below to build here</span>
+                ) : (
+                  arrangedChunks.map((chunk, index) => (
                     <button
-                      key={`available-${index}`}
-                      onClick={() => handleChunkClick(index)}
-                      className={`px-3 py-2 bg-white border-2 rounded-lg font-bold text-lg transition-all hover:scale-105 text-gray-700 ${
-                        selectedChunkIndex === index
-                          ? 'border-autism-secondary bg-autism-secondary/10'
-                          : 'border-autism-primary/30 hover:border-autism-primary hover:text-autism-primary'
-                      }`}
+                      key={`arranged-${index}`}
+                      onClick={() => handleChunkClick(chunk, index, 'arranged')}
+                      disabled={isReading}
+                      className="px-4 py-3 bg-autism-secondary text-grey-800 rounded-lg font-bold text-xl hover:bg-autism-secondary/80 transition-colors min-h-[56px] min-w-[56px] shadow-lg cursor-pointer border-2 border-autism-secondary disabled:opacity-50"
                     >
                       {chunk}
                     </button>
-                  ))}
-                </div>
+                  ))
+                )}
               </div>
-
-              {/* Feedback */}
-              {wordFeedback && (
-                <div className="text-center mb-3 p-2 bg-autism-calm-mint rounded-lg">
-                  <p className="text-sm text-autism-primary">{wordFeedback}</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Action Buttons - FIXED: Updated styling for accessibility */}
-          <div className="flex justify-center gap-3 mb-4 flex-wrap">
-            <Button
-              onClick={handleSmartHint}
-              className="text-sm px-3 py-2 bg-yellow-500 text-white border-2 border-yellow-500 hover:bg-yellow-600"
-            >
-              💡 Smart Hint
-            </Button>
-            <Button
-              onClick={handleResetWord}
-              className="text-sm px-3 py-2 bg-white text-gray-700 border-2 border-gray-400 hover:bg-gray-50 hover:border-gray-500"
-            >
-              🔄 Reset
-            </Button>
-            <Button
-              onClick={handleCheckWord}
-              disabled={arrangedChunks.length === 0}
-              className="text-sm px-3 py-2 bg-white text-gray-700 border-2 border-gray-400 hover:bg-gray-50 hover:border-gray-500 disabled:opacity-50 disabled:bg-gray-200"
-            >
-              ✓ Check My Word
-            </Button>
-            {(isWordComplete || showCelebration) && (
-              <Button
-                onClick={handleNextWord}
-                className="text-sm px-4 py-2 bg-green-600 text-white border-2 border-green-600 hover:bg-green-700"
-              >
-                {currentWordIndex === currentWords.length - 1 ? 
-                  adaptiveWordBank.current?.getCurrentDifficulty() === 'challenge' ? 
-                    "Build Sentences! 🎯" :
-                    "Level Up! →" :
-                  "Next Word! →"
-                }
-              </Button>
-            )}
-          </div>
-
-          {/* Compact Progress Indicator */}
-          <div className="text-center bg-autism-neutral rounded-lg p-2 border-2 border-autism-primary mx-auto max-w-md">
-            <div className="flex justify-center gap-1 mb-1">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-3 h-3 rounded-full ${
-                    index < wordsCompleted.length 
-                      ? 'bg-autism-secondary' 
-                      : 'bg-gray-300'
-                  }`}
-                />
-              ))}
             </div>
-            <p className="text-xs text-autism-primary/70">
-              Progress: {wordsCompleted.length}/8 words • {getDifficultyLabel()}
-            </p>
+
+            {/* Available Chunks - Pieces to use */}
+            <div className="mb-6">
+              <div className="text-center mb-3">
+                <span className="text-lg font-medium text-autism-primary">Word Pieces:</span>
+              </div>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {availableChunks.map((chunk, index) => (
+                  <button
+                    key={`available-${index}`}
+                    onClick={() => handleChunkClick(chunk, index, 'available')}
+                    disabled={isReading}
+                    className="px-4 py-3 bg-autism-primary text-grey-800 rounded-lg font-bold text-xl hover:bg-autism-primary/80 transition-colors min-h-[56px] min-w-[56px] shadow-lg cursor-pointer border-2 border-autism-primary hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                  >
+                    {chunk}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 justify-center">
+              <Button
+                onClick={handleHint}
+                disabled={isReading}
+                variant="outline"
+                className="px-4 py-2 border-autism-secondary text-autism-secondary hover:bg-autism-secondary hover:text-white disabled:opacity-50"
+              >
+                💡 Hint
+              </Button>
+              <Button
+                onClick={handleReset}
+                disabled={isReading}
+                variant="outline"
+                className="px-4 py-2 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white disabled:opacity-50"
+              >
+                🔄 Reset
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Celebration & Next Button */}
+        {showCelebration && (
+          <div className="text-center mb-6">
+            <Card className="bg-green-50 border-2 border-green-400 mb-4">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-3">🎉</div>
+                <h3 className="text-2xl font-bold text-green-800 mb-2">Fantastic!</h3>
+                <p className="text-green-700 text-lg">You built: <span className="font-bold text-xl">{currentWord}</span></p>
+              </CardContent>
+            </Card>
+            
+            <Button
+              onClick={handleNextWord}
+              disabled={isReading}
+              size="lg"
+              className="bg-autism-secondary hover:bg-autism-secondary/90 text-grey-700 px-8 py-4 text-xl font-bold rounded-lg shadow-lg disabled:opacity-50"
+            >
+              {currentWordIndex >= currentWords.length - 1 ? "🎯 Choose New Theme" : "Next Word! →"}
+            </Button>
           </div>
+        )}
 
-          {/* FIXED: Gentle Wrong Attempt Modal */}
-          {showWrongAttemptModal && (
-            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-orange-400 bg-orange-50 backdrop-blur-sm max-w-md mx-auto">
-              <CardHeader className="text-center pb-2">
-                <CardTitle className="text-lg text-orange-700">🤔 Almost There!</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center pt-0">
-                <p className="text-sm text-orange-700 mb-4">
-                  Oops, all the word parts are there, but you could try again. 
-                  You've got this! 💪
-                </p>
-                <Button
-                  onClick={() => setShowWrongAttemptModal(false)}
-                  className="bg-orange-500 hover:bg-orange-600 text-white"
-                >
-                  Try Again! 🎯
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Pattern Recognition Celebration */}
-          {showPatternRecognition && (
-            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
-              <CardHeader className="text-center pb-2">
-                <CardTitle className="text-lg text-autism-primary">🎯 Pattern Detective!</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center pt-0">
-                <p className="text-sm text-autism-primary mb-3">
-                  You're getting great at spotting word patterns! Keep going to unlock more challenges.
-                </p>
-                <Button
-                  onClick={() => setShowPatternRecognition(false)}
-                  className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
-                >
-                  Keep Building! 🚀
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Sentence Choice Modal */}
-          {showSentenceChoice && (
-            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
-              <CardHeader className="text-center pb-2">
-                <CardTitle className="text-lg text-autism-primary">🎉 Amazing Work!</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center pt-0">
-                <p className="text-sm text-autism-primary mb-4">
-                  You've built so many words! Ready to put them together into sentences?
-                </p>
-                <div className="flex gap-2 justify-center">
-                  <Button
-                    onClick={() => setLocation(`/sentence-building/${theme}`)}
-                    className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
-                  >
-                    Build Sentences! 📝
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setShowSentenceChoice(false)
-                      setSentenceChoiceDismissed(true)
-                    }}
-                    variant="outline"
-                    className="border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
-                  >
-                    Keep Building Words
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Celebration Modal */}
-          {showCelebration && (
-            <Card className="fixed inset-x-4 top-1/2 transform -translate-y-1/2 z-50 border-2 border-autism-secondary bg-autism-calm-mint backdrop-blur-sm max-w-md mx-auto">
-              <CardHeader className="text-center pb-2">
-                <CardTitle className="text-lg text-autism-primary">🎉 Fantastic!</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center pt-0">
-                <p className="text-sm text-autism-primary mb-3">
-                  You built "{currentWord}" perfectly! 
-                  {wordsCompleted.length >= 3 && " You're becoming a word-building expert!"}
-                </p>
-                <Button
-                  onClick={() => setShowCelebration(false)}
-                  className="bg-autism-secondary hover:bg-autism-secondary/80 text-white"
-                >
-                  {currentWordIndex === currentWords.length - 1 ? "Continue! 🚀" : "Next Word! 🎯"}
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+        {/* Progress Indicator */}
+        <div className="text-center bg-white/80 rounded-lg p-4 border-2 border-autism-primary">
+          <div className="flex justify-center gap-2 mb-2">
+            {currentWords.map((_, index) => (
+              <div
+                key={index}
+                className={`w-4 h-4 rounded-full ${
+                  index < currentWordIndex 
+                    ? 'bg-green-500' 
+                    : index === currentWordIndex
+                    ? 'bg-autism-secondary'
+                    : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-autism-primary/70 font-medium">
+            Word {currentWordIndex + 1} of {currentWords.length} • Theme: {theme}
+          </p>
         </div>
       </div>
-
-      <style jsx>{`
-        .page-container {
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          background: linear-gradient(to bottom, hsl(var(--autism-calm-mint)), hsl(var(--autism-calm-sky)));
-          padding: 8px;
-          box-sizing: border-box;
-        }
-
-        .content-area {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          max-width: 100%;
-        }
-
-        @media (max-height: 700px) {
-          .page-container {
-            padding: 4px;
-          }
-        }
-
-        @media (max-height: 600px) {
-          .text-2xl { font-size: 1.25rem; }
-          .text-3xl { font-size: 1.5rem; }
-          .text-lg { font-size: 1rem; }
-          .text-sm { font-size: 0.75rem; }
-          .text-xs { font-size: 0.7rem; }
-          .p-3 { padding: 0.5rem; }
-          .p-2 { padding: 0.375rem; }
-          .mb-3 { margin-bottom: 0.5rem; }
-          .mb-2 { margin-bottom: 0.375rem; }
-        }
-      `}</style>
     </div>
   )
 }

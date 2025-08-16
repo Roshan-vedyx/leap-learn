@@ -49,7 +49,6 @@ export const accessibility = {
 }
 
 // Enhanced Audio utilities for Web Speech API with TTS support
-
 export const audio = {
   // Check if speech synthesis is supported
   isSpeechSynthesisSupported: (): boolean => {
@@ -74,7 +73,7 @@ export const audio = {
     )
   },
 
-  // FIXED: Actually filter voices by accent
+  // ENHANCED: Complete getVoicesForAccent function
   getVoicesForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice[] => {
     const allVoices = audio.getVoices()
     
@@ -125,13 +124,13 @@ export const audio = {
     return accentVoices.length > 0 ? accentVoices : englishVoices
   },
 
-  // Get the best voice for accent with your original quality preferences
+  // ENHANCED: Complete getBestVoiceForAccent function
   getBestVoiceForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice | null => {
     const accentVoices = audio.getVoicesForAccent(accent)
     
     if (accentVoices.length === 0) return null
     
-    // Apply your original child-friendly filtering to the accent voices
+    // Apply child-friendly filtering to the accent voices
     const friendlyVoices = accentVoices.filter(voice => {
       const name = voice.name.toLowerCase()
       return name.includes('female') ||
@@ -150,6 +149,49 @@ export const audio = {
     
     // Otherwise, use the first voice from this accent
     return accentVoices[0]
+  },
+
+  // NEW: Get calm voices by accent
+  getCalmVoicesByAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice[] => {
+    const accentVoices = audio.getVoicesForAccent(accent)
+    
+    // Filter for calm, child-friendly voices
+    return accentVoices.filter(voice => {
+      const name = voice.name.toLowerCase()
+      return name.includes('female') ||
+             name.includes('child') ||
+             name.includes('kid') ||
+             name.includes('young') ||
+             name.includes('natural') ||
+             name.includes('premium') ||
+             name.includes('enhanced') ||
+             name.includes('neural') ||
+             (!name.includes('male') && !name.includes('man'))
+    })
+  },
+
+  // NEW: Get best calm voice  
+  getBestCalmVoice: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice | null => {
+    const calmVoices = audio.getCalmVoicesByAccent(accent)
+    
+    if (calmVoices.length > 0) {
+      // Prefer neural/premium voices if available
+      const premiumVoice = calmVoices.find(voice => 
+        voice.name.toLowerCase().includes('neural') ||
+        voice.name.toLowerCase().includes('premium') ||
+        voice.name.toLowerCase().includes('enhanced')
+      )
+      
+      if (premiumVoice) return premiumVoice
+      
+      // Otherwise return first calm voice
+      return calmVoices[0]
+    }
+    
+    // Fallback to any English voice
+    const allVoices = audio.getVoices()
+    const englishVoice = allVoices.find(voice => voice.lang.startsWith('en'))
+    return englishVoice || null
   },
 
   // Updated speak function that ACTUALLY uses the accent
