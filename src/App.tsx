@@ -24,6 +24,7 @@ import TodayIWantToPage from './pages/TodayIWantToPage'
 import StoryGenerationPage from './pages/StoryGenerationPage'
 import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
+import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -365,6 +366,9 @@ function App() {
             </Route>
             <Route path="/word-building/:theme">
               {(params) => <WordBuildingGamePage theme={params.theme} />}
+            </Route>
+            <Route path="/sentence-building">
+              <SentenceThemeSelectionPage />
             </Route>
             <Route path="/sentence-building/:theme">
               {(params) => <SentenceBuildingPage theme={params.theme} />}

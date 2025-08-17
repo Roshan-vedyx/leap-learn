@@ -29,6 +29,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   const [isReading, setIsReading] = useState(false)
   const [wordFeedback, setWordFeedback] = useState<string>('')
   const [showHints, setShowHints] = useState(true)
+  const [lastClickTime, setLastClickTime] = useState<number>(0)
+  const [lastClickedSlot, setLastClickedSlot] = useState<number>(-1)
   const [, setLocation] = useLocation()
 
   // Get theme-specific templates
@@ -73,61 +75,75 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
 
   // Get valid words for a specific slot type with enhanced filtering
   const getValidWordsForSlotType = (slotType: string): string[] => {
-    const baseWords = (() => {
-      switch (slotType) {
-        case 'animal':
-          return themeWords.filter(word => 
-            getWordsByThemeAndDifficulty('animals', 'easy').concat(
-              getWordsByThemeAndDifficulty('animals', 'regular')
-            ).map(w => w.toUpperCase()).includes(word)
-          )
-        case 'space':
-          return themeWords.filter(word => 
-            getWordsByThemeAndDifficulty('space', 'easy').concat(
-              getWordsByThemeAndDifficulty('space', 'regular')
-            ).map(w => w.toUpperCase()).includes(word)
-          )
-        case 'food':
-          return themeWords.filter(word => 
-            getWordsByThemeAndDifficulty('food', 'easy').concat(
-              getWordsByThemeAndDifficulty('food', 'regular')
-            ).map(w => w.toUpperCase()).includes(word)
-          )
-        case 'vehicle':
-          return themeWords.filter(word => 
-            getWordsByThemeAndDifficulty('vehicles', 'easy').concat(
-              getWordsByThemeAndDifficulty('vehicles', 'regular')
-            ).map(w => w.toUpperCase()).includes(word)
-          )
-        case 'adjective':
-          return currentTemplate.adjectives || ['BIG', 'SMALL', 'FAST', 'CUTE', 'FUNNY', 'SMART', 'HAPPY', 'BRAVE']
-        case 'action':
-          return currentTemplate.actions || ['RUN', 'JUMP', 'SWIM', 'FLY', 'PLAY', 'SLEEP', 'EAT', 'DANCE']
-        case 'color':
-          return currentTemplate.colors || ['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'BLACK', 'WHITE', 'PINK']
-        case 'number':
-          return currentTemplate.numbers || ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'MANY', 'SOME']
-        case 'object':
-          return currentTemplate.objects || ['BALL', 'BOOK', 'CHAIR', 'TREE', 'HOUSE', 'TOY', 'FLOWER']
-        case 'place':
-          return currentTemplate.places || ['HOME', 'SCHOOL', 'PARK', 'STORE', 'BEACH', 'GARDEN', 'PLAYGROUND']
-        case 'taste':
-          return currentTemplate.tastes || ['SWEET', 'SOUR', 'SPICY', 'SALTY', 'YUMMY', 'DELICIOUS']
-        case 'meal':
-          return currentTemplate.meals || ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK', 'TREAT']
-        case 'temperature':
-          return currentTemplate.temperatures || ['HOT', 'COLD', 'WARM', 'COOL', 'FROZEN']
-        case 'speed':
-          return currentTemplate.speeds || ['FAST', 'SLOW', 'QUICK', 'SUPER FAST']
-        case 'part':
-          return currentTemplate.parts || ['WHEELS', 'DOORS', 'WINDOWS', 'SEATS', 'ENGINE']
-        default:
-          return []
-      }
-    })()
-    
-    // Always include theme words as backup options
-    return [...new Set([...baseWords, ...themeWords])]
+    switch (slotType) {
+      case 'animal':
+        // Get animal words from wordBank, not filtered themeWords
+        return [
+          ...getWordsByThemeAndDifficulty('animals', 'easy'),
+          ...getWordsByThemeAndDifficulty('animals', 'regular')
+        ].map(w => w.toUpperCase())
+        
+      case 'space':
+        // Get space words from wordBank
+        return [
+          ...getWordsByThemeAndDifficulty('space', 'easy'),
+          ...getWordsByThemeAndDifficulty('space', 'regular')
+        ].map(w => w.toUpperCase())
+        
+      case 'food':
+        // Get food words from wordBank
+        return [
+          ...getWordsByThemeAndDifficulty('food', 'easy'),
+          ...getWordsByThemeAndDifficulty('food', 'regular')
+        ].map(w => w.toUpperCase())
+        
+      case 'vehicle':
+        // Get vehicle words from wordBank + template-specific vehicles
+        const vehicleWords = [
+          ...getWordsByThemeAndDifficulty('vehicles', 'easy'),
+          ...getWordsByThemeAndDifficulty('vehicles', 'regular')
+        ].map(w => w.toUpperCase())
+        
+        const templateVehicles = currentTemplate.vehicles || ['ROCKET', 'SPACESHIP', 'SHUTTLE', 'UFO', 'CAR', 'TRUCK', 'BUS', 'BIKE']
+        
+        return [...new Set([...vehicleWords, ...templateVehicles])]
+        
+      case 'adjective':
+        return currentTemplate.adjectives || ['BIG', 'SMALL', 'FAST', 'CUTE', 'FUNNY', 'SMART', 'HAPPY', 'BRAVE']
+        
+      case 'action':
+        return currentTemplate.actions || ['RUN', 'JUMP', 'SWIM', 'FLY', 'PLAY', 'SLEEP', 'EAT', 'DANCE']
+        
+      case 'color':
+        return currentTemplate.colors || ['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'BLACK', 'WHITE', 'PINK']
+        
+      case 'number':
+        return currentTemplate.numbers || ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'MANY', 'SOME']
+        
+      case 'object':
+        return currentTemplate.objects || ['BALL', 'BOOK', 'CHAIR', 'TREE', 'HOUSE', 'TOY', 'FLOWER']
+        
+      case 'place':
+        return currentTemplate.places || ['HOME', 'SCHOOL', 'PARK', 'STORE', 'BEACH', 'GARDEN', 'PLAYGROUND']
+        
+      case 'taste':
+        return currentTemplate.tastes || ['SWEET', 'SOUR', 'SPICY', 'SALTY', 'YUMMY', 'DELICIOUS']
+        
+      case 'meal':
+        return currentTemplate.meals || ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK', 'TREAT']
+        
+      case 'temperature':
+        return currentTemplate.temperatures || ['HOT', 'COLD', 'WARM', 'COOL', 'FROZEN']
+        
+      case 'speed':
+        return currentTemplate.speeds || ['FAST', 'SLOW', 'QUICK', 'SUPER FAST']
+        
+      case 'part':
+        return currentTemplate.parts || ['WHEELS', 'DOORS', 'WINDOWS', 'SEATS', 'ENGINE']
+        
+      default:
+        return []
+    }
   }
 
   // Initialize sentence slots when template changes
@@ -180,10 +196,35 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     }
   }, [sentenceSlots])
 
+  // Handle double-click/tap to remove words
+  const handleFilledSlotClick = async (slotIndex: number) => {
+    const now = Date.now()
+    const timeDiff = now - lastClickTime
+    
+    // Double-click/tap detection (within 500ms)
+    if (lastClickedSlot === slotIndex && timeDiff < 500) {
+      // Double-click detected - remove the word
+      await handleSlotClear(slotIndex)
+    } else {
+      // Single click - just give feedback
+      setWordFeedback('💡 Double-tap this word to remove it!')
+      setTimeout(() => setWordFeedback(''), 2000)
+    }
+    
+    setLastClickTime(now)
+    setLastClickedSlot(slotIndex)
+  }
+
   // Enhanced slot click handler with audio feedback
   const handleSlotClick = async (slotIndex: number) => {
     const slot = sentenceSlots[slotIndex]
     if (slot.type === 'fixed') return
+    
+    // If slot is filled, handle double-click for removal
+    if (slot.filled) {
+      await handleFilledSlotClick(slotIndex)
+      return
+    }
     
     setCurrentSlotIndex(slotIndex)
     setWordFeedback('')
@@ -292,27 +333,19 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     setTimeout(() => setWordFeedback(''), 2000)
   }
 
-  // Get filtered and highlighted words for current slot
-  const getWordDisplayInfo = () => {
+  // FIXED: Get only relevant words for current slot type
+  const getFilteredWordsForDisplay = () => {
     if (currentSlotIndex === null) {
-      return {
-        validWords: availableWords,
-        invalidWords: []
-      }
+      return [] // Show no words when no slot is selected
     }
     
     const currentSlot = sentenceSlots[currentSlotIndex]
     if (!currentSlot.validWords) {
-      return {
-        validWords: availableWords,
-        invalidWords: []
-      }
+      return []
     }
     
-    const validWords = availableWords.filter(word => currentSlot.validWords!.includes(word))
-    const invalidWords = availableWords.filter(word => !currentSlot.validWords!.includes(word))
-    
-    return { validWords, invalidWords }
+    // Return only words that match the current slot type
+    return availableWords.filter(word => currentSlot.validWords!.includes(word))
   }
 
   const handleReadAloud = async (text: string) => {
@@ -379,7 +412,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     }
   }
 
-  const { validWords, invalidWords } = getWordDisplayInfo()
+  const filteredWords = getFilteredWordsForDisplay()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-autism-calm-sage to-autism-calm-mint p-4">
@@ -451,26 +484,20 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                       : slot.filled
                         ? 'bg-autism-secondary text-white border-autism-secondary hover:bg-autism-secondary/80 hover:scale-105 shadow-lg'
                         : currentSlotIndex === index
-                          ? 'bg-yellow-100 border-yellow-400 border-dashed animate-pulse shadow-lg scale-105'
+                          ? 'bg-yellow-100 border-yellow-400 border-dashed shadow-lg scale-105'
                           : 'bg-gray-100 border-gray-400 border-dashed hover:bg-gray-200 hover:scale-105 hover:shadow-md'
                     }
                   `}
                 >
                   {slot.filled ? (
-                    <div className="flex items-center gap-2">
+                    <div 
+                      className="flex items-center justify-center gap-2 w-full h-full"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleFilledSlotClick(index)
+                      }}
+                    >
                       <span className="text-center px-2">{slot.content}</span>
-                      {slot.type !== 'fixed' && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleSlotClear(index)
-                          }}
-                          className="text-sm bg-white/30 rounded-full w-6 h-6 flex items-center justify-center hover:bg-white/60 transition-colors"
-                          aria-label="Remove word"
-                        >
-                          ×
-                        </button>
-                      )}
                     </div>
                   ) : (
                     <div className="text-center px-2">
@@ -495,68 +522,44 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                   🎯 Choose a <span className="text-yellow-900 underline">{sentenceSlots[currentSlotIndex].type}</span> word:
                 </p>
                 <p className="text-sm text-yellow-700">
-                  Green words fit perfectly! Other words might not work for this spot.
+                  Click any word below to fill this slot.
                 </p>
               </div>
             )}
 
-            {/* Word Feedback */}
+            {/* Feedback Display */}
             {wordFeedback && (
-              <div className="text-center mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="text-center mb-4 p-3 bg-blue-50 border-2 border-blue-300 rounded-xl">
                 <p className="text-blue-800 font-medium">{wordFeedback}</p>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Enhanced Word Bank */}
-        <Card className="mb-6 bg-white border-autism-primary border-2">
+        {/* FIXED: Word Bank - Show only relevant words */}
+        <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-center text-xl text-autism-primary">
               🔤 Word Bank
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Valid Words (Highlighted) */}
-            {validWords.length > 0 && (
-              <div className="mb-4">
-                <p className="text-center text-sm text-green-700 font-medium mb-3">
-                  ✅ Perfect words for your selected spot:
+            {/* FIXED: Only show words for selected slot type */}
+            {currentSlotIndex !== null && filteredWords.length > 0 && (
+              <div className="space-y-4">
+                <p className="text-center text-lg font-semibold text-autism-primary mb-4">
+                  {sentenceSlots[currentSlotIndex].type.toUpperCase()} words:
                 </p>
                 <div className="flex flex-wrap justify-center gap-3">
-                  {validWords.map((word, index) => (
+                  {filteredWords.map((word, index) => (
                     <button
-                      key={`valid-${index}`}
-                      onClick={() => handleWordClick(word)}
-                      className="px-6 py-3 rounded-xl text-lg font-bold transition-all duration-200 transform
-                                bg-green-100 text-green-800 border-2 border-green-300 
-                                hover:bg-green-200 hover:scale-110 hover:shadow-lg
-                                focus:outline-none focus:ring-4 focus:ring-green-300"
-                      aria-label={`Use word ${word}`}
-                    >
-                      {word}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Other Available Words */}
-            {invalidWords.length > 0 && (
-              <div>
-                <p className="text-center text-sm text-gray-600 mb-3">
-                  💭 Other words (try these in different spots):
-                </p>
-                <div className="flex flex-wrap justify-center gap-3">
-                  {invalidWords.map((word, index) => (
-                    <button
-                      key={`other-${index}`}
+                      key={`word-${index}`}
                       onClick={() => handleWordClick(word)}
                       className="px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200
-                                bg-gray-200 text-autism-primary border-2 border-gray-300 
-                                hover:bg-gray-300 hover:scale-105
-                                focus:outline-none focus:ring-4 focus:ring-gray-300"
-                      aria-label={`Try word ${word}`}
+                                bg-green-100 text-autism-primary border-2 border-green-400 
+                                hover:bg-green-200 hover:scale-105 hover:shadow-lg
+                                focus:outline-none focus:ring-4 focus:ring-green-300"
+                      aria-label={`Choose word ${word}`}
                     >
                       {word}
                     </button>
@@ -657,8 +660,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
         <div className="sr-only">
           <p>
             You are building sentences using a click-based system. First click on an empty slot to select it, 
-            then click on a word from the word bank to fill that slot. Words that fit the selected slot will 
-            be highlighted in green. You can click the X button next to filled words to remove them and try different options.
+            then click on a word from the word bank to fill that slot. Only words that fit the selected slot will 
+            be shown. You can click the X button next to filled words to remove them and try different options.
           </p>
         </div>
       </div>

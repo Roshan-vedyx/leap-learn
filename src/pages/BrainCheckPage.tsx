@@ -143,15 +143,7 @@ const BrainCheckPage: React.FC = () => {
               I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
             </p>
             
-            {/* Character Message - Compact */}
-            <div className="mt-4 inline-block bg-white rounded-xl p-4 shadow-sm border border-indigo-100">
-              <div className="flex items-center justify-center gap-3">
-                <Bot className="w-6 h-6 text-indigo-600 flex-shrink-0" />
-                <p className="viewport-text-sm text-indigo-800 font-medium">
-                  "I'm here to help you find stuff that actually works for how your brain is today."
-                </p>
-              </div>
-            </div>
+            
           </div>
 
           {/* Brain State Grid */}
@@ -190,9 +182,9 @@ const BrainCheckPage: React.FC = () => {
                         {state.description}
                       </p>
                     </div>
-                    <div className="mt-4 text-xs text-indigo-600 font-medium">
+                    {/*<div className="mt-4 text-xs text-indigo-600 font-medium">
                       {state.encouragement}
-                    </div>
+                    </div>*/}
                   </CardContent>
                 </Card>
               )
@@ -200,11 +192,20 @@ const BrainCheckPage: React.FC = () => {
           </div>
 
           {/* Footer Info */}
-          <div className="mt-8 text-center">
+          {/*<div className="mt-8 text-center">
             <p className="text-sm text-body-text opacity-75 max-w-md mx-auto">
               You can always come back and pick something different if your mood shifts. 
             </p>
-          </div>
+          </div>*/}
+          {/* Character Message - Compact */}
+          <div className="mt-4 inline-block bg-white rounded-xl p-4 shadow-sm border border-indigo-100">
+              <div className="flex items-center justify-center gap-3">
+                <Bot className="w-6 h-6 text-indigo-600 flex-shrink-0" />
+                <p className="viewport-text-sm text-indigo-800 font-medium">
+                  "You can always come back and pick something different if your mood shifts."
+                </p>
+              </div>
+            </div>
         </div>
       </div>
 

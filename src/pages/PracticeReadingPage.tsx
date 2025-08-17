@@ -33,6 +33,18 @@ const readingActivities: ReadingActivity[] = [
     skills: ['Word chunks', 'Spelling patterns', 'Sound blending']
   },
   {
+    id: 'sentence-building',
+    label: 'Build Sentences',
+    emoji: '🏗️',
+    description: "Create amazing sentences with words you know!",
+    detailedDescription: "Put words together to build sentences that tell cool stories. Practice sentence patterns while having fun!",
+    color: 'bg-purple-100 border-purple-400',
+    mood: 'focused',
+    route: '/sentence-building',
+    duration: '6-10 minutes',
+    skills: ['Sentence structure', 'Grammar patterns', 'Word relationships']
+  },
+  {
     id: 'stories',
     label: 'Read Stories',
     emoji: '📚',
@@ -100,8 +112,8 @@ const PracticeReadingPage: React.FC = () => {
               Time to Practice Reading!
             </h1>
             <p className="text-base md:text-lg text-autism-primary/80 leading-relaxed max-w-3xl mx-auto">
-              You've got two awesome ways to level up your reading skills. 
-              Both are fun and both make you a stronger reader!
+              You've got three awesome ways to level up your reading skills. 
+              They are all fun and make you a stronger reader!
             </p>
           </div>
 
@@ -180,7 +192,7 @@ const PracticeReadingPage: React.FC = () => {
           {/* Compact Footer Message */}
           <div className="text-center pt-4 pb-2">
             <p className="text-sm md:text-base text-autism-primary/60 leading-relaxed">
-              Remember: There's no wrong choice here. Both activities make you a stronger, more confident reader!
+              Remember: There's no wrong choice here. Every activity make you a stronger, more confident reader!
             </p>
           </div>
 
