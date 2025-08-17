@@ -23,6 +23,7 @@ import InterestSelectionPage from './pages/InterestSelectionPage'
 import TodayIWantToPage from './pages/TodayIWantToPage'
 import StoryGenerationPage from './pages/StoryGenerationPage'
 import NotFoundPage from './pages/NotFoundPage'
+import StorySelectionPage from './pages/StorySelectionPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -370,8 +371,8 @@ function App() {
             </Route>
             
             {/* Story reading page with optional story ID */}
-            <Route path="/story/:storyId?">
-              {(params) => <StoryPage storyId={params.storyId} />}
+            <Route path="/story/:interest/:storyId">
+              {(params) => <StoryPage interest={params.interest} storyName={params.storyId} />}
             </Route>
 
             {/* Creative response page */}
@@ -392,6 +393,10 @@ function App() {
             {/* Today I Want To page */}
             <Route path="/today-i-want-to">
               <TodayIWantToPage />
+            </Route>
+
+            <Route path="/stories/:interest">
+              {(params) => <StorySelectionPage interest={params.interest} />}
             </Route>
 
             <Route path="/story-generate">

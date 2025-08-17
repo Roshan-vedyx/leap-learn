@@ -1,0 +1,10 @@
+{
+  "id": "animal-rescue-forest",
+  "title": "Forest Rescue",
+  "theme": "animals",
+  "stories": {
+    "simple": "Sam heard a sad sound in the woods. A small fox was stuck under a log. Sam moved the log and helped the fox get free. The fox ran home safe. Sam felt happy.",
+    "regular": "Maya was walking through the forest when she heard a frightened cry. Behind some fallen branches, she found a young fox with its paw caught under heavy wood. Maya carefully lifted the branches and freed the scared animal. The grateful fox bounded away into the trees.",
+    "challenge": "Jordan had always loved exploring the wilderness areas near town. While hiking the mountain trail, Jordan heard desperate whimpering coming from a pile of storm debris. After carefully moving fallen logs and branches, Jordan discovered a red fox whose hind leg was trapped. Working patiently for twenty minutes, Jordan freed the exhausted animal and watched it disappear safely into the forest."
+  }
+}

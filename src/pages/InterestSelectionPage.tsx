@@ -1,4 +1,3 @@
-// src/pages/InterestSelectionPage.tsx - Calm, progressive version
 import React, { useState } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -12,6 +11,8 @@ interface InterestTopic {
   color: string
   category: 'nature' | 'technology' | 'social' | 'adventure' | 'mystery' | 'creative'
 }
+
+// Remove the interestToStoryMap since we don't need it anymore
 
 // Organized by categories for progressive disclosure
 const interestCategories = {
@@ -133,8 +134,15 @@ const InterestSelectionPage: React.FC = () => {
 
   const handleContinue = () => {
     if (selectedInterests.length >= 1) {
+      // Save interests for potential future use
       localStorage.setItem('selected-interests', JSON.stringify(selectedInterests))
-      setLocation('/story-generate')
+      
+      // Get the first selected interest and navigate to story selection page
+      const primaryInterest = selectedInterests[0]
+      localStorage.setItem('selected-interest', primaryInterest)
+      
+      // Navigate to story selection page for this interest
+      setLocation(`/stories/${primaryInterest}`)
     }
   }
 
@@ -181,15 +189,15 @@ const InterestSelectionPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Category Cards - Only 5 at once */}
+          {/* Category Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {Object.entries(interestCategories).map(([categoryKey, topics]) => {
               const categoryInfo = {
-                nature: { emoji: '🌍', label: 'Nature & Animals', description: 'Ocean adventures, amazing animals' },
-                adventure: { emoji: '🚀', label: 'Adventure & Mystery', description: 'Space exploration, puzzles to solve' },
-                social: { emoji: '👥', label: 'Friends & Family', description: 'Friendship stories, family fun' },
-                creative: { emoji: '✨', label: 'Magic & Arts', description: 'Fantasy worlds, creative expression' },
-                technology: { emoji: '🤖', label: 'Tech & Innovation', description: 'Robots, cool inventions' }
+                nature: { emoji: '🌿', title: 'Nature & Animals', description: 'Adventures in the natural world' },
+                adventure: { emoji: '🚀', title: 'Action & Adventure', description: 'Exciting journeys and discoveries' },
+                social: { emoji: '👥', title: 'Friends & Family', description: 'Stories about relationships' },
+                creative: { emoji: '🎨', title: 'Creative & Magical', description: 'Imagination and fantasy' },
+                technology: { emoji: '🤖', title: 'Science & Tech', description: 'Inventions and future worlds' }
               }
               
               const info = categoryInfo[categoryKey as keyof typeof categoryInfo]
@@ -197,40 +205,48 @@ const InterestSelectionPage: React.FC = () => {
               return (
                 <Card
                   key={categoryKey}
-                  className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 border-gray-200 bg-gradient-to-br from-white to-gray-50"
+                  className="cursor-pointer transition-all duration-300 border-2 border-gray-200 hover:scale-105 hover:shadow-lg hover:border-indigo-300"
                   onClick={() => handleCategorySelect(categoryKey)}
                 >
                   <CardContent className="p-6 text-center">
                     <div className="text-5xl mb-4">{info.emoji}</div>
-                    <h3 className="text-xl font-bold text-indigo-900 mb-3">{info.label}</h3>
-                    <p className="text-indigo-700 text-sm">{info.description}</p>
+                    <h3 className="text-xl font-bold text-indigo-900 mb-3">{info.title}</h3>
+                    <p className="text-indigo-700 text-sm mb-4">{info.description}</p>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {topics.slice(0, 3).map((topic) => (
+                        <span key={topic.id} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                          {topic.emoji}
+                        </span>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               )
             })}
           </div>
 
-          {/* Quick Options */}
-          <div className="text-center space-y-4">
+          {/* Browse All Option */}
+          <div className="text-center">
             <Button
-              onClick={() => setShowAllTopics(true) || setCurrentStep('topics')}
               variant="outline"
-              size="lg"
-              className="text-lg px-6 py-3"
+              onClick={() => {
+                setShowAllTopics(true)
+                setCurrentStep('topics')
+              }}
+              className="mb-4 text-indigo-600 border-indigo-300"
             >
-              🔍 Show me all options
+              🔍 Browse All Topics
             </Button>
             
-            <div className="text-indigo-600">or</div>
-            
-            <Button
-              onClick={handleSurpriseMe}
-              variant="default"
-              size="lg"
-              className="text-lg px-6 py-3 bg-indigo-600 hover:bg-indigo-700"
-            >
-              ✨ Surprise me with a story!
-            </Button>
+            <div className="text-center">
+              <Button
+                onClick={handleSurpriseMe}
+                variant="ghost"
+                className="text-indigo-600"
+              >
+                ✨ Surprise Me!
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -258,7 +274,7 @@ const InterestSelectionPage: React.FC = () => {
               Pick What Sounds Interesting
             </h1>
             <p className="text-lg text-indigo-700 max-w-xl mx-auto mb-4">
-              Choose one or more topics. I'll blend them into an awesome story!
+              Choose a topic to see all available stories!
             </p>
             
             {selectedInterests.length > 0 && (
@@ -270,7 +286,7 @@ const InterestSelectionPage: React.FC = () => {
             )}
           </div>
 
-          {/* Topic Cards - Max 8 at once */}
+          {/* Topic Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {topics.slice(0, 8).map((topic) => {
               const isSelected = selectedInterests.includes(topic.id)
@@ -308,7 +324,7 @@ const InterestSelectionPage: React.FC = () => {
           {selectedInterests.length > 0 && (
             <Card className="mb-6 bg-indigo-50 border-indigo-200 border-2">
               <CardContent className="p-4 text-center">
-                <h3 className="font-semibold text-indigo-900 mb-3">Your Story Will Include:</h3>
+                <h3 className="font-semibold text-indigo-900 mb-3">You'll see stories about:</h3>
                 <div className="flex flex-wrap justify-center gap-2">
                   {getSelectedTopics().map((topic) => (
                     <span
@@ -332,8 +348,8 @@ const InterestSelectionPage: React.FC = () => {
               className="text-lg px-8 py-3 bg-indigo-600 hover:bg-indigo-700"
             >
               {selectedInterests.length === 0 
-                ? "Pick at least one topic" 
-                : "Create my story! ✨"
+                ? "Pick one topic to see available stories!" 
+                : "See all stories! 📚"
               }
             </Button>
           </div>

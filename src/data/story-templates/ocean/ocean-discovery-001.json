@@ -107,7 +107,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "regular",
-            "word_hints": ["Maya", "Sam", "the young explorer", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "LOCATION",
@@ -146,7 +146,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "regular",
-            "word_hints": ["Maya", "Sam", "the young explorer", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "LOCATION",
@@ -209,7 +209,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "regular",
-            "word_hints": ["Maya", "Sam", "the young explorer", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "POSSESSIVE",
@@ -248,7 +248,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "regular",
-            "word_hints": ["Maya", "Sam", "the young explorer", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "ADJECTIVE",
@@ -293,7 +293,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "regular",
-            "word_hints": ["Maya", "Sam", "the young explorer", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "CREATURE",
@@ -346,7 +346,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "challenge",
-            "word_hints": ["Maya", "Sam", "the dedicated young researcher", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "LOCATION",
@@ -415,7 +415,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "challenge",
-            "word_hints": ["Maya", "Sam", "the young researcher", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "ADJECTIVE",
@@ -472,7 +472,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "challenge",
-            "word_hints": ["Maya", "Sam", "the young researcher", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "NOUN",
@@ -505,7 +505,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "challenge",
-            "word_hints": ["Maya", "Sam", "the young researcher", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "ADVERB",
@@ -592,7 +592,7 @@
             "slot_name": "CHARACTER",
             "themes": ["universal"],
             "complexity": "challenge",
-            "word_hints": ["Maya", "Sam", "the young researcher", "Alex"]
+            "word_hints": ["Maya", "Sam", "Rishi", "Alex"]
           },
           {
             "slot_name": "ADJECTIVE",
