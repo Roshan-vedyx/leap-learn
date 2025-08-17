@@ -1,0 +1,12 @@
+{
+    "id": "space-station-rescue",
+    "title": "Emergency in Orbit",
+    "theme": "Space Station Rescue",
+    "stories": {
+      "simple": "Alex got a radio call from the space station. The astronauts were in trouble! Their air cleaner was broken and they needed help fast. Alex flew a rescue ship up to space. Alex had to dock very carefully with the spinning station. Inside, Alex found the broken machine and fixed it with special tools. The astronauts were so happy and grateful. Alex helped them check all their other equipment too. Working together, they made sure everything was safe. Alex felt proud to help save the astronauts. Space rescues were scary but important work.",
+      
+      "regular": "Alex received an urgent distress signal from the International Space Station reporting critical life support system failures. The oxygen recycling equipment had malfunctioned, creating a potentially fatal emergency for the crew. Alex immediately launched a rescue mission, navigating precisely to achieve successful docking procedures. Inside the station, Alex diagnosed the complex technical problems and implemented emergency repairs using specialized tools. The grateful astronauts assisted with additional system diagnostics to prevent future malfunctions. Their collaborative teamwork ensured complete restoration of essential life support functions. Alex experienced tremendous satisfaction knowing that quick thinking and technical expertise had prevented a space disaster.",
+      
+      "challenge": "Alex responded to an unprecedented emergency transmission from the orbital laboratory facility, where catastrophic environmental control system failures threatened the immediate survival of resident researchers. The atmospheric processing equipment had experienced cascading malfunctions, necessitating immediate intervention to prevent fatal carbon dioxide accumulation. Alex executed a complex emergency rendezvous sequence, demonstrating exceptional spacecraft maneuvering precision under extreme temporal constraints. Within the pressurized habitat modules, Alex systematically diagnosed multiple interconnected technical failures and implemented sophisticated repair protocols using advanced diagnostic instrumentation. The interdisciplinary collaboration between Alex and the scientific crew resulted in comprehensive system restoration and enhanced redundancy mechanisms. This extraordinary rescue operation exemplified the critical importance of emergency preparedness and technical expertise in extraterrestrial environments."
+    }
+  }

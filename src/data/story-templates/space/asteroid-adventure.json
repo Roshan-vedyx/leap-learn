@@ -1,0 +1,12 @@
+{
+    "id": "asteroid-adventure",
+    "title": "Rock Field Navigator", 
+    "theme": "Asteroid Adventure",
+    "stories": {
+      "simple": "Rishi was flying a spaceship through a field of space rocks. The rocks were big and small, floating everywhere. Rishi had to steer very carefully to avoid hitting them. Some asteroids spun around really fast. Rishi used the ship's computer to find the safest path. One big rock almost hit the ship but Rishi turned just in time! The navigation was tricky but fun. Rishi felt like a real space pilot. After two hours, Rishi made it through safely. The asteroid field was dangerous but amazing to see.",
+      
+      "regular": "Rishi skillfully piloted the spacecraft through the treacherous asteroid belt, where countless rocky fragments orbited unpredictably. The navigation system constantly calculated optimal trajectories while avoiding collision hazards. Massive boulders tumbled chaotically alongside smaller debris, creating a dynamic three-dimensional maze. Rishi's quick reflexes and precise maneuvering proved essential when gravitational forces shifted asteroid positions unexpectedly. The ship's advanced sensors detected mineral compositions of various space rocks during the careful journey. Successfully navigating this cosmic obstacle course required intense concentration and expert piloting skills. Rishi emerged from the asteroid field feeling accomplished and grateful for the incredible space adventure.",
+      
+      "challenge": "Rishi demonstrated exceptional aerospace navigation expertise while traversing the notoriously hazardous asteroid belt, where countless rocky celestial bodies maintained chaotic orbital trajectories. The sophisticated flight management system continuously processed gravitational calculations and collision probability algorithms while executing evasive maneuvers. Massive planetoids and microscopic space debris created an extraordinarily complex three-dimensional navigation challenge requiring instantaneous decision-making capabilities. Rishi's superior spatial reasoning and technological proficiency proved indispensable when unexpected gravitational anomalies destabilized predictable flight patterns. The spacecraft's advanced spectrographic analysis systems simultaneously catalogued valuable mineral compositions and geological structures throughout this perilous cosmic journey. This remarkable demonstration of interplanetary piloting excellence established Rishi as an accomplished space navigation specialist."
+    }
+  }

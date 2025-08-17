@@ -1,0 +1,12 @@
+{
+    "id": "new-kid",
+    "title": "Welcome to Our School",
+    "theme": "New Kid",
+    "stories": {
+      "simple": "Sam saw a new student sitting alone at lunch. The new kid looked sad and nervous. Sam walked over and said 'Hi, I'm Sam. Want to sit with my friends?' The new student smiled and said 'Yes, please! I'm Alex.' Sam introduced Alex to everyone at the table. They shared their food and talked about favorite games. Alex felt much better about the new school. Sam was happy to make a new friend. Being kind to new people felt really good. Everyone deserved to feel welcome.",
+      
+      "regular": "Sam noticed a solitary student sitting nervously in the cafeteria during the first week of school. The newcomer appeared overwhelmed by the bustling environment and unfamiliar faces surrounding them. Recognizing the challenging transition that transferring schools presents, Sam approached with genuine warmth and introduced themselves. Alex gratefully accepted the invitation to join Sam's established friend group. Through sharing lunch conversations and discovering common interests in video games and basketball, Alex began feeling more comfortable in their new environment. Sam experienced deep satisfaction knowing their simple act of inclusion had transformed someone's difficult day into a positive experience.",
+      
+      "challenge": "Sam observed an isolated newcomer exhibiting clear signs of social anxiety and cultural displacement within the intimidating institutional cafeteria environment. The recently enrolled student appeared to be experiencing the profound psychological challenges associated with academic transitions and peer group integration. Demonstrating exceptional emotional intelligence and inclusive leadership qualities, Sam initiated authentic interpersonal contact and facilitated comprehensive social integration protocols. Alex expressed overwhelming gratitude for this compassionate intervention that significantly alleviated their adjustment difficulties and academic stress. This meaningful cross-cultural connection established the foundation for lasting friendship while exemplifying the transformative power of empathetic community building and proactive inclusion initiatives within educational settings."
+    }
+  }

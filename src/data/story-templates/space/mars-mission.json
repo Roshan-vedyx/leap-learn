@@ -1,0 +1,12 @@
+{
+    "id": "mars-mission",
+    "title": "Red Planet Explorer",
+    "theme": "Mars Mission",
+    "stories": {
+      "simple": "Maya stepped out of the rocket onto Mars. The red dirt was everywhere! She planted a flag and took pictures. Maya found some interesting rocks that might have water in them. She used special tools to dig and test the soil. Maya discovered old river beds where water used to flow. This was so exciting! Maya sent messages back to Earth about her findings. She felt proud to be the first kid to explore Mars. Maya couldn't wait to tell everyone what she learned. Mars was amazing but she missed Earth too.",
+      
+      "regular": "Maya became the youngest astronaut to successfully complete a Mars landing mission. The rusty landscape stretched endlessly before her as she conducted systematic geological surveys. Her specialized equipment detected promising mineral compositions that suggested ancient water activity. Maya documented evidence of prehistoric riverbeds and possible microbial life indicators. Each discovery transmitted to Earth generated tremendous excitement among scientists worldwide. The isolation challenged her emotionally, but Maya's determination and training sustained her throughout the historic expedition. Her comprehensive research contributed invaluable data for future colonization planning and expanded humanity's understanding of planetary evolution.",
+      
+      "challenge": "Maya accomplished the unprecedented achievement of becoming the first adolescent to successfully navigate an independent Mars exploration mission. The desolate Martian terrain presented extraordinary geological phenomena that demanded meticulous scientific analysis and documentation. Her sophisticated instrumentation revealed compelling evidence of substantial hydrological activity during Mars' primordial atmospheric period. Maya's paleontological investigations uncovered potential biosignatures that revolutionized astrobiology research and extraterrestrial life detection methodologies. Despite experiencing profound psychological isolation and homesickness, her remarkable resilience and intellectual curiosity sustained her through this groundbreaking scientific expedition. Her comprehensive research fundamentally advanced planetary science and established critical foundation knowledge for future interplanetary colonization initiatives."
+    }
+  }

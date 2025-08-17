@@ -1,7 +1,9 @@
+// src/pages/StorySelectionPage.tsx
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
+import { DynamicStoryLoader } from '@/utils/dynamicStoryLoader'
 
 interface StoryTemplate {
   id: string
@@ -31,36 +33,6 @@ const interestDisplayInfo: Record<string, { emoji: string; label: string; descri
   family: { emoji: '👨‍👩‍👧‍👦', label: 'Family Fun', description: 'Family adventures and traditions' }
 }
 
-// For now, we'll use a simple fallback approach since Vite has limitations with completely dynamic imports
-// You can manually add story filenames here as you create them, or we'll create a build script later
-const getAvailableStories = (interest: string): string[] => {
-  // This is a temporary solution - in production you'd generate this list automatically
-  const storyFiles: Record<string, string[]> = {
-    animals: ['forest-rescue'], // matches your actual filename
-    ocean: ['deep-sea-mystery'],
-    space: ['mars-mission'],
-    friendship: ['new-kid'],
-    mystery: ['treasure-hunt'],
-    magic: ['wizard-school'],
-    technology: ['helpful-robot'],
-    creative: ['art-contest'],
-    family: ['family-adventure']
-  }
-  
-  return storyFiles[interest] || []
-}
-
-const loadStoryFile = async (interest: string, storyFile: string): Promise<StoryTemplate | null> => {
-  try {
-    // Try to load the story file
-    const module = await import(`../../data/story-templates/${interest}/${storyFile}.json`)
-    return module.default
-  } catch (error) {
-    console.warn(`Failed to load story: ${interest}/${storyFile}`, error)
-    return null
-  }
-}
-
 const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => {
   const [stories, setStories] = useState<StoryTemplate[]>([])
   const [loading, setLoading] = useState(true)
@@ -74,17 +46,31 @@ const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => 
     const loadStories = async () => {
       try {
         setLoading(true)
-        const storyFiles = getAvailableStories(currentInterest)
-        const loadedStories: StoryTemplate[] = []
+        setError(null)
 
-        for (const storyFile of storyFiles) {
-          const story = await loadStoryFile(currentInterest, storyFile)
+        // Get all available story IDs for this interest
+        const storyIds = DynamicStoryLoader.getAvailableStories(currentInterest)
+        
+        if (storyIds.length === 0) {
+          console.log(`No stories found for interest: ${currentInterest}`)
+          setStories([])
+          setLoading(false)
+          return
+        }
+
+        // Load all stories for this interest
+        const loadedStories: StoryTemplate[] = []
+        
+        for (const storyId of storyIds) {
+          const story = await DynamicStoryLoader.loadStory(currentInterest, storyId)
           if (story) {
             loadedStories.push(story)
           }
         }
 
+        console.log(`Loaded ${loadedStories.length} stories for ${currentInterest}:`, loadedStories.map(s => s.title))
         setStories(loadedStories)
+
       } catch (err) {
         console.error('Error loading stories:', err)
         setError('Failed to load stories. Please try again.')
@@ -114,6 +100,9 @@ const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => 
             <h1 className="text-3xl font-bold text-indigo-900 mb-4">
               Loading {interestInfo.label} Stories...
             </h1>
+            <div className="animate-pulse text-indigo-600">
+              Discovering available adventures...
+            </div>
           </div>
         </div>
       </div>

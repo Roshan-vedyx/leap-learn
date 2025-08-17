@@ -1,10 +1,12 @@
 {
-  "id": "animal-rescue-forest",
-  "title": "Forest Rescue",
-  "theme": "animals",
+  "id": "forest-rescue",
+  "title": "Trapped in the Woods",
+  "theme": "Forest Rescue",
   "stories": {
-    "simple": "Sam heard a sad sound in the woods. A small fox was stuck under a log. Sam moved the log and helped the fox get free. The fox ran home safe. Sam felt happy.",
-    "regular": "Maya was walking through the forest when she heard a frightened cry. Behind some fallen branches, she found a young fox with its paw caught under heavy wood. Maya carefully lifted the branches and freed the scared animal. The grateful fox bounded away into the trees.",
-    "challenge": "Jordan had always loved exploring the wilderness areas near town. While hiking the mountain trail, Jordan heard desperate whimpering coming from a pile of storm debris. After carefully moving fallen logs and branches, Jordan discovered a red fox whose hind leg was trapped. Working patiently for twenty minutes, Jordan freed the exhausted animal and watched it disappear safely into the forest."
+    "simple": "Suha heard crying sounds in the forest. She followed the noise to a big tree. A baby fox was stuck under some fallen branches. The fox looked scared and hurt. Suha moved the heavy branches very carefully. She didn't want to scare the fox more. The little fox was free! It ran to its mom who was waiting nearby. The fox family was happy again. Suha felt proud that she helped a wild animal. Helping animals was the right thing to do.",
+    
+    "regular": "Suha was hiking through the dense woodland when she detected distressed animal calls echoing through the trees. Following the urgent sounds, she discovered a juvenile red fox trapped beneath fallen timber from a recent storm. The frightened creature appeared injured but alert, watching Suha with cautious eyes. Working slowly and quietly, Suha systematically removed the debris while speaking softly to keep the fox calm. Once liberated, the grateful animal immediately bounded toward its anxious mother waiting in the nearby underbrush. Witnessing this successful wildlife rescue filled Suha with tremendous satisfaction and reinforced her commitment to environmental conservation.",
+    
+    "challenge": "Suha was conducting a solitary nature expedition through the pristine deciduous forest when she perceived anguished vocalizations reverberating throughout the woodland ecosystem. Methodically tracking the distress signals, she located a trapped vulpes vulpes kit ensnared beneath substantial deadfall resulting from recent meteorological disturbances. The traumatized mammal exhibited clear signs of physical distress while maintaining defensive behavioral patterns typical of wild carnivores. Employing systematic debris removal techniques and employing calming vocalization strategies, Suha successfully executed the rescue operation without exacerbating the animal's psychological trauma. The immediate family reunion between the liberated kit and its vigilant vixen demonstrated the profound importance of human intervention in wildlife crisis situations and emergency conservation protocols."
   }
 }

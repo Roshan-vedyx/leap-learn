@@ -1,6 +1,8 @@
+// src/pages/StoryPage.tsx - Complete implementation with all original features
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { audio, storage } from '@/lib/utils'
+import { DynamicStoryLoader } from '@/utils/dynamicStoryLoader'
 import type { ComplexityLevel } from '@/types'
 
 interface StoryTemplate {
@@ -27,35 +29,61 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const [showSettings, setShowSettings] = useState(false)
   const [showComplexityHint, setShowComplexityHint] = useState(false)
   const [story, setStory] = useState<StoryTemplate | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [, setLocation] = useLocation()
 
-  // Load story template
+  // Load story template dynamically
   useEffect(() => {
     const loadStory = async () => {
       try {
+        setLoading(true)
+        setError(null)
+
         // Get interest and story from URL params or localStorage
         const selectedInterests = JSON.parse(localStorage.getItem('selected-interests') || '[]')
         const currentInterest = interest || selectedInterests[0] || 'animals'
-        const currentStoryName = storyName || 'animal-rescue-forest'
+        const currentStoryName = storyName || 'forest-rescue'
         
         console.log('Loading story:', currentInterest, currentStoryName)
         
-        // Load the JSON template with relative path
-        const storyModule = await import(`../../data/story-templates/${currentInterest}/${currentStoryName}.json`)
-        setStory(storyModule.default)
+        // Use the dynamic loader
+        const loadedStory = await DynamicStoryLoader.loadStory(currentInterest, currentStoryName)
+        
+        if (loadedStory) {
+          setStory(loadedStory)
+          console.log('Successfully loaded story:', loadedStory.title)
+        } else {
+          // Fallback story if the requested one doesn't exist
+          console.warn(`Story not found: ${currentInterest}/${currentStoryName}`)
+          setStory({
+            id: 'fallback-story',
+            title: 'Adventure Story',
+            theme: 'general',
+            stories: {
+              simple: 'There was an adventure. It was fun. The end.',
+              regular: 'There was an exciting adventure that everyone enjoyed.',
+              challenge: 'An extraordinary adventure unfolded, captivating everyone who experienced it.'
+            }
+          })
+        }
       } catch (error) {
         console.error('Failed to load story:', error)
-        // Fallback story
+        setError('Failed to load the story. Please try again.')
+        
+        // Fallback story for errors
         setStory({
-          id: 'fallback-story',
-          title: 'Adventure Story',
+          id: 'error-fallback',
+          title: 'Story Loading Error',
           theme: 'general',
           stories: {
-            simple: 'There was an adventure. It was fun. The end.',
-            regular: 'There was an exciting adventure that everyone enjoyed.',
-            challenge: 'An extraordinary adventure unfolded, captivating everyone who experienced it.'
+            simple: 'Sorry, we had trouble loading your story. Please try again.',
+            regular: 'We encountered an issue loading your story. Please refresh the page or try a different story.',
+            challenge: 'Unfortunately, we experienced a technical difficulty while loading your requested story. Please refresh the page or navigate back to select another adventure.'
           }
         })
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -68,50 +96,34 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     setComplexityLevel(savedComplexity === 'regular' ? 'full' : savedComplexity)
   }, [])
 
-  // Adapt presentation based on brain state
+  // Save complexity level when changed
   useEffect(() => {
-    const brainState = storage.get('current-brain-state', 'focused')
-    if (brainState === 'overwhelmed') {
-      setReadingMode('text')
-      setComplexityLevel('simple')
-    } else if (brainState === 'energetic') {
-      setReadingMode('both')
-    }
-  }, [])
+    storage.set('current-complexity-level', complexityLevel)
+  }, [complexityLevel])
 
   // Show complexity hint for new users
   useEffect(() => {
-    if (currentSection === 1 && !storage.get('complexity-hint-shown', false)) {
+    const hasSeenHint = storage.get('complexity-hint-seen', false)
+    if (!hasSeenHint) {
       setShowComplexityHint(true)
-      storage.set('complexity-hint-shown', true)
+      storage.set('complexity-hint-seen', true)
     }
-  }, [currentSection])
+  }, [])
 
-  if (!story) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
-        <div className="max-w-3xl mx-auto py-8 text-center">
-          <div className="text-2xl">📖 Loading your story...</div>
-        </div>
-      </div>
-    )
+  const getCurrentStoryText = (): string => {
+    if (!story) return ''
+    
+    // Map complexity levels to story keys
+    const storyKey = complexityLevel === 'simple' ? 'simple' : 
+                    complexityLevel === 'challenge' ? 'challenge' : 'regular'
+    
+    return story.stories[storyKey] || story.stories.regular
   }
 
-  // Convert complexity level for story access
-  const getStoryComplexity = () => {
-    if (complexityLevel === 'simple') return 'simple'
-    if (complexityLevel === 'challenge') return 'challenge'
-    return 'regular' // Map 'full' to 'regular'
-  }
-
-  // Split story into sections (sentences)
-  const getCurrentStoryText = () => {
-    return story.stories[getStoryComplexity()]
-  }
-
-  const getStorySections = () => {
-    const text = getCurrentStoryText()
-    return text.split('. ').filter(sentence => sentence.trim().length > 0)
+  // Break story into sections (sentences)
+  const getStorySections = (): string[] => {
+    const fullText = getCurrentStoryText()
+    return fullText.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0)
   }
 
   const sections = getStorySections()
@@ -162,10 +174,58 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     setShowComplexityHint(false)
   }
 
+  const handleBackToStories = () => {
+    if (interest) {
+      setLocation(`/stories/${interest}`)
+    } else {
+      setLocation('/interests')
+    }
+  }
+
   const complexityLabels = {
     simple: { label: 'Easier', emoji: '🌱', description: 'Shorter sentences, easier words' },
     full: { label: 'Just Right', emoji: '🎯', description: 'Standard complexity' },
     challenge: { label: 'Challenge Me', emoji: '🚀', description: 'Rich vocabulary, complex ideas' }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
+        <div className="max-w-3xl mx-auto py-8">
+          <div className="text-center">
+            <div className="text-4xl mb-4">📖</div>
+            <h1 className="text-3xl font-bold text-blue-900 mb-4">
+              Loading Your Story...
+            </h1>
+            <div className="animate-pulse text-blue-600">
+              Getting everything ready for you...
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !story) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
+        <div className="max-w-3xl mx-auto py-8">
+          <div className="text-center">
+            <div className="text-4xl mb-4">😅</div>
+            <h1 className="text-3xl font-bold text-blue-900 mb-4">
+              Oops! Story Not Found
+            </h1>
+            <p className="text-lg text-blue-700 mb-6">{error}</p>
+            <button 
+              onClick={handleBackToStories}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+            >
+              ← Back to Stories
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -174,8 +234,15 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         
         {/* Simple Title - No overwhelming metadata */}
         <div className="text-center mb-8">
+          <button
+            onClick={handleBackToStories}
+            className="mb-4 text-blue-600 hover:text-blue-800 font-medium"
+          >
+            ← Back to Stories
+          </button>
+          
           <h1 className="text-3xl font-bold text-blue-900 mb-2">
-            {story.title}
+            {story?.title || 'Story Time'}
           </h1>
           <div className="text-sm text-blue-700 opacity-75">
             Part {currentSection + 1} of {totalSections}
@@ -371,7 +438,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         {/* Accessibility Information */}
         <div className="sr-only">
           <p>
-            You are reading "{story.title}", section {currentSection + 1} of {totalSections}.
+            You are reading "{story?.title}", section {currentSection + 1} of {totalSections}.
             Currently reading at {complexityLabels[complexityLevel].label} level.
             Use the Previous and Next buttons to navigate, or use the audio controls to listen to the content.
             You can switch reading levels anytime using the settings.

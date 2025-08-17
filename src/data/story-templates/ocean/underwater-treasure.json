@@ -1,0 +1,12 @@
+{
+    "id": "underwater-treasure",
+    "title": "The Hidden Gift",
+    "theme": "Underwater Treasure",
+    "stories": {
+      "simple": "Alex put on snorkel gear and swam down. The water was clear and blue. Fish swam all around. Alex saw something shiny on the sea floor. It was an old bottle with something inside! Alex swam up to get air. Then Alex dove down again to get the bottle. Inside was a old map drawn on cloth. It showed where pirates used to hide things. Alex felt like a real treasure hunter. This was the best day ever at the beach!",
+      
+      "regular": "Alex descended into the crystal-clear water with snorkeling equipment, eager to explore the underwater landscape. Schools of colorful tropical fish surrounded the rocky formations below. Among the coral formations, something unusual caught Alex's attention - a barnacle-covered bottle wedged between two rocks. After surfacing for air, Alex carefully retrieved the mysterious container. Inside was a weathered piece of canvas with what appeared to be an authentic historical map. The document depicted coastal landmarks and suggested the location of a long-lost shipwreck. Alex realized this discovery could be historically significant and felt tremendously excited about sharing it with marine archaeologists.",
+      
+      "challenge": "Alex submerged into the pristine aquatic environment, equipped with professional-grade snorkeling apparatus for comprehensive underwater exploration. The diverse marine ecosystem flourished among the limestone formations, creating a spectacular underwater sanctuary. While systematically surveying the seabed, Alex identified an anomalous artifact - a corroded glass vessel firmly embedded within the geological substrate. Following proper archaeological protocols, Alex documented the discovery's location before carefully extracting the container. The preserved contents revealed an authenticated eighteenth-century nautical chart, complete with navigational notations and potential shipwreck coordinates. This extraordinary find represented a significant contribution to maritime historical research, potentially revolutionizing understanding of colonial-era shipping routes and trade networks."
+    }
+  }
