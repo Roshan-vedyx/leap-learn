@@ -1,4 +1,4 @@
-// src/pages/StoryPage.tsx - Complete implementation with all original features
+// src/pages/StoryPage.tsx - Complete implementation with complexity extracted from settings
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { audio, storage } from '@/lib/utils'
@@ -183,9 +183,9 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   }
 
   const complexityLabels = {
-    simple: { label: 'Easier', emoji: '🌱', description: 'Shorter sentences, easier words' },
-    full: { label: 'Just Right', emoji: '🎯', description: 'Standard complexity' },
-    challenge: { label: 'Challenge Me', emoji: '🚀', description: 'Rich vocabulary, complex ideas' }
+    simple: { label: 'Easier', emoji: '🌱', description: '' },
+    full: { label: 'Just Right', emoji: '🎯', description: '' },
+    challenge: { label: 'Challenge Me', emoji: '🚀', description: '' }
   }
 
   if (loading) {
@@ -213,7 +213,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
           <div className="text-center">
             <div className="text-4xl mb-4">😅</div>
             <h1 className="text-3xl font-bold text-blue-900 mb-4">
-              Oops! Story Not Found
+              Story Not Found
             </h1>
             <p className="text-lg text-blue-700 mb-6">{error}</p>
             <button 
@@ -256,7 +256,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
               <span className="text-xl">💡</span>
               <div className="flex-1">
                 <p className="text-yellow-800 text-sm mb-3">
-                  <strong>You're in control!</strong> If this feels too easy or too hard, try the settings below to switch reading levels.
+                  <strong>You're in control!</strong> If this feels too easy or too hard, try the reading level buttons below the story.
                 </p>
                 <button
                   onClick={dismissComplexityHint}
@@ -278,14 +278,14 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
           </div>
 
           {/* Subtle Audio Button - Top Right Corner */}
-          <button
+          {/*<button
             onClick={() => handleReadAloud()}
             disabled={isReading}
             className="absolute top-4 right-4 w-10 h-10 bg-blue-100 hover:bg-blue-200 disabled:opacity-50 rounded-full flex items-center justify-center text-lg transition-colors"
             aria-label="Read this section aloud"
           >
             {isReading ? '🗣️' : '🔊'}
-          </button>
+          </button>*/}
 
           {/* Navigation */}
           <div className="flex items-center justify-between mb-6">
@@ -323,46 +323,18 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
               disabled={isReading}
               className="px-4 py-2 bg-green-100 hover:bg-green-200 disabled:opacity-50 rounded-lg text-sm text-green-700 transition-colors"
             >
-              🎧 {isReading ? 'Reading...' : 'Read Aloud'}
+              🔊 {isReading ? 'Reading...' : 'Read Aloud'}
             </button>
 
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
-            >
-              ⚙️ Settings
-            </button>
+            
           </div>
         </div>
 
-        {/* Settings Panel */}
+        {/* Settings Panel - WITHOUT COMPLEXITY SELECTOR */}
         {showSettings && (
           <div className="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-200">
             <h3 className="font-semibold text-gray-800 mb-4">Reading Settings</h3>
             
-            {/* Complexity Selector */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Reading Level
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => (
-                  <button
-                    key={level}
-                    onClick={() => handleComplexityChange(level)}
-                    className={`p-3 rounded-lg text-sm transition-colors ${
-                      complexityLevel === level
-                        ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    <div className="text-lg mb-1">{complexityLabels[level].emoji}</div>
-                    <div className="font-medium">{complexityLabels[level].label}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Reading Mode */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -412,6 +384,13 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
                 🎧 {isReading ? 'Reading...' : 'Read This Section'}
               </button>
               <button
+                onClick={() => handleReadAloud(getCurrentStoryText())}
+                disabled={isReading}
+                className="p-3 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 rounded-lg text-sm text-blue-700 transition-colors"
+              >
+                📖 {isReading ? 'Reading...' : 'Read Whole Story'}
+              </button>
+              <button
                 onClick={() => setShowSettings(false)}
                 className="p-3 bg-green-50 hover:bg-green-100 rounded-lg text-sm text-green-700 transition-colors"
               >
@@ -430,6 +409,44 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
           </div>
         )}
 
+        {/* COMPLEXITY SELECTOR - BELOW STORY */}
+        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-200">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Reading Level
+          </label>
+
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => (
+              <button
+                key={level}
+                onClick={() => handleComplexityChange(level)}
+                className={`p-3 rounded-lg text-sm transition-colors ${
+                  complexityLevel === level
+                    ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <div className="text-lg mb-1">{complexityLabels[level].emoji}</div>
+                <div className="font-medium">{complexityLabels[level].label}</div>
+                <div className="text-xs opacity-75 mt-1">
+                  {complexityLabels[level].description}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Centered Settings Toggle Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              className="px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
+            >
+              {showSettings ? "Show less" : "⚙️ More Options"}
+            </button>
+          </div>
+        </div>
+
+
         {/* Encouragement - Calm and Supportive */}
         <div className="text-center mt-8 text-gray-500 text-sm">
           Take your time • No rush • You're doing great!
@@ -441,7 +458,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
             You are reading "{story?.title}", section {currentSection + 1} of {totalSections}.
             Currently reading at {complexityLabels[complexityLevel].label} level.
             Use the Previous and Next buttons to navigate, or use the audio controls to listen to the content.
-            You can switch reading levels anytime using the settings.
+            You can switch reading levels anytime using the reading level buttons above the story.
           </p>
         </div>
       </div>
