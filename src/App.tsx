@@ -13,6 +13,7 @@ import { ParentAuthProvider } from './contexts/ParentAuthContext'
 import { ChildAuthProvider } from './contexts/ChildAuthContext'
 import { AuthGate } from './components/auth/AuthGate'
 import { ParentDashboard } from './components/parent/ParentDashboard'
+import { ChildSetup } from './components/auth/ChildSetup'
 
 import type { TtsAccent } from './types'
 

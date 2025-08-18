@@ -1,51 +1,31 @@
+<!-- Updated index.html with Google Auth CSP fix -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    
-    <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/png" href="/logo.png" />
-    <link rel="shortcut icon" type="image/png" href="/logo.png" />
-    <link rel="apple-touch-icon" href="/logo.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
-    
-    <!-- Viewport and Mobile Optimization -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Vedyx Leap" />
+    <title>Vedyx Leap - AI-Powered Learning for Neurodivergent Students</title>
     
     <!-- Primary Meta Tags -->
-    <title>Vedyx Leap - Learning Hub</title>
-    <meta name="title" content="Vedyx Leap - Learning Hub" />
-    <meta name="description" content="AI-powered learning app designed for neurodivergent middle school students. Adaptive literacy and numeracy support that meets every child where they are in their learning journey." />
-    <meta name="keywords" content="neurodivergent learning, middle school education, AI tutoring, literacy skills, numeracy skills, adaptive learning, special needs education, personalized learning, ADHD learning, autism education, dyslexia support" />
+    <meta name="title" content="Vedyx Leap - AI-Powered Learning for Neurodivergent Students" />
+    <meta name="description" content="Personalized learning platform designed for neurodivergent learners. Building confidence in literacy and numeracy." />
+    <meta name="keywords" content="neurodivergent learning, ADHD, autism, dyslexia, personalized education, AI tutoring" />
     <meta name="author" content="Vedyx" />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content="English" />
-    
-    <!-- Theme and Color -->
-    <meta name="theme-color" content="#2563eb" />
-    <meta name="msapplication-TileColor" content="#2563eb" />
-    <meta name="msapplication-navbutton-color" content="#2563eb" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://leap.vedyx.ai" />
     <meta property="og:title" content="Vedyx Leap - AI-Powered Learning for Neurodivergent Students" />
-    <meta property="og:description" content="Personalized AI tutoring that adapts to each neurodivergent middle schooler's unique learning style. Building confidence in literacy and numeracy through compassionate, intelligent support." />
+    <meta property="og:description" content="Personalized learning platform designed for neurodivergent learners. Building confidence in literacy and numeracy." />
     <meta property="og:image" content="https://leap.vedyx.ai/public/logo.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="Vedyx Leap" />
-    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://leap.vedyx.ai" />
     <meta property="twitter:title" content="Vedyx Leap - AI-Powered Learning for Neurodivergent Students" />
-    <meta property="twitter:description" content="Personalized AI tutoring that adapts to each neurodivergent middle schooler's unique learning style. Building confidence in literacy and numeracy." />
+    <meta property="twitter:description" content="Personalized learning platform designed for neurodivergent learners. Building confidence in literacy and numeracy." />
     <meta property="twitter:image" content="https://leap.vedyx.ai/public/logo.png" />
     
     <!-- Additional SEO Meta Tags -->
@@ -59,13 +39,48 @@
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Preconnect for Google Auth -->
+    <link rel="preconnect" href="https://apis.google.com" />
+    <link rel="preconnect" href="https://accounts.google.com" />
     
     <!-- Web App Manifest (optional - you can create this later) -->
     <!-- <link rel="manifest" href="/manifest.json" /> -->
     
-    <!-- Security Headers -->
+    <!-- Updated CSP to allow Google Authentication -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://website-widgets.pages.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' 
+        https://website-widgets.pages.dev 
+        https://apis.google.com 
+        https://accounts.google.com 
+        https://securetoken.googleapis.com
+        https://www.googleapis.com;
+      style-src 'self' 'unsafe-inline' 
+        https://fonts.googleapis.com 
+        https://accounts.google.com;
+      font-src 'self' 
+        https://fonts.gstatic.com;
+      img-src 'self' data: https: 
+        https://lh3.googleusercontent.com
+        https://googleusercontent.com;
+      connect-src 'self' 
+        https://apis.google.com 
+        https://accounts.google.com 
+        https://securetoken.googleapis.com
+        https://www.googleapis.com
+        https://identitytoolkit.googleapis.com
+        https://firebaseinstallations.googleapis.com
+        https://firestore.googleapis.com
+        wss://firestore.googleapis.com;
+      frame-src 'self' 
+        https://accounts.google.com
+        https://v-leap.firebaseapp.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self' 
+        https://accounts.google.com;
+    " />
   </head>
   <body>
     <div id="root"></div>
