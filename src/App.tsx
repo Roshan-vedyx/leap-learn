@@ -13,7 +13,9 @@ import { ParentAuthProvider } from './contexts/ParentAuthContext'
 import { ChildAuthProvider } from './contexts/ChildAuthContext'
 import { AuthGate } from './components/auth/AuthGate'
 import { ParentDashboard } from './components/parent/ParentDashboard'
-import { ChildSetup } from './components/auth/ChildSetup'
+import { ChildLogin } from './components/auth/ChildLogin'
+import { ParentSignup } from './components/auth/ParentSignup'
+import { ParentLogin } from './components/auth/ParentLogin'
 
 import type { TtsAccent } from './types'
 
@@ -439,16 +441,12 @@ function AppContent() {
               </AuthGate>
             </Route>
 
-            {/*Parent Login */}
+            <Route path="/parent-signup">
+              <ParentSignup />
+            </Route>
             <Route path="/parent">
               <AuthGate requireParent>
                 <ParentDashboard />
-              </AuthGate>
-            </Route>
-
-            <Route path="/parent/setup">
-              <AuthGate requireParent>
-                <ChildSetup onComplete={() => setLocation('/parent')} />
               </AuthGate>
             </Route>
 
