@@ -8,6 +8,12 @@ import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 
 // CHANGE THIS LINE - import EnhancedCalmCorner instead of CalmCorner
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
 
+// NEW: Import auth providers and components
+import { ParentAuthProvider } from './contexts/ParentAuthContext'
+import { ChildAuthProvider } from './contexts/ChildAuthContext'
+import { AuthGate } from './components/auth/AuthGate'
+import { ParentDashboard } from './components/parent/ParentDashboard'
+
 import type { TtsAccent } from './types'
 
 // Import page components
@@ -67,7 +73,8 @@ const Footer = () => (
   </footer>
 )
 
-function App() {
+// Main App Content Component (extracted to work within auth providers)
+function AppContent() {
   const [accessibilityMode, setAccessibilityMode] = useState<AccessibilityMode>('default')
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [reducedMotion, setReducedMotion] = useState(false)
@@ -345,94 +352,135 @@ function App() {
       <main id="main-content" className="content-area">
         <Router>
           <Switch>
-            {/* Default route - Brain Check-in */}
+            {/* Public routes - no auth needed */}
             <Route path="/">
               <BrainCheckPage />
             </Route>
 
-            {/* Brain Check-in page */}
+            {/* Brain Check-in page - Public */}
             <Route path="/brain-check">
               <BrainCheckPage />
             </Route>
 
-            {/* Practice Reading Route */}
+            {/* Protected routes - require child auth */}
             <Route path="/practice-reading">
-              <PracticeReadingPage />
+              <AuthGate requireChild>
+                <PracticeReadingPage />
+              </AuthGate>
             </Route>
 
-            {/* Word Building Routes */}
+            {/* Word Building Routes - Protected */}
             <Route path="/word-building">
-              <WordInterestSelectionPage />
+              <AuthGate requireChild>
+                <WordInterestSelectionPage />
+              </AuthGate>
             </Route>
             <Route path="/word-building/:theme">
-              {(params) => <WordBuildingGamePage theme={params.theme} />}
+              <AuthGate requireChild>
+                {(params) => <WordBuildingGamePage theme={params.theme} />}
+              </AuthGate>
             </Route>
             <Route path="/sentence-building">
-              <SentenceThemeSelectionPage />
+              <AuthGate requireChild>
+                <SentenceThemeSelectionPage />
+              </AuthGate>
             </Route>
             <Route path="/sentence-building/:theme">
-              {(params) => <SentenceBuildingPage theme={params.theme} />}
+              <AuthGate requireChild>
+                {(params) => <SentenceBuildingPage theme={params.theme} />}
+              </AuthGate>
             </Route>
             
-            {/* Story reading page with optional story ID */}
+            {/* Story reading page with optional story ID - Protected */}
             <Route path="/story/:interest/:storyId">
-              {(params) => <StoryPage interest={params.interest} storyName={params.storyId} />}
+              <AuthGate requireChild>
+                {(params) => <StoryPage interest={params.interest} storyName={params.storyId} />}
+              </AuthGate>
             </Route>
 
-            {/* Creative response page */}
+            {/* Creative response page - Protected */}
             <Route path="/create">
-              <CreatePage />
+              <AuthGate requireChild>
+                <CreatePage />
+              </AuthGate>
             </Route>
 
-            {/* Celebration page */}
+            {/* Celebration page - Protected */}
             <Route path="/celebrate">
-              <CelebratePage />
+              <AuthGate requireChild>
+                <CelebratePage />
+              </AuthGate>
             </Route>
 
-            {/* Interest Selection page */}
+            {/* Interest Selection page - Protected */}
             <Route path="/interests">
-              <InterestSelectionPage />
+              <AuthGate requireChild>
+                <InterestSelectionPage />
+              </AuthGate>
             </Route>
 
-            {/* Today I Want To page */}
+            {/* Today I Want To page - Protected */}
             <Route path="/today-i-want-to">
-              <TodayIWantToPage />
+              <AuthGate requireChild>
+                <TodayIWantToPage />
+              </AuthGate>
             </Route>
 
             <Route path="/stories/:interest">
-              {(params) => <StorySelectionPage interest={params.interest} />}
+              <AuthGate requireChild>
+                {(params) => <StorySelectionPage interest={params.interest} />}
+              </AuthGate>
             </Route>
 
             <Route path="/story-generate">
-              <StoryGenerationPage />
+              <AuthGate requireChild>
+                <StoryGenerationPage />
+              </AuthGate>
             </Route>
 
-            {/* Math activities placeholder */}
+            {/*Parent Login */}
+            <Route path="/parent">
+              <AuthGate requireParent>
+                <ParentDashboard />
+              </AuthGate>
+            </Route>
+
+            <Route path="/parent/setup">
+              <AuthGate requireParent>
+                <ChildSetup onComplete={() => setLocation('/parent')} />
+              </AuthGate>
+            </Route>
+
+            {/* Math activities placeholder - Protected */}
             <Route path="/math-activities">
-              <div className="container">
-                <div className="viewport-header">
-                  <div className="text-6xl mb-4">🔢</div>
-                  <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
-                  <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
-                  <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
-                    Back to Today I Want To
-                  </Button>
+              <AuthGate requireChild>
+                <div className="container">
+                  <div className="viewport-header">
+                    <div className="text-6xl mb-4">🔢</div>
+                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
+                    <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                      Back to Today I Want To
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </AuthGate>
             </Route>
 
-            {/* Gentle activities placeholder */}
+            {/* Gentle activities placeholder - Protected */}
             <Route path="/gentle-activities">
-              <div className="container">
-                <div className="viewport-header">
-                  <div className="text-6xl mb-4">🌸</div>
-                  <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
-                  <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
-                  <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
-                    Back to Today I Want To
-                  </Button>
+              <AuthGate requireChild>
+                <div className="container">
+                  <div className="viewport-header">
+                    <div className="text-6xl mb-4">🌸</div>
+                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
+                    <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
+                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                      Back to Today I Want To
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </AuthGate>
             </Route>
 
             {/* 404 Not Found - catch all other routes */}
@@ -625,6 +673,19 @@ function App() {
         `
       }} />
     </div>
+  )
+}
+
+// Main App Component with Auth Providers
+function App() {
+  return (
+    <ParentAuthProvider>
+      <ChildAuthProvider>
+        <div className="min-h-screen bg-page-bg text-page-text">
+          <AppContent />
+        </div>
+      </ChildAuthProvider>
+    </ParentAuthProvider>
   )
 }
 

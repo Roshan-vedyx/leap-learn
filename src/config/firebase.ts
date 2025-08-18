@@ -1,9 +1,8 @@
-// src/config/firebase.ts
+// src/config/firebase.ts - UPDATE YOUR EXISTING FILE
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
-// Your Firebase configuration
-// You need to get these values from your Firebase project settings
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -17,10 +16,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
-// Initialize Firestore
+// Initialize services
 export const db = getFirestore(app)
+export const auth = getAuth(app)
 
-// Export the app for other services if needed
 export { app }
-
 export default app

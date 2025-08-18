@@ -494,7 +494,7 @@
       {
         "word": "solar",
         "chunks": ["so", "lar"],
-        "tts_chunks": ["so", "lur"],
+        "tts_chunks": ["so", "lurr"],
         "alternative_chunks": ["s", "o", "l", "ar"],
         "phonics_pattern": "r_controlled",
         "syllables": 2,
@@ -504,7 +504,7 @@
       {
         "word": "lunar",
         "chunks": ["lu", "nar"],
-        "tts_chunks": ["loo", "nur"],
+        "tts_chunks": ["loo", "nurr"],
         "alternative_chunks": ["l", "u", "n", "ar"],
         "phonics_pattern": "r_controlled",
         "syllables": 2,
@@ -514,7 +514,7 @@
       {
         "word": "galaxy",
         "chunks": ["gal", "ax", "y"],
-        "tts_chunks": ["gal", "ax", "ee"],
+        "tts_chunks": ["gal", "eks", "ee"],
         "alternative_chunks": ["g", "al", "ax", "y"],
         "phonics_pattern": "three_syllable",
         "syllables": 3,
