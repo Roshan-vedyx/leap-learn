@@ -6,6 +6,7 @@ import { useChildAuth } from '../../contexts/ChildAuthContext'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../../config/firebase'
 import { PinRecovery } from './PinRecovery'
+import { PinReset } from './PinReset'
 
 export const ChildLogin: React.FC = () => {
   const [username, setUsername] = useState('')
@@ -15,6 +16,7 @@ export const ChildLogin: React.FC = () => {
   const [showRecovery, setShowRecovery] = useState(false)
   const [recoveryChildId, setRecoveryChildId] = useState('')
   const { authenticateChild } = useChildAuth()
+  const [showPinReset, setShowPinReset] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -112,12 +114,23 @@ export const ChildLogin: React.FC = () => {
   const handleRecoverySuccess = () => {
     // Reset PIN was successful through recovery
     setShowRecovery(false)
-    setRecoveryChildId('')
+    setShowPinReset(true) // Show PIN reset instead of alert
     setPin('')
     setError('')
+  }
+
+  const handlePinResetSuccess = () => {
+    setShowPinReset(false)
+    setRecoveryChildId('')
+    setError('')
     // Show success message
-    setError('') // Clear any errors
-    alert('Great! You can now create a new PIN. Please try logging in again.')
+    alert('🎉 Your new PIN is ready! You can now log in with your new PIN.')
+  }
+  
+  const handlePinResetCancel = () => {
+    setShowPinReset(false)
+    setRecoveryChildId('')
+    setError('')
   }
 
   const handleRecoveryCancel = () => {
@@ -158,7 +171,27 @@ export const ChildLogin: React.FC = () => {
     )
   }
 
-  // Main login screen
+ // Show PIN reset screen if activated
+    if (showPinReset && recoveryChildId) {
+        return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 
+                        dark:from-gray-900 dark:via-indigo-900/20 dark:to-purple-900/20 
+                        flex items-center justify-center p-4">
+            <div className="w-full max-w-md">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+                <PinReset
+                childId={recoveryChildId}
+                childUsername={username}
+                onSuccess={handlePinResetSuccess}
+                onCancel={handlePinResetCancel}
+                />
+            </div>
+            </div>
+        </div>
+        )
+    } 
+
+    // Main login screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 
                     dark:from-gray-900 dark:via-indigo-900/20 dark:to-purple-900/20 
