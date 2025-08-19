@@ -1,12 +1,13 @@
-// src/components/auth/ParentLogin.tsx - Enhanced with Google Sign-In
+// src/components/auth/ParentLogin.tsx - Enhanced with forgot password
 import React, { useState } from 'react'
-import { UserPlus, Mail, Lock, ArrowRight } from 'lucide-react'
+import { UserPlus, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react'
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  getAdditionalUserInfo
+  getAdditionalUserInfo,
+  sendPasswordResetEmail
 } from 'firebase/auth'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, db } from '../../config/firebase'
@@ -20,8 +21,13 @@ export const ParentLogin: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
+  
+  // Forgot password state
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [resetEmailSent, setResetEmailSent] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
 
-  // Initialize Google Auth Provider
   const googleProvider = new GoogleAuthProvider()
   googleProvider.addScope('email')
   googleProvider.addScope('profile')
@@ -35,10 +41,8 @@ export const ParentLogin: React.FC = () => {
       let userCredential
       
       if (isSignUp) {
-        // Create new account
         userCredential = await createUserWithEmailAndPassword(auth, email, password)
         
-        // Create parent profile
         const parentProfile: ParentProfile = {
           parentId: userCredential.user.uid,
           email: userCredential.user.email!,
@@ -55,7 +59,6 @@ export const ParentLogin: React.FC = () => {
         
         await setDoc(doc(db, 'parents', userCredential.user.uid), parentProfile)
       } else {
-        // Sign in existing user
         userCredential = await signInWithEmailAndPassword(auth, email, password)
       }
       
@@ -77,14 +80,12 @@ export const ParentLogin: React.FC = () => {
       const user = result.user
       const additionalUserInfo = getAdditionalUserInfo(result)
 
-      // Check if this is a new user
       if (additionalUserInfo?.isNewUser) {
-        // Create parent profile for new Google user
         const parentProfile: ParentProfile = {
           parentId: user.uid,
           email: user.email!,
-          displayName: user.displayName || user.email?.split('@')[0] || 'Parent',
-          photoURL: user.photoURL || null,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
           authProvider: 'google',
           createdAt: new Date(),
           subscription: {
@@ -95,213 +96,291 @@ export const ParentLogin: React.FC = () => {
         }
         
         await setDoc(doc(db, 'parents', user.uid), parentProfile)
-        console.log('New Google user profile created')
-      } else {
-        // Existing user - optionally update profile with latest Google info
-        const parentDocRef = doc(db, 'parents', user.uid)
-        const parentDoc = await getDoc(parentDocRef)
-        
-        if (parentDoc.exists()) {
-          // Update with latest Google profile info
-          await setDoc(parentDocRef, {
-            displayName: user.displayName || parentDoc.data().displayName,
-            photoURL: user.photoURL || parentDoc.data().photoURL,
-            lastLoginAt: new Date()
-          }, { merge: true })
-        }
-        console.log('Existing Google user signed in')
       }
-
-    } catch (err: any) {
-      console.error('Google sign-in error:', err)
       
-      // Handle specific Google sign-in errors
-      if (err.code === 'auth/popup-closed-by-user') {
-        setError('Sign-in was cancelled. Please try again.')
-      } else if (err.code === 'auth/popup-blocked') {
-        setError('Pop-up was blocked. Please allow pop-ups and try again.')
-      } else if (err.code === 'auth/account-exists-with-different-credential') {
-        setError('An account already exists with the same email address but different sign-in credentials.')
-      } else {
-        setError(err.message || 'Google sign-in failed')
-      }
+      console.log('Google authentication successful')
+      
+    } catch (err: any) {
+      setError(err.message || 'Google sign-in failed')
     } finally {
       setGoogleLoading(false)
     }
   }
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!forgotEmail.trim()) {
+      setError('Please enter your email address')
+      return
+    }
+
+    setResetLoading(true)
+    setError('')
+
+    try {
+      await sendPasswordResetEmail(auth, forgotEmail.trim())
+      setResetEmailSent(true)
+    } catch (err: any) {
+      if (err.code === 'auth/user-not-found') {
+        setError('No account found with this email address')
+      } else {
+        setError('Failed to send reset email. Please try again.')
+      }
+    } finally {
+      setResetLoading(false)
+    }
+  }
+
+  const resetForgotPassword = () => {
+    setShowForgotPassword(false)
+    setForgotEmail('')
+    setResetEmailSent(false)
+    setError('')
+  }
+
+  // Forgot Password Modal
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 
+                      dark:from-gray-900 dark:via-indigo-900/20 dark:to-purple-900/20 
+                      flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            
+            {!resetEmailSent ? (
+              <>
+                <div className="text-center mb-6">
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+                      <Mail className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    Reset Password
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Enter your email to receive a password reset link
+                  </p>
+                </div>
+
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 
+                                     text-gray-400 w-5 h-5" />
+                      <input
+                        type="email"
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 
+                                 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                                 focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                                 transition-colors"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {error && (
+                    <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm">
+                      <AlertCircle className="w-4 h-4" />
+                      {error}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 
+                             rounded-lg transition-colors flex items-center justify-center gap-2"
+                  >
+                    {resetLoading ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        Send Reset Email
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                <button
+                  onClick={resetForgotPassword}
+                  className="w-full mt-4 text-gray-600 dark:text-gray-400 hover:text-gray-800 
+                           dark:hover:text-gray-200 transition-colors"
+                >
+                  Back to login
+                </button>
+              </>
+            ) : (
+              <div className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
+                    <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  Email Sent!
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  Check your email for a password reset link. It may take a few minutes to arrive.
+                </p>
+                <Button
+                  onClick={resetForgotPassword}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 
+                           rounded-lg transition-colors"
+                >
+                  Back to Login
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Main Login Form
   return (
-    <div className="page-container">
-      <div className="container max-w-md mx-auto">
-        <div className="content-area">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 
+                    dark:from-gray-900 dark:via-indigo-900/20 dark:to-purple-900/20 
+                    flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
           
-          {/* Header */}
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-6">
-              <div className="p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-full">
-                <UserPlus className="w-12 h-12 text-indigo-600 dark:text-indigo-400" />
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-full">
+                <UserPlus className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               </div>
             </div>
-            
-            <h1 className="text-3xl font-bold text-header-primary mb-3">
-              {isSignUp ? 'Create Parent Account' : 'Parent Sign In'}
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {isSignUp ? 'Create Parent Account' : 'Welcome Back!'}
             </h1>
-            <p className="text-lg text-body-text">
-              {isSignUp 
-                ? 'Set up your account to manage your children\'s learning'
-                : 'Welcome back! Sign in to your parent dashboard'
-              }
+            <p className="text-gray-600 dark:text-gray-300">
+              {isSignUp ? 'Set up your family account' : 'Sign in to manage your family\'s learning'}
             </p>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
-            </div>
-          )}
+          {/* Google Sign In */}
+          <Button
+            onClick={handleGoogleSignIn}
+            disabled={googleLoading}
+            className="w-full mb-4 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 
+                     text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 
+                     font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-3"
+          >
+            {googleLoading ? (
+              <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+              </>
+            )}
+          </Button>
 
-          {/* Google Sign-In Button */}
-          <div className="mb-6">
-            <Button
-              onClick={handleGoogleSignIn}
-              disabled={googleLoading || loading}
-              className="w-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 
-                         border border-gray-300 dark:border-gray-600 hover:bg-gray-50 
-                         dark:hover:bg-gray-700 shadow-sm"
-              variant="outline"
-            >
-              {googleLoading ? (
-                <div className="flex items-center space-x-3">
-                  <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                  <span>Signing in with Google...</span>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-3">
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  <span>{isSignUp ? 'Sign up with Google' : 'Continue with Google'}</span>
-                </div>
-              )}
-            </Button>
+          <div className="relative flex items-center justify-center my-6">
+            <hr className="w-full border-gray-300 dark:border-gray-600" />
+            <span className="px-3 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-sm">
+              or
+            </span>
           </div>
 
-          {/* Divider */}
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-                Or continue with email
-              </span>
-            </div>
-          </div>
-
-          {/* Email/Password Form */}
-          <form onSubmit={handleEmailSubmit} className="space-y-6">
-            
-            {/* Email Field */}
+          {/* Email Form */}
+          <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email Address
-              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 
+                               text-gray-400 w-5 h-5" />
                 <input
-                  id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 
+                           rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                           focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                           transition-colors"
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 
-                           rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                           placeholder-gray-500 dark:placeholder-gray-400"
-                  placeholder="parent@example.com"
                 />
               </div>
             </div>
 
-            {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Password
-              </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 
+                               text-gray-400 w-5 h-5" />
                 <input
-                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 
+                           rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                           focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                           transition-colors"
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 
-                           rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 
-                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                           placeholder-gray-500 dark:placeholder-gray-400"
-                  placeholder={isSignUp ? "Create a secure password" : "Enter your password"}
-                  minLength={6}
                 />
               </div>
-              {isSignUp && (
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  Password must be at least 6 characters long
-                </p>
-              )}
             </div>
 
-            {/* Submit Button */}
+            {error && (
+              <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm">
+                <AlertCircle className="w-4 h-4" />
+                {error}
+              </div>
+            )}
+
             <Button
               type="submit"
-              disabled={loading || googleLoading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 
+                       rounded-lg transition-colors flex items-center justify-center gap-2"
             >
               {loading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span>{isSignUp ? 'Creating Account...' : 'Signing In...'}</span>
-                </div>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <div className="flex items-center space-x-2">
-                  <span>{isSignUp ? 'Create Account' : 'Sign In'}</span>
-                  <ArrowRight className="w-5 h-5" />
-                </div>
+                <>
+                  {isSignUp ? 'Create Account' : 'Sign In'}
+                  <ArrowRight className="w-4 h-4" />
+                </>
               )}
             </Button>
           </form>
 
+          {/* Forgot Password Link */}
+          {!isSignUp && (
+            <div className="text-center mt-4">
+              <button
+                onClick={() => setShowForgotPassword(true)}
+                className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 
+                         dark:hover:text-indigo-300 text-sm transition-colors"
+              >
+                Forgot your password?
+              </button>
+            </div>
+          )}
+
           {/* Toggle Sign Up/Sign In */}
-          <div className="mt-8 text-center">
-            <p className="text-body-text">
+          <div className="text-center mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-gray-600 dark:text-gray-400">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}
               <button
-                onClick={() => {
-                  setIsSignUp(!isSignUp)
-                  setError('')
-                }}
-                disabled={loading || googleLoading}
-                className="ml-2 text-indigo-600 dark:text-indigo-400 font-semibold hover:text-indigo-700 
-                         dark:hover:text-indigo-300 transition-colors"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="ml-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 
+                         dark:hover:text-indigo-300 font-medium transition-colors"
               >
-                {isSignUp ? 'Sign In' : 'Sign Up'}
+                {isSignUp ? 'Sign in' : 'Sign up'}
               </button>
-            </p>
-          </div>
-
-          {/* Footer Note */}
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-              By creating an account, you agree to our Terms of Service and Privacy Policy.
-              Your children's data is always kept private and secure.
             </p>
           </div>
         </div>
