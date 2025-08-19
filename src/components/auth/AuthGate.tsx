@@ -1,12 +1,13 @@
-// src/components/auth/AuthGate.tsx - SIMPLIFIED VERSION
+// src/components/auth/AuthGate.tsx - FIXED VERSION
 import React from 'react'
+import { useParams } from 'wouter'
 import { useParentAuth } from '../../contexts/ParentAuthContext'
 import { useChildAuth } from '../../contexts/ChildAuthContext'
 import { ParentLogin } from './ParentLogin'
 import { ChildLogin } from './ChildLogin'
 
 interface AuthGateProps {
-  children: React.ReactNode
+  children: React.ReactNode | ((params: any) => React.ReactNode)
   requireParent?: boolean
   requireChild?: boolean
 }
@@ -18,6 +19,11 @@ export const AuthGate: React.FC<AuthGateProps> = ({
 }) => {
   const { user: parentUser, loading: parentLoading } = useParentAuth()
   const { childSession, loading: childLoading } = useChildAuth()
+  const params = useParams()
+
+  const renderChildren = () => {
+    return typeof children === 'function' ? children(params) : children
+  }
 
   // === PARENT-ONLY ROUTES (like /parent dashboard) ===
   if (requireParent) {
@@ -29,7 +35,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({
       return <ParentLogin />
     }
     
-    return <>{children}</>
+    return <>{renderChildren()}</>
   }
 
   // === CHILD-FIRST ROUTES (like /, /practice-reading) ===
@@ -40,7 +46,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({
     
     // Child already authenticated - show app
     if (childSession) {
-      return <>{children}</>
+      return <>{renderChildren()}</>
     }
     
     // No child session - show simple login screen
@@ -48,5 +54,5 @@ export const AuthGate: React.FC<AuthGateProps> = ({
   }
 
   // === PUBLIC ROUTES ===
-  return <>{children}</>
+  return <>{renderChildren()}</>
 }

@@ -86,7 +86,7 @@ function AppContent() {
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
   const [ttsAccent, setTtsAccent] = useState<TtsAccent>(() => 
-    storage.get('tts-accent', 'US') as TtsAccent
+    storage.get('tts-accent', 'GB') as TtsAccent
   )
 
   // Load preferences on app start

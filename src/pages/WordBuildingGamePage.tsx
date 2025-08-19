@@ -142,7 +142,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         resolve()
         return
       }
-
+  
       try {
         setIsReading(true)
         
@@ -153,45 +153,26 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         } else {
           proceedWithSpeech()
         }
-
+  
         function proceedWithSpeech() {
-          // Get saved accent preference
-          const savedAccent = storage.get('tts-accent', 'US')
+          // Get saved accent preference (default to GB)
+          const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
           console.log(`🎤 Using accent: ${savedAccent}`)
           
           // Create utterance
           const utterance = new SpeechSynthesisUtterance(text)
           
-          // Child-friendly speech parameters
-          utterance.rate = isChunk ? 0.7 : 0.8  // Slower for chunks
-          utterance.pitch = 1.1  // Slightly higher pitch
-          utterance.volume = 0.9
+          // Child-friendly speech parameters (consistent for neurodivergent users)
+          utterance.rate = isChunk ? 0.6 : 0.7  // Slower speeds
+          utterance.pitch = 0.9  // Calm pitch
+          utterance.volume = 0.8  // Clear volume
           
-          // Voice selection based on accent preference
-          const voices = speechSynthesis.getVoices()
-          let selectedVoice = null
-          
-          // Filter for child-friendly voices
-          const childFriendlyVoices = voices.filter(voice => {
-            const isEnglish = voice.lang.startsWith('en')
-            const isNatural = voice.name.toLowerCase().includes('natural') || 
-                            voice.name.toLowerCase().includes('neural') ||
-                            voice.name.toLowerCase().includes('enhanced')
-            return isEnglish && isNatural
-          })
-          
-          if (childFriendlyVoices.length > 0) {
-            selectedVoice = childFriendlyVoices.find(voice => 
-              voice.name.toLowerCase().includes('neural') || 
-              voice.name.toLowerCase().includes('natural')
-            ) || childFriendlyVoices[0]
-          } else {
-            selectedVoice = voices.find(voice => voice.lang.startsWith('en'))
-          }
+          // Get the specific hardcoded voice for selected accent
+          const selectedVoice = audio.getBestVoiceForAccent(savedAccent)
           
           if (selectedVoice) {
             utterance.voice = selectedVoice
-            console.log(`🗣️ Using child-friendly voice: ${selectedVoice.name} (${selectedVoice.lang})`)
+            console.log(`🗣️ Using ${savedAccent} voice: ${selectedVoice.name}`)
           }
           
           // Set up event handlers

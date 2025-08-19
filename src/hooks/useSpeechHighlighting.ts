@@ -54,8 +54,8 @@ export const useSpeechHighlighting = (
       setAvailableVoices(voices)
       
       // Get current accent preference and select appropriate voice
-      const savedAccent = storage.get('tts-accent', 'US') as TtsAccent
-      const calmVoices = audio.getCalmVoicesByAccent(savedAccent)
+      const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
+      const bestVoice = audio.getBestVoiceForAccent(savedAccent)
       
       if (calmVoices.length > 0 && !selectedVoice) {
         setSelectedVoice(calmVoices[0])
@@ -126,7 +126,7 @@ export const useSpeechHighlighting = (
     currentElementRef.current = elementId
 
     // Get current accent preference
-    const savedAccent = storage.get('tts-accent', 'US') as TtsAccent
+    const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
 
     // Store original content for reset
     const element = document.getElementById(elementId)
@@ -138,7 +138,7 @@ export const useSpeechHighlighting = (
       options.onSpeechStart?.()
 
       // Get the best calm voice for selected accent
-      const bestVoice = audio.getBestCalmVoice(savedAccent) || selectedVoice
+      const bestVoice = audio.getBestVoiceForAccent(savedAccent) || selectedVoice
 
       // Use the existing audio.speak method with highlighting simulation
       const words = text.split(/\s+/)

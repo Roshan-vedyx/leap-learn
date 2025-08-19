@@ -73,127 +73,30 @@ export const audio = {
     )
   },
 
-  // ENHANCED: Complete getVoicesForAccent function
-  getVoicesForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice[] => {
+  // Hardcoded single voice per accent for consistency
+  getHardcodedVoice: (accent: TtsAccent): string => {
+    const voiceMap = {
+      'GB': 'Google UK English Female',
+      'US': 'Google US English',  // Changed from 'Google US English Female' 
+      'IN': 'Microsoft Heera - English (India)'  // Female Indian voice
+    }
+    return voiceMap[accent]
+  },
+
+  getBestVoiceForAccent: (accent: TtsAccent): SpeechSynthesisVoice | null => {
     const allVoices = audio.getVoices()
+    const targetVoiceName = audio.getHardcodedVoice(accent)
     
-    // Get all English voices first
-    const englishVoices = allVoices.filter(voice => 
-      voice.lang.toLowerCase().startsWith('en')
-    )
+    // Find THE specific voice for this accent
+    const voice = allVoices.find(v => v.name === targetVoiceName)
     
-    // Define clearer language patterns for each accent
-    let accentVoices: SpeechSynthesisVoice[] = []
+    if (voice) return voice
     
-    if (accent === 'US') {
-      accentVoices = englishVoices.filter(voice => {
-        const lang = voice.lang.toLowerCase()
-        const name = voice.name.toLowerCase()
-        return lang.includes('en-us') || 
-               lang.includes('en_us') ||
-               name.includes('us ') ||
-               name.includes('american') ||
-               (!lang.includes('gb') && !lang.includes('uk') && !lang.includes('in') && lang.startsWith('en'))
-      })
-    } else if (accent === 'GB') {
-      accentVoices = englishVoices.filter(voice => {
-        const lang = voice.lang.toLowerCase()
-        const name = voice.name.toLowerCase()
-        return lang.includes('en-gb') || 
-               lang.includes('en-uk') ||
-               lang.includes('en_gb') ||
-               name.includes('uk ') ||
-               name.includes('british') ||
-               name.includes('daniel') ||
-               name.includes('kate')
-      })
-    } else if (accent === 'IN') {
-      accentVoices = englishVoices.filter(voice => {
-        const lang = voice.lang.toLowerCase()
-        const name = voice.name.toLowerCase()
-        return lang.includes('en-in') || 
-               lang.includes('hi-in') ||
-               lang.includes('en_in') ||
-               name.includes('indian') ||
-               name.includes('rishi')
-      })
-    }
-    
-    // If we found accent-specific voices, return them
-    // Otherwise return all English voices as fallback
-    return accentVoices.length > 0 ? accentVoices : englishVoices
+    // Only fallback if the specific voice isn't available
+    return allVoices.find(voice => voice.lang.startsWith('en')) || null
   },
-
-  // ENHANCED: Complete getBestVoiceForAccent function
-  getBestVoiceForAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice | null => {
-    const accentVoices = audio.getVoicesForAccent(accent)
-    
-    if (accentVoices.length === 0) return null
-    
-    // Apply child-friendly filtering to the accent voices
-    const friendlyVoices = accentVoices.filter(voice => {
-      const name = voice.name.toLowerCase()
-      return name.includes('female') ||
-             name.includes('child') ||
-             name.includes('kid') ||
-             name.includes('young') ||
-             name.includes('natural') ||
-             name.includes('premium') ||
-             name.includes('enhanced')
-    })
-    
-    // If we found friendly voices in this accent, use the first one
-    if (friendlyVoices.length > 0) {
-      return friendlyVoices[0]
-    }
-    
-    // Otherwise, use the first voice from this accent
-    return accentVoices[0]
-  },
-
-  // NEW: Get calm voices by accent
-  getCalmVoicesByAccent: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice[] => {
-    const accentVoices = audio.getVoicesForAccent(accent)
-    
-    // Filter for calm, child-friendly voices
-    return accentVoices.filter(voice => {
-      const name = voice.name.toLowerCase()
-      return name.includes('female') ||
-             name.includes('child') ||
-             name.includes('kid') ||
-             name.includes('young') ||
-             name.includes('natural') ||
-             name.includes('premium') ||
-             name.includes('enhanced') ||
-             name.includes('neural') ||
-             (!name.includes('male') && !name.includes('man'))
-    })
-  },
-
-  // NEW: Get best calm voice  
-  getBestCalmVoice: (accent: 'US' | 'GB' | 'IN'): SpeechSynthesisVoice | null => {
-    const calmVoices = audio.getCalmVoicesByAccent(accent)
-    
-    if (calmVoices.length > 0) {
-      // Prefer neural/premium voices if available
-      const premiumVoice = calmVoices.find(voice => 
-        voice.name.toLowerCase().includes('neural') ||
-        voice.name.toLowerCase().includes('premium') ||
-        voice.name.toLowerCase().includes('enhanced')
-      )
-      
-      if (premiumVoice) return premiumVoice
-      
-      // Otherwise return first calm voice
-      return calmVoices[0]
-    }
-    
-    // Fallback to any English voice
-    const allVoices = audio.getVoices()
-    const englishVoice = allVoices.find(voice => voice.lang.startsWith('en'))
-    return englishVoice || null
-  },
-
+  
+  
   // Updated speak function that ACTUALLY uses the accent
   speak: async (
     text: string, 
@@ -463,3 +366,4 @@ export const format = {
     return text.slice(0, maxLength - 3) + '...'
   }
 }
+

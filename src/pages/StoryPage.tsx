@@ -96,6 +96,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     setComplexityLevel(savedComplexity === 'regular' ? 'full' : savedComplexity)
   }, [])
 
+  
   // Save complexity level when changed
   useEffect(() => {
     storage.set('current-complexity-level', complexityLevel)
@@ -132,15 +133,23 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const handleReadAloud = async (textToRead?: string) => {
     if (!audio.isSpeechSynthesisSupported()) return
     
-    const currentAccent = storage.get('tts-accent', 'US') as 'US' | 'GB' | 'IN'
+    // Small delay to ensure voices are loaded
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    const currentAccent = storage.get('tts-accent', 'GB') as 'US' | 'GB' | 'IN'
     const text = textToRead || sections[currentSection] || getCurrentStoryText()
     
     setIsReading(true)
     try {
+      const selectedVoice = audio.getBestVoiceForAccent(currentAccent)
+      console.log(`🎤 Using ${currentAccent} voice:`, selectedVoice?.name)
+      
       await audio.speak(text, {
+        voice: selectedVoice,
         accent: currentAccent,
         rate: 0.8,
-        pitch: 1.1
+        pitch: 0.9,
+        volume: 0.8
       })
     } catch (error) {
       console.error('Text-to-speech error:', error)

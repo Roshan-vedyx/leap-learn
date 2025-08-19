@@ -353,13 +353,14 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     
     setIsReading(true)
     try {
-      const voices = audio.getChildVoices()
-      const selectedVoice = voices[0] || audio.getVoices()[0]
-      
+      const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
+      const selectedVoice = audio.getBestVoiceForAccent(savedAccent)
+
       await audio.speak(text, {
         voice: selectedVoice,
         rate: 0.8,
-        pitch: 1.1
+        pitch: 1.1,
+        accent: savedAccent
       })
     } catch (error) {
       console.error('Text-to-speech error:', error)
