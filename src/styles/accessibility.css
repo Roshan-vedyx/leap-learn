@@ -91,7 +91,7 @@
   --adhd-focus: 60 100% 50%;
   
   /* Dyslexia-Friendly Variables */
-  --dyslexia-font-primary: 'OpenDyslexic', 'Comic Sans MS', cursive;
+  --dyslexia-font-primary: 'Comic Sans MS', cursive;
   --dyslexia-font-secondary: 'Lexend', 'Inter', sans-serif;
   --dyslexia-letter-spacing: 0.05em;
   --dyslexia-word-spacing: 0.16em;

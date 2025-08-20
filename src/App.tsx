@@ -581,7 +581,7 @@ function AppContent() {
 
           /* Dyslexia Mode Styles */
           .dyslexia-mode {
-            font-family: 'OpenDyslexic', 'Comic Sans MS', cursive !important;
+            font-family: 'Comic Sans MS', cursive !important;
             letter-spacing: 0.05em;
             word-spacing: 0.16em;
             line-height: 1.8;
@@ -593,7 +593,7 @@ function AppContent() {
           }
 
           .dyslexia-mode *, .dyslexia-mode *::before, .dyslexia-mode *::after {
-            font-family: 'OpenDyslexic', 'Comic Sans MS', cursive !important;
+            font-family: 'Comic Sans MS', cursive !important;
           }
 
           /* Autism Mode Styles */

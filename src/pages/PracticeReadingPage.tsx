@@ -119,7 +119,7 @@ const PracticeReadingPage: React.FC = () => {
 
           {/* Activity Selection Grid - Wider Cards */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 w-full max-w-5xl">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 w-full max-w-5xl">
               {readingActivities.map((activity) => (
                 <EmotionalCard
                   key={activity.id}
@@ -174,7 +174,7 @@ const PracticeReadingPage: React.FC = () => {
 
                     {/* Activity Info */}
                     <div className="mt-4 pt-4 border-t border-autism-primary/20">
-                      <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs md:text-sm text-autism-primary/70">
+                      <div className="flex flex-col justify-center items-center gap-2 text-xs md:text-sm text-autism-primary/70">
                         <span className="flex items-center gap-1">
                           ⏱️ {activity.duration}
                         </span>

@@ -17,7 +17,7 @@ module.exports = {
       extend: {
         // Neurodivergent-friendly typography
         fontFamily: {
-          'dyslexia': ['OpenDyslexic', 'Comic Sans MS', 'cursive'],
+          'dyslexia': ['Comic Sans MS', 'cursive'],
           'sans': ['Inter', 'system-ui', 'sans-serif'],
           'readable': ['Lexend', 'system-ui', 'sans-serif'],
         },

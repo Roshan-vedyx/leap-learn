@@ -9,12 +9,7 @@
 /* Global base layer overrides for accessibility */
 @layer base {
   /* Ensure proper font loading */
-  @font-face {
-    font-family: 'OpenDyslexic';
-    src: url('https://fonts.googleapis.com/css2?family=OpenDyslexic:wght@400;700&display=swap');
-    font-display: swap;
-  }
-
+  
   /* Root element setup */
   html {
     height: 100%;
