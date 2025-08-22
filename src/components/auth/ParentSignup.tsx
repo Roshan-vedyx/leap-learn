@@ -325,9 +325,9 @@ export const ParentSignup: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 
                     dark:from-gray-900 dark:via-indigo-900/20 dark:to-purple-900/20 
-                    flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+                    flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-sm sm:max-w-md lg:max-w-2xl">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
           
           {/* Progress Steps */}
           <div className="flex items-center justify-center mb-8">
@@ -365,7 +365,7 @@ export const ParentSignup: React.FC = () => {
           {step === 1 && (
             <div>
               <div className="text-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   Help Create Your Child's Reading Space
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -380,7 +380,7 @@ export const ParentSignup: React.FC = () => {
                 disabled={loading}
                 className="w-full mb-6 bg-white dark:bg-gray-700 border border-gray-300 
                          dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-50 
-                         dark:hover:bg-gray-600 py-3 px-4 rounded-lg font-medium 
+                         dark:hover:bg-gray-600 py-4 px-4 min-h-[44px] rounded-lg font-medium 
                          transition-colors duration-200 flex items-center justify-center gap-3"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -408,7 +408,7 @@ export const ParentSignup: React.FC = () => {
                     type="text"
                     value={parentData.displayName}
                     onChange={(e) => setParentData({ ...parentData, displayName: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                    className="w-full px-4 py-4 text-base border border-gray-300 dark:border-gray-600 rounded-lg
                              bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                              focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="Your name"
@@ -423,7 +423,7 @@ export const ParentSignup: React.FC = () => {
                     type="email"
                     value={parentData.email}
                     onChange={(e) => setParentData({ ...parentData, email: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                    className="w-full px-4 py-4 text-base border border-gray-300 dark:border-gray-600 rounded-lg
                              bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                              focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="your.email@example.com"
@@ -439,7 +439,7 @@ export const ParentSignup: React.FC = () => {
                     type="password"
                     value={parentData.password}
                     onChange={(e) => setParentData({ ...parentData, password: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg
+                    className="w-full px-4 py-4 text-base border border-gray-300 dark:border-gray-600 rounded-lg
                              bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                              focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="Create a secure password"
@@ -451,7 +451,7 @@ export const ParentSignup: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 px-4 min-h-[44px] 
                            rounded-lg font-medium transition-colors duration-200 
                            disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -548,7 +548,7 @@ export const ParentSignup: React.FC = () => {
           {step === 3 && (
             <div>
               <div className="text-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   Create Your Secret Login 🔐
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -575,7 +575,7 @@ export const ParentSignup: React.FC = () => {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6">
                       <div>
                         <label className="block text-sm font-bold text-purple-700 dark:text-purple-300 mb-3">
                           🎯 Your Username
@@ -584,7 +584,7 @@ export const ParentSignup: React.FC = () => {
                           type="text"
                           value={child.username}
                           onChange={(e) => updateChild(index, 'username', e.target.value)}
-                          className="w-full px-4 py-3 border-2 border-purple-300 dark:border-purple-600 rounded-lg
+                          className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500
                                    font-medium text-center"
@@ -603,7 +603,7 @@ export const ParentSignup: React.FC = () => {
                           type="password"
                           value={child.pin}
                           onChange={(e) => updateChild(index, 'pin', e.target.value)}
-                          className="w-full px-4 py-3 border-2 border-purple-300 dark:border-purple-600 rounded-lg
+                          className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                    text-center font-mono text-xl tracking-widest
                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -623,7 +623,7 @@ export const ParentSignup: React.FC = () => {
                           type="password"
                           value={child.confirmPin}
                           onChange={(e) => updateChild(index, 'confirmPin', e.target.value)}
-                          className="w-full px-4 py-3 border-2 border-purple-300 dark:border-purple-600 rounded-lg
+                          className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                    text-center font-mono text-xl tracking-widest
                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
@@ -779,7 +779,7 @@ export const ParentSignup: React.FC = () => {
                   type="button"
                   onClick={() => setStep(2)}
                   className="flex-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 
-                           dark:hover:bg-gray-600 text-gray-900 dark:text-white py-3 px-4 
+                           dark:hover:bg-gray-600 text-gray-900 dark:text-white py-4 px-4 min-h-[44px]
                            rounded-lg font-medium transition-colors duration-200
                            flex items-center justify-center gap-2"
                 >
@@ -791,7 +791,7 @@ export const ParentSignup: React.FC = () => {
                   onClick={createChildren}
                   disabled={loading}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 
-                           text-white py-3 px-4 rounded-lg font-bold transition-all duration-200 
+                           text-white py-4 px-4 min-h-[44px] rounded-lg font-bold transition-all duration-200 
                            disabled:opacity-50 disabled:cursor-not-allowed
                            flex items-center justify-center gap-2 transform hover:scale-105"
                 >

@@ -42,34 +42,40 @@ import { useSessionStore } from '@/stores/sessionStore'
 type AccessibilityMode = 'default' | 'adhd' | 'dyslexia' | 'autism'
 type FontSize = 'default' | 'large' | 'extra-large'
 
-// Professional Footer Component
+// Professional Footer Component - Mobile Responsive
 const Footer = () => (
-  <footer className="bg-page-section-bg border-t border-gray-100 py-4">
-    <div className="max-w-6xl mx-auto px-6">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-6 text-sm text-gray-500">
-          <span className="flex items-center gap-2">
-            <Brain className="w-4 h-4" />
-            Neurodivergent Designed
+  <footer className="bg-page-section-bg border-t border-gray-100 py-2 sm:py-4 lg:py-8 flex-shrink-0">
+    <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
+        {/* Main credentials - responsive layout */}
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-500">
+          <span className="flex items-center gap-1 sm:gap-2">
+            <Brain className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Neurodivergent Designed</span>
+            <span className="sm:hidden">ND Designed</span>
           </span>
-          <span className="flex items-center gap-2">
-            <Target className="w-4 h-4" />
-            Evidence-Based
+          <span className="flex items-center gap-1 sm:gap-2">
+            <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Evidence-Based</span>
+            <span className="sm:hidden">Evidence-Based</span>
           </span>
-          <span className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Accessibility First
+          <span className="flex items-center gap-1 sm:gap-2">
+            <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Accessibility First</span>
+            <span className="sm:hidden">Accessible</span>
           </span>
         </div>
         
-        <div className="flex items-center gap-4 text-sm text-gray-500">
-          <Link href="/privacy" className="hover:text-gray-700 transition-colors">Privacy</Link>
-          <Link href="/support" className="hover:text-gray-700 transition-colors">Support</Link>
-          <Link href="/about" className="hover:text-gray-700 transition-colors">About</Link>
+        {/* Links - stacked on mobile */}
+        <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500">
+          <Link href="/privacy" className="hover:text-gray-700 transition-colors min-h-[44px] flex items-center">Privacy</Link>
+          <Link href="/support" className="hover:text-gray-700 transition-colors min-h-[44px] flex items-center">Support</Link>
+          <Link href="/about" className="hover:text-gray-700 transition-colors min-h-[44px] flex items-center">About</Link>
         </div>
       </div>
       
-      <div className="text-center text-sm text-gray-400 mt-2">
+      {/* Bottom text - responsive sizing */}
+      <div className="text-center text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">
         Built for neurodivergent learners | UDL Aligned | Research-Based Design
       </div>
     </div>
@@ -167,27 +173,26 @@ function AppContent() {
   return (
     <div className="page-container">
       {/* Skip Navigation Link for Keyboard Users */}
-      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded">
+      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded min-h-[44px] flex items-center">
         Skip to main content
       </a>
 
-      {/* Professional Header - Redesigned */}
+      {/* Professional Header - Mobile-First Responsive */}
       <nav className="bg-white border-b border-gray-200 shadow-gentle flex-shrink-0" role="navigation" aria-label="Main navigation">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-6">
           <div className="flex items-center justify-between">
-            {/* Logo Section - Enhanced */}
-            <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center hover:opacity-90 transition-opacity group">
+            {/* Logo Section - Mobile Optimized */}
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link href="/" className="flex items-center hover:opacity-90 transition-opacity group min-h-[44px]">
                 <img 
                   src="/logo_xl.png" 
                   alt="Vedyx Leap - Stories that match your brilliant brain" 
-                  className="h-16 w-auto md:h-20 lg:h-24 object-contain"
+                  className="h-10 w-auto sm:h-12 md:h-16 lg:h-20 xl:h-24 object-contain"
                 />
               </Link>
               
-              {/* Tagline and Credibility */}
-              <div className="hidden md:flex flex-col gap-1">
-                
+              {/* Desktop-only tagline and credentials */}
+              <div className="hidden lg:flex flex-col gap-1">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full">
                     <CheckCircle className="w-3 h-3 text-sage-green" />
@@ -201,7 +206,7 @@ function AppContent() {
               </div>
             </div>
 
-            {/* Session Progress - Center positioned for desktop */}
+            {/* Session Progress - Center positioned for desktop only */}
             {sessionProgress.step > 0 && (
               <div className="hidden xl:flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-lg">
                 <span className="text-sm font-medium text-warm-charcoal">
@@ -219,28 +224,32 @@ function AppContent() {
               </div>
             )}
 
-            {/* Right Actions - Refined */}
-            <div className="flex items-center gap-3">
-              {/* Calm Corner - Enhanced */}
+            {/* Right Actions - Mobile Optimized */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Calm Corner - Enhanced for touch */}
               <Button 
                 variant="outline" 
                 size="comfortable" 
                 onClick={handleCalmCornerToggle}
                 className={`
+                  min-h-[44px] min-w-[44px] px-3 sm:px-4
                   border-2 border-soft-lavender/40 text-soft-lavender bg-soft-lavender/5 
                   hover:bg-soft-lavender/15 hover:border-soft-lavender/60 
                   font-medium shadow-soft transition-all duration-200
-                  ${isInCalmCorner ? 'ring-2 ring-deep-ocean-blue bg-soft-lavender/20' : ''}
+                  ${isInCalmCorner ? 
+                    'ring-2 ring-deep-ocean-blue bg-soft-lavender/20' : ''
+                  }
                 `}
                 aria-label="Open calm corner for emotional regulation"
+                aria-pressed={isInCalmCorner}
               >
-                <Heart className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Calm Corner</span>
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline ml-2">Calm Corner</span>
                 <span className="sm:hidden">Calm</span>
               </Button>
               
-              {/* Accessibility Settings - Styled as professional controls */}
-              <div className="hidden sm:flex items-center space-x-3">
+              {/* Accessibility Settings - Desktop Only, Mobile version below */}
+              <div className="hidden lg:flex items-center space-x-3">
                 <div className="flex items-center space-x-2">
                   <div className="relative">
                     <label htmlFor="accessibility-mode" className="sr-only">
@@ -252,7 +261,7 @@ function AppContent() {
                       onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
                       className="
                         rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                        min-w-[110px] font-primary cursor-pointer
+                        min-w-[110px] min-h-[44px] font-primary cursor-pointer
                         hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
                         focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
                         appearance-none pr-8
@@ -267,7 +276,7 @@ function AppContent() {
                     <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                   </div>
 
-                  {/* NEW: TTS Accent Dropdown */}
+                  {/* TTS Accent Dropdown */}
                   <div className="relative">
                     <label htmlFor="tts-accent" className="sr-only">
                       Choose voice accent for text-to-speech reading
@@ -278,7 +287,7 @@ function AppContent() {
                       onChange={(e) => handleTtsAccentChange(e.target.value as TtsAccent)}
                       className="
                         rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                        min-w-[80px] font-primary cursor-pointer
+                        min-w-[80px] min-h-[44px] font-primary cursor-pointer
                         hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
                         focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
                         appearance-none pr-8
@@ -301,8 +310,9 @@ function AppContent() {
                 variant="ghost" 
                 size="icon" 
                 className="
+                  min-h-[44px] min-w-[44px] p-2
                   text-warm-charcoal hover:text-deep-ocean-blue 
-                  hover:bg-gray-100 rounded-lg p-2
+                  hover:bg-gray-100 rounded-lg
                   transition-all duration-200
                 "
               >
@@ -312,37 +322,91 @@ function AppContent() {
             </div>
           </div>
 
-          {/* Mobile Session Progress & Credentials */}
-          <div className="mt-4 space-y-3">
-            {/* Mobile Session Progress */}
+          {/* Mobile/Tablet Section - Stack elements vertically */}
+          <div className="mt-3 sm:mt-4 space-y-3 sm:space-y-4">
+            {/* Session Progress - Mobile */}
             {sessionProgress.step > 0 && (
-              <div className="xl:hidden flex items-center gap-3 bg-gray-50 px-3 py-2 rounded-lg">
-                <span className="text-sm font-medium text-warm-charcoal">
+              <div className="xl:hidden flex items-center gap-2 sm:gap-3 bg-gray-50 px-3 py-2 rounded-lg">
+                <span className="text-sm font-medium text-warm-charcoal min-w-0 flex-shrink-0">
                   Progress
                 </span>
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
+                <div className="flex-1 bg-gray-200 rounded-full h-2 min-w-0">
                   <div 
                     className="bg-deep-ocean-blue h-2 rounded-full transition-all duration-500"
                     style={{ width: `${sessionProgress.progressPercent}%` }}
                   />
                 </div>
-                <span className="text-sm font-semibold text-deep-ocean-blue">
+                <span className="text-sm font-semibold text-deep-ocean-blue flex-shrink-0">
                   {sessionProgress.step}/{sessionProgress.totalSteps}
                 </span>
               </div>
             )}
 
-            {/* Mobile Credentials */}
-            <div className="md:hidden flex flex-wrap items-center justify-center gap-2">
-              <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full">
+            {/* Mobile/Tablet Accessibility Settings */}
+            <div className="lg:hidden flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <div className="relative flex-1">
+                <label htmlFor="mobile-accessibility-mode" className="sr-only">
+                  Choose accessibility mode for your neurodivergent needs
+                </label>
+                <select
+                  id="mobile-accessibility-mode"
+                  value={accessibilityMode}
+                  onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
+                  className="
+                    w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                    min-h-[44px] font-primary cursor-pointer
+                    hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                    focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                    appearance-none pr-8
+                  "
+                  aria-describedby="accessibility-mode-help"
+                >
+                  <option value="none">Screen Mode</option>
+                  <option value="adhd">ADHD</option>
+                  <option value="dyslexia">Dyslexia</option>
+                  <option value="autism">Autism</option>
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+
+              <div className="relative flex-1">
+                <label htmlFor="mobile-tts-accent" className="sr-only">
+                  Choose voice accent for text-to-speech reading
+                </label>
+                <select
+                  id="mobile-tts-accent"
+                  value={ttsAccent}
+                  onChange={(e) => handleTtsAccentChange(e.target.value as TtsAccent)}
+                  className="
+                    w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                    min-h-[44px] font-primary cursor-pointer
+                    hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                    focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                    appearance-none pr-8
+                  "
+                  aria-describedby="tts-accent-help"
+                  title="Choose voice accent for reading aloud"
+                >
+                  <option value="none">Voice Accent</option>
+                  <option value="US">🇺🇸 US</option>
+                  <option value="GB">🇬🇧 UK</option>
+                  <option value="IN">🇮🇳 India</option>
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Mobile/Tablet Credentials - Responsive badges */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 lg:hidden">
+              <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full min-h-[32px]">
                 <CheckCircle className="w-3 h-3 text-sage-green" />
                 <span className="text-xs font-medium text-sage-green">UDL Aligned</span>
               </div>
-              <div className="flex items-center gap-1 bg-deep-ocean-blue/10 px-2 py-1 rounded-full">
+              <div className="flex items-center gap-1 bg-deep-ocean-blue/10 px-2 py-1 rounded-full min-h-[32px]">
                 <Brain className="w-3 h-3 text-deep-ocean-blue" />
                 <span className="text-xs font-medium text-deep-ocean-blue">Neurodivergent Designed</span>
               </div>
-              <div className="flex items-center gap-1 bg-cool-mint/10 px-2 py-1 rounded-full">
+              <div className="flex items-center gap-1 bg-cool-mint/10 px-2 py-1 rounded-full min-h-[32px]">
                 <Target className="w-3 h-3 text-cool-mint" />
                 <span className="text-xs font-medium text-cool-mint">Evidence-Based</span>
               </div>
@@ -351,7 +415,7 @@ function AppContent() {
         </div>
       </nav>
 
-      {/* Main Content Area - Now uses content-area class for flex: 1 */}
+      {/* Main Content Area - Responsive container */}
       <main id="main-content" className="content-area">
         <Router>
           <Switch>
@@ -453,12 +517,15 @@ function AppContent() {
             {/* Math activities placeholder - Protected */}
             <Route path="/math-activities">
               <AuthGate requireChild>
-                <div className="container">
-                  <div className="viewport-header">
-                    <div className="text-6xl mb-4">🔢</div>
-                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
-                    <p className="text-lg mb-6 text-body-text">We're building awesome number activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                <div className="container px-4 sm:px-6">
+                  <div className="viewport-header text-center py-8 sm:py-12">
+                    <div className="text-4xl sm:text-5xl md:text-6xl mb-4">🔢</div>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-header-primary">Math Adventures Coming Soon!</h1>
+                    <p className="text-base sm:text-lg mb-6 text-body-text max-w-md mx-auto">We're building awesome number activities for you.</p>
+                    <Button 
+                      onClick={() => setLocation('/today-i-want-to')} 
+                      className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90 min-h-[44px] px-6"
+                    >
                       Back to Today I Want To
                     </Button>
                   </div>
@@ -469,12 +536,15 @@ function AppContent() {
             {/* Gentle activities placeholder - Protected */}
             <Route path="/gentle-activities">
               <AuthGate requireChild>
-                <div className="container">
-                  <div className="viewport-header">
-                    <div className="text-6xl mb-4">🌸</div>
-                    <h1 className="text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
-                    <p className="text-lg mb-6 text-body-text">We're creating peaceful, calming activities for you.</p>
-                    <Button onClick={() => setLocation('/today-i-want-to')} className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90">
+                <div className="container px-4 sm:px-6">
+                  <div className="viewport-header text-center py-8 sm:py-12">
+                    <div className="text-4xl sm:text-5xl md:text-6xl mb-4">🌸</div>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-header-primary">Gentle Activities Coming Soon!</h1>
+                    <p className="text-base sm:text-lg mb-6 text-body-text max-w-md mx-auto">We're creating peaceful, calming activities for you.</p>
+                    <Button 
+                      onClick={() => setLocation('/today-i-want-to')} 
+                      className="bg-deep-ocean-blue hover:bg-deep-ocean-blue/90 min-h-[44px] px-6"
+                    >
                       Back to Today I Want To
                     </Button>
                   </div>
@@ -490,7 +560,7 @@ function AppContent() {
         </Router>
       </main>
 
-      {/* Professional Footer - Now inside the page-container */}
+      {/* Professional Footer - Mobile Responsive */}
       <Footer />
 
       {/* FIXED: Use EnhancedCalmCorner instead of CalmCorner */}
@@ -528,106 +598,10 @@ function AppContent() {
         </div>
       </div>
 
-      {/* Updated Dynamic CSS for Professional Design */}
+      {/* Dynamic Styles for Accessibility and Animations */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          /* Skip Link Styles */
-          .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: var(--deep-ocean-blue);
-            color: white;
-            padding: 8px 12px;
-            text-decoration: none;
-            border-radius: 8px;
-            z-index: 1000;
-            font-weight: 500;
-            box-shadow: var(--shadow-md);
-          }
-          
-          .skip-link:focus {
-            top: 6px;
-          }
-
-          /* ADHD Mode Styles */
-          .adhd-mode {
-            --background: 0 0% 0%;
-            --foreground: 0 0% 100%;
-            --primary: 142 100% 50%;
-            --secondary: 0 82% 63%;
-            --border: 0 0% 100%;
-            --input: 0 0% 100%;
-            --ring: 60 100% 50%;
-            --card: 0 0% 5%;
-            --muted: 0 0% 10%;
-            --muted-foreground: 0 0% 80%;
-          }
-
-          .adhd-mode * {
-            border-color: white !important;
-          }
-
-          .adhd-mode input, .adhd-mode select, .adhd-mode textarea {
-            background-color: black !important;
-            color: white !important;
-            border-color: white !important;
-          }
-
-          .adhd-mode nav {
-            background-color: black !important;
-            border-color: white !important;
-          }
-
-          /* Dyslexia Mode Styles */
-          .dyslexia-mode {
-            font-family: 'Comic Sans MS', cursive !important;
-            letter-spacing: 0.05em;
-            word-spacing: 0.16em;
-            line-height: 1.8;
-            --background: 44 87% 94%;
-            --foreground: 36 100% 12%;
-            --card: 44 100% 97%;
-            --muted: 44 50% 88%;
-            --muted-foreground: 36 50% 40%;
-          }
-
-          .dyslexia-mode *, .dyslexia-mode *::before, .dyslexia-mode *::after {
-            font-family: 'Comic Sans MS', cursive !important;
-          }
-
-          /* Autism Mode Styles */
-          .autism-mode {
-            --background: var(--autism-calm-mint);
-            --card: var(--autism-neutral);
-            --primary: var(--autism-primary);
-            --secondary: var(--autism-secondary);
-            --muted: 152 40% 85%;
-            --muted-foreground: 209 50% 30%;
-          }
-
-          /* Font Size Overrides */
-          .font-large {
-            font-size: 1.125rem !important;
-          }
-
-          .font-large h1 { font-size: 2.5rem !important; }
-          .font-large h2 { font-size: 2rem !important; }
-          .font-large h3 { font-size: 1.75rem !important; }
-          .font-large p, .font-large span, .font-large div { font-size: 1.25rem !important; }
-          .font-large button { font-size: 1.125rem !important; }
-
-          .font-extra-large {
-            font-size: 1.25rem !important;
-          }
-
-          .font-extra-large h1 { font-size: 3rem !important; }
-          .font-extra-large h2 { font-size: 2.5rem !important; }
-          .font-extra-large h3 { font-size: 2rem !important; }
-          .font-extra-large p, .font-extra-large span, .font-extra-large div { font-size: 1.5rem !important; }
-          .font-extra-large button { font-size: 1.25rem !important; }
-
-          /* Reduced Motion Overrides */
+          /* Accessibility Motion Preferences */
           ${reducedMotion ? `
             *, *::before, *::after {
               animation-duration: 0.01ms !important;

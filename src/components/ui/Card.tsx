@@ -2,62 +2,91 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-// Card variants for different neurodivergent needs
+// Card variants with responsive design
 const cardVariants = cva(
-  "rounded-xl border bg-card text-card-foreground shadow-soft transition-all duration-200",
+  // Base styles - mobile-first approach
+  [
+    "relative overflow-hidden rounded-lg border shadow-sm transition-all duration-200",
+    "bg-card text-card-foreground",
+    // Mobile: 320px+ optimized
+    "w-full min-h-[120px]",
+    "p-4 space-y-3",
+    // Touch-friendly spacing and sizing
+    "touch-manipulation",
+  ],
   {
     variants: {
       variant: {
-        default: "border-border gradient-card",
-        outline: "border-2 border-gray-200",
-        elevated: "shadow-gentle hover:shadow-elevated border-gray-100",
-        calm: "bg-gradient-to-br from-soft-lavender/10 to-soft-lavender/5 border-soft-lavender/30 shadow-gentle",
-        'high-contrast': "bg-contrast-low border-contrast-high border-3 shadow-lg",
-        celebration: "bg-gradient-to-br from-cool-mint/10 to-sage-green/5 border-sage-green/30 shadow-gentle",
-        // New professional mood variants
-        'mood-energetic': "bg-gradient-to-br from-muted-coral/10 to-muted-coral/5 border-muted-coral/30 shadow-gentle",
-        'mood-focused': "bg-gradient-to-br from-cool-mint/10 to-cool-mint/5 border-cool-mint/30 shadow-gentle",
-        'mood-calm': "bg-gradient-to-br from-soft-lavender/10 to-soft-lavender/5 border-soft-lavender/30 shadow-gentle",
+        default: [
+          // Mobile
+          "border-border bg-card hover:shadow-md",
+          // Tablet: 768px+
+          "md:hover:shadow-lg md:hover:-translate-y-0.5",
+        ],
+        outlined: [
+          "border-2 border-border bg-transparent",
+          "hover:border-primary hover:bg-accent/5",
+          "md:hover:shadow-md",
+        ],
+        filled: [
+          "border-primary/20 bg-primary/5",
+          "hover:border-primary/40 hover:bg-primary/10",
+          "md:hover:shadow-md",
+        ],
+        elevated: [
+          // Mobile: subtle elevation
+          "border-none shadow-md bg-card",
+          // Tablet+: enhanced elevation
+          "md:shadow-lg md:hover:shadow-xl",
+        ],
+        interactive: [
+          "cursor-pointer transition-all duration-150",
+          "hover:shadow-md active:scale-[0.98]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+          "md:hover:shadow-lg md:hover:-translate-y-1",
+        ],
       },
-      padding: {
-        none: "p-0",
-        sm: "p-4",
-        default: "p-6",
-        lg: "p-8",
-        comfortable: "p-8", // Extra comfortable spacing
-        spacious: "p-10", // Even more generous spacing
+      size: {
+        sm: [
+          // Mobile: min touch target 44px
+          "min-h-[44px] p-3 space-y-2 text-sm",
+          // Tablet: slightly larger
+          "md:min-h-[48px] md:p-4",
+        ],
+        default: [
+          // Mobile: comfortable spacing
+          "min-h-[120px] p-4 space-y-3",
+          // Tablet: more generous spacing  
+          "md:min-h-[140px] md:p-6 md:space-y-4",
+          // Desktop: full spacing
+          "lg:p-8 lg:space-y-5",
+        ],
+        lg: [
+          "min-h-[160px] p-5 space-y-4",
+          "md:min-h-[180px] md:p-7 md:space-y-5",
+          "lg:p-9 lg:space-y-6",
+        ],
       },
-      interactive: {
-        none: "",
-        hover: "hover:shadow-gentle hover:scale-[1.01] cursor-pointer",
-        focus: "focus-within:ring-2 focus-within:ring-deep-ocean-blue focus-within:ring-offset-2",
-        full: "hover:shadow-gentle hover:scale-[1.01] focus-within:ring-2 focus-within:ring-deep-ocean-blue focus-within:ring-offset-2 cursor-pointer",
-      }
     },
     defaultVariants: {
       variant: "default",
-      padding: "default",
-      interactive: "none",
+      size: "default",
     },
   }
 )
 
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
-  as?: React.ElementType
-}
+    VariantProps<typeof cardVariants> {}
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, padding, interactive, as: Component = "div", ...props }, ref) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn(cardVariants({ variant, padding, interactive }), className)}
-        {...props}
-      />
-    )
-  }
+  ({ className, variant, size, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(cardVariants({ variant, size }), className)}
+      {...props}
+    />
+  )
 )
 Card.displayName = "Card"
 
@@ -67,7 +96,15 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-2 p-6 pb-4", className)}
+    className={cn(
+      // Mobile: compact header
+      "flex flex-col space-y-2 pb-3",
+      // Tablet: more space
+      "md:space-y-3 md:pb-4",
+      // Desktop: generous spacing
+      "lg:pb-6",
+      className
+    )}
     {...props}
   />
 ))
@@ -82,9 +119,17 @@ const CardTitle = React.forwardRef<
   <Component
     ref={ref}
     className={cn(
-      "font-semibold leading-tight tracking-tight text-xl md:text-2xl",
-      // Dyslexia-friendly spacing
-      "letter-spacing-wide",
+      // Mobile: readable but compact
+      "font-semibold leading-tight tracking-tight",
+      "text-lg leading-6",
+      // Tablet: larger text
+      "md:text-xl md:leading-7",
+      // Desktop: full size
+      "lg:text-2xl lg:leading-8",
+      // Neurodivergent-friendly typography
+      "text-card-foreground font-medium",
+      // Dyslexia-friendly letter spacing
+      "tracking-wide",
       className
     )}
     {...props}
@@ -99,9 +144,15 @@ const CardDescription = React.forwardRef<
   <p
     ref={ref}
     className={cn(
+      // Mobile: base readable size
       "text-muted-foreground leading-relaxed",
-      // Enhanced readability
-      "text-base md:text-lg leading-7",
+      "text-sm leading-5",
+      // Tablet: comfortable reading
+      "md:text-base md:leading-6",
+      // Desktop: optimal reading experience  
+      "lg:text-lg lg:leading-7",
+      // Enhanced readability for neurodivergent users
+      "max-w-prose", // Limit line length for easier reading
       className
     )}
     {...props}
@@ -113,10 +164,18 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div 
-    ref={ref} 
-    className={cn("p-6 pt-0 space-y-4", className)} 
-    {...props} 
+  <div
+    ref={ref}
+    className={cn(
+      // Mobile: compact content spacing
+      "space-y-3",
+      // Tablet: comfortable spacing
+      "md:space-y-4",
+      // Desktop: generous spacing
+      "lg:space-y-5",
+      className
+    )}
+    {...props}
   />
 ))
 CardContent.displayName = "CardContent"
@@ -127,13 +186,20 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center justify-between p-6 pt-4 gap-4", className)}
+    className={cn(
+      // Mobile: single column on small screens, proper touch targets
+      "flex flex-col gap-3 mt-4",
+      "min-h-[44px]", // Ensure touch target compliance
+      // Tablet: horizontal layout with proper spacing
+      "md:flex-row md:items-center md:justify-between md:gap-4 md:mt-6",
+      className
+    )}
     {...props}
   />
 ))
 CardFooter.displayName = "CardFooter"
 
-// Specialized cards for different emotional states
+// Specialized cards for different emotional states and accessibility needs
 export interface EmotionalCardProps extends CardProps {
   mood?: 'calm' | 'energetic' | 'focused' | 'neutral'
   accessibilityMode?: 'adhd' | 'dyslexia' | 'autism' | 'default'
@@ -142,25 +208,63 @@ export interface EmotionalCardProps extends CardProps {
 const EmotionalCard = React.forwardRef<HTMLDivElement, EmotionalCardProps>(
   ({ mood = 'neutral', accessibilityMode = 'default', className, children, ...props }, ref) => {
     const moodClasses = {
-      calm: "bg-autism-calm-mint border-autism-primary",
-      energetic: "bg-gradient-to-br from-autism-calm-sky to-autism-calm-mint animate-gentle-bounce",
-      focused: "ring-2 ring-autism-primary ring-offset-2",
-      neutral: ""
+      calm: [
+        // Calming colors and subtle animation
+        "bg-gradient-to-br from-blue-50 to-green-50",
+        "border-blue-200 hover:border-blue-300",
+        "md:hover:shadow-blue-100/50",
+      ],
+      energetic: [
+        // Vibrant but not overwhelming
+        "bg-gradient-to-br from-orange-50 to-yellow-50",
+        "border-orange-200 hover:border-orange-300", 
+        "md:hover:shadow-orange-100/50",
+        // Subtle pulse animation for desktop
+        "md:animate-pulse-gentle",
+      ],
+      focused: [
+        // Sharp, focused styling
+        "bg-white border-2 border-indigo-200",
+        "ring-1 ring-indigo-100 hover:ring-indigo-200",
+        "md:hover:shadow-indigo-100/50",
+      ],
+      neutral: "bg-card border-border",
     }
 
     const accessibilityClasses = {
-      adhd: "border-3 border-adhd-accent bg-adhd-bg text-adhd-text",
-      dyslexia: "bg-dyslexia-cream border-dyslexia-text font-dyslexia",
-      autism: "bg-autism-neutral border-autism-primary",
-      default: ""
+      adhd: [
+        // High contrast, clear boundaries
+        "border-2 border-blue-400 bg-blue-50/30",
+        "shadow-lg ring-2 ring-blue-200/50",
+        // Reduced motion for ADHD users
+        "transition-none hover:transition-all hover:duration-200",
+      ],
+      dyslexia: [
+        // Cream background, high contrast text
+        "bg-yellow-50 border-amber-200 text-gray-800",
+        // Enhanced typography
+        "font-mono tracking-wider leading-relaxed",
+      ],
+      autism: [
+        // Soft, predictable styling
+        "bg-green-50/50 border-green-200",
+        "shadow-sm hover:shadow-md",
+        // Gentle, consistent transitions
+        "transition-all duration-300",
+      ],
+      default: "",
     }
 
     return (
       <Card
         ref={ref}
         className={cn(
-          moodClasses[mood],
-          accessibilityClasses[accessibilityMode],
+          Array.isArray(moodClasses[mood]) 
+            ? moodClasses[mood].join(' ')
+            : moodClasses[mood],
+          Array.isArray(accessibilityClasses[accessibilityMode])
+            ? accessibilityClasses[accessibilityMode].join(' ')
+            : accessibilityClasses[accessibilityMode],
           className
         )}
         {...props}

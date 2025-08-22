@@ -396,53 +396,86 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      {/* Mobile-first container */}
+      <div className="px-4 py-6 md:px-6 lg:px-8 max-w-4xl mx-auto">
         
-        {/* Header with Audio Options */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-autism-primary mb-4">
-            Build: {currentWord}
+        {/* Header - responsive */}
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-autism-primary mb-2">
+            Build the Word! 🧩
           </h1>
-          
-          {/* Audio buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
-            <Button
-              onClick={handleHearWord}
-              disabled={isReading}
-              variant="outline"
-              className="px-4 py-2 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white"
-            >
-              🔊 {isReading ? 'Playing...' : 'Hear Word'}
-            </Button>
-            <Button
-              onClick={handleHearChunks}
-              disabled={isReading}
-              variant="outline" 
-              className="px-4 py-2 border-autism-secondary text-autism-secondary hover:bg-autism-secondary hover:text-white"
-            >
-              🎵 {isReading ? 'Playing...' : 'Hear Chunks'}
-            </Button>
-          </div>
-          
-          <p className="text-sm text-autism-primary/70">
-            Tap word pieces to hear them, then build the word!
+          <p className="text-base md:text-lg text-autism-primary/70">
+            Target: <span className="font-bold text-lg md:text-xl">{currentWords[currentWordIndex]}</span>
           </p>
         </div>
 
-        {/* FIXED: Wrong Order Message */}
+        {/* Action buttons - responsive stack */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-8">
+          <Button
+            onClick={handleShowHint}
+            disabled={isWordComplete || isReading || arrangedChunks.length >= getChunksForWord(currentWords[currentWordIndex]).length}
+            className="flex-1 min-h-[48px] bg-green-500 hover:bg-green-600 text-white font-medium text-base"
+          >
+            💡 Hint
+          </Button>
+          <Button
+            onClick={handleReset}
+            disabled={isWordComplete || isReading}
+            className="flex-1 min-h-[48px] bg-orange-500 hover:bg-orange-600 text-white font-medium text-base"
+          >
+            🔄 Reset
+          </Button>
+          <Button
+            onClick={handleReadCurrentWord}
+            disabled={isReading}
+            className="flex-1 min-h-[48px] bg-purple-500 hover:bg-purple-600 text-white font-medium text-base"
+          >
+            {isReading ? '🔊 Reading...' : '🔊 Hear Word'}
+          </Button>
+        </div>
+
+        {/* Celebration - responsive */}
+        {showCelebration && (
+          <div className="mb-6">
+            <Card className="bg-green-50 border-2 border-green-300 animate-bounce">
+              <CardContent className="p-4 md:p-6 text-center">
+                <div className="text-4xl md:text-5xl mb-3">🎉</div>
+                <h3 className="text-xl md:text-2xl font-bold text-green-800 mb-2">Perfect!</h3>
+                <p className="text-base md:text-lg text-green-700 mb-4">
+                  You built "{currentWords[currentWordIndex]}" correctly!
+                </p>
+                <Button
+                  onClick={handleWordCompletionTTS}
+                  disabled={isReading}
+                  className="w-full sm:w-auto min-h-[48px] mb-3 sm:mb-0 sm:mr-3 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 text-base font-medium"
+                >
+                  {isReading ? '🔊 Reading...' : '🔊 Hear Success'}
+                </Button>
+                <Button
+                  onClick={handleNextWord}
+                  className="w-full sm:w-auto min-h-[48px] bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-base font-medium"
+                >
+                  {currentWordIndex >= currentWords.length - 1 ? "🎯 Choose New Theme" : "Next Word! →"}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Wrong order message - responsive */}
         {showWrongOrderMessage && (
           <div className="mb-6">
             <Card className="bg-orange-50 border-2 border-orange-300 animate-pulse">
-              <CardContent className="p-4 text-center">
-                <div className="text-2xl mb-2">🤔</div>
-                <h3 className="text-lg font-medium text-orange-800 mb-2">Oops!</h3>
-                <p className="text-orange-700 mb-3">
-                  The word parts don't seem to be in the right order. 
+              <CardContent className="p-4 md:p-6 text-center">
+                <div className="text-3xl md:text-4xl mb-3">🤔</div>
+                <h3 className="text-lg md:text-xl font-medium text-orange-800 mb-2">Oops!</h3>
+                <p className="text-base md:text-lg text-orange-700 mb-4">
+                  The word parts don't seem to be in the right order.
                 </p>
                 <Button
                   onClick={handleTryAgain}
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2"
+                  className="w-full sm:w-auto min-h-[48px] bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 text-base font-medium"
                 >
                   Try Again 🔄
                 </Button>
@@ -451,45 +484,49 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
           </div>
         )}
 
-        {/* Word Building Area */}
-        <Card className="mb-6 border-2 border-autism-primary bg-white/90">
-          <CardContent className="p-6">
+        {/* Main game area - responsive */}
+        <Card className="mb-6 md:mb-8 border-2 border-autism-primary bg-white/90">
+          <CardContent className="p-4 md:p-6">
             
-            {/* Arranged Chunks Area - Word being built */}
-            <div className="mb-6">
+            {/* Word building area */}
+            <div className="mb-6 md:mb-8">
               <div className="text-center mb-3">
-                <span className="text-lg font-medium text-autism-primary">Your Word:</span>
+                <span className="text-lg md:text-xl font-medium text-autism-primary">Your Word:</span>
               </div>
-              <div className="min-h-[80px] p-4 bg-autism-neutral rounded-lg border-2 border-dashed border-autism-secondary flex flex-wrap gap-3 justify-center items-center">
-                {arrangedChunks.length === 0 ? (
-                  <span className="text-autism-primary/50 text-lg">Tap word pieces below to build here</span>
-                ) : (
-                  arrangedChunks.map((chunk, index) => (
-                    <button
-                      key={`arranged-${index}`}
-                      onClick={() => handleChunkClick(chunk, index, 'arranged')}
-                      disabled={isReading}
-                      className="px-4 py-3 bg-autism-secondary text-grey-800 rounded-lg font-bold text-xl hover:bg-autism-secondary/80 transition-colors min-h-[56px] min-w-[56px] shadow-lg cursor-pointer border-2 border-autism-secondary disabled:opacity-50"
-                    >
-                      {chunk}
-                    </button>
-                  ))
-                )}
+              <div className="min-h-[80px] md:min-h-[100px] p-4 bg-autism-neutral rounded-lg border-2 border-dashed border-autism-secondary">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center items-center min-h-[48px]">
+                  {arrangedChunks.length === 0 ? (
+                    <span className="text-autism-primary/50 text-base md:text-lg text-center px-2">
+                      Tap word pieces below to build here
+                    </span>
+                  ) : (
+                    arrangedChunks.map((chunk, index) => (
+                      <button
+                        key={`arranged-${index}`}
+                        onClick={() => handleChunkClick(chunk, index, 'arranged')}
+                        disabled={isReading}
+                        className="min-h-[48px] min-w-[48px] px-4 py-3 bg-autism-secondary text-gray-800 rounded-lg font-bold text-lg md:text-xl hover:bg-autism-secondary/80 transition-colors shadow-lg cursor-pointer border-2 border-autism-secondary disabled:opacity-50 active:scale-95 touch-manipulation"
+                      >
+                        {chunk}
+                      </button>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Available Chunks - Pieces to use */}
-            <div className="mb-6">
+            {/* Available chunks - mobile-optimized */}
+            <div className="mb-4 md:mb-6">
               <div className="text-center mb-3">
-                <span className="text-lg font-medium text-autism-primary">Word Pieces:</span>
+                <span className="text-lg md:text-xl font-medium text-autism-primary">Word Pieces:</span>
               </div>
-              <div className="flex flex-wrap gap-3 justify-center">
+              <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 justify-center max-h-[300px] md:max-h-none overflow-y-auto">
                 {availableChunks.map((chunk, index) => (
                   <button
                     key={`available-${index}`}
                     onClick={() => handleChunkClick(chunk, index, 'available')}
                     disabled={isReading}
-                    className="px-4 py-3 bg-autism-primary text-grey-800 rounded-lg font-bold text-xl hover:bg-autism-primary/80 transition-colors min-h-[56px] min-w-[56px] shadow-lg cursor-pointer border-2 border-autism-primary hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+                    className="min-h-[48px] min-w-[48px] px-4 py-3 bg-white border-2 border-autism-primary text-autism-primary rounded-lg font-bold text-lg md:text-xl hover:bg-autism-primary hover:text-white transition-colors shadow-md cursor-pointer disabled:opacity-50 active:scale-95 touch-manipulation"
                   >
                     {chunk}
                   </button>
@@ -497,57 +534,34 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 justify-center">
+            {/* TTS Controls - responsive */}
+            <div className="flex flex-col sm:flex-row gap-2 mb-4">
               <Button
-                onClick={handleHint}
-                disabled={isReading}
-                variant="outline"
-                className="px-4 py-2 border-autism-secondary text-autism-secondary hover:bg-autism-secondary hover:text-white disabled:opacity-50"
+                onClick={handleListenToArrangedChunks}
+                disabled={arrangedChunks.length === 0 || isReading}
+                className="flex-1 min-h-[44px] bg-blue-500 hover:bg-blue-600 text-white text-sm md:text-base"
               >
-                💡 Hint
+                {isReading ? '🔊 Reading...' : `🔊 Hear "${arrangedChunks.join('')}"`}
               </Button>
               <Button
-                onClick={handleReset}
-                disabled={isReading}
-                variant="outline"
-                className="px-4 py-2 border-autism-primary text-autism-primary hover:bg-autism-primary hover:text-white disabled:opacity-50"
+                onClick={handleListenToAvailableChunks}
+                disabled={availableChunks.length === 0 || isReading}
+                className="flex-1 min-h-[44px] bg-indigo-500 hover:bg-indigo-600 text-white text-sm md:text-base"
               >
-                🔄 Reset
+                {isReading ? '🔊 Reading...' : '🔊 Hear All Pieces'}
               </Button>
             </div>
+
           </CardContent>
         </Card>
 
-        {/* Celebration & Next Button */}
-        {showCelebration && (
-          <div className="text-center mb-6">
-            <Card className="bg-green-50 border-2 border-green-400 mb-4">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-3">🎉</div>
-                <h3 className="text-2xl font-bold text-green-800 mb-2">Fantastic!</h3>
-                <p className="text-green-700 text-lg">You built: <span className="font-bold text-xl">{currentWord}</span></p>
-              </CardContent>
-            </Card>
-            
-            <Button
-              onClick={handleNextWord}
-              disabled={isReading}
-              size="lg"
-              className="bg-autism-secondary hover:bg-autism-secondary/90 text-grey-700 px-8 py-4 text-xl font-bold rounded-lg shadow-lg disabled:opacity-50"
-            >
-              {currentWordIndex >= currentWords.length - 1 ? "🎯 Choose New Theme" : "Next Word! →"}
-            </Button>
-          </div>
-        )}
-
-        {/* Progress Indicator */}
+        {/* Progress indicator - responsive */}
         <div className="text-center bg-white/80 rounded-lg p-4 border-2 border-autism-primary">
-          <div className="flex justify-center gap-2 mb-2">
+          <div className="flex justify-center gap-2 mb-3 flex-wrap">
             {currentWords.map((_, index) => (
               <div
                 key={index}
-                className={`w-4 h-4 rounded-full ${
+                className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${
                   index < currentWordIndex 
                     ? 'bg-green-500' 
                     : index === currentWordIndex
@@ -557,10 +571,11 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
               />
             ))}
           </div>
-          <p className="text-sm text-autism-primary/70 font-medium">
+          <p className="text-sm md:text-base text-autism-primary/70 font-medium">
             Word {currentWordIndex + 1} of {currentWords.length} • Theme: {theme}
           </p>
         </div>
+
       </div>
     </div>
   )

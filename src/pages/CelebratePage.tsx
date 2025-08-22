@@ -112,7 +112,7 @@ const CelebratePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-orange-50 to-pink-50 p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-orange-50 to-pink-50 relative overflow-hidden">
       {/* Confetti Animation */}
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none">
@@ -138,43 +138,43 @@ const CelebratePage: React.FC = () => {
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto py-8 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 relative z-10">
         {/* Main Celebration */}
-        <div className="text-center mb-8">
-          <div className="mb-6 flex justify-center">
-            <PartyPopper className="w-20 h-20 text-primary animate-bounce" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="mb-4 sm:mb-6 flex justify-center">
+            <PartyPopper className="w-16 h-16 sm:w-20 sm:h-20 text-primary animate-bounce" />
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-primary mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary mb-4">
             Amazing Work!
           </h1>
-          <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-6 flex items-center justify-center gap-3">
-            <currentCelebration.titleIcon className="w-8 h-8" />
-            {currentCelebration.title}
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary mb-4 sm:mb-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+            <currentCelebration.titleIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+            <span className="text-center">{currentCelebration.title}</span>
           </h2>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto px-4">
             {currentCelebration.message}
           </p>
         </div>
 
         {/* Personal Achievement Summary */}
         {currentBrainState && (
-          <Card className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-primary border-2 shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <currentBrainState.icon className="w-8 h-8 text-primary" />
-                <h3 className="text-xl font-semibold text-primary">
+          <Card className="mb-6 sm:mb-8 bg-gradient-to-r from-blue-50 to-purple-50 border-primary border-2 shadow-lg">
+            <CardContent className="p-4 sm:p-6 text-center">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mb-4">
+                <currentBrainState.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                <h3 className="text-lg sm:text-xl font-semibold text-primary">
                   Your Brain Journey Today
                 </h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed flex items-center justify-center flex-wrap gap-2">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed flex flex-col sm:flex-row items-center justify-center flex-wrap gap-1 sm:gap-2">
                 <span>Started feeling <strong>{currentBrainState.label.toLowerCase()}</strong></span>
                 {creativeResponse && (
                   <>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 hidden sm:inline" />
                     <span>Created something amazing</span>
                   </>
                 )}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 hidden sm:inline" />
                 <span>Celebrated your success!</span>
               </p>
             </CardContent>
@@ -182,18 +182,19 @@ const CelebratePage: React.FC = () => {
         )}
 
         {/* Achievements Grid */}
-        <Card className="mb-8 bg-card border-primary border-2 shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl text-primary flex items-center justify-center gap-3">
-              <Trophy className="w-8 h-8" /> What You Accomplished Today
+        <Card className="mb-6 sm:mb-8 bg-card border-primary border-2 shadow-lg">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-center text-lg sm:text-xl lg:text-2xl text-primary flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+              <Trophy className="w-6 h-6 sm:w-8 sm:h-8" /> 
+              <span>What You Accomplished Today</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {achievements.map((achievement, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-3 p-4 rounded-lg transition-all duration-300 border-2 ${
+                  className={`flex items-center gap-3 p-3 sm:p-4 rounded-lg transition-all duration-300 border-2 ${
                     achievement.achieved
                       ? 'bg-green-50 border-green-200'
                       : 'bg-muted border-muted-foreground/20 opacity-50'
@@ -201,18 +202,18 @@ const CelebratePage: React.FC = () => {
                 >
                   <span className="flex-shrink-0">
                     {achievement.achieved ? (
-                      <achievement.icon className="w-6 h-6 text-primary" />
+                      <achievement.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                     ) : (
-                      <X className="w-6 h-6 text-muted-foreground" />
+                      <X className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
                     )}
                   </span>
-                  <span className={`font-medium ${
+                  <span className={`font-medium text-sm sm:text-base ${
                     achievement.achieved ? 'text-primary' : 'text-muted-foreground'
                   }`}>
                     {achievement.text}
                   </span>
                   {achievement.achieved && (
-                    <Check className="ml-auto w-5 h-5 text-green-600 font-bold" />
+                    <Check className="ml-auto w-4 h-4 sm:w-5 sm:h-5 text-green-600 font-bold flex-shrink-0" />
                   )}
                 </div>
               ))}
@@ -222,68 +223,73 @@ const CelebratePage: React.FC = () => {
 
         {/* Creative Response Highlight */}
         {creativeResponse && (
-          <Card className="mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 border-2 shadow-lg">
-            <CardContent className="p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4 text-center flex items-center justify-center gap-3">
-                <Palette className="w-6 h-6" /> Your Creative Masterpiece
+          <Card className="mb-6 sm:mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-300 border-2 shadow-lg">
+            <CardContent className="p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold text-primary mb-4 text-center flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+                <Palette className="w-5 h-5 sm:w-6 sm:h-6" /> 
+                <span>Your Creative Masterpiece</span>
               </h3>
-              <div className="bg-card rounded-lg p-4 border border-border">
-                <p className="text-sm text-muted-foreground mb-2">
+              <div className="bg-card rounded-lg p-3 sm:p-4 border border-border">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                   Your response to "{creativeResponse.prompt}":
                 </p>
-                <p className="text-foreground leading-relaxed italic">
+                <p className="text-sm sm:text-base text-foreground leading-relaxed italic">
                   "{creativeResponse.response}"
                 </p>
               </div>
-              <p className="text-center text-sm text-muted-foreground mt-3 flex items-center justify-center gap-2">
-                Your creativity and thoughts make stories come alive! <Star className="w-4 h-4" />
+              <p className="text-center text-xs sm:text-sm text-muted-foreground mt-3 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                <span>Your creativity and thoughts make stories come alive!</span>
+                <Star className="w-4 h-4" />
               </p>
             </CardContent>
           </Card>
         )}
 
         {/* Personal Message */}
-        <Card className="mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-primary border-2 shadow-lg">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-semibold text-primary mb-4 flex items-center justify-center gap-3">
-              <Star className="w-8 h-8" /> You're Building Real Skills
+        <Card className="mb-6 sm:mb-8 bg-gradient-to-r from-green-50 to-blue-50 border-primary border-2 shadow-lg">
+          <CardContent className="p-6 sm:p-8 text-center">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-primary mb-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+              <Star className="w-6 h-6 sm:w-8 sm:h-8" /> 
+              <span>You're Building Real Skills</span>
             </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-4">
               Every time you read, you're getting stronger at understanding words, 
               making connections, and expressing your ideas. That's not just reading - 
               that's becoming a more powerful thinker!
             </p>
-            <p className="text-base text-muted-foreground italic flex items-center justify-center gap-2">
+            <p className="text-sm sm:text-base text-muted-foreground italic flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
               <Heart className="w-4 h-4" />
-              "Reading is not just about words on a page. It's about building worlds in your mind."
+              <span>"Reading is not just about words on a page. It's about building worlds in your mind."</span>
             </p>
           </CardContent>
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-6 sm:mb-8">
           <Button
             variant="default"
             size="lg"
             onClick={handleContinue}
-            className="text-xl px-8 py-4 min-h-[56px] shadow-lg flex items-center gap-3"
+            className="w-full sm:w-auto text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] sm:min-h-[56px] shadow-lg flex items-center justify-center gap-2 sm:gap-3"
           >
-            <Rocket className="w-6 h-6" /> Read Another Story!
+            <Rocket className="w-5 h-5 sm:w-6 sm:h-6" /> 
+            <span>Read Another Story!</span>
           </Button>
           
           <Button
             variant="outline"
             size="lg"
             onClick={handleFinish}
-            className="text-lg px-6 py-4 min-h-[56px] flex items-center gap-3"
+            className="w-full sm:w-auto text-base sm:text-lg px-4 sm:px-6 py-3 sm:py-4 min-h-[44px] sm:min-h-[56px] flex items-center justify-center gap-2 sm:gap-3"
           >
-            <Wand2 className="w-5 h-5" /> I'm Done for Now
+            <Wand2 className="w-4 h-4 sm:w-5 sm:h-5" /> 
+            <span>I'm Done for Now</span>
           </Button>
         </div>
 
         {/* Encouragement for Next Time */}
-        <div className="text-center mt-8">
-          <p className="text-muted-foreground text-sm leading-relaxed">
+        <div className="text-center">
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed px-4">
             Remember: Every time you read, you're growing your brain! 
             Come back whenever you're ready for your next adventure.
           </p>

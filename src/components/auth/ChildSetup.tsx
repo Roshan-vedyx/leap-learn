@@ -1,4 +1,4 @@
-// src/components/auth/ChildSetup.tsx - FIXED UX FLOW
+// src/components/auth/ChildSetup.tsx - FULLY RESPONSIVE
 import React, { useState } from 'react'
 import { Star, Lock, ArrowRight, ArrowLeft, Shield, CheckCircle } from 'lucide-react'
 import bcrypt from 'bcryptjs'
@@ -167,31 +167,38 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
   }
 
   const handleAnswerChange = (questionId: string, answer: string) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }))
+    setAnswers(prev => ({ ...prev, [questionId]: answer }))
   }
 
-  // Step 1: Username
+  // Step 1: Username - RESPONSIVE
   if (step === 1) {
     return (
-      <div className="max-w-md mx-auto p-6">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
-              <Star className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+      <div className="w-full max-w-md mx-auto p-4 sm:p-6">
+        {/* Progress indicator - MOBILE OPTIMIZED */}
+        <div className="flex justify-between items-center mb-6 sm:mb-8">
+          <div className="flex space-x-2 sm:space-x-3">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-600 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-300 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-300 rounded-full"></div>
+          </div>
+          <span className="text-xs sm:text-sm text-gray-500">Step 1 of 3</span>
+        </div>
+
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full">
+              <Star className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Choose Your Username
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            What should we call you?
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
-            Pick a fun name that you'll remember easily!
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+            Pick a fun username that's just for you
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Username
@@ -201,10 +208,11 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
               value={formData.username}
               onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
               placeholder="Your cool username"
-              className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
+              className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                        focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                       text-lg placeholder-gray-400 dark:placeholder-gray-500"
+                       text-base sm:text-lg placeholder-gray-400 dark:placeholder-gray-500"
+              style={{ minHeight: '48px' }} // Touch target minimum
               maxLength={20}
               autoFocus
             />
@@ -216,17 +224,20 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             </div>
           )}
 
-          <div className="flex gap-3 pt-4">
+          {/* Button container - RESPONSIVE */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               onClick={onCancel}
               variant="outline"
-              className="flex-1"
+              className="w-full sm:flex-1 h-12 sm:h-auto text-base"
+              style={{ minHeight: '48px' }}
             >
               Cancel
             </Button>
             <Button
               onClick={handleNext}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white h-12 sm:h-auto text-base"
+              style={{ minHeight: '48px' }}
             >
               Next
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -237,28 +248,38 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
     )
   }
 
-  // Step 2: PIN + Security Questions (COMBINED)
+  // Step 2: PIN + Security Questions - RESPONSIVE
   if (step === 2) {
     return (
-      <div className="max-w-2xl mx-auto p-6">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
-              <Lock className="w-8 h-8 text-green-600 dark:text-green-400" />
+      <div className="w-full max-w-2xl mx-auto p-4 sm:p-6">
+        {/* Progress indicator */}
+        <div className="flex justify-between items-center mb-6 sm:mb-8">
+          <div className="flex space-x-2 sm:space-x-3">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-600 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-600 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gray-300 rounded-full"></div>
+          </div>
+          <span className="text-xs sm:text-sm text-gray-500">Step 2 of 3</span>
+        </div>
+
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
+              <Lock className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 dark:text-green-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Create Your Secret PIN
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             Choose 4 numbers that are easy for you to remember
           </p>
         </div>
 
-        <div className="space-y-8">
-          {/* PIN Section */}
-          <div className="bg-white dark:bg-gray-800 border-2 border-green-200 dark:border-green-800 rounded-lg p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-6 sm:space-y-8">
+          {/* PIN Section - RESPONSIVE GRID */}
+          <div className="bg-white dark:bg-gray-800 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 sm:p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   PIN (4 digits)
@@ -273,10 +294,11 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                     }
                   }}
                   placeholder="••••"
-                  className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
+                  className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                            focus:ring-2 focus:ring-green-500 focus:border-transparent
-                           text-2xl text-center tracking-widest"
+                           text-xl sm:text-2xl text-center tracking-widest"
+                  style={{ minHeight: '48px' }}
                   maxLength={4}
                   autoFocus
                 />
@@ -296,90 +318,90 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                     }
                   }}
                   placeholder="••••"
-                  className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
+                  className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                            focus:ring-2 focus:ring-green-500 focus:border-transparent
-                           text-2xl text-center tracking-widest"
+                           text-xl sm:text-2xl text-center tracking-widest"
+                  style={{ minHeight: '48px' }}
                   maxLength={4}
                 />
               </div>
             </div>
           </div>
 
-          {/* Security Questions Toggle */}
+          {/* Security Questions Toggle - RESPONSIVE */}
           {formData.pin.length === 4 && formData.confirmPin.length === 4 && formData.pin === formData.confirmPin && (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Help Me Remember My PIN
-                </h3>
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-lg p-4 sm:p-6">
+              <div className="flex items-start sm:items-center gap-3 mb-4">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600 dark:text-yellow-400 mt-0.5 sm:mt-0 flex-shrink-0" />
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                    Help Me Remember My PIN
+                  </h3>
+                </div>
               </div>
               
-              <p className="text-gray-600 dark:text-gray-300 mb-4">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4">
                 Want to set up some questions to help you remember your PIN if you ever forget it? 
                 This is optional but really helpful!
               </p>
               
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={() => setShowSecurityQuestions(true)}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white h-12 sm:h-auto"
+                  style={{ minHeight: '48px' }}
                   disabled={showSecurityQuestions}
                 >
-                  {showSecurityQuestions ? '✓ Questions Added' : 'Yes, Add Questions'}
+                  {showSecurityQuestions ? 'Questions Added!' : 'Yes, Add Questions'}
                 </Button>
-                {!showSecurityQuestions && (
-                  <Button
-                    onClick={() => setShowSecurityQuestions(false)}
-                    variant="outline"
-                  >
-                    Skip for Now
-                  </Button>
-                )}
+                <Button
+                  onClick={() => setShowSecurityQuestions(false)}
+                  variant="outline"
+                  className="h-12 sm:h-auto"
+                  style={{ minHeight: '48px' }}
+                  disabled={showSecurityQuestions}
+                >
+                  Skip for Now
+                </Button>
               </div>
             </div>
           )}
 
-          {/* Security Questions Section */}
+          {/* Security Questions List - RESPONSIVE */}
           {showSecurityQuestions && (
-            <div className="bg-white dark:bg-gray-800 border-2 border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <Shield className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Choose 2-3 Questions
-                </h3>
-              </div>
-
-              <div className="space-y-4">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 sm:p-6">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Choose Questions to Help You Remember
+              </h3>
+              
+              <div className="space-y-3 sm:space-y-4">
                 {SECURITY_QUESTIONS.map((question) => {
                   const isSelected = selectedQuestions.includes(question.id)
-                  const canSelect = selectedQuestions.length < 3 || isSelected
-
+                  
                   return (
-                    <div key={question.id} className="relative">
+                    <div key={question.id}>
                       <div
-                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        onClick={() => handleQuestionToggle(question.id)}
+                        className={`p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           isSelected
                             ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20'
-                            : canSelect
-                            ? 'border-gray-300 dark:border-gray-600 hover:border-yellow-300 dark:hover:border-yellow-600 bg-white dark:bg-gray-800'
-                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 opacity-50 cursor-not-allowed'
+                            : 'border-gray-300 dark:border-gray-600 hover:border-yellow-300'
                         }`}
-                        onClick={() => canSelect && handleQuestionToggle(question.id)}
+                        style={{ minHeight: '48px' }}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 ${
+                          <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center mt-0.5 flex-shrink-0 ${
                             isSelected
                               ? 'border-yellow-500 bg-yellow-500'
                               : 'border-gray-300 dark:border-gray-600'
                           }`}>
                             {isSelected && (
-                              <CheckCircle className="w-3 h-3 text-white" />
+                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                             )}
                           </div>
-                          <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-900 dark:text-white mb-2 text-sm sm:text-base">
                               {question.question}
                             </h4>
                             {isSelected && (
@@ -388,10 +410,11 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                                 value={answers[question.id] || ''}
                                 onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                                 placeholder={question.placeholder}
-                                className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg 
+                                className="w-full p-2 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-lg 
                                          bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                          focus:ring-2 focus:ring-yellow-500 focus:border-transparent
-                                         placeholder-gray-400 dark:placeholder-gray-500"
+                                         placeholder-gray-400 dark:placeholder-gray-500 text-sm sm:text-base"
+                                style={{ minHeight: '40px' }}
                                 onClick={(e) => e.stopPropagation()}
                               />
                             )}
@@ -403,7 +426,7 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                 })}
               </div>
 
-              <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
+              <div className="text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-4">
                 Selected: {selectedQuestions.length}/3 questions
                 {selectedQuestions.length >= 2 && (
                   <span className="text-yellow-600 dark:text-yellow-400 ml-2">✓ Ready to continue</span>
@@ -418,11 +441,13 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             </div>
           )}
 
-          <div className="flex gap-3 pt-4">
+          {/* Navigation buttons - RESPONSIVE */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               onClick={handleBack}
               variant="outline"
-              className="flex-1"
+              className="w-full sm:flex-1 h-12 sm:h-auto"
+              style={{ minHeight: '48px' }}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
@@ -430,7 +455,8 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             <Button
               onClick={handleNext}
               disabled={formData.pin.length !== 4 || formData.confirmPin.length !== 4}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              className="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white h-12 sm:h-auto"
+              style={{ minHeight: '48px' }}
             >
               Next
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -441,35 +467,45 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
     )
   }
 
-  // Step 3: Preferences
+  // Step 3: Preferences - RESPONSIVE
   if (step === 3) {
     return (
-      <div className="max-w-md mx-auto p-6">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full">
-              <Star className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+      <div className="w-full max-w-md mx-auto p-4 sm:p-6">
+        {/* Progress indicator */}
+        <div className="flex justify-between items-center mb-6 sm:mb-8">
+          <div className="flex space-x-2 sm:space-x-3">
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-blue-600 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-600 rounded-full"></div>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-purple-600 rounded-full"></div>
+          </div>
+          <span className="text-xs sm:text-sm text-gray-500">Step 3 of 3</span>
+        </div>
+
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-purple-100 dark:bg-purple-900/30 rounded-full">
+              <Star className="w-6 h-6 sm:w-8 sm:h-8 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Make It Yours
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             Choose settings that work best for you
           </p>
         </div>
 
         <div className="space-y-6">
-          {/* Font Size */}
+          {/* Font Size - RESPONSIVE GRID */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Text Size
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
               {[
-                { value: 'default', label: 'Normal', size: 'text-base' },
-                { value: 'large', label: 'Large', size: 'text-lg' },
-                { value: 'extra-large', label: 'Extra Large', size: 'text-xl' }
+                { value: 'default', label: 'Normal', size: 'text-sm sm:text-base' },
+                { value: 'large', label: 'Large', size: 'text-base sm:text-lg' },
+                { value: 'extra-large', label: 'Extra Large', size: 'text-lg sm:text-xl' }
               ].map((option) => (
                 <button
                   key={option.value}
@@ -477,11 +513,12 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                     ...prev,
                     preferences: { ...prev.preferences, fontSize: option.value as any }
                   }))}
-                  className={`p-3 border-2 rounded-lg transition-colors ${option.size} ${
+                  className={`p-3 sm:p-4 border-2 rounded-lg transition-colors ${option.size} ${
                     formData.preferences.fontSize === option.value
                       ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
                       : 'border-gray-300 dark:border-gray-600 hover:border-purple-300'
                   }`}
+                  style={{ minHeight: '48px' }}
                 >
                   {option.label}
                 </button>
@@ -489,8 +526,8 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             </div>
           </div>
 
-          {/* Accessibility Options */}
-          <div className="space-y-4">
+          {/* Accessibility Options - RESPONSIVE CARDS */}
+          <div className="space-y-3 sm:space-y-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Accessibility Options
             </label>
@@ -514,13 +551,14 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             ].map((option) => (
               <div
                 key={option.key}
-                className="flex items-center justify-between p-4 border border-gray-300 dark:border-gray-600 rounded-lg"
+                className="flex items-center justify-between p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg"
+                style={{ minHeight: '64px' }}
               >
-                <div>
-                  <div className="font-medium text-gray-900 dark:text-white">
+                <div className="flex-1 min-w-0 mr-3">
+                  <div className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
                     {option.label}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                     {option.description}
                   </div>
                 </div>
@@ -532,16 +570,17 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                       [option.key]: !prev.preferences[option.key as keyof typeof prev.preferences]
                     }
                   }))}
-                  className={`w-12 h-6 rounded-full transition-colors ${
+                  className={`w-12 h-6 sm:w-14 sm:h-7 rounded-full transition-colors flex-shrink-0 ${
                     formData.preferences[option.key as keyof typeof formData.preferences]
                       ? 'bg-purple-600'
                       : 'bg-gray-300 dark:bg-gray-600'
                   }`}
+                  style={{ minWidth: '48px', minHeight: '24px' }}
                 >
                   <div
-                    className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                    className={`w-5 h-5 sm:w-6 sm:h-6 bg-white rounded-full transition-transform ${
                       formData.preferences[option.key as keyof typeof formData.preferences]
-                        ? 'translate-x-6'
+                        ? 'translate-x-6 sm:translate-x-7'
                         : 'translate-x-0.5'
                     }`}
                   />
@@ -556,11 +595,13 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             </div>
           )}
 
-          <div className="flex gap-3 pt-4">
+          {/* Final navigation - RESPONSIVE */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               onClick={handleBack}
               variant="outline"
-              className="flex-1"
+              className="w-full sm:flex-1 h-12 sm:h-auto"
+              style={{ minHeight: '48px' }}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
@@ -568,7 +609,8 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
             <Button
               onClick={handleCreateChild}
               disabled={loading}
-              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+              className="w-full sm:flex-1 bg-purple-600 hover:bg-purple-700 text-white h-12 sm:h-auto"
+              style={{ minHeight: '48px' }}
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

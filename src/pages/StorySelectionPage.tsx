@@ -93,14 +93,19 @@ const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
-        <div className="max-w-4xl mx-auto py-8">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           <div className="text-center">
-            <div className="text-4xl mb-4">{interestInfo.emoji}</div>
-            <h1 className="text-3xl font-bold text-indigo-900 mb-4">
+            {/* Responsive emoji sizing */}
+            <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">{interestInfo.emoji}</div>
+            
+            {/* Responsive heading */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
               Loading {interestInfo.label} Stories...
             </h1>
-            <div className="animate-pulse text-indigo-600">
+            
+            {/* Loading animation with responsive text */}
+            <div className="animate-pulse text-indigo-600 text-base sm:text-lg">
               Discovering available adventures...
             </div>
           </div>
@@ -111,15 +116,25 @@ const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => 
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
-        <div className="max-w-4xl mx-auto py-8">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           <div className="text-center">
-            <div className="text-4xl mb-4">😅</div>
-            <h1 className="text-3xl font-bold text-indigo-900 mb-4">
+            {/* Responsive emoji sizing */}
+            <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">😅</div>
+            
+            {/* Responsive heading */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
               Oops! Something went wrong
             </h1>
-            <p className="text-lg text-indigo-700 mb-6">{error}</p>
-            <Button onClick={handleBackToInterests} className="bg-indigo-600 hover:bg-indigo-700">
+            
+            {/* Responsive error message */}
+            <p className="text-base sm:text-lg md:text-xl text-indigo-700 mb-4 sm:mb-6 px-4">{error}</p>
+            
+            {/* Responsive button */}
+            <Button 
+              onClick={handleBackToInterests} 
+              className="bg-indigo-600 hover:bg-indigo-700 min-h-[44px] px-6 py-3 text-base sm:text-lg"
+            >
               ← Back to Topics
             </Button>
           </div>
@@ -129,75 +144,104 @@ const StorySelectionPage: React.FC<StorySelectionPageProps> = ({ interest }) => 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
-      <div className="max-w-4xl mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-3 sm:p-4">
+      <div className="max-w-4xl mx-auto py-4 sm:py-8">
         
-        {/* Header */}
-        <div className="text-center mb-8">
+        {/* Header - Responsive layout and sizing */}
+        <div className="text-center mb-6 sm:mb-8">
+          {/* Back button with proper touch target */}
           <Button
             variant="ghost"
             onClick={handleBackToInterests}
-            className="mb-4 text-indigo-600"
+            className="mb-4 text-indigo-600 min-h-[44px] px-4 py-2"
           >
             ← Back to all topics
           </Button>
           
-          <div className="text-4xl mb-4">{interestInfo.emoji}</div>
-          <h1 className="text-4xl md:text-5xl font-bold text-indigo-900 mb-4">
+          {/* Responsive emoji */}
+          <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">{interestInfo.emoji}</div>
+          
+          {/* Responsive heading */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
             {interestInfo.label} Stories
           </h1>
-          <p className="text-xl text-indigo-700 leading-relaxed max-w-2xl mx-auto mb-6">
+          
+          {/* Responsive description */}
+          <p className="text-base sm:text-lg md:text-xl text-indigo-700 leading-relaxed max-w-2xl mx-auto mb-4 sm:mb-6 px-4">
             Pick a story that sounds exciting to you!
           </p>
         </div>
 
-        {/* Story Cards */}
+        {/* Story Cards - Responsive grid layout */}
         {stories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {stories.map((story, index) => (
-              <Card
-                key={story.id}
-                className="cursor-pointer transition-all duration-300 border-2 border-gray-200 hover:scale-105 hover:shadow-lg hover:border-indigo-300 h-full"
-                onClick={() => handleStorySelect(story.id)}
-              >
-                <CardContent className="p-6 text-center h-full flex flex-col justify-center">
-                  <div className="text-4xl mb-4">{interestInfo.emoji}</div>
-                  <h3 className="text-lg font-bold text-indigo-900 mb-3">{story.title}</h3>
-                  <p className="text-indigo-700 text-sm mb-4">
-                    A {currentInterest} adventure waiting for you!
-                  </p>
-                  <div className="mt-auto">
-                    <div className="text-xs text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-                      Story #{index + 1}
+          <>
+            {/* Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+              {stories.map((story, index) => (
+                <Card
+                  key={story.id}
+                  className="cursor-pointer transition-all duration-300 border-2 border-gray-200 hover:scale-102 hover:shadow-lg hover:border-indigo-300 active:scale-98 h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px]"
+                  onClick={() => handleStorySelect(story.id)}
+                >
+                  <CardContent className="p-4 sm:p-6 text-center h-full flex flex-col justify-center">
+                    {/* Responsive emoji sizing */}
+                    <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">{interestInfo.emoji}</div>
+                    
+                    {/* Responsive title */}
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-indigo-900 mb-2 sm:mb-3 leading-tight">
+                      {story.title}
+                    </h3>
+                    
+                    {/* Responsive description */}
+                    <p className="text-indigo-700 text-sm sm:text-base mb-3 sm:mb-4 leading-relaxed">
+                      A {currentInterest} adventure waiting for you!
+                    </p>
+                    
+                    {/* Story number badge - responsive sizing */}
+                    <div className="mt-auto">
+                      <div className="text-xs sm:text-sm text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                        Story #{index + 1}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Encouragement text - responsive sizing */}
+            <div className="text-center">
+              <p className="text-sm sm:text-base text-indigo-600 px-4">
+                Each story has three reading levels • Pick what feels right for you!
+              </p>
+            </div>
+          </>
         ) : (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">📚</div>
-            <h2 className="text-2xl font-bold text-indigo-900 mb-4">
+          /* No stories available - responsive layout */
+          <div className="text-center py-8 sm:py-16">
+            {/* Large emoji - responsive sizing */}
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">📚</div>
+            
+            {/* Responsive heading */}
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
               More stories coming soon!
             </h2>
-            <p className="text-lg text-indigo-700 mb-6">
+            
+            {/* Responsive description */}
+            <p className="text-base sm:text-lg md:text-xl text-indigo-700 mb-4 sm:mb-6 px-4">
               We're working on adding more {interestInfo.label.toLowerCase()} adventures.
             </p>
-            <Button onClick={handleBackToInterests} className="bg-indigo-600 hover:bg-indigo-700">
+            
+            {/* Responsive button */}
+            <Button 
+              onClick={handleBackToInterests} 
+              className="bg-indigo-600 hover:bg-indigo-700 min-h-[44px] px-6 py-3 text-base sm:text-lg w-full sm:w-auto"
+            >
               ← Choose a different topic
             </Button>
           </div>
         )}
 
-        {/* Encouragement */}
-        <div className="text-center">
-          <p className="text-sm text-indigo-600">
-            Each story has three reading levels • Pick what feels right for you!
-          </p>
-        </div>
-
-        {/* Accessibility Information */}
+        {/* Accessibility Information - Screen reader only */}
         <div className="sr-only">
           <p>
             You are browsing {interestInfo.label} stories. There are {stories.length} stories available.

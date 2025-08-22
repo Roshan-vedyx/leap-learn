@@ -12,8 +12,6 @@ interface InterestTopic {
   category: 'nature' | 'technology' | 'social' | 'adventure' | 'mystery' | 'creative'
 }
 
-// Remove the interestToStoryMap since we don't need it anymore
-
 // Organized by categories for progressive disclosure
 const interestCategories = {
   nature: [
@@ -176,76 +174,83 @@ const InterestSelectionPage: React.FC = () => {
   // Step 1: Category Selection
   if (currentStep === 'categories') {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
-        <div className="max-w-4xl mx-auto py-8">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           
-          <div className="text-center mb-8">
-            <div className="text-4xl mb-4">🎨</div>
-            <h1 className="text-4xl md:text-5xl font-bold text-indigo-900 mb-4">
+          {/* Header - Responsive text sizes and spacing */}
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🎨</div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
               What Kind of Story Sounds Fun?
             </h1>
-            <p className="text-xl text-indigo-700 leading-relaxed max-w-2xl mx-auto mb-6">
+            <p className="text-base sm:text-lg md:text-xl text-indigo-700 leading-relaxed max-w-2xl mx-auto mb-4 sm:mb-6 px-4">
               Let's start with what type of adventure you're in the mood for today.
             </p>
           </div>
 
-          {/* Category Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Category Grid - Responsive layout: 1 col mobile, 2 col tablet, 3 col desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {Object.entries(interestCategories).map(([categoryKey, topics]) => {
               const categoryInfo = {
-                nature: { emoji: '🌿', title: 'Nature & Animals', description: 'Adventures in the natural world' },
-                adventure: { emoji: '🚀', title: 'Action & Adventure', description: 'Exciting journeys and discoveries' },
-                social: { emoji: '👥', title: 'Friends & Family', description: 'Stories about relationships' },
-                creative: { emoji: '🎨', title: 'Creative & Magical', description: 'Imagination and fantasy' },
-                technology: { emoji: '🤖', title: 'Science & Tech', description: 'Inventions and future worlds' }
+                nature: { emoji: '🌿', label: 'Nature & Animals', color: 'from-green-100 to-emerald-200 border-green-300' },
+                adventure: { emoji: '🚀', label: 'Adventure & Mystery', color: 'from-purple-100 to-blue-200 border-purple-300' },
+                social: { emoji: '👥', label: 'Friends & Family', color: 'from-teal-100 to-cyan-200 border-teal-300' },
+                creative: { emoji: '🎨', label: 'Magic & Creativity', color: 'from-pink-100 to-purple-200 border-pink-300' },
+                technology: { emoji: '🤖', label: 'Tech & Inventions', color: 'from-gray-100 to-slate-200 border-gray-300' }
               }
-              
-              const info = categoryInfo[categoryKey as keyof typeof categoryInfo]
-              
+
+              const category = categoryInfo[categoryKey as keyof typeof categoryInfo]
+              if (!category) return null
+
               return (
                 <Card
                   key={categoryKey}
-                  className="cursor-pointer transition-all duration-300 border-2 border-gray-200 hover:scale-105 hover:shadow-lg hover:border-indigo-300"
+                  className={`
+                    cursor-pointer transition-all duration-300 border-2 
+                    hover:scale-102 hover:shadow-md active:scale-98
+                    bg-gradient-to-br ${category.color}
+                    min-h-[140px] sm:min-h-[160px] md:min-h-[180px]
+                  `}
                   onClick={() => handleCategorySelect(categoryKey)}
                 >
-                  <CardContent className="p-6 text-center">
-                    <div className="text-5xl mb-4">{info.emoji}</div>
-                    <h3 className="text-xl font-bold text-indigo-900 mb-3">{info.title}</h3>
-                    <p className="text-indigo-700 text-sm mb-4">{info.description}</p>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {topics.slice(0, 3).map((topic) => (
-                        <span key={topic.id} className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
-                          {topic.emoji}
-                        </span>
-                      ))}
-                    </div>
+                  <CardContent className="p-4 sm:p-6 text-center h-full flex flex-col justify-center">
+                    {/* Emoji - Responsive sizing */}
+                    <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4">{category.emoji}</div>
+                    
+                    {/* Label - Responsive text */}
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-indigo-900 mb-2 sm:mb-3 leading-tight">
+                      {category.label}
+                    </h3>
+                    
+                    {/* Topic count - Responsive text */}
+                    <p className="text-sm sm:text-base text-indigo-700">
+                      {topics.length} topic{topics.length === 1 ? '' : 's'}
+                    </p>
                   </CardContent>
                 </Card>
               )
             })}
           </div>
 
-          {/* Browse All Option */}
-          <div className="text-center">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowAllTopics(true)
-                setCurrentStep('topics')
-              }}
-              className="mb-4 text-indigo-600 border-indigo-300"
-            >
-              🔍 Browse All Topics
-            </Button>
-            
-            <div className="text-center">
-              <Button
+          {/* Action Buttons - Responsive layout and sizing */}
+          <div className="text-center space-y-3 sm:space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+              {/*<Button
                 onClick={handleSurpriseMe}
-                variant="ghost"
-                className="text-indigo-600"
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] border-indigo-300 text-indigo-700 hover:bg-indigo-50"
               >
-                ✨ Surprise Me!
+                🎲 Surprise me!
               </Button>
+              
+              <Button
+                onClick={() => setShowAllTopics(true)}
+                variant="ghost" 
+                className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] text-indigo-600 hover:bg-indigo-50"
+              >
+                See all topics →
+              </Button>*/}
             </div>
           </div>
         </div>
@@ -258,36 +263,38 @@ const InterestSelectionPage: React.FC = () => {
     const topics = getCurrentTopics()
     
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-4">
-        <div className="max-w-4xl mx-auto py-8">
+      <div className="min-h-screen bg-gradient-to-b from-indigo-50 via-white to-green-50 p-3 sm:p-4">
+        <div className="max-w-4xl mx-auto py-4 sm:py-8">
           
-          <div className="text-center mb-8">
+          {/* Header with back button - Responsive spacing */}
+          <div className="text-center mb-6 sm:mb-8">
             <Button
               variant="ghost"
               onClick={() => setCurrentStep('categories')}
-              className="mb-4 text-indigo-600"
+              className="mb-4 text-indigo-600 min-h-[44px] px-4 py-2"
             >
               ← Back to categories
             </Button>
             
-            <h1 className="text-3xl font-bold text-indigo-900 mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900 mb-3 sm:mb-4 px-2">
               Pick What Sounds Interesting
             </h1>
-            <p className="text-lg text-indigo-700 max-w-xl mx-auto mb-4">
+            <p className="text-base sm:text-lg md:text-xl text-indigo-700 max-w-xl mx-auto mb-4 px-4">
               Choose a topic to see all available stories!
             </p>
             
+            {/* Selection counter - Responsive design */}
             {selectedInterests.length > 0 && (
-              <div className="inline-flex items-center gap-2 bg-indigo-100 px-4 py-2 rounded-full">
-                <span className="text-sm font-medium text-indigo-800">
+              <div className="inline-flex items-center gap-2 bg-indigo-100 px-3 sm:px-4 py-2 rounded-full mt-2">
+                <span className="text-sm sm:text-base font-medium text-indigo-800">
                   {selectedInterests.length} picked ✓
                 </span>
               </div>
             )}
           </div>
 
-          {/* Topic Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Topic Cards - Responsive grid: 1 col mobile, 2 col tablet, 2 col landscape tablet, 3 col desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {topics.slice(0, 8).map((topic) => {
               const isSelected = selectedInterests.includes(topic.id)
               
@@ -296,40 +303,54 @@ const InterestSelectionPage: React.FC = () => {
                   key={topic.id}
                   className={`
                     cursor-pointer transition-all duration-300 border-2 h-full
+                    min-h-[140px] sm:min-h-[160px] md:min-h-[180px]
                     ${isSelected 
                       ? 'border-indigo-400 bg-indigo-50 transform scale-105 shadow-lg' 
-                      : 'border-gray-200 hover:scale-102 hover:shadow-md'
+                      : 'border-gray-200 hover:scale-102 hover:shadow-md active:scale-98'
                     }
                     ${topic.color}
                   `}
                   onClick={() => handleInterestToggle(topic.id)}
                 >
-                  <CardContent className="p-6 text-center h-full flex flex-col justify-center relative">
+                  <CardContent className="p-4 sm:p-6 text-center h-full flex flex-col justify-center relative">
+                    {/* Selection indicator - Responsive sizing */}
                     {isSelected && (
-                      <div className="absolute top-3 right-3 w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                      <div className="absolute top-2 sm:top-3 right-2 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
                         ✓
                       </div>
                     )}
                     
-                    <div className="text-4xl mb-4">{topic.emoji}</div>
-                    <h3 className="text-lg font-bold text-indigo-900 mb-3">{topic.label}</h3>
-                    <p className="text-indigo-700 text-sm">{topic.description}</p>
+                    {/* Emoji - Responsive sizing */}
+                    <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">{topic.emoji}</div>
+                    
+                    {/* Title - Responsive text with line height */}
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-indigo-900 mb-2 sm:mb-3 leading-tight">
+                      {topic.label}
+                    </h3>
+                    
+                    {/* Description - Responsive text */}
+                    <p className="text-indigo-700 text-sm sm:text-base leading-relaxed">
+                      {topic.description}
+                    </p>
                   </CardContent>
                 </Card>
               )
             })}
           </div>
 
-          {/* Selected Preview */}
+          {/* Selected Preview - Responsive layout */}
           {selectedInterests.length > 0 && (
             <Card className="mb-6 bg-indigo-50 border-indigo-200 border-2">
               <CardContent className="p-4 text-center">
-                <h3 className="font-semibold text-indigo-900 mb-3">You'll see stories about:</h3>
+                <h3 className="font-semibold text-indigo-900 mb-3 text-base sm:text-lg">
+                  You'll see stories about:
+                </h3>
+                {/* Tags - Responsive wrapping and sizing */}
                 <div className="flex flex-wrap justify-center gap-2">
                   {getSelectedTopics().map((topic) => (
                     <span
                       key={topic.id}
-                      className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+                      className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium min-h-[32px] flex items-center"
                     >
                       {topic.emoji} {topic.label}
                     </span>
@@ -339,13 +360,14 @@ const InterestSelectionPage: React.FC = () => {
             </Card>
           )}
 
+          {/* Continue button - Responsive sizing */}
           <div className="text-center">
             <Button
               onClick={handleContinue}
               disabled={selectedInterests.length === 0}
               variant="default"
               size="lg"
-              className="text-lg px-8 py-3 bg-indigo-600 hover:bg-indigo-700"
+              className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] bg-indigo-600 hover:bg-indigo-700"
             >
               {selectedInterests.length === 0 
                 ? "Pick one topic to see available stories!" 

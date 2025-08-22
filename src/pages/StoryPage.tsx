@@ -238,38 +238,124 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
-      <div className="max-w-3xl mx-auto py-8">
-        
-        {/* Simple Title - No overwhelming metadata */}
-        <div className="text-center mb-8">
-          <button
-            onClick={handleBackToStories}
-            className="mb-4 text-blue-600 hover:text-blue-800 font-medium"
-          >
-            ← Back to Stories
-          </button>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
+              {story?.title || 'Loading Story...'}
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">
+              Section {currentSection + 1} of {totalSections}
+            </p>
+          </div>
           
-          <h1 className="text-3xl font-bold text-blue-900 mb-2">
-            {story?.title || 'Story Time'}
-          </h1>
-          <div className="text-sm text-blue-700 opacity-75">
-            Part {currentSection + 1} of {totalSections}
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <button
+              onClick={() => setLocation('/practice-reading')}
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              ← Back to Reading
+            </button>
+            
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
+            >
+              {showSettings ? "Show less" : "⚙️ More Options"}
+            </button>
           </div>
         </div>
 
-        {/* Complexity Hint - Show once for new users */}
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-8 sm:py-12">
+            <div className="text-lg sm:text-xl text-gray-600">Loading your story...</div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6 mb-6">
+            <div className="text-red-800 font-medium mb-2">Oops! Something went wrong</div>
+            <div className="text-red-600 text-sm sm:text-base">{error}</div>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-3 min-h-[44px] px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Settings Panel - Expandable */}
+        {showSettings && story && (
+          <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6">
+            <h3 className="font-semibold text-gray-800 mb-4 text-base sm:text-lg">Reading Settings</h3>
+            
+            {/* Complexity Level Controls */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Reading Level:
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {(['simple', 'full', 'challenge'] as const).map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => setComplexityLevel(level)}
+                      className={`min-h-[44px] px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                        complexityLevel === level
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                      }`}
+                    >
+                      {level === 'simple' ? 'Simple' : level === 'full' ? 'Standard' : 'Challenge'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Reading Mode Controls */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  How would you like to read?
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {(['text', 'audio', 'both'] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setReadingMode(mode)}
+                      className={`min-h-[44px] px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                        readingMode === mode
+                          ? 'bg-green-500 text-white'
+                          : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                      }`}
+                    >
+                      {mode === 'text' ? '📖 Read' : mode === 'audio' ? '🔊 Listen' : '👀👂 Both'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Complexity Hint for New Users */}
         {showComplexityHint && (
-          <div className="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
-            <div className="flex items-start gap-3">
-              <span className="text-xl">💡</span>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 sm:p-6 mb-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="text-2xl">💡</div>
               <div className="flex-1">
-                <p className="text-yellow-800 text-sm mb-3">
-                  <strong>You're in control!</strong> If this feels too easy or too hard, try the reading level buttons below the story.
+                <div className="font-medium text-yellow-800 mb-1">New Feature!</div>
+                <p className="text-yellow-700 text-sm sm:text-base mb-2">
+                  You can change the reading level anytime using the buttons above. 
+                  Pick what feels right for you today!
                 </p>
                 <button
-                  onClick={dismissComplexityHint}
-                  className="text-xs text-yellow-700 hover:text-yellow-900 underline"
+                  onClick={() => setShowComplexityHint(false)}
+                  className="text-xs sm:text-sm text-yellow-700 hover:text-yellow-900 underline min-h-[44px] px-2 py-1"
                 >
                   Got it! ✓
                 </button>
@@ -279,38 +365,28 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         )}
 
         {/* MAIN STORY CARD - The Hero Element */}
-        <div className="relative bg-white rounded-xl p-8 mb-6 shadow-sm border-2 border-blue-200">
+        <div className="relative bg-white rounded-xl p-4 sm:p-6 lg:p-8 mb-6 shadow-sm border-2 border-blue-200">
           
           {/* Story Content - Biggest, cleanest, HERO of the page */}
-          <div className="text-xl leading-relaxed text-gray-800 mb-8 font-serif">
+          <div className="text-base sm:text-lg lg:text-xl leading-relaxed text-gray-800 mb-6 sm:mb-8 font-serif min-h-[120px] sm:min-h-[140px]">
             {sections[currentSection] || getCurrentStoryText()}
           </div>
 
-          {/* Subtle Audio Button - Top Right Corner */}
-          {/*<button
-            onClick={() => handleReadAloud()}
-            disabled={isReading}
-            className="absolute top-4 right-4 w-10 h-10 bg-blue-100 hover:bg-blue-200 disabled:opacity-50 rounded-full flex items-center justify-center text-lg transition-colors"
-            aria-label="Read this section aloud"
-          >
-            {isReading ? '🗣️' : '🔊'}
-          </button>*/}
-
           {/* Navigation */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
             <button
               onClick={handlePreviousSection}
               disabled={currentSection === 0}
-              className="px-6 py-3 bg-blue-100 hover:bg-blue-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-medium text-blue-800 transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-blue-100 hover:bg-blue-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-medium text-blue-800 transition-colors"
             >
               ← Previous
             </button>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 order-first sm:order-none">
               {Array.from({ length: totalSections }, (_, i) => (
                 <div
                   key={i}
-                  className={`w-3 h-3 rounded-full ${
+                  className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full ${
                     i === currentSection ? 'bg-blue-500' : 'bg-blue-200'
                   }`}
                 />
@@ -319,145 +395,40 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
             <button
               onClick={handleNextSection}
-              className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
             >
               {currentSection === totalSections - 1 ? 'Finish' : 'Next'} →
             </button>
           </div>
 
           {/* Quick Controls */}
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
             <button
               onClick={() => handleReadAloud()}
               disabled={isReading}
-              className="px-4 py-2 bg-green-100 hover:bg-green-200 disabled:opacity-50 rounded-lg text-sm text-green-700 transition-colors"
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-green-100 hover:bg-green-200 disabled:opacity-50 rounded-lg text-sm text-green-700 transition-colors"
             >
               🔊 {isReading ? 'Reading...' : 'Read Aloud'}
             </button>
-
             
-          </div>
-        </div>
-
-        {/* Settings Panel - WITHOUT COMPLEXITY SELECTOR */}
-        {showSettings && (
-          <div className="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-200">
-            <h3 className="font-semibold text-gray-800 mb-4">Reading Settings</h3>
-            
-            {/* Reading Mode */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                How would you like to read?
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => setReadingMode('text')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                    readingMode === 'text'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  📖 Read Only
-                </button>
-                <button
-                  onClick={() => setReadingMode('audio')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                    readingMode === 'audio'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  🎧 Listen Only
-                </button>
-                <button
-                  onClick={() => setReadingMode('both')}
-                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                    readingMode === 'both'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  🎯 Read & Listen
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => handleReadAloud()}
-                disabled={isReading}
-                className="p-3 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 rounded-lg text-sm text-blue-700 transition-colors"
-              >
-                🎧 {isReading ? 'Reading...' : 'Read This Section'}
-              </button>
-              <button
-                onClick={() => handleReadAloud(getCurrentStoryText())}
-                disabled={isReading}
-                className="p-3 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 rounded-lg text-sm text-blue-700 transition-colors"
-              >
-                📖 {isReading ? 'Reading...' : 'Read Whole Story'}
-              </button>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="p-3 bg-green-50 hover:bg-green-100 rounded-lg text-sm text-green-700 transition-colors"
-              >
-                🧘 Back to Story
-              </button>
-            </div>
-
-            {/* Story metadata - only in settings */}
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-                <span>📚 Adaptive Grade Level</span>
-                <span>⏱️ {Math.ceil(sections.length * 0.5)} min read</span>
-                <span>🎯 Skills: Reading & Comprehension</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* COMPLEXITY SELECTOR - BELOW STORY */}
-        <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-200">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Reading Level
-          </label>
-
-          <div className="grid grid-cols-3 gap-2 mb-4">
-            {(Object.keys(complexityLabels) as ComplexityLevel[]).map((level) => (
-              <button
-                key={level}
-                onClick={() => handleComplexityChange(level)}
-                className={`p-3 rounded-lg text-sm transition-colors ${
-                  complexityLevel === level
-                    ? 'bg-blue-100 text-blue-800 border-2 border-blue-300'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                <div className="text-lg mb-1">{complexityLabels[level].emoji}</div>
-                <div className="font-medium">{complexityLabels[level].label}</div>
-                <div className="text-xs opacity-75 mt-1">
-                  {complexityLabels[level].description}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Centered Settings Toggle Button */}
-          <div className="flex justify-center">
             <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
+              onClick={handleRestart}
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-lg text-sm text-orange-700 transition-colors"
             >
-              {showSettings ? "Show less" : "⚙️ More Options"}
+              🔄 Start Over
+            </button>
+            
+            <button
+              onClick={() => setLocation('/story-selection')}
+              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
+            >
+              📚 New Story
             </button>
           </div>
         </div>
 
-
         {/* Encouragement - Calm and Supportive */}
-        <div className="text-center mt-8 text-gray-500 text-sm">
+        <div className="text-center mt-6 sm:mt-8 text-gray-500 text-sm sm:text-base">
           Take your time • No rush • You're doing great!
         </div>
 
@@ -465,7 +436,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         <div className="sr-only">
           <p>
             You are reading "{story?.title}", section {currentSection + 1} of {totalSections}.
-            Currently reading at {complexityLabels[complexityLevel].label} level.
+            Currently reading at {complexityLabels[complexityLevel]?.label || complexityLevel} level.
             Use the Previous and Next buttons to navigate, or use the audio controls to listen to the content.
             You can switch reading levels anytime using the reading level buttons above the story.
           </p>

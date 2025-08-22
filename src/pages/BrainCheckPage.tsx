@@ -1,4 +1,4 @@
-// src/pages/BrainCheckPage.tsx - With MVP Age Mock
+// src/pages/BrainCheckPage.tsx - Fully Responsive Mobile & Tablet Optimized
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent } from '@/components/ui/Card'
@@ -125,35 +125,44 @@ const BrainCheckPage: React.FC = () => {
   const displayStates = brainStates
 
   return (
-    <div className="page-container">
-      <div className="container">
-        <div className="content-area">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col">
+      {/* Responsive Container with proper padding for all screen sizes */}
+      <div className="flex-1 px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-8 lg:px-8 max-w-7xl mx-auto w-full">
+        
+        {/* Header Section - Fully Responsive */}
+        <div className="text-center mb-6 sm:mb-8 md:mb-10">
           
-          {/* Compact Header */}
-          <div className="viewport-header">
-            <div className="flex justify-center gap-3 mb-3">
-              <BookOpen className="w-12 h-12 text-indigo-600" />
-              <Star className="w-12 h-12 text-purple-500" />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-header-primary mb-3">
-              What's Your Vibe Today?
-            </h1>
-            <p className="text-lg text-body-text leading-relaxed max-w-2xl mx-auto mb-3">
-              Your brain works differently every day - sometimes it's buzzing with energy, sometimes it wants to chill.
-              I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
-            </p>
-            
-            
+          {/* Logo Icons - Responsive sizing */}
+          <div className="flex justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-indigo-600" />
+            <Star className="w-10 h-10 sm:w-12 sm:h-12 text-purple-500" />
           </div>
+          
+          {/* Main Heading - Responsive text sizing */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-header-primary mb-3 sm:mb-4 px-2">
+            What's Your Vibe Today?
+          </h1>
+          
+          {/* Description - Responsive sizing and line height */}
+          <p className="text-base sm:text-lg md:text-xl text-body-text leading-relaxed max-w-2xl mx-auto mb-3 px-4 sm:px-6">
+            Your brain works differently every day - sometimes it's buzzing with energy, sometimes it wants to chill.
+            I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
+          </p>
+        </div>
 
-          {/* Brain State Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
+        {/* Brain State Grid - Mobile-First Responsive Design */}
+        <div className="w-full max-w-6xl mx-auto mb-6 sm:mb-8">
+          
+          {/* Single column on mobile, 2 cols on small screens, 3 cols on larger screens */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
             {displayStates.map((state) => {
               const IconComponent = state.icon
               return (
                 <Card 
                   key={state.id}
-                  className="brain-state-card cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:border-indigo-300"
+                  className="brain-state-card cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:border-indigo-300 active:scale-95 
+                            min-h-[120px] sm:min-h-[140px] md:min-h-[160px] 
+                            touch-manipulation"
                   onClick={() => handleStateSelect(state.id)}
                   role="button"
                   tabIndex={0}
@@ -165,47 +174,51 @@ const BrainCheckPage: React.FC = () => {
                   }}
                   aria-label={`Select ${state.label}: ${state.description}`}
                 >
-                  <CardContent className="p-6 text-center h-full flex flex-col justify-between">
-                    <div className="space-y-3">
+                  <CardContent className="p-3 sm:p-4 md:p-5 lg:p-6 text-center h-full flex flex-col justify-between">
+                    
+                    {/* Icon and Text Content */}
+                    <div className="space-y-2 sm:space-y-3">
+                      
+                      {/* Icon - Responsive sizing */}
                       <div className="flex justify-center">
                         <IconComponent 
-                          className={`w-12 h-12 ${state.color === 'mood-energetic' ? 'text-orange-500' : 
-                                     state.color === 'mood-focused' ? 'text-blue-500' : 
-                                     'text-green-500'}`}
+                          className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 ${
+                            state.color === 'mood-energetic' ? 'text-orange-500' : 
+                            state.color === 'mood-focused' ? 'text-blue-500' : 
+                            'text-green-500'
+                          }`}
                           aria-hidden="true"
                         />
                       </div>
-                      <h3 className="text-xl font-bold text-header-primary">
+                      
+                      {/* Title - Responsive sizing */}
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-header-primary leading-tight">
                         {state.label}
                       </h3>
-                      <p className="text-body-text leading-relaxed text-sm">
+                      
+                      {/* Description - Responsive sizing and adaptive visibility */}
+                      <p className="text-sm sm:text-base md:text-lg text-body-text leading-relaxed 
+                                   block sm:block md:block">
                         {state.description}
                       </p>
                     </div>
-                    {/*<div className="mt-4 text-xs text-indigo-600 font-medium">
-                      {state.encouragement}
-                    </div>*/}
                   </CardContent>
                 </Card>
               )
             })}
           </div>
+        </div>
 
-          {/* Footer Info */}
-          {/*<div className="mt-8 text-center">
-            <p className="text-sm text-body-text opacity-75 max-w-md mx-auto">
-              You can always come back and pick something different if your mood shifts. 
-            </p>
-          </div>*/}
-          {/* Character Message - Compact */}
-          <div className="mt-4 inline-block bg-white rounded-xl p-4 shadow-sm border border-indigo-100">
-              <div className="flex items-center justify-center gap-3">
-                <Bot className="w-6 h-6 text-indigo-600 flex-shrink-0" />
-                <p className="viewport-text-sm text-indigo-800 font-medium">
-                  "You can always come back and pick something different if your mood shifts."
-                </p>
-              </div>
+        {/* Character Message - Responsive and Touch-Friendly */}
+        <div className="text-center">
+          <div className="inline-block bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-indigo-100 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-2 sm:gap-3">
+              <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600 flex-shrink-0" />
+              <p className="text-sm sm:text-base text-indigo-800 font-medium leading-relaxed">
+                "You can always come back and pick something different if your mood shifts."
+              </p>
             </div>
+          </div>
         </div>
       </div>
 

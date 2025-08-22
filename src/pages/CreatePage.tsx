@@ -125,14 +125,15 @@ const CreatePage: React.FC = () => {
   const selectedPromptData = adaptedPrompts.find(p => p.id === selectedPrompt)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 p-4">
-      <div className="max-w-4xl mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 flex items-center justify-center gap-4">
-            Time to Create! <Palette className="w-12 h-12 text-primary" />
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-primary mb-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+            <span>Time to Create!</span>
+            <Palette className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-primary" />
           </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto px-4">
             You've read an amazing story! Now it's your turn to add your own thoughts and ideas. 
             Pick what feels right to you - there are no wrong answers!
           </p>
@@ -149,70 +150,97 @@ const CreatePage: React.FC = () => {
         </div>
 
         {!selectedPrompt ? (
-          /* Prompt Selection */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {adaptedPrompts.map((prompt) => (
-              <Card
-                key={prompt.id}
-                className="cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg bg-card border-2 border-border"
-                onClick={() => handlePromptSelect(prompt.id)}
-                role="button"
-                tabIndex={0}
-                aria-label={`Select creative prompt: ${prompt.title}`}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    handlePromptSelect(prompt.id)
-                  }
-                }}
-              >
-                <CardContent className="p-6 text-center h-full flex flex-col justify-center">
-                  <div className="mb-4 flex justify-center">
-                    <prompt.icon 
-                      className="w-12 h-12 text-primary" 
-                      aria-label={prompt.title}
-                    />
-                  </div>
-                  <h3 className="text-2xl font-semibold text-primary mb-3">
-                    {prompt.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {prompt.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+          /* PROMPT SELECTION SCREEN */
+          <div className="space-y-6 sm:space-y-8">
+            <div className="text-center">
+              <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
+                Choose Your Creative Path
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground">
+                Pick the type of creative response that appeals to you most right now
+              </p>
+            </div>
+
+            {/* Prompt Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
+              {adaptedPrompts.map((prompt) => {
+                const IconComponent = prompt.icon
+                return (
+                  <Card 
+                    key={prompt.id}
+                    className="cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] border-2 hover:border-primary/30"
+                    onClick={() => handlePromptSelect(prompt.id)}
+                  >
+                    <CardHeader className="text-center pb-3">
+                      <div className="flex justify-center mb-3">
+                        <div className="p-3 sm:p-4 bg-primary/10 rounded-full">
+                          <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+                        </div>
+                      </div>
+                      <CardTitle className="text-lg sm:text-xl">{prompt.title}</CardTitle>
+                      <CardDescription className="text-sm sm:text-base">{prompt.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="bg-muted/50 rounded-lg p-3 sm:p-4 text-center">
+                        <p className="text-xs sm:text-sm text-muted-foreground italic">
+                          "{prompt.placeholder}"
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+
+            {/* Encouragement */}
+            <div className="text-center">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                Remember: Your ideas are valuable! There's no right or wrong way to be creative.
+              </p>
+            </div>
           </div>
         ) : (
-          /* Response Writing */
-          <div className="space-y-6">
-            <Card className="bg-card border-primary border-2 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-2xl text-primary flex items-center gap-3">
-                  {selectedPromptData?.icon && (
-                    <selectedPromptData.icon className="w-8 h-8" />
-                  )}
-                  {selectedPromptData?.title}
-                </CardTitle>
-                <CardDescription className="text-lg text-muted-foreground">
-                  {selectedPromptData?.description}
-                </CardDescription>
+          /* WRITING SCREEN */
+          <div className="space-y-6 sm:space-y-8">
+            {/* Selected Prompt Info */}
+            <Card className="border-primary/20 bg-primary/5">
+              <CardHeader className="pb-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg">
+                    {selectedPromptData && <selectedPromptData.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />}
+                  </div>
+                  <div className="flex-1">
+                    <CardTitle className="text-lg sm:text-xl text-primary mb-1">
+                      {selectedPromptData?.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm sm:text-base">
+                      {selectedPromptData?.description}
+                    </CardDescription>
+                  </div>
+                </div>
               </CardHeader>
             </Card>
 
-            <Card className="bg-card border-2 border-border shadow-lg">
-              <CardContent className="p-6">
+            {/* Writing Area */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl">Your Creative Response</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  Write as much or as little as you want. Take your time!
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <Textarea
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
-                  placeholder={selectedPromptData?.placeholder}
-                  className="min-h-[200px] text-lg leading-relaxed resize-none border-2 focus:ring-2 focus:ring-primary"
-                  aria-label="Write your creative response here"
+                  placeholder={selectedPromptData?.placeholder || 'Start writing here...'}
+                  className="min-h-[200px] sm:min-h-[250px] text-base sm:text-lg resize-none focus:ring-2 focus:ring-primary/20"
+                  autoFocus
                 />
                 
-                {/* Character counter for encouragement */}
-                <div className="mt-3 text-right">
-                  <div className={`text-sm flex items-center justify-end gap-1 ${
+                {/* Character Count & Encouragement */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                  <div className={`flex items-center gap-2 text-sm transition-colors ${
                     response.trim().length >= 10 
                       ? 'text-primary font-medium' 
                       : 'text-muted-foreground'
@@ -230,7 +258,7 @@ const CreatePage: React.FC = () => {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Button
                 variant="outline"
                 size="lg"
@@ -238,9 +266,10 @@ const CreatePage: React.FC = () => {
                   setSelectedPrompt(null)
                   setResponse('')
                 }}
-                className="min-h-[56px] flex items-center gap-2"
+                className="w-full sm:w-auto min-h-[44px] sm:min-h-[56px] flex items-center justify-center gap-2"
               >
-                <ChevronLeft className="w-5 h-5" /> Choose Different Prompt
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" /> 
+                Choose Different Prompt
               </Button>
               
               <Button
@@ -248,13 +277,13 @@ const CreatePage: React.FC = () => {
                 size="lg"
                 onClick={handleContinue}
                 disabled={response.trim().length < 10}
-                className="text-lg px-8 min-h-[56px] flex items-center gap-2"
+                className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 min-h-[44px] sm:min-h-[56px] flex items-center justify-center gap-2"
               >
                 {response.trim().length < 10 
                   ? 'Keep Writing...' 
                   : (
                     <>
-                      I'm Done Creating! <PartyPopper className="w-5 h-5" />
+                      I'm Done Creating! <PartyPopper className="w-4 h-4 sm:w-5 sm:h-5" />
                     </>
                   )
                 }
@@ -263,7 +292,7 @@ const CreatePage: React.FC = () => {
 
             {/* Encouragement */}
             <div className="text-center">
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                 Take your time! Your ideas are valuable and there's no rush.
               </p>
             </div>
@@ -271,11 +300,11 @@ const CreatePage: React.FC = () => {
         )}
 
         {/* Back to Story */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6 sm:mt-8">
           <Button
             variant="ghost"
             onClick={() => setLocation('/story')}
-            className="text-muted-foreground hover:text-foreground flex items-center gap-2"
+            className="min-h-[44px] text-muted-foreground hover:text-foreground flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Story
           </Button>

@@ -416,183 +416,194 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   const filteredWords = getFilteredWordsForDisplay()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-sage to-autism-calm-mint p-4">
-      <div className="max-w-4xl mx-auto py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-autism-primary mb-2">
-            Click to Build Sentences! 
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+      <div className="px-4 py-6 md:px-6 lg:px-8 max-w-6xl mx-auto">
+        
+        {/* Header - responsive */}
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-autism-primary mb-2">
+            Sentence Builder! ✨
           </h1>
-          <p className="text-lg text-autism-primary/80">
+          <p className="text-base md:text-lg text-autism-primary/80">
             Use your {getThemeLabel().toLowerCase()} words to create awesome sentences!
           </p>
         </div>
 
-        {/* Enhanced Instructions */}
+        {/* Instructions - responsive */}
         <Card className="mb-6 bg-autism-neutral border-autism-primary border-2">
           <CardHeader>
-            <CardTitle className="text-center text-xl text-autism-primary">
+            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
               📖 How to Build:
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-3">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-lg">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center text-base md:text-lg">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">1️⃣</span>
+                <span className="text-xl md:text-2xl">1️⃣</span>
                 <span>Click an empty box</span>
               </div>
               <div className="hidden sm:block text-autism-primary">→</div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">2️⃣</span>
+                <span className="text-xl md:text-2xl">2️⃣</span>
                 <span>Click a word</span>
               </div>
               <div className="hidden sm:block text-autism-primary">→</div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">3️⃣</span>
+                <span className="text-xl md:text-2xl">3️⃣</span>
                 <span>Build your sentence!</span>
               </div>
             </div>
-            <p className="text-sm text-autism-primary/60 mt-4">
+            <p className="text-xs md:text-sm text-autism-primary/60 mt-4">
               Template: <strong>"{currentTemplate.template}"</strong>
             </p>
             {currentTemplate.hint && (
-              <p className="text-sm text-autism-primary/70 italic">
+              <p className="text-xs md:text-sm text-autism-primary/70 italic">
                 💡 {currentTemplate.hint}
               </p>
             )}
           </CardContent>
         </Card>
 
-        {/* Enhanced Sentence Frame */}
+        {/* Sentence Frame - responsive */}
         <Card className="mb-6 bg-white border-autism-secondary border-2">
           <CardHeader>
-            <CardTitle className="text-center text-xl text-autism-primary">
+            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
               ✍️ Your Sentence
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {/* Visual Sentence Slots */}
-            <div className="flex flex-wrap justify-center gap-3 mb-6">
+            {/* Mobile-optimized sentence slots */}
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
               {sentenceSlots.map((slot, index) => (
                 <div
                   key={slot.id}
                   onClick={() => handleSlotClick(index)}
                   className={`
-                    relative min-w-[100px] min-h-[70px] border-3 rounded-xl flex items-center justify-center
-                    text-lg font-bold cursor-pointer transition-all duration-300 transform
+                    relative min-w-[80px] md:min-w-[100px] min-h-[48px] md:min-h-[70px] border-3 rounded-xl flex items-center justify-center
+                    text-sm md:text-lg font-bold cursor-pointer transition-all duration-300 transform
                     ${slot.type === 'fixed' 
                       ? 'bg-autism-neutral text-autism-primary border-autism-primary/30 cursor-default shadow-sm' 
                       : slot.filled
                         ? 'bg-autism-secondary text-white border-autism-secondary hover:bg-autism-secondary/80 hover:scale-105 shadow-lg'
                         : currentSlotIndex === index
-                          ? 'bg-yellow-100 border-yellow-400 border-dashed shadow-lg scale-105'
-                          : 'bg-gray-100 border-gray-400 border-dashed hover:bg-gray-200 hover:scale-105 hover:shadow-md'
+                          ? 'border-autism-primary border-4 bg-autism-primary/10 animate-pulse'
+                          : 'border-gray-300 border-dashed bg-gray-50 hover:border-autism-primary hover:bg-autism-primary/5'
                     }
+                    ${slot.type !== 'fixed' ? 'active:scale-95 touch-manipulation' : ''}
                   `}
                 >
                   {slot.filled ? (
-                    <div 
-                      className="flex items-center justify-center gap-2 w-full h-full"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleFilledSlotClick(index)
-                      }}
-                    >
-                      <span className="text-center px-2">{slot.content}</span>
+                    <div className="flex items-center gap-1 md:gap-2">
+                      <span className="px-2 py-1 text-center break-words max-w-[60px] md:max-w-none">
+                        {slot.content}
+                      </span>
+                      {slot.type !== 'fixed' && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleSlotClear(index)
+                          }}
+                          className="text-xs md:text-sm bg-red-500 text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center hover:bg-red-600 transition-colors active:scale-95"
+                          aria-label={`Remove ${slot.content}`}
+                        >
+                          ×
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="text-center px-2">
-                      <div className="text-gray-500 text-sm font-medium">
-                        {slot.type.replace('_', ' ').toUpperCase()}
-                      </div>
-                      {currentSlotIndex === index && (
-                        <div className="text-xs text-yellow-600 mt-1">
-                          👆 SELECTED
-                        </div>
+                      {slot.type === 'fixed' ? slot.content : (
+                        <span className="text-xs md:text-sm text-gray-500 break-words">
+                          {slot.type.replace('_', ' ')}
+                        </span>
                       )}
+                    </div>
+                  )}
+                  
+                  {/* Mobile-friendly selection indicator */}
+                  {currentSlotIndex === index && slot.type !== 'fixed' && (
+                    <div className="absolute -top-2 -right-2 w-4 h-4 md:w-6 md:h-6 bg-autism-primary rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs md:text-sm font-bold">👆</span>
                     </div>
                   )}
                 </div>
               ))}
             </div>
 
-            {/* Enhanced Current Slot Guidance */}
-            {currentSlotIndex !== null && !showCelebration && (
-              <div className="text-center mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-xl">
-                <p className="text-lg font-semibold text-yellow-800 mb-2">
-                  🎯 Choose a <span className="text-yellow-900 underline">{sentenceSlots[currentSlotIndex].type}</span> word:
-                </p>
-                <p className="text-sm text-yellow-700">
-                  Click any word below to fill this slot.
-                </p>
+            {/* Word feedback - responsive */}
+            {wordFeedback && (
+              <div className="text-center mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm md:text-base text-blue-700">{wordFeedback}</p>
               </div>
             )}
 
-            {/* Feedback Display */}
-            {wordFeedback && (
-              <div className="text-center mb-4 p-3 bg-blue-50 border-2 border-blue-300 rounded-xl">
-                <p className="text-blue-800 font-medium">{wordFeedback}</p>
+            {/* Hint system - responsive */}
+            {showHints && currentSlotIndex !== null && sentenceSlots[currentSlotIndex] && (
+              <div className="text-center mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-sm md:text-base text-green-700">
+                  💡 Choose a <strong>{sentenceSlots[currentSlotIndex].type.replace('_', ' ')}</strong> word below!
+                </p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowHints(false)}
+                  className="mt-2 text-xs"
+                >
+                  Hide Hints
+                </Button>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* FIXED: Word Bank - Show only relevant words */}
-        <Card className="mb-6">
+        {/* Word Bank - mobile-optimized */}
+        <Card className="mb-6 bg-white border-autism-primary border-2">
           <CardHeader>
-            <CardTitle className="text-center text-xl text-autism-primary">
-              🔤 Word Bank
+            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
+              {currentSlotIndex !== null && sentenceSlots[currentSlotIndex] 
+                ? `📝 ${sentenceSlots[currentSlotIndex].type.replace('_', ' ').toUpperCase()} Words`
+                : '📝 Word Bank'
+              }
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {/* FIXED: Only show words for selected slot type */}
-            {currentSlotIndex !== null && filteredWords.length > 0 && (
-              <div className="space-y-4">
-                <p className="text-center text-lg font-semibold text-autism-primary mb-4">
-                  {sentenceSlots[currentSlotIndex].type.toUpperCase()} words:
-                </p>
-                <div className="flex flex-wrap justify-center gap-3">
-                  {filteredWords.map((word, index) => (
-                    <button
-                      key={`word-${index}`}
-                      onClick={() => handleWordClick(word)}
-                      className="px-6 py-3 rounded-xl text-lg font-semibold transition-all duration-200
-                                bg-green-100 text-autism-primary border-2 border-green-400 
-                                hover:bg-green-200 hover:scale-105 hover:shadow-lg
-                                focus:outline-none focus:ring-4 focus:ring-green-300"
-                      aria-label={`Choose word ${word}`}
-                    >
-                      {word}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* No slot selected message */}
-            {currentSlotIndex === null && !isSentenceComplete && (
+            {currentSlotIndex === null ? (
               <div className="text-center p-6">
-                <p className="text-lg text-autism-primary/70 mb-4">
-                  👆 Click on an empty box above to get started!
+                <div className="text-4xl md:text-6xl mb-4">👆</div>
+                <p className="text-base md:text-lg text-autism-primary/70">
+                  Click on an empty box above to see words for that slot!
                 </p>
-                <div className="text-6xl mb-4">⬆️</div>
+              </div>
+            ) : (
+              /* Mobile-first word grid */
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[300px] md:max-h-[400px] overflow-y-auto">
+                {getFilteredWordsForDisplay().map((word, index) => (
+                  <button
+                    key={`word-${index}`}
+                    onClick={() => handleWordClick(word)}
+                    disabled={isReading}
+                    className="min-h-[48px] px-3 py-2 bg-white border-2 border-autism-primary text-autism-primary rounded-lg font-medium text-sm md:text-base hover:bg-autism-primary hover:text-white transition-colors disabled:opacity-50 active:scale-95 touch-manipulation break-words"
+                  >
+                    {word}
+                  </button>
+                ))}
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Enhanced Success Celebration */}
+        {/* Celebration - responsive */}
         {showCelebration && (
-          <Card className="mb-6 bg-green-100 border-green-400 border-3 shadow-2xl">
-            <CardContent className="p-8 text-center">
-              <div className="text-8xl mb-4 animate-bounce">🎉</div>
-              <h3 className="text-3xl font-bold text-green-800 mb-4">
-                AMAZING SENTENCE!
+          <Card className="mb-6 bg-gradient-to-r from-yellow-100 to-orange-100 border-3 border-yellow-400">
+            <CardContent className="p-4 md:p-8 text-center">
+              <div className="text-4xl md:text-6xl mb-4">🎉</div>
+              <h3 className="text-xl md:text-2xl font-bold text-orange-800 mb-4">
+                Amazing Work!
               </h3>
-              <div className="text-2xl text-green-700 font-semibold mb-4 p-4 bg-white/60 rounded-lg">
+              <div className="text-lg md:text-2xl text-green-700 font-semibold mb-4 p-4 bg-white/60 rounded-lg">
                 "{sentenceSlots.map(slot => slot.content).join(' ')}."
               </div>
-              <p className="text-green-600 text-lg mb-6">
+              <p className="text-base md:text-lg text-green-600 mb-6">
                 You're officially a sentence building superstar! 🌟
               </p>
               
@@ -601,7 +612,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                   variant="outline"
                   onClick={() => handleReadAloud(sentenceSlots.map(slot => slot.content).join(' '))}
                   disabled={isReading}
-                  className="text-lg px-6 py-3"
+                  className="min-h-[48px] text-base md:text-lg px-6 py-3"
                 >
                   {isReading ? '🗣️ Reading...' : '🔊 Hear My Sentence Again'}
                 </Button>
@@ -610,13 +621,13 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
           </Card>
         )}
 
-        {/* Controls */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
+        {/* Controls - responsive */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
           <Button
             variant="outline"
             onClick={handleReset}
             size="comfortable"
-            className="text-lg px-6 py-3"
+            className="min-h-[48px] text-base md:text-lg px-6 py-3"
           >
             🔄 Start Over
           </Button>
@@ -626,7 +637,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
               variant="celebration"
               onClick={handleNextTemplate}
               size="comfortable"
-              className="text-xl px-8 py-4"
+              className="min-h-[48px] text-lg md:text-xl px-8 py-4"
             >
               {currentTemplateIndex < templates.length - 1 ? 
                 "Build Another Sentence! →" : 
@@ -636,13 +647,13 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
           )}
         </div>
 
-        {/* Progress Indicator */}
-        <div className="mt-8 text-center">
-          <div className="flex justify-center gap-2 mb-2">
+        {/* Progress Indicator - responsive */}
+        <div className="text-center">
+          <div className="flex justify-center gap-2 mb-2 flex-wrap">
             {templates.map((_, index) => (
               <div
                 key={index}
-                className={`w-3 h-3 rounded-full ${
+                className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${
                   index === currentTemplateIndex 
                     ? 'bg-autism-secondary' 
                     : index < currentTemplateIndex 
@@ -652,7 +663,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
               />
             ))}
           </div>
-          <p className="text-sm text-autism-primary/70">
+          <p className="text-xs md:text-sm text-autism-primary/70">
             Sentence {currentTemplateIndex + 1} of {templates.length}
           </p>
         </div>

@@ -9,7 +9,7 @@ interface CalmCornerPreferences {
   lastUsed?: string
 }
 
-// Enhanced Calm Corner Component
+// Enhanced Calm Corner Component - Fully Responsive
 const EnhancedCalmCorner: React.FC = () => {
   const { isInCalmCorner, toggleCalmCorner } = useSessionStore()
   const [currentExperience, setCurrentExperience] = useState<'heavy' | 'rock' | 'quiet' | null>(null)
@@ -114,16 +114,22 @@ const EnhancedCalmCorner: React.FC = () => {
     }
   }, [])
 
-  // Floating button when not active
+  // Floating button when not active - RESPONSIVE
   if (!isInCalmCorner) {
     return (
       <button
         onClick={toggleCalmCorner}
-        className="fixed top-4 right-4 z-50 w-16 h-16 bg-[#8BA888] hover:bg-[#7A9F77] rounded-full shadow-lg border-2 border-white transition-all duration-200 flex items-center justify-center text-2xl"
+        className="fixed top-4 right-4 z-50 
+          w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16
+          bg-[#8BA888] hover:bg-[#7A9F77] 
+          rounded-full shadow-lg border-2 border-white 
+          transition-all duration-200 
+          flex items-center justify-center 
+          text-lg sm:text-xl md:text-2xl"
         aria-label="Open calm corner for sensory regulation"
         style={{ 
-          minWidth: '64px',
-          minHeight: '64px',
+          minWidth: '48px',
+          minHeight: '48px',
           touchAction: 'manipulation'
         }}
       >
@@ -132,7 +138,7 @@ const EnhancedCalmCorner: React.FC = () => {
     )
   }
 
-  // Option selection screen
+  // Option selection screen - RESPONSIVE
   if (!currentExperience) {
     return (
       <div 
@@ -143,59 +149,76 @@ const EnhancedCalmCorner: React.FC = () => {
           touchAction: 'manipulation'
         }}
       >
-        <div className="w-full h-full flex items-center justify-center p-8">
-          {/* Option buttons container */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+        <div className="w-full h-full flex items-center justify-center 
+          p-4 sm:p-6 md:p-8 lg:p-12">
+          
+          {/* Option buttons container - RESPONSIVE LAYOUT */}
+          <div className="flex flex-col items-center justify-center 
+            gap-4 sm:gap-6 md:gap-8 lg:gap-12
+            md:flex-row
+            w-full max-w-4xl">
             
-            {/* HEAVY Option */}
+            {/* HEAVY Option - RESPONSIVE SIZING */}
             <button
               onClick={() => startExperience('heavy')}
-              className="flex flex-col items-center justify-center bg-white bg-opacity-90 hover:bg-opacity-100 rounded-3xl shadow-lg transition-all duration-200 active:scale-95 border-4 border-white"
+              className="flex flex-col items-center justify-center 
+                bg-white bg-opacity-90 hover:bg-opacity-100 
+                rounded-2xl sm:rounded-3xl 
+                shadow-lg transition-all duration-200 active:scale-95 
+                border-2 sm:border-4 border-white
+                w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48"
               style={{ 
-                width: '160px',
-                height: '160px',
-                minWidth: '160px',
-                minHeight: '160px',
+                minWidth: '128px',
+                minHeight: '128px',
                 touchAction: 'manipulation'
               }}
               aria-label="Heavy pressure experience for deep sensory input"
             >
-              <div className="text-6xl mb-3">🤗</div>
-              <div className="text-gray-800 text-xl font-bold tracking-wide">HEAVY</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-1 sm:mb-2 md:mb-3">🤗</div>
+              <div className="text-gray-800 text-sm sm:text-base md:text-lg lg:text-xl 
+                font-bold tracking-wide px-2 text-center">HEAVY</div>
             </button>
 
-            {/* ROCK Option */}
+            {/* ROCK Option - RESPONSIVE SIZING */}
             <button
               onClick={() => startExperience('rock')}
-              className="flex flex-col items-center justify-center bg-white bg-opacity-90 hover:bg-opacity-100 rounded-3xl shadow-lg transition-all duration-200 active:scale-95 border-4 border-white"
+              className="flex flex-col items-center justify-center 
+                bg-white bg-opacity-90 hover:bg-opacity-100 
+                rounded-2xl sm:rounded-3xl 
+                shadow-lg transition-all duration-200 active:scale-95 
+                border-2 sm:border-4 border-white
+                w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48"
               style={{ 
-                width: '160px',
-                height: '160px',
-                minWidth: '160px',
-                minHeight: '160px',
+                minWidth: '128px',
+                minHeight: '128px',
                 touchAction: 'manipulation'
               }}
               aria-label="Rocking movement experience for vestibular input"
             >
-              <div className="text-6xl mb-3">🌊</div>
-              <div className="text-gray-800 text-xl font-bold tracking-wide">ROCK</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-1 sm:mb-2 md:mb-3">🌊</div>
+              <div className="text-gray-800 text-sm sm:text-base md:text-lg lg:text-xl 
+                font-bold tracking-wide px-2 text-center">ROCK</div>
             </button>
 
-            {/* QUIET Option */}
+            {/* QUIET Option - RESPONSIVE SIZING */}
             <button
               onClick={() => startExperience('quiet')}
-              className="flex flex-col items-center justify-center bg-white bg-opacity-90 hover:bg-opacity-100 rounded-3xl shadow-lg transition-all duration-200 active:scale-95 border-4 border-white"
+              className="flex flex-col items-center justify-center 
+                bg-white bg-opacity-90 hover:bg-opacity-100 
+                rounded-2xl sm:rounded-3xl 
+                shadow-lg transition-all duration-200 active:scale-95 
+                border-2 sm:border-4 border-white
+                w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48"
               style={{ 
-                width: '160px',
-                height: '160px',
-                minWidth: '160px',
-                minHeight: '160px',
+                minWidth: '128px',
+                minHeight: '128px',
                 touchAction: 'manipulation'
               }}
               aria-label="Quiet sensory reduction for calming"
             >
-              <div className="text-6xl mb-3">🤫</div>
-              <div className="text-gray-800 text-xl font-bold tracking-wide">QUIET</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-1 sm:mb-2 md:mb-3">🤫</div>
+              <div className="text-gray-800 text-sm sm:text-base md:text-lg lg:text-xl 
+                font-bold tracking-wide px-2 text-center">QUIET</div>
             </button>
           </div>
         </div>
@@ -203,7 +226,7 @@ const EnhancedCalmCorner: React.FC = () => {
     )
   }
 
-  // HEAVY Experience
+  // HEAVY Experience - RESPONSIVE
   if (currentExperience === 'heavy') {
     return (
       <div 
@@ -242,28 +265,35 @@ const EnhancedCalmCorner: React.FC = () => {
             animation: 'pulseFromEdges 3s ease-in-out infinite'
           }}
         >
-          <div className="text-8xl opacity-50">🤗</div>
+          <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl opacity-50">🤗</div>
         </div>
 
         {showExitButton && (
           <button
             onClick={exitExperience}
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-green-500 hover:bg-green-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 active:scale-95"
+            className="fixed 
+              bottom-4 sm:bottom-6 md:bottom-8 
+              left-1/2 transform -translate-x-1/2 
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+              bg-green-500 hover:bg-green-600 
+              rounded-full shadow-lg 
+              flex items-center justify-center 
+              transition-all duration-200 active:scale-95"
             style={{ 
-              minWidth: '96px',
-              minHeight: '96px',
+              minWidth: '64px',
+              minHeight: '64px',
               touchAction: 'manipulation'
             }}
             aria-label="I'm ready to continue"
           >
-            <div className="text-white text-4xl">✓</div>
+            <div className="text-white text-2xl sm:text-3xl md:text-4xl">✓</div>
           </button>
         )}
       </div>
     )
   }
 
-  // ROCK Experience
+  // ROCK Experience - RESPONSIVE
   if (currentExperience === 'rock') {
     return (
       <div 
@@ -303,7 +333,7 @@ const EnhancedCalmCorner: React.FC = () => {
             animation: 'waveMotion 4s ease-in-out infinite'
           }}
         >
-          <div className="text-8xl opacity-50">🌊</div>
+          <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl opacity-50">🌊</div>
           
           {/* Subtle wave pattern */}
           <div 
@@ -318,22 +348,29 @@ const EnhancedCalmCorner: React.FC = () => {
         {showExitButton && (
           <button
             onClick={exitExperience}
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-green-500 hover:bg-green-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 active:scale-95"
+            className="fixed 
+              bottom-4 sm:bottom-6 md:bottom-8 
+              left-1/2 transform -translate-x-1/2 
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+              bg-green-500 hover:bg-green-600 
+              rounded-full shadow-lg 
+              flex items-center justify-center 
+              transition-all duration-200 active:scale-95"
             style={{ 
-              minWidth: '96px',
-              minHeight: '96px',
+              minWidth: '64px',
+              minHeight: '64px',
               touchAction: 'manipulation'
             }}
             aria-label="I'm ready to continue"
           >
-            <div className="text-white text-4xl">✓</div>
+            <div className="text-white text-2xl sm:text-3xl md:text-4xl">✓</div>
           </button>
         )}
       </div>
     )
   }
 
-  // QUIET Experience
+  // QUIET Experience - RESPONSIVE
   if (currentExperience === 'quiet') {
     return (
       <div 
@@ -354,26 +391,34 @@ const EnhancedCalmCorner: React.FC = () => {
         `}</style>
         
         <div 
-          className="w-32 h-32 rounded-full bg-white/20 flex items-center justify-center"
+          className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36
+            rounded-full bg-white/20 flex items-center justify-center"
           style={{
             animation: 'breathingCircle 4s ease-in-out infinite'
           }}
         >
-          <div className="text-4xl opacity-60">🤫</div>
+          <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl opacity-60">🤫</div>
         </div>
 
         {showExitButton && (
           <button
             onClick={exitExperience}
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 w-24 h-24 bg-green-500 hover:bg-green-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 active:scale-95"
+            className="fixed 
+              bottom-4 sm:bottom-6 md:bottom-8 
+              left-1/2 transform -translate-x-1/2 
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+              bg-green-500 hover:bg-green-600 
+              rounded-full shadow-lg 
+              flex items-center justify-center 
+              transition-all duration-200 active:scale-95"
             style={{ 
-              minWidth: '96px',
-              minHeight: '96px',
+              minWidth: '64px',
+              minHeight: '64px',
               touchAction: 'manipulation'
             }}
             aria-label="I'm ready to continue"
           >
-            <div className="text-white text-4xl">✓</div>
+            <div className="text-white text-2xl sm:text-3xl md:text-4xl">✓</div>
           </button>
         )}
       </div>
