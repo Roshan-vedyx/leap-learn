@@ -107,7 +107,7 @@ const interestCategories = {
 }
 
 const InterestSelectionPage: React.FC = () => {
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([])
+  
   const [currentStep, setCurrentStep] = useState<'categories' | 'topics' | 'confirmation'>('categories')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [showAllTopics, setShowAllTopics] = useState(false)
@@ -120,40 +120,9 @@ const InterestSelectionPage: React.FC = () => {
     setCurrentStep('topics')
   }
 
-  const handleInterestToggle = (interestId: string) => {
-    setSelectedInterests(prev => {
-      if (prev.includes(interestId)) {
-        return prev.filter(id => id !== interestId)
-      } else {
-        return [...prev, interestId]
-      }
-    })
-  }
-
-  const handleContinue = () => {
-    if (selectedInterests.length >= 1) {
-      // Save interests for potential future use
-      localStorage.setItem('selected-interests', JSON.stringify(selectedInterests))
-      
-      // Get the first selected interest and navigate to story selection page
-      const primaryInterest = selectedInterests[0]
-      localStorage.setItem('selected-interest', primaryInterest)
-      
-      // Navigate to story selection page for this interest
-      setLocation(`/stories/${primaryInterest}`)
-    }
-  }
-
-  const handleSurpriseMe = () => {
-    // Auto-select 2-3 random interests
-    const allTopics = Object.values(interestCategories).flat()
-    const randomTopics = allTopics
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 2 + Math.floor(Math.random() * 2))
-      .map(topic => topic.id)
-    
-    setSelectedInterests(randomTopics)
-    setCurrentStep('confirmation')
+  const handleTopicSelect = (topicId: string) => {
+    localStorage.setItem('selected-interest', topicId)
+    setLocation(`/stories/${topicId}`)
   }
 
   const getCurrentTopics = () => {
@@ -164,11 +133,6 @@ const InterestSelectionPage: React.FC = () => {
       return interestCategories[selectedCategory as keyof typeof interestCategories]
     }
     return []
-  }
-
-  const getSelectedTopics = () => {
-    const allTopics = Object.values(interestCategories).flat()
-    return allTopics.filter(topic => selectedInterests.includes(topic.id))
   }
 
   // Step 1: Category Selection
@@ -283,43 +247,23 @@ const InterestSelectionPage: React.FC = () => {
               Choose a topic to see all available stories!
             </p>
             
-            {/* Selection counter - Responsive design */}
-            {selectedInterests.length > 0 && (
-              <div className="inline-flex items-center gap-2 bg-indigo-100 px-3 sm:px-4 py-2 rounded-full mt-2">
-                <span className="text-sm sm:text-base font-medium text-indigo-800">
-                  {selectedInterests.length} picked ✓
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Topic Cards - Responsive grid: 1 col mobile, 2 col tablet, 2 col landscape tablet, 3 col desktop */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {topics.slice(0, 8).map((topic) => {
-              const isSelected = selectedInterests.includes(topic.id)
-              
               return (
                 <Card
                   key={topic.id}
                   className={`
                     cursor-pointer transition-all duration-300 border-2 h-full
                     min-h-[140px] sm:min-h-[160px] md:min-h-[180px]
-                    ${isSelected 
-                      ? 'border-indigo-400 bg-indigo-50 transform scale-105 shadow-lg' 
-                      : 'border-gray-200 hover:scale-102 hover:shadow-md active:scale-98'
-                    }
+                    border-gray-200 hover:scale-102 hover:shadow-md active:scale-98
                     ${topic.color}
                   `}
-                  onClick={() => handleInterestToggle(topic.id)}
+                  onClick={() => handleTopicSelect(topic.id)}
                 >
-                  <CardContent className="p-4 sm:p-6 text-center h-full flex flex-col justify-center relative">
-                    {/* Selection indicator - Responsive sizing */}
-                    {isSelected && (
-                      <div className="absolute top-2 sm:top-3 right-2 sm:right-3 w-5 h-5 sm:w-6 sm:h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs sm:text-sm font-bold">
-                        ✓
-                      </div>
-                    )}
-                    
+                  <CardContent className="p-4 sm:p-6 text-center h-full flex flex-col justify-center">
                     {/* Emoji - Responsive sizing */}
                     <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">{topic.emoji}</div>
                     
@@ -338,43 +282,6 @@ const InterestSelectionPage: React.FC = () => {
             })}
           </div>
 
-          {/* Selected Preview - Responsive layout */}
-          {selectedInterests.length > 0 && (
-            <Card className="mb-6 bg-indigo-50 border-indigo-200 border-2">
-              <CardContent className="p-4 text-center">
-                <h3 className="font-semibold text-indigo-900 mb-3 text-base sm:text-lg">
-                  You'll see stories about:
-                </h3>
-                {/* Tags - Responsive wrapping and sizing */}
-                <div className="flex flex-wrap justify-center gap-2">
-                  {getSelectedTopics().map((topic) => (
-                    <span
-                      key={topic.id}
-                      className="bg-indigo-500 text-white px-3 py-1 rounded-full text-sm font-medium min-h-[32px] flex items-center"
-                    >
-                      {topic.emoji} {topic.label}
-                    </span>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Continue button - Responsive sizing */}
-          <div className="text-center">
-            <Button
-              onClick={handleContinue}
-              disabled={selectedInterests.length === 0}
-              variant="default"
-              size="lg"
-              className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px] bg-indigo-600 hover:bg-indigo-700"
-            >
-              {selectedInterests.length === 0 
-                ? "Pick one topic to see available stories!" 
-                : "See all stories! 📚"
-              }
-            </Button>
-          </div>
         </div>
       </div>
     )

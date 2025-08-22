@@ -19,6 +19,8 @@ interface SentenceSlot {
   validWords?: string[]
 }
 
+type TtsAccent = 'US' | 'GB' | 'AU' | 'CA'
+
 const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) => {
   const [currentTemplateIndex, setCurrentTemplateIndex] = useState(0)
   const [sentenceSlots, setSentenceSlots] = useState<SentenceSlot[]>([])
@@ -28,7 +30,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   const [showCelebration, setShowCelebration] = useState(false)
   const [isReading, setIsReading] = useState(false)
   const [wordFeedback, setWordFeedback] = useState<string>('')
-  const [showHints, setShowHints] = useState(true)
+  const [showHints, setShowHints] = useState(false) // Changed to default false
+  const [audioEnabled, setAudioEnabled] = useState(false) // New audio toggle
   const [lastClickTime, setLastClickTime] = useState<number>(0)
   const [lastClickedSlot, setLastClickedSlot] = useState<number>(-1)
   const [, setLocation] = useLocation()
@@ -64,7 +67,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
         slots.push({
           id: `fixed-${index}`,
           type: 'fixed',
-          content: word,
+          content: word.toUpperCase(),
           filled: true
         })
       }
@@ -73,73 +76,48 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     return slots
   }
 
-  // Get valid words for a specific slot type with enhanced filtering
+  // Get valid words for each slot type - LIMITED TO 3-4 APPROPRIATE WORDS
   const getValidWordsForSlotType = (slotType: string): string[] => {
+    // Get theme words first
+    const availableThemeWords = themeWords.slice(0, 4) // Limit theme words to 4
+    
     switch (slotType) {
       case 'animal':
-        // Get animal words from wordBank, not filtered themeWords
-        return [
-          ...getWordsByThemeAndDifficulty('animals', 'easy'),
-          ...getWordsByThemeAndDifficulty('animals', 'regular')
-        ].map(w => w.toUpperCase())
-        
-      case 'space':
-        // Get space words from wordBank
-        return [
-          ...getWordsByThemeAndDifficulty('space', 'easy'),
-          ...getWordsByThemeAndDifficulty('space', 'regular')
-        ].map(w => w.toUpperCase())
-        
-      case 'food':
-        // Get food words from wordBank
-        return [
-          ...getWordsByThemeAndDifficulty('food', 'easy'),
-          ...getWordsByThemeAndDifficulty('food', 'regular')
-        ].map(w => w.toUpperCase())
-        
-      case 'vehicle':
-        // Get vehicle words from wordBank + template-specific vehicles
-        const vehicleWords = [
-          ...getWordsByThemeAndDifficulty('vehicles', 'easy'),
-          ...getWordsByThemeAndDifficulty('vehicles', 'regular')
-        ].map(w => w.toUpperCase())
-        
-        const templateVehicles = currentTemplate.vehicles || ['ROCKET', 'SPACESHIP', 'SHUTTLE', 'UFO', 'CAR', 'TRUCK', 'BUS', 'BIKE']
-        
-        return [...new Set([...vehicleWords, ...templateVehicles])]
+        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
+        currentTemplate.animals?.slice(0, 3) || ['CAT', 'DOG', 'BIRD']
         
       case 'adjective':
-        return currentTemplate.adjectives || ['BIG', 'SMALL', 'FAST', 'CUTE', 'FUNNY', 'SMART', 'HAPPY', 'BRAVE']
+        return currentTemplate.adjectives?.slice(0, 4) || ['BIG', 'SMALL', 'CUTE', 'FAST']
         
       case 'action':
-        return currentTemplate.actions || ['RUN', 'JUMP', 'SWIM', 'FLY', 'PLAY', 'SLEEP', 'EAT', 'DANCE']
+        return currentTemplate.actions?.slice(0, 4) || ['RUNS', 'JUMPS', 'PLAYS', 'SLEEPS']
         
       case 'color':
-        return currentTemplate.colors || ['RED', 'BLUE', 'GREEN', 'YELLOW', 'PURPLE', 'BLACK', 'WHITE', 'PINK']
+        return ['RED', 'BLUE', 'GREEN', 'YELLOW'].slice(0, 4)
         
       case 'number':
-        return currentTemplate.numbers || ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'MANY', 'SOME']
+        return currentTemplate.numbers?.slice(0, 3) || ['ONE', 'TWO', 'THREE']
         
       case 'object':
-        return currentTemplate.objects || ['BALL', 'BOOK', 'CHAIR', 'TREE', 'HOUSE', 'TOY', 'FLOWER']
+        return currentTemplate.objects?.slice(0, 4) || ['BALL', 'BOOK', 'TOY', 'TREE']
         
       case 'place':
-        return currentTemplate.places || ['HOME', 'SCHOOL', 'PARK', 'STORE', 'BEACH', 'GARDEN', 'PLAYGROUND']
+        return currentTemplate.places?.slice(0, 4) || ['HOME', 'PARK', 'SCHOOL', 'GARDEN']
         
       case 'taste':
-        return currentTemplate.tastes || ['SWEET', 'SOUR', 'SPICY', 'SALTY', 'YUMMY', 'DELICIOUS']
+        return currentTemplate.tastes?.slice(0, 3) || ['SWEET', 'YUMMY', 'DELICIOUS']
         
       case 'meal':
-        return currentTemplate.meals || ['BREAKFAST', 'LUNCH', 'DINNER', 'SNACK', 'TREAT']
+        return currentTemplate.meals?.slice(0, 4) || ['LUNCH', 'DINNER', 'SNACK', 'TREAT']
         
       case 'temperature':
-        return currentTemplate.temperatures || ['HOT', 'COLD', 'WARM', 'COOL', 'FROZEN']
+        return currentTemplate.temperatures?.slice(0, 3) || ['HOT', 'COLD', 'WARM']
         
       case 'speed':
-        return currentTemplate.speeds || ['FAST', 'SLOW', 'QUICK', 'SUPER FAST']
+        return currentTemplate.speeds?.slice(0, 3) || ['FAST', 'SLOW', 'QUICK']
         
       case 'part':
-        return currentTemplate.parts || ['WHEELS', 'DOORS', 'WINDOWS', 'SEATS', 'ENGINE']
+        return currentTemplate.parts?.slice(0, 4) || ['WHEELS', 'DOORS', 'SEATS', 'ENGINE']
         
       default:
         return []
@@ -185,16 +163,18 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       setShowCelebration(true)
       setCurrentSlotIndex(null)
       
-      // Read the completed sentence with a small delay for better UX
-      setTimeout(() => {
-        const sentence = sentenceSlots.map(slot => slot.content).join(' ')
-        handleReadAloud(sentence)
-      }, 500)
+      // Only read if audio is enabled
+      if (audioEnabled) {
+        setTimeout(() => {
+          const sentence = sentenceSlots.map(slot => slot.content).join(' ')
+          handleReadAloud(sentence)
+        }, 500)
+      }
     } else {
       setIsSentenceComplete(false)
       setShowCelebration(false)
     }
-  }, [sentenceSlots])
+  }, [sentenceSlots, audioEnabled])
 
   // Handle double-click/tap to remove words
   const handleFilledSlotClick = async (slotIndex: number) => {
@@ -207,7 +187,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       await handleSlotClear(slotIndex)
     } else {
       // Single click - just give feedback
-      setWordFeedback('💡 Double-tap this word to remove it!')
+      setWordFeedback('💡 Double-click this word to remove it!')
       setTimeout(() => setWordFeedback(''), 2000)
     }
     
@@ -229,8 +209,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     setCurrentSlotIndex(slotIndex)
     setWordFeedback('')
     
-    // Audio feedback for slot selection
-    if (audio.isSpeechSynthesisSupported()) {
+    // Audio feedback for slot selection only if enabled
+    if (audioEnabled && audio.isSpeechSynthesisSupported()) {
       const slotType = slot.type.replace('_', ' ')
       await handleReadAloud(`Choose a ${slotType} word`)
     }
@@ -257,8 +237,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     if (currentSlot.validWords && !currentSlot.validWords.includes(word)) {
       setWordFeedback(`💡 "${word}" doesn't fit here. Try a ${currentSlot.type} word!`)
       
-      // Audio feedback for wrong choice
-      if (audio.isSpeechSynthesisSupported()) {
+      // Audio feedback for wrong choice only if enabled
+      if (audioEnabled && audio.isSpeechSynthesisSupported()) {
         await handleReadAloud(`Try a ${currentSlot.type} word instead`)
       }
       
@@ -283,8 +263,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     // Positive feedback
     setWordFeedback(`✨ Great choice! "${word}" fits perfectly!`)
     
-    // Audio celebration for correct choice
-    if (audio.isSpeechSynthesisSupported()) {
+    // Audio celebration for correct choice only if enabled
+    if (audioEnabled && audio.isSpeechSynthesisSupported()) {
       await handleReadAloud(`Great! ${word}`)
     }
     
@@ -325,15 +305,15 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     // Feedback
     setWordFeedback(`🔄 "${originalWord}" is back in your word bank!`)
     
-    // Audio feedback
-    if (audio.isSpeechSynthesisSupported()) {
+    // Audio feedback only if enabled
+    if (audioEnabled && audio.isSpeechSynthesisSupported()) {
       await handleReadAloud(`${originalWord} removed`)
     }
     
     setTimeout(() => setWordFeedback(''), 2000)
   }
 
-  // FIXED: Get only relevant words for current slot type
+  // FIXED: Get only relevant words for current slot type - LIMITED TO 3-4 WORDS
   const getFilteredWordsForDisplay = () => {
     if (currentSlotIndex === null) {
       return [] // Show no words when no slot is selected
@@ -344,8 +324,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       return []
     }
     
-    // Return only words that match the current slot type
-    return availableWords.filter(word => currentSlot.validWords!.includes(word))
+    // Return only words that match the current slot type, limited to 3-4 words
+    return availableWords.filter(word => currentSlot.validWords!.includes(word)).slice(0, 4)
   }
 
   const handleReadAloud = async (text: string) => {
@@ -373,7 +353,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     if (currentTemplateIndex < templates.length - 1) {
       setCurrentTemplateIndex(currentTemplateIndex + 1)
     } else {
-      // Complete! Go to celebration
+      // Complete!
       storage.set('word-building-completed', {
         theme,
         completedAt: new Date().toISOString(),
@@ -456,10 +436,26 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
             <p className="text-xs md:text-sm text-autism-primary/60 mt-4">
               Template: <strong>"{currentTemplate.template}"</strong>
             </p>
-            {currentTemplate.hint && (
-              <p className="text-xs md:text-sm text-autism-primary/70 italic">
-                💡 {currentTemplate.hint}
-              </p>
+            
+            {/* Show/Hide Hint Button */}
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowHints(!showHints)}
+                className="text-xs md:text-sm"
+              >
+                {showHints ? 'Hide Hint' : 'Show Hint'}
+              </Button>
+            </div>
+            
+            {/* Collapsible Hint */}
+            {showHints && currentTemplate.hint && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs md:text-sm text-blue-700 italic">
+                  💡 {currentTemplate.hint}
+                </p>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -467,9 +463,24 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
         {/* Sentence Frame - responsive */}
         <Card className="mb-6 bg-white border-autism-secondary border-2">
           <CardHeader>
-            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
-              ✍️ Your Sentence
-            </CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-center text-lg md:text-xl text-autism-primary flex-1">
+                ✍️ Your Sentence
+              </CardTitle>
+              
+              {/* Audio Toggle */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-autism-primary">Read aloud:</span>
+                <Button
+                  variant={audioEnabled ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setAudioEnabled(!audioEnabled)}
+                  className="text-xs px-3 py-1"
+                >
+                  {audioEnabled ? 'ON' : 'OFF'}
+                </Button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {/* Mobile-optimized sentence slots */}
@@ -484,41 +495,24 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                     ${slot.type === 'fixed' 
                       ? 'bg-autism-neutral text-autism-primary border-autism-primary/30 cursor-default shadow-sm' 
                       : slot.filled
-                        ? 'bg-autism-secondary text-white border-autism-secondary hover:bg-autism-secondary/80 hover:scale-105 shadow-lg'
+                        ? 'bg-autism-secondary text-white border-autism-secondary hover:scale-105 shadow-lg'
                         : currentSlotIndex === index
-                          ? 'border-autism-primary border-4 bg-autism-primary/10 animate-pulse'
-                          : 'border-gray-300 border-dashed bg-gray-50 hover:border-autism-primary hover:bg-autism-primary/5'
+                          ? 'bg-blue-50 border-blue-400 border-dashed hover:bg-blue-100 shadow-md'
+                          : 'bg-gray-50 border-gray-300 border-dashed hover:bg-gray-100 hover:border-gray-400'
                     }
-                    ${slot.type !== 'fixed' ? 'active:scale-95 touch-manipulation' : ''}
                   `}
                 >
-                  {slot.filled ? (
-                    <div className="flex items-center gap-1 md:gap-2">
-                      <span className="px-2 py-1 text-center break-words max-w-[60px] md:max-w-none">
-                        {slot.content}
+                  <div className="text-center px-2">
+                    {slot.filled ? (
+                      slot.content
+                    ) : slot.content ? (
+                      slot.content
+                    ) : (
+                      <span className="text-xs md:text-sm text-gray-500 break-words">
+                        {slot.type.replace('_', ' ')}
                       </span>
-                      {slot.type !== 'fixed' && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleSlotClear(index)
-                          }}
-                          className="text-xs md:text-sm bg-red-500 text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center hover:bg-red-600 transition-colors active:scale-95"
-                          aria-label={`Remove ${slot.content}`}
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-center px-2">
-                      {slot.type === 'fixed' ? slot.content : (
-                        <span className="text-xs md:text-sm text-gray-500 break-words">
-                          {slot.type.replace('_', ' ')}
-                        </span>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
                   
                   {/* Mobile-friendly selection indicator */}
                   {currentSlotIndex === index && slot.type !== 'fixed' && (
@@ -528,6 +522,13 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* Double-click instruction */}
+            <div className="text-center mb-4">
+              <p className="text-xs md:text-sm text-autism-primary/70">
+                Double-click a word twice to remove
+              </p>
             </div>
 
             {/* Word feedback - responsive */}
@@ -543,20 +544,13 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                 <p className="text-sm md:text-base text-green-700">
                   💡 Choose a <strong>{sentenceSlots[currentSlotIndex].type.replace('_', ' ')}</strong> word below!
                 </p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowHints(false)}
-                  className="mt-2 text-xs"
-                >
-                  Hide Hints
-                </Button>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Word Bank - mobile-optimized */}
+        {/* Word Bank - mobile-optimized - Hide when sentence complete */}
+        {!isSentenceComplete && (
         <Card className="mb-6 bg-white border-autism-primary border-2">
           <CardHeader>
             <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
@@ -574,48 +568,58 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
                   Click on an empty box above to see words for that slot!
                 </p>
               </div>
+            ) : filteredWords.length === 0 ? (
+              <div className="text-center p-6">
+                <div className="text-4xl md:text-6xl mb-4">🎯</div>
+                <p className="text-base md:text-lg text-autism-primary/70">
+                  No more words available for this slot type!
+                </p>
+              </div>
             ) : (
-              /* Mobile-first word grid */
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[300px] md:max-h-[400px] overflow-y-auto">
-                {getFilteredWordsForDisplay().map((word, index) => (
-                  <button
-                    key={`word-${index}`}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                {filteredWords.map(word => (
+                  <Button
+                    key={word}
                     onClick={() => handleWordClick(word)}
-                    disabled={isReading}
-                    className="min-h-[48px] px-3 py-2 bg-white border-2 border-autism-primary text-autism-primary rounded-lg font-medium text-sm md:text-base hover:bg-autism-primary hover:text-white transition-colors disabled:opacity-50 active:scale-95 touch-manipulation break-words"
+                    variant="outline"
+                    size="comfortable"
+                    className="min-h-[48px] md:min-h-[60px] text-base md:text-lg px-4 py-3 border-2 border-autism-primary/30 hover:border-autism-primary hover:bg-autism-primary hover:text-white transition-all duration-200 transform hover:scale-105"
                   >
                     {word}
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
           </CardContent>
         </Card>
+        )}
 
-        {/* Celebration - responsive */}
+        {/* Celebration Banner */}
         {showCelebration && (
-          <Card className="mb-6 bg-gradient-to-r from-yellow-100 to-orange-100 border-3 border-yellow-400">
-            <CardContent className="p-4 md:p-8 text-center">
+          <Card className="mb-6 bg-gradient-to-r from-green-100 to-blue-100 border-green-400 border-2">
+            <CardContent className="text-center py-6">
               <div className="text-4xl md:text-6xl mb-4">🎉</div>
-              <h3 className="text-xl md:text-2xl font-bold text-orange-800 mb-4">
-                Amazing Work!
+              <h3 className="text-xl md:text-2xl font-bold text-green-700 mb-2">
+                Fantastic Sentence!
               </h3>
-              <div className="text-lg md:text-2xl text-green-700 font-semibold mb-4 p-4 bg-white/60 rounded-lg">
-                "{sentenceSlots.map(slot => slot.content).join(' ')}."
+              <div className="text-lg md:text-xl bg-white p-4 rounded-lg border border-green-200 mb-4">
+                <strong>"{sentenceSlots.map(slot => slot.content).join(' ')}"</strong>
               </div>
               <p className="text-base md:text-lg text-green-600 mb-6">
                 You're officially a sentence building superstar! 🌟
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  variant="outline"
-                  onClick={() => handleReadAloud(sentenceSlots.map(slot => slot.content).join(' '))}
-                  disabled={isReading}
-                  className="min-h-[48px] text-base md:text-lg px-6 py-3"
-                >
-                  {isReading ? '🗣️ Reading...' : '🔊 Hear My Sentence Again'}
-                </Button>
+                {audioEnabled && (
+                  <Button
+                    variant="outline"
+                    onClick={() => handleReadAloud(sentenceSlots.map(slot => slot.content).join(' '))}
+                    disabled={isReading}
+                    className="min-h-[48px] text-base md:text-lg px-6 py-3"
+                  >
+                    {isReading ? '🗣️ Reading...' : '🔊 Hear My Sentence Again'}
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -634,10 +638,10 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
           
           {isSentenceComplete && (
             <Button
-              variant="celebration"
+              variant="outline"
               onClick={handleNextTemplate}
               size="comfortable"
-              className="min-h-[48px] text-lg md:text-xl px-8 py-4"
+              className="min-h-[48px] text-base md:text-lg px-6 py-3"
             >
               {currentTemplateIndex < templates.length - 1 ? 
                 "Build Another Sentence! →" : 
@@ -673,7 +677,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
           <p>
             You are building sentences using a click-based system. First click on an empty slot to select it, 
             then click on a word from the word bank to fill that slot. Only words that fit the selected slot will 
-            be shown. You can click the X button next to filled words to remove them and try different options.
+            be shown. You can double-click filled words to remove them and try different options.
           </p>
         </div>
       </div>

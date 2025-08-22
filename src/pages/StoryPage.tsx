@@ -258,7 +258,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
           
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <button
-              onClick={() => setLocation('/practice-reading')}
+              onClick={() => setLocation('/interests')}
               className="w-full sm:w-auto min-h-[44px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
             >
               ← Back to Reading
@@ -424,13 +424,37 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
             </button>
             
             <button
-              onClick={() => setLocation('/story-selection')}
+              onClick={() => setLocation('/interests')}
               className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
             >
               📚 New Story
             </button>
           </div>
         </div>
+
+        {/* Reading Level Controls - Standalone */}
+        {story && (
+          <div className="bg-white/50 rounded-lg p-4 mb-6 max-w-md mx-auto">
+            <label className="block text-sm font-medium text-gray-700 mb-3 text-center">
+              How do you feel like reading today?
+            </label>
+            <div className="flex gap-2 justify-center">
+              {(['simple', 'full', 'challenge'] as const).map((level) => (
+                <button
+                  key={level}
+                  onClick={() => setComplexityLevel(level)}
+                  className={`min-h-[44px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    complexityLevel === level
+                      ? 'bg-blue-400 text-white'
+                      : 'bg-blue-100 text-gray-700 hover:bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  {level === 'simple' ? 'Take it easy' : level === 'full' ? 'Just right' : 'Bring it on!'}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Encouragement - Calm and Supportive */}
         <div className="text-center mt-6 sm:mt-8 text-gray-500 text-sm sm:text-base">
