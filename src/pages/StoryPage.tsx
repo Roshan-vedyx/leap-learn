@@ -172,6 +172,11 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     }
   }
 
+  const handleRestart = () => {
+    setCurrentSection(0)
+    setIsReading(false)
+  }
+  
   const handleComplexityChange = (newLevel: ComplexityLevel) => {
     setComplexityLevel(newLevel)
     storage.set('current-complexity-level', newLevel)

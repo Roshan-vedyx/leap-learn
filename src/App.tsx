@@ -35,6 +35,8 @@ import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 
+import { AssessmentFlow } from './pages/AssessmentFlow'
+
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
 
@@ -550,6 +552,11 @@ function AppContent() {
                   </div>
                 </div>
               </AuthGate>
+            </Route>
+
+            {/*Assesment Page for GTM*/}
+            <Route path="/assessment">
+              <AssessmentFlow />
             </Route>
 
             {/* 404 Not Found - catch all other routes */}

@@ -1,12 +1,13 @@
 // src/pages/WordBuildingGamePage.tsx
-// UPDATED VERSION: TTS chunks support with EXACT same UI/UX as original
+// FIXED VERSION: Autism-friendly UI with consistent colors and gentle interactions
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { storage } from '@/lib/utils'
+import { audio, storage } from '@/lib/utils'
 import { AdaptiveWordBank } from '@/data/wordBank'
+import type { TtsAccent } from '@/types'
 
 interface WordBuildingGamePageProps {
   theme: string
@@ -66,11 +67,12 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
       
       // Ensure we get proper phonetic chunks for gameplay
-      if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
+      if (!chunks || chunks.length === 0) {
+        console.warn(`⚠️ No JSON chunks found for ${currentWord}, using phonetic fallback`)
         chunks = getPhoneticChunks(currentWord)
       }
       
-      console.log(`📝 Word: ${currentWord}, Visual Chunks:`, chunks)
+      console.log(`🔍 Word: ${currentWord}, Visual Chunks:`, chunks)
       
       // Shuffle chunks for the game
       const shuffledChunks = [...chunks].sort(() => Math.random() - 0.5)
@@ -380,6 +382,23 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }
 
+  const handleListenToAvailableChunks = async () => {
+    if (availableChunks.length > 0 && !isReading) {
+      // Speak each chunk with a pause
+      setIsReading(true)
+      try {
+        for (let i = 0; i < availableChunks.length; i++) {
+          await speakText(availableChunks[i], true)
+          if (i < availableChunks.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 600))
+          }
+        }
+      } finally {
+        setIsReading(false)
+      }
+    }
+  }
+
   // Dismiss wrong order message
   const handleTryAgain = () => {
     setShowWrongOrderMessage(false)
@@ -402,71 +421,57 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         
         {/* Header - responsive */}
         <div className="text-center mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-autism-primary mb-2">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-autism-primary mb-4">
             Build the Word! 🧩
           </h1>
-          <p className="text-base md:text-lg text-autism-primary/70">
+          <p className="text-base md:text-lg text-autism-primary/70 mb-4">
             Target: <span className="font-bold text-lg md:text-xl">{currentWords[currentWordIndex]}</span>
           </p>
-        </div>
-
-        {/* Action buttons - responsive stack */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6 md:mb-8">
+          
+          {/* Single "Hear Word" button below header */}
           <Button
-            onClick={handleShowHint}
-            disabled={isWordComplete || isReading || arrangedChunks.length >= getChunksForWord(currentWords[currentWordIndex]).length}
-            className="flex-1 min-h-[48px] bg-green-500 hover:bg-green-600 text-white font-medium text-base"
-          >
-            💡 Hint
-          </Button>
-          <Button
-            onClick={handleReset}
-            disabled={isWordComplete || isReading}
-            className="flex-1 min-h-[48px] bg-orange-500 hover:bg-orange-600 text-white font-medium text-base"
-          >
-            🔄 Reset
-          </Button>
-          <Button
-            onClick={handleReadCurrentWord}
+            onClick={handleHearWord}
             disabled={isReading}
-            className="flex-1 min-h-[48px] bg-purple-500 hover:bg-purple-600 text-white font-medium text-base"
+            className="min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white font-medium text-base px-6 py-3"
           >
             {isReading ? '🔊 Reading...' : '🔊 Hear Word'}
           </Button>
         </div>
 
-        {/* Celebration - responsive */}
+        {/* Gentle celebration - NO bouncing animation */}
         {showCelebration && (
           <div className="mb-6">
-            <Card className="bg-green-50 border-2 border-green-300 animate-bounce">
+            <Card className="bg-green-50 border-2 border-green-300 shadow-lg">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-4xl md:text-5xl mb-3">🎉</div>
                 <h3 className="text-xl md:text-2xl font-bold text-green-800 mb-2">Perfect!</h3>
                 <p className="text-base md:text-lg text-green-700 mb-4">
                   You built "{currentWords[currentWordIndex]}" correctly!
                 </p>
-                <Button
-                  onClick={handleWordCompletionTTS}
-                  disabled={isReading}
-                  className="w-full sm:w-auto min-h-[48px] mb-3 sm:mb-0 sm:mr-3 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 text-base font-medium"
-                >
-                  {isReading ? '🔊 Reading...' : '🔊 Hear Success'}
-                </Button>
-                <Button
-                  onClick={handleNextWord}
-                  className="w-full sm:w-auto min-h-[48px] bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-base font-medium"
-                >
-                  {currentWordIndex >= currentWords.length - 1 ? "🎯 Choose New Theme" : "Next Word! →"}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button
+                    onClick={handleWordCompletionTTS}
+                    disabled={isReading}
+                    className="min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 text-base font-medium"
+                  >
+                    {isReading ? '🔊 Reading...' : '🔊 Hear Success'}
+                  </Button>
+                  <Button
+                    onClick={handleNextWord}
+                    className="min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 text-base font-medium"
+                  >
+                    {currentWordIndex >= currentWords.length - 1 ? "🎯 Choose New Theme" : "Next Word! →"}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
         )}
 
-        {/* Wrong order message - responsive */}
+        {/* Gentle wrong order message - NO pulsing animation */}
         {showWrongOrderMessage && (
           <div className="mb-6">
-            <Card className="bg-orange-50 border-2 border-orange-300 animate-pulse">
+            <Card className="bg-orange-50 border-2 border-orange-300 shadow-lg">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-3xl md:text-4xl mb-3">🤔</div>
                 <h3 className="text-lg md:text-xl font-medium text-orange-800 mb-2">Oops!</h3>
@@ -475,7 +480,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                 </p>
                 <Button
                   onClick={handleTryAgain}
-                  className="w-full sm:w-auto min-h-[48px] bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 text-base font-medium"
+                  className="min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 text-base font-medium"
                 >
                   Try Again 🔄
                 </Button>
@@ -485,7 +490,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         )}
 
         {/* Main game area - responsive */}
-        <Card className="mb-6 md:mb-8 border-2 border-autism-primary bg-white/90">
+        <Card className="mb-6 md:mb-8 border-2 border-autism-primary bg-blue-50/80">
           <CardContent className="p-4 md:p-6">
             
             {/* Word building area */}
@@ -526,7 +531,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                     key={`available-${index}`}
                     onClick={() => handleChunkClick(chunk, index, 'available')}
                     disabled={isReading}
-                    className="min-h-[48px] min-w-[48px] px-4 py-3 bg-white border-2 border-autism-primary text-autism-primary rounded-lg font-bold text-lg md:text-xl hover:bg-autism-primary hover:text-white transition-colors shadow-md cursor-pointer disabled:opacity-50 active:scale-95 touch-manipulation"
+                    className="min-h-[48px] min-w-[48px] px-4 py-3 bg-blue-50 border-2 border-autism-primary text-autism-primary rounded-lg font-bold text-lg md:text-xl hover:bg-autism-primary hover:text-white transition-colors shadow-md cursor-pointer disabled:opacity-50 active:scale-95 touch-manipulation"
                   >
                     {chunk}
                   </button>
@@ -534,21 +539,28 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
               </div>
             </div>
 
-            {/* TTS Controls - responsive */}
-            <div className="flex flex-col sm:flex-row gap-2 mb-4">
+            {/* Bottom action buttons - UPDATED layout: Hint, Reset, Hear Pieces */}
+            <div className="flex flex-col sm:flex-row gap-3">
               <Button
-                onClick={handleListenToArrangedChunks}
-                disabled={arrangedChunks.length === 0 || isReading}
-                className="flex-1 min-h-[44px] bg-blue-500 hover:bg-blue-600 text-white text-sm md:text-base"
+                onClick={handleHint}
+                disabled={isWordComplete || isReading || arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0)}
+                className="flex-1 min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white font-medium text-base"
               >
-                {isReading ? '🔊 Reading...' : `🔊 Hear "${arrangedChunks.join('')}"`}
+                💡 Hint
+              </Button>
+              <Button
+                onClick={handleReset}
+                disabled={isWordComplete || isReading}
+                className="flex-1 min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white font-medium text-base"
+              >
+                🔄 Reset
               </Button>
               <Button
                 onClick={handleListenToAvailableChunks}
                 disabled={availableChunks.length === 0 || isReading}
-                className="flex-1 min-h-[44px] bg-indigo-500 hover:bg-indigo-600 text-white text-sm md:text-base"
+                className="flex-1 min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white text-sm md:text-base"
               >
-                {isReading ? '🔊 Reading...' : '🔊 Hear All Pieces'}
+                {isReading ? '🔊 Reading...' : '🔊 Hear Pieces'}
               </Button>
             </div>
 
@@ -563,9 +575,9 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                 key={index}
                 className={`w-3 h-3 md:w-4 md:h-4 rounded-full ${
                   index < currentWordIndex 
-                    ? 'bg-green-500' 
+                    ? 'bg-autism-secondary' 
                     : index === currentWordIndex
-                    ? 'bg-autism-secondary'
+                    ? 'bg-autism-primary'
                     : 'bg-gray-300'
                 }`}
               />
