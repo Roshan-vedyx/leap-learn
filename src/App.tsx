@@ -86,7 +86,6 @@ const Footer = () => (
 
 // Main App Content Component (extracted to work within auth providers)
 function AppContent() {
-  const [accessibilityMode, setAccessibilityMode] = useState<AccessibilityMode>('default')
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [reducedMotion, setReducedMotion] = useState(false)
   const [location, setLocation] = useLocation()
@@ -99,20 +98,17 @@ function AppContent() {
 
   // Load preferences on app start
   useEffect(() => {
-    const savedMode = preferences.getAccessibilityMode()
     const savedFontSize = preferences.getFontSize()
     const prefersReducedMotion = accessibility.prefersReducedMotion()
 
-    setAccessibilityMode(savedMode)
     setFontSize(savedFontSize)
     setReducedMotion(prefersReducedMotion)
 
-    // Apply preferences to document
-    preferences.setAccessibilityMode(savedMode)
+    // Apply font size preference to document
     preferences.setFontSize(savedFontSize)
 
-    // Apply accessibility classes to document body
-    document.body.className = `${savedMode}-mode font-${savedFontSize}`
+    // Apply font size class to document body
+    document.body.className = `font-${savedFontSize}`
 
     // Apply reduced motion preference
     if (prefersReducedMotion) {
@@ -121,26 +117,13 @@ function AppContent() {
     }
   }, [])
 
-  // Handle accessibility mode change
-  const handleAccessibilityModeChange = (mode: AccessibilityMode) => {
-    setAccessibilityMode(mode)
-    preferences.setAccessibilityMode(mode)
-    
-    // Update body class
-    document.body.className = `${mode}-mode font-${fontSize}`
-    
-    // Announce change to screen readers
-    const announcement = `Accessibility mode changed to ${mode === 'default' ? 'default' : mode + ' mode'}`
-    announceToScreenReader(announcement)
-  }
-
   // Handle font size change
   const handleFontSizeChange = (size: FontSize) => {
     setFontSize(size)
     preferences.setFontSize(size)
     
-    // Update body class
-    document.body.className = `${accessibilityMode}-mode font-${size}`
+    // Update body class (only font size now)
+    document.body.className = `font-${size}`
     
     // Announce change to screen readers
     const announcement = `Font size changed to ${size === 'default' ? 'default' : size}`
@@ -250,81 +233,53 @@ function AppContent() {
                 <span className="sm:hidden">Calm</span>
               </Button>
               
-              {/* Accessibility Settings - Desktop Only, Mobile version below */}
+              {/* TTS Accent Settings Only - Desktop */}
               <div className="hidden lg:flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  <div className="relative">
-                    <label htmlFor="accessibility-mode" className="sr-only">
-                      Choose accessibility mode for your neurodivergent needs
-                    </label>
-                    <select
-                      id="accessibility-mode"
-                      value={accessibilityMode}
-                      onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
-                      className="
-                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                        min-w-[110px] min-h-[44px] font-primary cursor-pointer
-                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
-                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
-                        appearance-none pr-8
-                      "
-                      aria-describedby="accessibility-mode-help"
-                    >
-                      <option value="none">Screen Mode</option>
-                      <option value="adhd">ADHD</option>
-                      <option value="dyslexia">Dyslexia</option>
-                      <option value="autism">Autism</option>
-                    </select>
-                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  </div>
-
-                  {/* TTS Accent Dropdown */}
-                  <div className="relative">
-                    <label htmlFor="tts-accent" className="sr-only">
-                      Choose voice accent for text-to-speech reading
-                    </label>
-                    <select
-                      id="tts-accent"
-                      value={ttsAccent}
-                      onChange={(e) => handleTtsAccentChange(e.target.value as TtsAccent)}
-                      className="
-                        rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                        min-w-[80px] min-h-[44px] font-primary cursor-pointer
-                        hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
-                        focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
-                        appearance-none pr-8
-                      "
-                      aria-describedby="tts-accent-help"
-                      title="Choose voice accent for reading aloud"
-                    >
-                      <option value="none">Switch Accent</option>
-                      <option value="US">🇺🇸 US</option>
-                      <option value="GB">🇬🇧 UK</option>
-                      <option value="IN">🇮🇳 India</option>
-                    </select>
-                    <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  </div>
+                <div className="relative">
+                  <label htmlFor="tts-accent" className="sr-only">
+                    Choose voice accent for text-to-speech reading
+                  </label>
+                  <select
+                    id="tts-accent"
+                    value={ttsAccent}
+                    onChange={(e) => handleTtsAccentChange(e.target.value as TtsAccent)}
+                    className="
+                      rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
+                      min-w-[100px] min-h-[44px] font-primary cursor-pointer
+                      hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
+                      focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
+                      appearance-none pr-8
+                    "
+                    aria-describedby="tts-accent-help"
+                    title="Choose voice accent for reading aloud"
+                  >
+                    <option value="" disabled hidden>Choose Accent</option>
+                    <option value="US">🇺🇸 US</option>
+                    <option value="GB">🇬🇧 UK</option>
+                    <option value="IN">🇮🇳 India</option>
+                  </select>
+                  <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 </div>
-              </div>
 
-              {/* Settings Button - Professional */}
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="
-                  min-h-[44px] min-w-[44px] p-2
-                  text-warm-charcoal hover:text-deep-ocean-blue 
-                  hover:bg-gray-100 rounded-lg
-                  transition-all duration-200
-                "
-              >
-                <Settings className="w-5 h-5" />
-                <span className="sr-only">Settings</span>
-              </Button>
+                {/* Settings Button - Professional */}
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="
+                    min-h-[44px] min-w-[44px] p-2
+                    text-warm-charcoal hover:text-deep-ocean-blue 
+                    hover:bg-gray-100 rounded-lg
+                    transition-all duration-200
+                  "
+                >
+                  <Settings className="w-5 h-5" />
+                  <span className="sr-only">Settings</span>
+                </Button>
+              </div>
             </div>
           </div>
 
-          {/* Mobile/Tablet Section - Stack elements vertically */}
+          {/* Mobile/Tablet Section - MOVED OUTSIDE of flex container */}
           <div className="mt-3 sm:mt-4 space-y-3 sm:space-y-4">
             {/* Session Progress - Mobile */}
             {sessionProgress.step > 0 && (
@@ -344,34 +299,9 @@ function AppContent() {
               </div>
             )}
 
-            {/* Mobile/Tablet Accessibility Settings */}
-            <div className="lg:hidden flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <div className="relative flex-1">
-                <label htmlFor="mobile-accessibility-mode" className="sr-only">
-                  Choose accessibility mode for your neurodivergent needs
-                </label>
-                <select
-                  id="mobile-accessibility-mode"
-                  value={accessibilityMode}
-                  onChange={(e) => handleAccessibilityModeChange(e.target.value as AccessibilityMode)}
-                  className="
-                    w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm 
-                    min-h-[44px] font-primary cursor-pointer
-                    hover:border-deep-ocean-blue/50 focus:border-deep-ocean-blue 
-                    focus:ring-2 focus:ring-deep-ocean-blue/20 transition-all
-                    appearance-none pr-8
-                  "
-                  aria-describedby="accessibility-mode-help"
-                >
-                  <option value="none">Screen Mode</option>
-                  <option value="adhd">ADHD</option>
-                  <option value="dyslexia">Dyslexia</option>
-                  <option value="autism">Autism</option>
-                </select>
-                <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              </div>
-
-              <div className="relative flex-1">
+            {/* Mobile TTS Accent Only */}
+            <div className="lg:hidden">
+              <div className="relative">
                 <label htmlFor="mobile-tts-accent" className="sr-only">
                   Choose voice accent for text-to-speech reading
                 </label>
@@ -389,10 +319,10 @@ function AppContent() {
                   aria-describedby="tts-accent-help"
                   title="Choose voice accent for reading aloud"
                 >
-                  <option value="none">Voice Accent</option>
-                  <option value="US">🇺🇸 US</option>
-                  <option value="GB">🇬🇧 UK</option>
-                  <option value="IN">🇮🇳 India</option>
+                  <option value="" disabled hidden>Choose Accent</option>
+                  <option value="US">🇺🇸 US Voice</option>
+                  <option value="GB">🇬🇧 UK Voice</option>
+                  <option value="IN">🇮🇳 India Voice</option>
                 </select>
                 <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               </div>
