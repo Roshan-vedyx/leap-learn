@@ -3,7 +3,7 @@ import React from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent } from '@/components/ui/Card'
 import { EmotionalCard } from '@/components/ui/Card'
-import { PawPrint, Rocket, Pizza, Car } from 'lucide-react'
+import { PawPrint, Rocket, Waves, Users, Search } from 'lucide-react'
 
 interface WordTheme {
   id: string
@@ -16,7 +16,7 @@ interface WordTheme {
 
 const wordThemes: WordTheme[] = [
   {
-    id: 'animals',
+    id: 'animals',  // ✅ Keep this
     label: 'Amazing Animals',
     icon: PawPrint,
     description: "Build words about cute and wild animals!",
@@ -24,7 +24,7 @@ const wordThemes: WordTheme[] = [
     mood: 'focused'
   },
   {
-    id: 'space',
+    id: 'space',  // ✅ Keep this
     label: 'Space Adventure',
     icon: Rocket,
     description: "Explore the galaxy with space words!",
@@ -32,20 +32,28 @@ const wordThemes: WordTheme[] = [
     mood: 'energetic'
   },
   {
-    id: 'food',
-    label: 'Yummy Food',
-    icon: Pizza,
-    description: "Discover delicious food words!",
+    id: 'ocean',  // 🔄 CHANGE from 'food' to 'ocean'
+    label: 'Ocean Adventures',
+    icon: Waves, // You'll need to import { Waves } from 'lucide-react'
+    description: "Dive into underwater mysteries!",
+    color: 'bg-blue-100 border-blue-400',
+    mood: 'energetic'
+  },
+  {
+    id: 'friendship',  // 🔄 CHANGE from 'vehicles' to 'friendship'
+    label: 'Friendship Stories',
+    icon: Users, // You'll need to import { Users } from 'lucide-react'
+    description: "Adventures with friends!",
     color: 'bg-orange-100 border-orange-400',
     mood: 'focused'
   },
   {
-    id: 'vehicles',
-    label: 'Cool Vehicles',
-    icon: Car,
-    description: "Build words about cars, planes, and more!",
-    color: 'bg-blue-100 border-blue-400',
-    mood: 'energetic'
+    id: 'mystery',  // 🆕 ADD this new theme
+    label: 'Mystery Solving',
+    icon: Search, // You'll need to import { Search } from 'lucide-react'
+    description: "Solve exciting puzzles!",
+    color: 'bg-indigo-100 border-indigo-400',
+    mood: 'focused'
   }
 ]
 
