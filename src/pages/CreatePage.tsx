@@ -1,4 +1,4 @@
-// src/pages/CreatePage.tsx - Simplified for MVP with Lucide icons
+// src/pages/CreatePage.tsx - Enhanced with Story Reflections
 import React, { useState } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
@@ -14,7 +14,9 @@ import {
   ArrowLeft, 
   PartyPopper,
   ChevronLeft,
-  Star
+  Star,
+  Heart,
+  Lightbulb
 } from 'lucide-react'
 
 const CreatePage: React.FC = () => {
@@ -22,16 +24,16 @@ const CreatePage: React.FC = () => {
   const [response, setResponse] = useState('')
   const [, setLocation] = useLocation()
 
-  // Zustand store
-  const { currentBrainState, setCreativeResponse } = useSessionStore()
+  // Zustand store - now includes story reflections
+  const { currentBrainState, setCreativeResponse, storyReflections } = useSessionStore()
 
-  const prompts = [
+  const basePrompts = [
     {
       id: 'continue',
       title: 'What happens next?',
       icon: Sparkles,
       description: 'Continue the story in your own words',
-      placeholder: 'Maya and Bolt decided to...'
+      placeholder: 'The adventure continues when...'
     },
     {
       id: 'reminds',
@@ -45,7 +47,7 @@ const CreatePage: React.FC = () => {
       title: 'If I were the character...',
       icon: Users,
       description: 'Put yourself in the story',
-      placeholder: 'If I were Maya, I would...'
+      placeholder: 'If I were in this story, I would...'
     },
     {
       id: 'questions',
@@ -56,36 +58,50 @@ const CreatePage: React.FC = () => {
     }
   ]
 
+  // NEW: Add reflection prompts from the story
+  const reflectionPrompts = storyReflections.map((reflection, idx) => ({
+    id: `reflection-${idx}`,
+    title: 'Think about this...',
+    icon: Lightbulb,
+    description: reflection,
+    placeholder: 'I think...'
+  }))
+
+  // Combine base prompts with reflection prompts
+  const allPrompts = [...basePrompts, ...reflectionPrompts]
+
   // Adapt prompts based on brain state
   const getAdaptedPrompts = () => {
-    if (!currentBrainState) return prompts
+    if (!currentBrainState) return allPrompts
 
     switch (currentBrainState.mood) {
       case 'energetic':
         return [
-          prompts[0], // What happens next - good for high energy
+          allPrompts[0], // What happens next - good for high energy
           {
-            ...prompts[2],
+            ...allPrompts[2],
             title: 'Action time!',
             description: 'What exciting action would you take?',
             placeholder: 'If I were in this story, I would jump up and...'
           },
-          prompts[3]
+          ...reflectionPrompts,
+          allPrompts[3]
         ]
       case 'calm':
         return [
-          prompts[1], // This reminds me - reflective
+          allPrompts[1], // This reminds me - reflective
           {
-            ...prompts[0],
+            ...allPrompts[0],
             title: 'What happens peacefully?',
             description: 'Continue the story with a calm moment',
-            placeholder: 'Maya sat quietly and...'
+            placeholder: 'The character sat quietly and...'
           },
-          prompts[3]
+          ...reflectionPrompts,
+          allPrompts[3]
         ]
       case 'focused':
       default:
-        return prompts
+        return allPrompts
     }
   }
 
@@ -95,7 +111,7 @@ const CreatePage: React.FC = () => {
     setSelectedPrompt(promptId)
     const prompt = adaptedPrompts.find(p => p.id === promptId)
     if (prompt) {
-      setResponse(prompt.placeholder)
+      setResponse('')
     }
 
     // Announce selection for screen readers
@@ -137,66 +153,109 @@ const CreatePage: React.FC = () => {
             You've read an amazing story! Now it's your turn to add your own thoughts and ideas. 
             Pick what feels right to you - there are no wrong answers!
           </p>
-          
-          {/* Brain state adaptation message */}
-          {currentBrainState && (
-            <div className="mt-4 inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 text-sm border shadow-sm">
-              <currentBrainState.icon className="w-4 h-4" />
-              <span className="text-muted-foreground">
-                Prompts adapted for your {currentBrainState.label.toLowerCase()} energy
-              </span>
-            </div>
-          )}
         </div>
 
         {!selectedPrompt ? (
           /* PROMPT SELECTION SCREEN */
           <div className="space-y-6 sm:space-y-8">
-            <div className="text-center">
-              <h2 className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
-                Choose Your Creative Path
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Pick the type of creative response that appeals to you most right now
-              </p>
-            </div>
+            {/* Brain State Adaptation */}
+            {currentBrainState && (
+              <Card className="border-primary/20 bg-primary/5">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-primary" />
+                    Prompts Chosen Just For You
+                  </CardTitle>
+                  <CardDescription className="text-sm">
+                    Based on how you're feeling today ({currentBrainState.mood}), 
+                    these prompts are perfect for your current energy level.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            )}
 
-            {/* Prompt Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
-              {adaptedPrompts.map((prompt) => {
-                const IconComponent = prompt.icon
-                return (
-                  <Card 
-                    key={prompt.id}
-                    className="cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] border-2 hover:border-primary/30"
-                    onClick={() => handlePromptSelect(prompt.id)}
-                  >
-                    <CardHeader className="text-center pb-3">
-                      <div className="flex justify-center mb-3">
-                        <div className="p-3 sm:p-4 bg-primary/10 rounded-full">
-                          <IconComponent className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+            {/* Story Reflections Section */}
+            {reflectionPrompts.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5 text-yellow-500" />
+                  Questions from Your Story
+                </h2>
+                <div className="grid gap-4 sm:gap-6">
+                  {reflectionPrompts.map((prompt, idx) => (
+                    <Card 
+                      key={prompt.id}
+                      className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1 bg-gradient-to-br from-yellow-50 to-orange-50"
+                      onClick={() => handlePromptSelect(prompt.id)}
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-yellow-100 rounded-lg">
+                            <prompt.icon className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
+                          </div>
+                          <div className="flex-1">
+                            <CardTitle className="text-base sm:text-lg text-gray-800">
+                              {prompt.title}
+                            </CardTitle>
+                            <CardDescription className="text-sm sm:text-base text-gray-600 mt-1">
+                              {prompt.description}
+                            </CardDescription>
+                          </div>
                         </div>
-                      </div>
-                      <CardTitle className="text-lg sm:text-xl">{prompt.title}</CardTitle>
-                      <CardDescription className="text-sm sm:text-base">{prompt.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <div className="bg-muted/50 rounded-lg p-3 sm:p-4 text-center">
-                        <p className="text-xs sm:text-sm text-muted-foreground italic">
-                          "{prompt.placeholder}"
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
+                      </CardHeader>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* General Creative Prompts */}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <Star className="w-5 h-5 text-purple-500" />
+                Creative Prompts
+              </h2>
+              <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+                {basePrompts.map((prompt) => {
+                  const isAdapted = adaptedPrompts.find(p => p.id === prompt.id && p.title !== prompt.title)
+                  const displayPrompt = isAdapted || prompt
+                  
+                  return (
+                    <Card 
+                      key={prompt.id}
+                      className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1"
+                      onClick={() => handlePromptSelect(prompt.id)}
+                    >
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <displayPrompt.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                          </div>
+                          <div className="flex-1">
+                            <CardTitle className="text-base sm:text-lg">
+                              {displayPrompt.title}
+                            </CardTitle>
+                            <CardDescription className="text-sm sm:text-base">
+                              {displayPrompt.description}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  )
+                })}
+              </div>
             </div>
 
             {/* Encouragement */}
             <div className="text-center">
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Remember: Your ideas are valuable! There's no right or wrong way to be creative.
-              </p>
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/60 rounded-full border border-primary/20">
+                <PartyPopper className="w-5 h-5 text-primary" />
+                <p className="text-sm sm:text-base text-muted-foreground font-medium">
+                  Choose what feels good right now. 
+                  There's no right or wrong way to be creative.
+                </p>
+              </div>
             </div>
           </div>
         ) : (
@@ -242,82 +301,47 @@ const CreatePage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                   <div className={`flex items-center gap-2 text-sm transition-colors ${
                     response.trim().length >= 10 
-                      ? 'text-primary font-medium' 
+                      ? 'text-green-600' 
                       : 'text-muted-foreground'
                   }`}>
-                    <span>{response.trim().length} characters</span>
-                    {response.trim().length >= 10 && (
-                      <>
-                        <Star className="w-4 h-4" />
-                        <span>Great work!</span>
-                      </>
-                    )}
+                    <Star className="w-4 h-4" />
+                    <span>
+                      {response.trim().length >= 10 
+                        ? 'Great job! You can continue or finish when ready.' 
+                        : 'Write at least 10 characters to continue'
+                      }
+                    </span>
                   </div>
+                  
+                  <div className="text-sm text-muted-foreground">
+                    {response.length} characters
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    onClick={() => setSelectedPrompt(null)}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Choose Different Prompt
+                  </Button>
+                  
+                  <Button
+                    onClick={handleContinue}
+                    disabled={response.trim().length < 10}
+                    className="flex items-center gap-2 flex-1"
+                  >
+                    <PartyPopper className="w-4 h-4" />
+                    Celebrate My Creativity!
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => {
-                  setSelectedPrompt(null)
-                  setResponse('')
-                }}
-                className="w-full sm:w-auto min-h-[44px] sm:min-h-[56px] flex items-center justify-center gap-2"
-              >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" /> 
-                Choose Different Prompt
-              </Button>
-              
-              <Button
-                variant="default"
-                size="lg"
-                onClick={handleContinue}
-                disabled={response.trim().length < 10}
-                className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 min-h-[44px] sm:min-h-[56px] flex items-center justify-center gap-2"
-              >
-                {response.trim().length < 10 
-                  ? 'Keep Writing...' 
-                  : (
-                    <>
-                      I'm Done Creating! <PartyPopper className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </>
-                  )
-                }
-              </Button>
-            </div>
-
-            {/* Encouragement */}
-            <div className="text-center">
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Take your time! Your ideas are valuable and there's no rush.
-              </p>
-            </div>
           </div>
         )}
-
-        {/* Back to Story */}
-        <div className="text-center mt-6 sm:mt-8">
-          <Button
-            variant="ghost"
-            onClick={() => setLocation('/story')}
-            className="min-h-[44px] text-muted-foreground hover:text-foreground flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to Story
-          </Button>
-        </div>
-
-        {/* Accessibility Information */}
-        <div className="sr-only">
-          <p>
-            This page lets you respond creatively to the story you just read. 
-            Choose from different prompts that have been adapted to your current energy level.
-            Your response will be celebrated, not graded.
-          </p>
-        </div>
 
         {/* Hidden announcements area for screen readers */}
         <div id="accessibility-announcements" className="sr-only" aria-live="polite"></div>

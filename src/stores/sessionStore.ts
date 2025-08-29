@@ -59,6 +59,7 @@ interface SessionState {
   currentStoryId: string | null
   creativeResponse: CreativeResponse | null
   currentAppSection: string // track where user is in app
+  storyReflections: string[]
   
   // Session history
   completedSessions: SessionData[]
@@ -75,6 +76,7 @@ interface SessionState {
   setStoryId: (storyId: string) => void
   setCreativeResponse: (response: CreativeResponse) => void
   setCurrentAppSection: (section: string) => void
+  setStoryReflections: (reflections: string[]) => void
   completeSession: () => void
   resetSession: () => void
   toggleCalmCorner: () => void
@@ -108,6 +110,7 @@ export const useSessionStore = create<SessionState>()(
       currentStoryId: null,
       creativeResponse: null,
       currentAppSection: 'home',
+      storyReflections: [],
       completedSessions: [],
       isInCalmCorner: false,
       
@@ -140,6 +143,10 @@ export const useSessionStore = create<SessionState>()(
 
       setCurrentAppSection: (section: string) => {
         set({ currentAppSection: section })
+      },
+
+      setStoryReflections: (reflections: string[]) => {
+        set({ storyReflections: reflections })
       },
 
       completeSession: () => {

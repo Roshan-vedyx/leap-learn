@@ -1,8 +1,9 @@
-// src/pages/StoryPage.tsx - Complete implementation with complexity extracted from settings
+// src/pages/StoryPage.tsx - Fixed version
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { audio, storage } from '@/lib/utils'
 import { DynamicStoryLoader } from '@/utils/dynamicStoryLoader'
+import { useSessionStore } from '@/stores/sessionStore'
 import type { ComplexityLevel } from '@/types'
 
 interface StoryTemplate {
@@ -21,17 +22,29 @@ interface StoryPageProps {
   storyName?: string
 }
 
+type StoryBlock = {
+  type: 'narration' | 'choice' | 'consequence' | 'reflection' | 'action' | 'continuation' | 'conclusion'
+  text: string
+  choiceLetter?: string
+  choicePointId?: number
+  options?: { letter: string; text: string }[]
+}
+
 const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const [currentSection, setCurrentSection] = useState(0)
   const [isReading, setIsReading] = useState(false)
   const [readingMode, setReadingMode] = useState<'text' | 'audio' | 'both'>('text')
   const [complexityLevel, setComplexityLevel] = useState<ComplexityLevel>('full')
-  const [showSettings, setShowSettings] = useState(false)
-  const [showComplexityHint, setShowComplexityHint] = useState(false)
   const [story, setStory] = useState<StoryTemplate | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [choices, setChoices] = useState<{ [choicePointId: number]: string }>({})
+  const [showComplexityHint, setShowComplexityHint] = useState(false)
   const [, setLocation] = useLocation()
+
+  // NEW: Store reflections for CreatePage
+  const { setStoryReflections } = useSessionStore()
+  const [collectedReflections, setCollectedReflections] = useState<string[]>([])
 
   // Load story template dynamically
   useEffect(() => {
@@ -40,22 +53,15 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         setLoading(true)
         setError(null)
 
-        // Get interest and story from URL params or localStorage
         const selectedInterests = JSON.parse(localStorage.getItem('selected-interests') || '[]')
         const currentInterest = interest || selectedInterests[0] || 'animals'
         const currentStoryName = storyName || 'forest-rescue'
         
-        console.log('Loading story:', currentInterest, currentStoryName)
-        
-        // Use the dynamic loader
         const loadedStory = await DynamicStoryLoader.loadStory(currentInterest, currentStoryName)
         
         if (loadedStory) {
           setStory(loadedStory)
-          console.log('Successfully loaded story:', loadedStory.title)
         } else {
-          // Fallback story if the requested one doesn't exist
-          console.warn(`Story not found: ${currentInterest}/${currentStoryName}`)
           setStory({
             id: 'fallback-story',
             title: 'Adventure Story',
@@ -70,18 +76,6 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
       } catch (error) {
         console.error('Failed to load story:', error)
         setError('Failed to load the story. Please try again.')
-        
-        // Fallback story for errors
-        setStory({
-          id: 'error-fallback',
-          title: 'Story Loading Error',
-          theme: 'general',
-          stories: {
-            simple: 'Sorry, we had trouble loading your story. Please try again.',
-            regular: 'We encountered an issue loading your story. Please refresh the page or try a different story.',
-            challenge: 'Unfortunately, we experienced a technical difficulty while loading your requested story. Please refresh the page or navigate back to select another adventure.'
-          }
-        })
       } finally {
         setLoading(false)
       }
@@ -90,19 +84,16 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     loadStory()
   }, [interest, storyName])
 
-  // Get saved complexity level
+  // Load saved complexity
   useEffect(() => {
     const savedComplexity = storage.get('current-complexity-level', 'full') as ComplexityLevel
     setComplexityLevel(savedComplexity === 'regular' ? 'full' : savedComplexity)
   }, [])
 
-  
-  // Save complexity level when changed
   useEffect(() => {
     storage.set('current-complexity-level', complexityLevel)
   }, [complexityLevel])
 
-  // Show complexity hint for new users
   useEffect(() => {
     const hasSeenHint = storage.get('complexity-hint-seen', false)
     if (!hasSeenHint) {
@@ -113,43 +104,120 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
   const getCurrentStoryText = (): string => {
     if (!story) return ''
-    
-    // Map complexity levels to story keys
     const storyKey = complexityLevel === 'simple' ? 'simple' : 
-                    complexityLevel === 'challenge' ? 'challenge' : 'regular'
-    
+                     complexityLevel === 'challenge' ? 'challenge' : 'regular'
     return story.stories[storyKey] || story.stories.regular
   }
 
-  // Break story into sections (sentences)
-  const getStorySections = (): string[] => {
-    const fullText = getCurrentStoryText()
-    return fullText.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0)
+  // FIXED: Parse blocks and collect reflections (moved to useEffect to prevent infinite loop)
+  const parseStoryBlocks = (storyText: string): { blocks: StoryBlock[], reflections: string[] } => {
+    let choicePointCounter = 0
+    const rawBlocks = storyText.split(/\n+/)
+    const parsedBlocks: StoryBlock[] = []
+    const reflections: string[] = []
+
+    for (let i = 0; i < rawBlocks.length; i++) {
+      let block = rawBlocks[i].trim()
+
+      // Skip empty blocks
+      if (block.length === 0) continue
+
+      if (block.startsWith('[CHOICE POINT')) {
+        choicePointCounter++
+        const question = block.replace(/\[CHOICE POINT \d+\]/, '').trim()
+        const options: { letter: string; text: string }[] = []
+        let j = i + 1
+
+        while (j < rawBlocks.length && /^[A-C]\)/.test(rawBlocks[j].trim())) {
+          const line = rawBlocks[j].trim()
+          const match = line.match(/^([A-C])\)\s*(.+)$/)
+          if (match) {
+            options.push({ letter: match[1], text: match[2] })
+          }
+          j++
+        }
+
+        parsedBlocks.push({
+          type: 'choice',
+          text: question,
+          choicePointId: choicePointCounter,
+          options
+        })
+
+        i = j - 1
+      }
+      else if (block.startsWith('[CONSEQUENCE')) {
+        const letter = block.match(/\[CONSEQUENCE (.)\]/)?.[1]
+        parsedBlocks.push({
+          type: 'consequence',
+          text: block,
+          choiceLetter: letter,
+          choicePointId: choicePointCounter
+        })
+      }
+      // COLLECT reflections instead of creating blocks
+      else if (block.startsWith('[PERSONAL REFLECTION]')) {
+        const reflectionText = block.replace('[PERSONAL REFLECTION]', '').trim()
+        reflections.push(reflectionText)
+        // Don't add to parsedBlocks - we'll show these in CreatePage
+      }
+      else if (block.startsWith('[ACTION REFLECTION]')) {
+        parsedBlocks.push({ type: 'action', text: block })
+      }
+      else if (block.startsWith('[STORY CONTINUATION]')) {
+        parsedBlocks.push({ type: 'continuation', text: block })
+      }
+      else if (block.startsWith('[FINAL CONCLUSION]')) {
+        parsedBlocks.push({ type: 'conclusion', text: block })
+      }
+      // FIXED: Only add substantial content as narration
+      else if (block.length > 20) {
+        parsedBlocks.push({ type: 'narration', text: block })
+      }
+    }
+
+    return { blocks: parsedBlocks, reflections }
   }
 
-  const sections = getStorySections()
-  const totalSections = sections.length
+  // FIXED: Parse story and set reflections in useEffect to prevent infinite loop
+  const [blocks, setBlocks] = useState<StoryBlock[]>([])
+  const totalSections = blocks.length
 
+  useEffect(() => {
+    if (story) {
+      const storyText = getCurrentStoryText()
+      const result = parseStoryBlocks(storyText)
+      setBlocks(result.blocks)
+      setCollectedReflections(result.reflections)
+      // Reset section if it's out of bounds
+      setCurrentSection(prev => Math.min(prev, result.blocks.length - 1))
+    }
+  }, [story, complexityLevel]) // Only re-parse when story or complexity changes
+
+  // FIXED: Clean text for TTS
   const handleReadAloud = async (textToRead?: string) => {
     if (!audio.isSpeechSynthesisSupported()) return
-    
-    // Small delay to ensure voices are loaded
     await new Promise(resolve => setTimeout(resolve, 100))
-    
     const currentAccent = storage.get('tts-accent', 'GB') as 'US' | 'GB' | 'IN'
-    const text = textToRead || sections[currentSection] || getCurrentStoryText()
+    
+    let text = textToRead || (blocks[currentSection]?.text) || getCurrentStoryText()
+    
+    // FIXED: Remove prefixes for TTS
+    text = text.replace(/\[CONSEQUENCE .\]\s*/g, '')
+    text = text.replace(/\[PERSONAL REFLECTION\]\s*/g, '')
+    text = text.replace(/\[ACTION REFLECTION\]\s*/g, '')
+    text = text.replace(/\[STORY CONTINUATION\]\s*/g, '')
+    text = text.replace(/\[FINAL CONCLUSION\]\s*/g, '')
     
     setIsReading(true)
     try {
       const selectedVoice = audio.getBestVoiceForAccent(currentAccent)
-      console.log(`🎤 Using ${currentAccent} voice:`, selectedVoice?.name)
-      
       await audio.speak(text, {
         voice: selectedVoice,
         accent: currentAccent,
-        rate: 0.8,
-        pitch: 0.9,
-        volume: 0.8
+        rate: 0.85,
+        pitch: 0.95,
+        volume: 0.9
       })
     } catch (error) {
       console.error('Text-to-speech error:', error)
@@ -158,318 +226,152 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     }
   }
 
-  const handleNextSection = () => {
-    if (currentSection < totalSections - 1) {
-      setCurrentSection(currentSection + 1)
-    } else {
-      setLocation('/create')
-    }
+  const handleChoiceSelect = (choicePointId: number, letter: string) => {
+    setChoices(prev => ({ ...prev, [choicePointId]: letter }))
   }
 
-  const handlePreviousSection = () => {
-    if (currentSection > 0) {
-      setCurrentSection(currentSection - 1)
-    }
-  }
-
-  const handleRestart = () => {
-    setCurrentSection(0)
-    setIsReading(false)
-  }
-  
   const handleComplexityChange = (newLevel: ComplexityLevel) => {
     setComplexityLevel(newLevel)
-    storage.set('current-complexity-level', newLevel)
     setShowComplexityHint(false)
-    setCurrentSection(0) // Reset to beginning with new complexity
+    // The useEffect will handle re-parsing when complexityLevel changes
   }
 
-  const dismissComplexityHint = () => {
-    setShowComplexityHint(false)
-  }
-
-  const handleBackToStories = () => {
-    if (interest) {
-      setLocation(`/stories/${interest}`)
+  // FIXED: Navigate to CreatePage at story end
+  const handleNextSection = () => {
+    if (currentSection === totalSections - 1) {
+      // Story finished - save reflections and go to CreatePage
+      setStoryReflections(collectedReflections)
+      setLocation('/create')
     } else {
-      setLocation('/interests')
+      setCurrentSection(s => Math.min(totalSections - 1, s + 1))
     }
   }
 
-  const complexityLabels = {
-    simple: { label: 'Easier', emoji: '🌱', description: '' },
-    full: { label: 'Just Right', emoji: '🎯', description: '' },
-    challenge: { label: 'Challenge Me', emoji: '🚀', description: '' }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
-        <div className="max-w-3xl mx-auto py-8">
-          <div className="text-center">
-            <div className="text-4xl mb-4">📖</div>
-            <h1 className="text-3xl font-bold text-blue-900 mb-4">
-              Loading Your Story...
-            </h1>
-            <div className="animate-pulse text-blue-600">
-              Getting everything ready for you...
+  const renderBlock = (block: StoryBlock, idx: number) => {
+    switch (block.type) {
+      case 'choice':
+        return (
+          <div key={idx} className="my-6">
+            <p className="font-semibold text-blue-700 mb-3">{block.text}</p>
+            <div className="flex flex-col gap-3">
+              {block.options?.map(opt => (
+                <button
+                  key={opt.letter}
+                  onClick={() => handleChoiceSelect(block.choicePointId!, opt.letter)}
+                  className={`w-full px-4 py-3 rounded-xl text-lg font-medium text-left transition-colors ${
+                    choices[block.choicePointId!] === opt.letter
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white border border-blue-300 text-blue-700 hover:bg-blue-50'
+                  }`}
+                >
+                  <span className="font-bold mr-2">{opt.letter})</span>
+                  {opt.text}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
-    )
+        )
+
+      case 'consequence':
+        if (choices[block.choicePointId!] === block.choiceLetter) {
+          return <p key={idx} className="text-gray-700 italic">{block.text.replace(/\[CONSEQUENCE .\]/, '')}</p>
+        }
+        return null
+
+      case 'action':
+        return <div key={idx} className="bg-green-50 border border-green-200 rounded-lg p-4 my-4 font-semibold">🌍 {block.text.replace('[ACTION REFLECTION]', '').trim()}</div>
+      case 'continuation':
+        return <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">{block.text.replace('[STORY CONTINUATION]', '').trim()}</div>
+      case 'conclusion':
+        return <div key={idx} className="bg-purple-50 border border-purple-200 rounded-lg p-4 my-4 font-bold">⭐ {block.text.replace('[FINAL CONCLUSION]', '').trim()}</div>
+      default:
+        return <p key={idx} className="mb-3">{block.text}</p>
+    }
   }
 
-  if (error && !story) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50 p-4">
-        <div className="max-w-3xl mx-auto py-8">
-          <div className="text-center">
-            <div className="text-4xl mb-4">😅</div>
-            <h1 className="text-3xl font-bold text-blue-900 mb-4">
-              Story Not Found
-            </h1>
-            <p className="text-lg text-blue-700 mb-6">{error}</p>
-            <button 
-              onClick={handleBackToStories}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
-            >
-              ← Back to Stories
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading story...</div>
+  if (error && !story) return <div className="min-h-screen flex items-center justify-center">Error loading story</div>
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 sm:mb-8">
-          <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
-              {story?.title || 'Loading Story...'}
-            </h1>
-            <p className="text-sm sm:text-base text-gray-600">
-              Section {currentSection + 1} of {totalSections}
-            </p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-            <button
-              onClick={() => setLocation('/interests')}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              ← Back to Reading
-            </button>
-            
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors"
-            >
-              {showSettings ? "Show less" : "⚙️ More Options"}
-            </button>
-          </div>
-        </div>
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">{story?.title}</h1>
+        <p className="text-gray-500 mb-6">Section {currentSection + 1} of {totalSections}</p>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-8 sm:py-12">
-            <div className="text-lg sm:text-xl text-gray-600">Loading your story...</div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6 mb-6">
-            <div className="text-red-800 font-medium mb-2">Oops! Something went wrong</div>
-            <div className="text-red-600 text-sm sm:text-base">{error}</div>
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-3 min-h-[44px] px-4 py-2 bg-red-100 hover:bg-red-200 text-red-800 rounded-lg transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        )}
-
-        {/* Settings Panel - Expandable */}
-        {showSettings && story && (
-          <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6">
-            <h3 className="font-semibold text-gray-800 mb-4 text-base sm:text-lg">Reading Settings</h3>
-            
-            {/* Complexity Level Controls */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Reading Level:
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {(['simple', 'full', 'challenge'] as const).map((level) => (
-                    <button
-                      key={level}
-                      onClick={() => setComplexityLevel(level)}
-                      className={`min-h-[44px] px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                        complexityLevel === level
-                          ? 'bg-blue-500 text-white'
-                          : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                      }`}
-                    >
-                      {level === 'simple' ? 'Simple' : level === 'full' ? 'Standard' : 'Challenge'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reading Mode Controls */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  How would you like to read?
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {(['text', 'audio', 'both'] as const).map((mode) => (
-                    <button
-                      key={mode}
-                      onClick={() => setReadingMode(mode)}
-                      className={`min-h-[44px] px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                        readingMode === mode
-                          ? 'bg-green-500 text-white'
-                          : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-                      }`}
-                    >
-                      {mode === 'text' ? '📖 Read' : mode === 'audio' ? '🔊 Listen' : '👀👂 Both'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Complexity Hint for New Users */}
+        {/* Complexity Hint */}
         {showComplexityHint && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 sm:p-6 mb-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="text-2xl">💡</div>
-              <div className="flex-1">
-                <div className="font-medium text-yellow-800 mb-1">New Feature!</div>
-                <p className="text-yellow-700 text-sm sm:text-base mb-2">
-                  You can change the reading level anytime using the buttons above. 
-                  Pick what feels right for you today!
-                </p>
-                <button
-                  onClick={() => setShowComplexityHint(false)}
-                  className="text-xs sm:text-sm text-yellow-700 hover:text-yellow-900 underline min-h-[44px] px-2 py-1"
-                >
-                  Got it! ✓
-                </button>
-              </div>
-            </div>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <p className="text-yellow-800 font-medium mb-2">💡 You can change the reading level anytime.</p>
+            <button
+              onClick={() => setShowComplexityHint(false)}
+              className="underline text-sm text-yellow-700 hover:text-yellow-900"
+            >
+              Got it ✓
+            </button>
           </div>
         )}
 
-        {/* MAIN STORY CARD - The Hero Element */}
-        <div className="relative bg-white rounded-xl p-4 sm:p-6 lg:p-8 mb-6 shadow-sm border-2 border-blue-200">
-          
-          {/* Story Content - Biggest, cleanest, HERO of the page */}
-          <div className="text-base sm:text-lg lg:text-xl leading-relaxed text-gray-800 mb-6 sm:mb-8 font-serif min-h-[120px] sm:min-h-[140px]">
-            {sections[currentSection] || getCurrentStoryText()}
-          </div>
-
-          {/* Navigation */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-            <button
-              onClick={handlePreviousSection}
-              disabled={currentSection === 0}
-              className="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-blue-100 hover:bg-blue-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg font-medium text-blue-800 transition-colors"
-            >
-              ← Previous
-            </button>
-
-            <div className="flex gap-2 order-first sm:order-none">
-              {Array.from({ length: totalSections }, (_, i) => (
-                <div
-                  key={i}
-                  className={`w-4 h-4 sm:w-3 sm:h-3 rounded-full ${
-                    i === currentSection ? 'bg-blue-500' : 'bg-blue-200'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNextSection}
-              className="w-full sm:w-auto min-h-[44px] px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
-            >
-              {currentSection === totalSections - 1 ? 'Finish' : 'Next'} →
-            </button>
-          </div>
-
-          {/* Quick Controls */}
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
-            <button
-              onClick={() => handleReadAloud()}
-              disabled={isReading}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-green-100 hover:bg-green-200 disabled:opacity-50 rounded-lg text-sm text-green-700 transition-colors"
-            >
-              🔊 {isReading ? 'Reading...' : 'Read Aloud'}
-            </button>
-            
-            <button
-              onClick={handleRestart}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-lg text-sm text-orange-700 transition-colors"
-            >
-              🔄 Start Over
-            </button>
-            
-            <button
-              onClick={() => setLocation('/interests')}
-              className="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg text-sm text-purple-700 transition-colors"
-            >
-              📚 New Story
-            </button>
-          </div>
+        {/* Story Block */}
+        <div className="bg-white rounded-xl p-6 border shadow-sm min-h-[150px]">
+          {blocks.length > 0 && currentSection < blocks.length ? (
+            renderBlock(blocks[currentSection], currentSection)
+          ) : (
+            <p className="text-gray-500">Loading story section...</p>
+          )}
         </div>
 
-        {/* Reading Level Controls - Standalone */}
+        {/* Navigation */}
+        <div className="flex justify-between mt-6">
+          <button
+            onClick={() => setCurrentSection(s => Math.max(0, s - 1))}
+            disabled={currentSection === 0}
+            className="px-4 py-2 bg-blue-100 rounded-lg disabled:opacity-40"
+          >
+            ← Back
+          </button>
+          <button
+            onClick={handleNextSection}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+          >
+            {currentSection === totalSections - 1 ? 'Create Your Response →' : 'Next →'}
+          </button>
+        </div>
+
+        {/* Controls */}
+        <div className="flex gap-3 mt-6 flex-wrap">
+          <button onClick={() => handleReadAloud()} disabled={isReading} className="px-4 py-2 bg-green-100 rounded-lg">
+            🔊 {isReading ? 'Reading...' : 'Read Aloud'}
+          </button>
+          <button onClick={() => setCurrentSection(0)} className="px-4 py-2 bg-orange-100 rounded-lg">
+            🔄 Start Over
+          </button>
+          <button onClick={() => setLocation('/interests')} className="px-4 py-2 bg-purple-100 rounded-lg">
+            📚 New Story
+          </button>
+        </div>
+
+        {/* Complexity Level Controls */}
         {story && (
-          <div className="bg-white/50 rounded-lg p-4 mb-6 max-w-md mx-auto">
-            <label className="block text-sm font-medium text-gray-700 mb-3 text-center">
-              How do you feel like reading today?
-            </label>
+          <div className="bg-white/50 rounded-lg p-4 mt-8 max-w-md mx-auto text-center">
+            <p className="text-sm font-medium text-gray-700 mb-3">How do you feel like reading today?</p>
             <div className="flex gap-2 justify-center">
               {(['simple', 'full', 'challenge'] as const).map((level) => (
                 <button
                   key={level}
-                  onClick={() => setComplexityLevel(level)}
+                  onClick={() => handleComplexityChange(level)}
                   className={`min-h-[44px] px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     complexityLevel === level
-                      ? 'bg-blue-400 text-white'
+                      ? 'bg-blue-500 text-white'
                       : 'bg-blue-100 text-gray-700 hover:bg-gray-50 border border-gray-200'
                   }`}
                 >
-                  {level === 'simple' ? 'Take it easy' : level === 'full' ? 'Just right' : 'Bring it on!'}
+                  {level === 'simple' ? '🌱 Easy' : level === 'full' ? '🎯 Just Right' : '🚀 Challenge'}
                 </button>
               ))}
             </div>
           </div>
         )}
-
-        {/* Encouragement - Calm and Supportive */}
-        <div className="text-center mt-6 sm:mt-8 text-gray-500 text-sm sm:text-base">
-          Take your time • No rush • You're doing great!
-        </div>
-
-        {/* Accessibility Information */}
-        <div className="sr-only">
-          <p>
-            You are reading "{story?.title}", section {currentSection + 1} of {totalSections}.
-            Currently reading at {complexityLabels[complexityLevel]?.label || complexityLevel} level.
-            Use the Previous and Next buttons to navigate, or use the audio controls to listen to the content.
-            You can switch reading levels anytime using the reading level buttons above the story.
-          </p>
-        </div>
       </div>
     </div>
   )
