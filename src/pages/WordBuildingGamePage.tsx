@@ -315,7 +315,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     return messages[family] || `Outstanding work on ${word.toUpperCase()}!`
   }
 
-  // Pattern discovery system
+  // Pattern discovery system - FIXED to avoid duplicates
   const checkPatternDiscovery = (word: string) => {
     if (!currentWordData) return
     
@@ -324,9 +324,15 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     // Update pattern progress
     setPatternProgress(prev => {
       const current = prev[family] || { family, wordsCompleted: [], totalEncountered: 0, lastCelebrated: 0 }
+      
+      // Check if word is already in the completed list to avoid duplicates
+      if (current.wordsCompleted.includes(word.toUpperCase())) {
+        return prev // Don't add duplicate
+      }
+      
       const updated = {
         ...current,
-        wordsCompleted: [...current.wordsCompleted, word],
+        wordsCompleted: [...current.wordsCompleted, word.toUpperCase()],
         totalEncountered: current.totalEncountered + 1
       }
       
@@ -369,7 +375,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }
 
-  // Word completion with enhanced celebrations
+  // Word completion with enhanced celebrations - FIXED wrong order logic
   useEffect(() => {
     const checkWordCompletion = () => {
       if (arrangedChunks.length === 0) return
@@ -383,6 +389,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         setShowCelebration(true)
         setShowMeaningIntegration(true)
         setShowContextIntro(false)
+        setShowWrongOrderMessage(false) // Immediately hide wrong order message on success
         setWordsCompleted(prev => [...prev, currentWord])
         
         // Track pattern discovery
@@ -391,6 +398,11 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         // Performance tracking
         const completionTime = Date.now() - wordStartTime
         console.log(`📊 Word "${currentWord}" completed in ${completionTime}ms with ${hintsUsed} hints and ${resetsUsed} resets`)
+        
+        // Auto-play success TTS message
+        setTimeout(() => {
+          handleWordCompletionTTS()
+        }, 500)
         
         // Update adaptive system with your existing recordWordPerformance method
         if (adaptiveWordBank.current) {
@@ -404,31 +416,81 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
             timestamp: Date.now()
           })
         }
-      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0)) {
+      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration) {
+        // Only show wrong order message if word is NOT complete, NOT celebrating, and we have all chunks arranged
         setShowWrongOrderMessage(true)
+        setTimeout(() => setShowWrongOrderMessage(false), 4000)
       }
     }
     
     checkWordCompletion()
-  }, [arrangedChunks, currentWord, wordStartTime, hintsUsed, resetsUsed])
+  }, [arrangedChunks, currentWord, wordStartTime, hintsUsed, resetsUsed, isWordComplete, showCelebration])
 
-  // Enhanced TTS system - Fixed to match your original working audio implementation
-  const getStoredAccent = (): TtsAccent => storage.get('tts-accent', 'GB')
-  
+  // FIXED: Back to your original working TTS implementation
   const speakText = async (text: string, isChunk: boolean = false): Promise<void> => {
-    if (!audio.isSpeechSynthesisSupported()) {
-      console.warn('TTS not supported')
-      return
-    }
-    
-    setIsReading(true)
-    try {
-      const accent = getStoredAccent()
-      await audio.speak(text, { accent, rate: isChunk ? 0.8 : 0.9 })
-    } catch (error) {
-      console.warn('TTS failed:', error)
-    }
-    setIsReading(false)
+    return new Promise((resolve) => {
+      if (!('speechSynthesis' in window)) {
+        console.warn('Speech synthesis not supported')
+        resolve()
+        return
+      }
+
+      try {
+        setIsReading(true)
+        console.log(`🔊 Speaking: "${text}"`)
+        
+        // Stop any current speech gently
+        if (speechSynthesis.speaking) {
+          speechSynthesis.cancel()
+          setTimeout(() => proceedWithSpeech(), 100)
+        } else {
+          proceedWithSpeech()
+        }
+
+        function proceedWithSpeech() {
+          // Get saved accent preference (default to GB)
+          const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
+          console.log(`🎤 Using accent: ${savedAccent}`)
+          
+          // Create utterance
+          const utterance = new SpeechSynthesisUtterance(text)
+          
+          // Child-friendly speech parameters (consistent for neurodivergent users)
+          utterance.rate = isChunk ? 0.6 : 0.7  // Slower speeds
+          utterance.pitch = 0.9  // Calm pitch
+          utterance.volume = 0.8  // Clear volume
+          
+          // Get the specific hardcoded voice for selected accent
+          const selectedVoice = audio.getBestVoiceForAccent(savedAccent)
+          
+          if (selectedVoice) {
+            utterance.voice = selectedVoice
+            console.log(`🗣️ Using ${savedAccent} voice: ${selectedVoice.name}`)
+          }
+          
+          // Set up event handlers
+          utterance.onend = () => {
+            console.log(`✅ TTS completed: "${text}"`)
+            setIsReading(false)
+            resolve()
+          }
+          
+          utterance.onerror = (event) => {
+            console.error('Speech error:', event)
+            setIsReading(false)
+            resolve()
+          }
+          
+          // Speak
+          speechSynthesis.speak(utterance)
+        }
+        
+      } catch (error) {
+        console.error('TTS error:', error)
+        setIsReading(false)
+        resolve()
+      }
+    })
   }
 
   // Phonetic chunking fallback
@@ -482,9 +544,11 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     return [upperWord]
   }
 
-  // Interaction handlers
+  // Interaction handlers - Fixed TTS for chunks and hear word
   const handleChunkClick = async (chunk: string, index: number, source: 'available' | 'arranged') => {
     if (isReading || isWordComplete) return
+    
+    console.log(`🔊 Chunk clicked: ${chunk} from ${source}`)
     
     let ttsToSpeak = chunk
     if (adaptiveWordBank.current) {
@@ -496,11 +560,15 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       
       if (chunkIndex !== -1 && chunkIndex < ttsChunks.length) {
         ttsToSpeak = ttsChunks[chunkIndex]
+        console.log(`🎵 Using TTS pronunciation: ${ttsToSpeak} for visual chunk: ${chunk}`)
       }
     }
     
+    // First, play the TTS for the chunk
+    console.log(`🔊 About to speak chunk: "${ttsToSpeak}"`)
     await speakText(ttsToSpeak, true)
     
+    // Then move the chunk
     if (source === 'available') {
       setAvailableChunks(prev => prev.filter((_, i) => i !== index))
       setArrangedChunks(prev => [...prev, chunk])
@@ -517,19 +585,32 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   const handleListenToAvailableChunks = async () => {
     if (availableChunks.length === 0 || isReading) return
     const chunksText = availableChunks.join(', ')
+    console.log(`🔊 Speaking available chunks: "${chunksText}"`)
     await speakText(`Listen to the word pieces: ${chunksText}`)
   }
 
   const handleHearWord = async () => {
     if (!isReading) {
+      console.log(`🔊 Speaking current word: "${currentWord}"`)
       await speakText(currentWord)
     }
   }
 
   const handleWordCompletionTTS = async () => {
-    if (!isReading && currentWordData) {
-      const message = currentWordData.completion_sentence || `Fantastic! You built the word: ${currentWord}`
-      await speakText(message)
+    if (!isReading) {
+      // Always say "You have built [WORD]" first
+      const successMessage = `You have built ${currentWord.toUpperCase()}!`
+      await speakText(successMessage)
+      
+      // Then add the completion sentence if available
+      if (currentWordData && currentWordData.completion_sentence) {
+        // Small pause between messages
+        setTimeout(async () => {
+          if (!isReading) { // Check again in case user clicked something else
+            await speakText(currentWordData.completion_sentence!)
+          }
+        }, 800)
+      }
     }
   }
 
@@ -541,6 +622,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       setShowWrongOrderMessage(false)
       setShowMeaningIntegration(false)
       setShowPatternCelebration(false)
+      setShowContextIntro(true) // Reset to show context for next word
     } else {
       // Check if we should show theme choice
       if (wordsCompleted.length >= 3) {
@@ -593,6 +675,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       return allChunks.sort(() => Math.random() - 0.5)
     })
     setShowWrongOrderMessage(false)
+    setIsWordComplete(false) // Reset word completion state
   }
 
   const handleThemeChoice = (selectedTheme: string) => {
