@@ -33,6 +33,7 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([])
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [showSecurityQuestions, setShowSecurityQuestions] = useState(false)
+  const [showPins, setShowPins] = useState({ pin: false, confirmPin: false })
   
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -284,47 +285,65 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   PIN (4 digits)
                 </label>
-                <input
-                  type="password"
-                  value={formData.pin}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 4 && /^\d*$/.test(e.target.value)) {
-                      setFormData(prev => ({ ...prev, pin: e.target.value }))
-                      setError('')
-                    }
-                  }}
-                  placeholder="••••"
-                  className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
-                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                           focus:ring-2 focus:ring-green-500 focus:border-transparent
-                           text-xl sm:text-2xl text-center tracking-widest"
-                  style={{ minHeight: '48px' }}
-                  maxLength={4}
-                  autoFocus
-                />
+                <div className="relative">
+                  <input
+                    type={showPins.pin ? "text" : "password"}
+                    value={formData.pin}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 4 && /^\d*$/.test(e.target.value)) {
+                        setFormData(prev => ({ ...prev, pin: e.target.value }))
+                        setError('')
+                      }
+                    }}
+                    placeholder="••••"
+                    className="w-full p-3 sm:p-4 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg 
+                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                            focus:ring-2 focus:ring-green-500 focus:border-transparent
+                            text-xl sm:text-2xl text-center tracking-widest"
+                    style={{ minHeight: '48px' }}
+                    maxLength={4}
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPins(prev => ({ ...prev, pin: !prev.pin }))}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPins.pin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Confirm PIN
                 </label>
-                <input
-                  type="password"
-                  value={formData.confirmPin}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 4 && /^\d*$/.test(e.target.value)) {
-                      setFormData(prev => ({ ...prev, confirmPin: e.target.value }))
-                      setError('')
-                    }
-                  }}
-                  placeholder="••••"
-                  className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
-                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                           focus:ring-2 focus:ring-green-500 focus:border-transparent
-                           text-xl sm:text-2xl text-center tracking-widest"
-                  style={{ minHeight: '48px' }}
-                  maxLength={4}
-                />
+                <div className="relative">
+                  <input
+                    type={showPins.confirmPin ? "text" : "password"}
+                    value={formData.confirmPin}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 4 && /^\d*$/.test(e.target.value)) {
+                        setFormData(prev => ({ ...prev, confirmPin: e.target.value }))
+                        setError('')
+                      }
+                    }}
+                    placeholder="••••"
+                    className="w-full p-3 sm:p-4 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg 
+                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                            focus:ring-2 focus:ring-green-500 focus:border-transparent
+                            text-xl sm:text-2xl text-center tracking-widest"
+                    style={{ minHeight: '48px' }}
+                    maxLength={4}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPins(prev => ({ ...prev, confirmPin: !prev.confirmPin }))}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPins.confirmPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -360,7 +379,6 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
                   variant="outline"
                   className="h-12 sm:h-auto"
                   style={{ minHeight: '48px' }}
-                  disabled={showSecurityQuestions}
                 >
                   Skip for Now
                 </Button>

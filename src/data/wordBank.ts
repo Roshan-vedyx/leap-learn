@@ -146,10 +146,9 @@ export class AdaptiveWordBank {
       const difficultyWords = this.enhancedWordBank.words[this.session.currentDifficulty]
       
       const filteredWords = difficultyWords.filter(wordEntry => {
-        const matchesTheme = wordEntry.themes.includes(theme) || 
-                           wordEntry.themes.includes('universal') ||
-                           (theme === 'all')
-        return matchesTheme
+        // If theme is 'all', return everything
+        if (theme === 'all') return true
+        return wordEntry.themes.includes(theme)
       })
       
       const wordStrings = filteredWords.map(entry => entry.word.toUpperCase())

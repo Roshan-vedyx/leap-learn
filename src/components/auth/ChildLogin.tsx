@@ -1,6 +1,6 @@
 // src/components/auth/ChildLogin.tsx - FULLY RESPONSIVE VERSION
 import React, { useState } from 'react'
-import { User, Lock, UserPlus, ArrowRight, HelpCircle } from 'lucide-react'
+import { User, Lock, UserPlus, ArrowRight, HelpCircle, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useChildAuth } from '../../contexts/ChildAuthContext'
 import { collection, query, where, getDocs } from 'firebase/firestore'
@@ -17,6 +17,7 @@ export const ChildLogin: React.FC = () => {
   const [recoveryChildId, setRecoveryChildId] = useState('')
   const [showPinReset, setShowPinReset] = useState(false)
   const { authenticateChild } = useChildAuth()
+  const [showPin, setShowPin] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -298,23 +299,17 @@ export const ChildLogin: React.FC = () => {
                 PIN
               </label>
               <div className="relative">
-                {/* Icon - Responsive Size */}
-                <Lock className="absolute left-3 sm:left-4 
-                                top-1/2 transform -translate-y-1/2 
-                                text-gray-400 
-                                w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6
-                                pointer-events-none" />
-                
-                {/* PIN Input - Touch Optimized */}
+                <Lock className="absolute left-3 sm:left-4 md:left-5 top-1/2 transform -translate-y-1/2 
+                                text-gray-400 dark:text-gray-500 
+                                w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 <input
-                  id="pin"
-                  type="password"
+                  type={showPin ? "text" : "password"}
                   value={pin}
                   onChange={(e) => handlePinChange(e.target.value)}
                   placeholder="••••"
                   className="w-full 
                             pl-10 sm:pl-12 md:pl-14 
-                            pr-3 sm:pr-4 
+                            pr-12 sm:pr-14
                             py-3 sm:py-4 md:py-4
                             border-2 border-gray-300 dark:border-gray-600 
                             rounded-lg sm:rounded-xl 
@@ -332,6 +327,14 @@ export const ChildLogin: React.FC = () => {
                   autoCapitalize="none"
                   autoCorrect="off"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPin(!showPin)}
+                  className="absolute right-3 sm:right-4 top-1/2 transform -translate-y-1/2 
+                            text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  {showPin ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
               
               {/* PIN Visual Dots - Responsive */}

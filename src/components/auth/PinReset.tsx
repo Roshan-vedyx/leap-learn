@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs'
 interface PinResetProps {
   childId: string
   childUsername: string
+  age: number
   onSuccess: () => void
   onCancel: () => void
 }
@@ -16,6 +17,7 @@ interface PinResetProps {
 export const PinReset: React.FC<PinResetProps> = ({
   childId,
   childUsername,
+  age,
   onSuccess,
   onCancel
 }) => {
@@ -24,6 +26,8 @@ export const PinReset: React.FC<PinResetProps> = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState(1) // 1: Enter PIN, 2: Confirm PIN
+  const [showNewPin, setShowNewPin] = useState(false)
+  const [showConfirmPin, setShowConfirmPin] = useState(false)
 
   const handlePinChange = (value: string, isConfirm: boolean = false) => {
     // Only allow numbers, max 4 digits
@@ -221,7 +225,7 @@ export const PinReset: React.FC<PinResetProps> = ({
                 ) : (
                   <div className="flex items-center justify-center gap-2 text-red-600 dark:text-red-400">
                     <AlertCircle className="w-5 h-5" />
-                    <span className="text-sm">PINs don't match</span>
+                    <span className="text-sm">Oops! The two PINs don't seem to match. Try again.</span>
                   </div>
                 )}
               </div>

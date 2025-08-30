@@ -1,6 +1,6 @@
 // src/components/auth/ParentSignup.tsx - CHILD-CENTERED SIGNUP FLOW
 import React, { useState } from 'react'
-import { Mail, Lock, User, ArrowRight, ArrowLeft, Plus, Check, Shield, Heart, Star, CheckCircle } from 'lucide-react'
+import { Mail, Lock, User, ArrowRight, ArrowLeft, Plus, Check, Shield, Heart, Star, CheckCircle, X, Eye, EyeOff } from 'lucide-react'
 import { 
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -34,6 +34,7 @@ export const ParentSignup: React.FC = () => {
   // Children data with security questions
   const [children, setChildren] = useState([{ 
     username: '', 
+    age: '',
     pin: '', 
     confirmPin: '',
     showSecurityQuestions: false,
@@ -146,6 +147,7 @@ export const ParentSignup: React.FC = () => {
     if (children.length < 5) {
       setChildren([...children, { 
         username: '', 
+        age: '',
         pin: '', 
         confirmPin: '',
         showSecurityQuestions: false,
@@ -161,6 +163,8 @@ export const ParentSignup: React.FC = () => {
       setChildren(newChildren)
     }
   }
+
+  const [showPins, setShowPins] = useState<Record<string, boolean>>({})
 
   const updateChild = (index: number, field: string, value: string) => {
     const newChildren = [...children]
@@ -211,6 +215,7 @@ export const ParentSignup: React.FC = () => {
   const validateChildren = () => {
     for (const child of children) {
       if (!child.username.trim()) return 'All children need usernames'
+      if (!child.age) return 'Please select age for all children'
       if (child.pin.length !== 4) return 'All PINs must be 4 digits'
       if (child.pin !== child.confirmPin) return 'PINs must match'
       
@@ -279,6 +284,7 @@ export const ParentSignup: React.FC = () => {
             childId: '', // Will be set by Firestore
             parentId: createdParentId,
             username: child.username.trim(),
+            age: parseInt(child.age),
             pinHash: hashedPin,
             createdAt: new Date(),
             lastActive: new Date(),
@@ -597,19 +603,53 @@ export const ParentSignup: React.FC = () => {
 
                       <div>
                         <label className="block text-sm font-bold text-purple-700 dark:text-purple-300 mb-3">
-                          🔒 Secret PIN
+                          👶 How old are you?
                         </label>
-                        <input
-                          type="password"
-                          value={child.pin}
-                          onChange={(e) => updateChild(index, 'pin', e.target.value)}
+                        <select
+                          value={child.age}
+                          onChange={(e) => updateChild(index, 'age', e.target.value)}
                           className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   text-center font-mono text-xl tracking-widest
-                                   focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                          placeholder="••••"
-                          maxLength={4}
-                        />
+                                  bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                                  focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                        >
+                          <option value="">Select your age</option>
+                          <option value="6">6 years old</option>
+                          <option value="7">7 years old</option>
+                          <option value="8">8 years old</option>
+                          <option value="9">9 years old</option>
+                          <option value="10">10 years old</option>
+                          <option value="11">11 years old</option>
+                          <option value="12">12 years old</option>
+                          <option value="13">13 years old</option>
+                          <option value="14">14 years old</option>
+                          <option value="15">15+ years old</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-bold text-purple-700 dark:text-purple-300 mb-3">
+                          🔒 Create PIN
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showPins[`pin-${index}`] ? "text" : "password"}
+                            value={child.pin}
+                            onChange={(e) => updateChild(index, 'pin', e.target.value)}
+                            className="w-full px-4 py-4 pr-12 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
+                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                                    text-center font-mono text-xl tracking-widest
+                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                            placeholder="••••"
+                            maxLength={4}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPins(prev => ({ ...prev, [`pin-${index}`]: !prev[`pin-${index}`] }))}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-600 dark:text-purple-400"
+                          >
+                            {showPins[`pin-${index}`] ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
                         <p className="text-xs text-purple-600 dark:text-purple-400 mt-1 text-center">
                           4 numbers only you know
                         </p>
@@ -619,23 +659,39 @@ export const ParentSignup: React.FC = () => {
                         <label className="block text-sm font-bold text-purple-700 dark:text-purple-300 mb-3">
                           ✓ Confirm PIN
                         </label>
-                        <input
-                          type="password"
-                          value={child.confirmPin}
-                          onChange={(e) => updateChild(index, 'confirmPin', e.target.value)}
-                          className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
-                                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                                   text-center font-mono text-xl tracking-widest
-                                   focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                          placeholder="••••"
-                          maxLength={4}
-                        />
+                        <div className="relative">
+                          <input
+                            type={showPins[`confirm-${index}`] ? "text" : "password"}
+                            value={child.confirmPin}
+                            onChange={(e) => updateChild(index, 'confirmPin', e.target.value)}
+                            className="w-full px-4 py-4 pr-12 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
+                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                                    text-center font-mono text-xl tracking-widest
+                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                            placeholder="••••"
+                            maxLength={4}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPins(prev => ({ ...prev, [`confirm-${index}`]: !prev[`confirm-${index}`] }))}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-600 dark:text-purple-400"
+                          >
+                            {showPins[`confirm-${index}`] ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
                         <p className="text-xs text-purple-600 dark:text-purple-400 mt-1 text-center">
                           Type it again to be sure
                         </p>
                       </div>
                     </div>
 
+                    {child.confirmPin.length === 4 && child.pin !== child.confirmPin && (
+                      <div className="flex items-center gap-2 text-red-600 dark:text-red-400 text-sm mt-2">
+                        <X className="w-4 h-4" />
+                        <span>Oops! The two PINs don't seem to match. Try again.</span>
+                      </div>
+                    )}
+                    
                     {/* Security Questions Toggle */}
                     {child.pin.length === 4 && child.confirmPin.length === 4 && child.pin === child.confirmPin && (
                       <div className="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
@@ -660,15 +716,13 @@ export const ParentSignup: React.FC = () => {
                           >
                             {child.showSecurityQuestions ? '✓ Questions Added' : 'Yes, Add Questions'}
                           </Button>
-                          {!child.showSecurityQuestions && (
-                            <Button
-                              type="button"
-                              onClick={() => toggleSecurityQuestions(index, false)}
-                              className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
-                            >
-                              Skip for Now
-                            </Button>
-                          )}
+                          <Button
+                            type="button"
+                            onClick={() => toggleSecurityQuestions(index, false)}
+                            className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
+                          >
+                            Skip for Now
+                          </Button>
                         </div>
                       </div>
                     )}

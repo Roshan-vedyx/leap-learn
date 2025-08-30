@@ -103,8 +103,16 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       // Get initial words for the specified theme
       const words = adaptiveWordBank.current.getWordsForTheme(theme)
       console.log(`🎯 Loading words for theme: ${theme}`, words)
-      
-      setCurrentWords(words)
+
+      // Validate that we actually got theme-appropriate words
+      if (words.length === 0) {
+        console.warn(`⚠️ No words found for theme '${theme}', falling back to universal`)
+        const fallbackWords = adaptiveWordBank.current.getWordsForTheme('universal')
+        setCurrentWords(fallbackWords.length > 0 ? fallbackWords : ['CAT', 'DOG', 'SUN'])
+      } else {
+        console.log(`✅ Successfully loaded ${words.length} words for ${theme} theme`)
+        setCurrentWords(words)
+      }
       setIsInitialized(true)
       
       // Load saved pattern progress
