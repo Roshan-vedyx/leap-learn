@@ -152,8 +152,9 @@ export class AdaptiveWordBank {
       })
       
       const wordStrings = filteredWords.map(entry => entry.word.toUpperCase())
-      console.log(`✅ Found ${wordStrings.length} ${this.session.currentDifficulty} words for theme: ${theme} (from JSON)`)
-      return wordStrings
+      const randomizedWords = wordStrings.sort(() => Math.random() - 0.5)
+      console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (randomized from JSON)`)
+      return randomizedWords
     }
 
     // Fallback to hardcoded word bank
@@ -165,8 +166,9 @@ export class AdaptiveWordBank {
     }
     
     const words = themeWords[this.session.currentDifficulty] || []
-    console.log(`✅ Found ${words.length} ${this.session.currentDifficulty} words for theme: ${theme} (from hardcoded)`)
-    return words.map(w => w.toUpperCase())
+    const randomizedWords = words.sort(() => Math.random() - 0.5)
+    console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (randomized from hardcoded)`)
+    return randomizedWords.map(w => w.toUpperCase())
   }
 
   // UPDATED: Get visual chunks for game pieces

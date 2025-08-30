@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useLocation } from 'wouter'
+import { Volume2, Heart } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
@@ -424,10 +425,9 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
             timestamp: Date.now()
           })
         }
-      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration) {
+      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration && arrangedWord !== targetWord) {  
         // Only show wrong order message if word is NOT complete, NOT celebrating, and we have all chunks arranged
         setShowWrongOrderMessage(true)
-        setTimeout(() => setShowWrongOrderMessage(false), 4000)
       }
     }
     
@@ -592,7 +592,8 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   const handleListenToAvailableChunks = async () => {
     if (availableChunks.length === 0 || isReading) return
-    const chunksText = availableChunks.join(', ')
+    const originalChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || [currentWord]
+    const chunksText = originalChunks.join(', ')
     console.log(`🔊 Speaking available chunks: "${chunksText}"`)
     await speakText(`Listen to the word pieces: ${chunksText}`)
   }
@@ -609,16 +610,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       // Always say "You have built [WORD]" first
       const successMessage = `You have built ${currentWord.toUpperCase()}!`
       await speakText(successMessage)
-      
-      // Then add the completion sentence if available
-      if (currentWordData && currentWordData.completion_sentence) {
-        // Small pause between messages
-        setTimeout(async () => {
-          if (!isReading) { // Check again in case user clicked something else
-            await speakText(currentWordData.completion_sentence!)
-          }
-        }, 800)
-      }
+           
     }
   }
 
@@ -697,7 +689,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky flex items-center justify-center p-4">
         <Card className="bg-white/80 border-2 border-blue-300 shadow-lg">
           <CardContent className="p-6 text-center">
             <div className="text-4xl mb-4">🎯</div>
@@ -710,13 +702,13 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-green-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Context Introduction - appears before word building */}
         {showContextIntro && currentWordData && (
           <div className="mb-6">
-            <Card className="bg-purple-50 border-2 border-purple-300 shadow-lg">
+            <Card className="bg-slate-50 border-2 border-slate-200 shadow-gentle">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-3xl md:text-4xl mb-3">🌟</div>
                 <h3 className="text-lg md:text-xl font-medium text-purple-800 mb-3">Story Time!</h3>
@@ -725,7 +717,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                 </p>
                 <Button
                   onClick={handleContextContinue}
-                  className="min-h-[48px] bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 text-base font-medium"
+                  className="min-h-[48px] bg-deep-ocean-blue hover:bg-deep-ocean-blue/90 text-white px-4 sm:px-6 py-3 text-sm sm:text-base font-medium transition-colors"
                 >
                   Let's Build It! ✨
                 </Button>
@@ -737,7 +729,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         {/* Pattern Discovery Celebration */}
         {showPatternCelebration && (
           <div className="mb-6">
-            <Card className="bg-yellow-50 border-2 border-yellow-400 shadow-lg">
+            <Card className="bg-gradient-to-br from-sage-green/10 to-soft-lavender/10 border-2 border-sage-green/30 shadow-gentle">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-3xl md:text-4xl mb-3">🎉</div>
                 <h3 className="text-lg md:text-xl font-medium text-yellow-800 mb-3">Pattern Master!</h3>
@@ -758,7 +750,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         {/* Theme Choice Modal */}
         {showThemeChoice && (
           <div className="mb-6">
-            <Card className="bg-green-50 border-2 border-green-400 shadow-lg">
+            <Card className="bg-gradient-to-br from-sage-green/10 to-cool-mint/10 border-2 border-sage-green/30 shadow-gentle">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-3xl md:text-4xl mb-3">🎯</div>
                 <h3 className="text-lg md:text-xl font-medium text-green-800 mb-3">You Mastered {theme} Words!</h3>
@@ -802,14 +794,12 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                 
                 {currentWordData.personal_connection_question && (
                   <div className="bg-white/60 rounded-lg p-3 mb-4">
-                    <p className="text-sm md:text-base text-teal-700 mb-2">
-                      {currentWordData.personal_connection_question}
-                    </p>
                     <Button
-                      onClick={handlePersonalResponse}
-                      className="min-h-[40px] bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 text-sm"
+                      onClick={() => speakText(currentWordData.completion_sentence || `The ${currentWord} is amazing!`)}
+                      className="..."
                     >
-                      I can relate! 💭
+                      <Volume2 className="..." />
+                      Hear the sentence
                     </Button>
                   </div>
                 )}
@@ -829,7 +819,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         {/* Success celebration - enhanced */}
         {showCelebration && currentWordData && (
           <div className="mb-6">
-            <Card className="bg-green-50 border-2 border-green-400 shadow-lg">
+            <Card className="bg-gradient-to-br from-sage-green/10 to-cool-mint/10 border-2 border-sage-green/30 shadow-gentle">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-4xl md:text-5xl mb-4">🎉</div>
                 <h2 className="text-xl md:text-2xl font-bold text-green-800 mb-3">Outstanding!</h2>
@@ -845,7 +835,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
                     disabled={isReading}
                     className="min-h-[48px] bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-base font-medium"
                   >
-                    {isReading ? '🔊 Reading...' : '🔊 Hear Story'}
+                    {isReading ? '🔊 Reading...' : '🔊 What did i build?'}
                   </Button>
                   <Button
                     onClick={handleNextWord}
@@ -862,16 +852,19 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         {/* Gentle wrong order message */}
         {showWrongOrderMessage && (
           <div className="mb-6">
-            <Card className="bg-orange-50 border-2 border-orange-300 shadow-lg">
+            <Card className="bg-slate-50 border-2 border-muted-coral/30 shadow-gentle">
               <CardContent className="p-4 md:p-6 text-center">
                 <div className="text-3xl md:text-4xl mb-3">🤔</div>
                 <h3 className="text-lg md:text-xl font-medium text-orange-800 mb-2">Oops!</h3>
                 <p className="text-base md:text-lg text-orange-700 mb-4">
-                  The word parts don't seem to be in the right order.
+                  The word parts don't seem to be in the right order, do you want to try again?
                 </p>
                 <Button
-                  onClick={handleTryAgain}
-                  className="min-h-[48px] bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 text-base font-medium"
+                  onClick={() => {
+                    handleTryAgain()
+                    setShowWrongOrderMessage(false)  // Dismiss the message
+                  }}
+                  className="min-h-[48px] bg-deep-ocean-blue hover:bg-deep-ocean-blue/90 text-white px-6 py-3 text-base font-medium"
                 >
                   Try Again 🔄
                 </Button>
@@ -881,7 +874,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         )}
 
         {/* Main game area - enhanced with context awareness */}
-        <Card className="mb-6 md:mb-8 border-2 border-blue-400 bg-blue-50/80">
+        <Card className="mb-6 md:mb-8 border-2 border-autism-primary/20 bg-white shadow-gentle">
           <CardContent className="p-4 md:p-6">
             
             {/* Enhanced word building area */}

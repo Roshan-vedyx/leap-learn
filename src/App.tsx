@@ -234,6 +234,7 @@ function AppContent() {
               
               {/* TTS Accent Settings Only - Desktop */}
               <div className="hidden lg:flex items-center space-x-3">
+                <span className="text-sm font-medium text-warm-charcoal">Change Accent:</span>
                 <div className="relative">
                   <label htmlFor="tts-accent" className="sr-only">
                     Choose voice accent for text-to-speech reading
@@ -300,6 +301,7 @@ function AppContent() {
 
             {/* Mobile TTS Accent Only */}
             <div className="lg:hidden">
+              <span className="text-sm font-medium text-warm-charcoal mb-2 block">Change Accent:</span>
               <div className="relative">
                 <label htmlFor="mobile-tts-accent" className="sr-only">
                   Choose voice accent for text-to-speech reading
