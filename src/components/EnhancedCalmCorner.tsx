@@ -116,7 +116,7 @@ const EnhancedCalmCorner: React.FC = () => {
 
   // Floating button when not active - RESPONSIVE
   if (!isInCalmCorner) {
-    return (
+    {/*return (
       <button
         onClick={toggleCalmCorner}
         className="fixed top-4 right-4 z-50 
@@ -135,7 +135,8 @@ const EnhancedCalmCorner: React.FC = () => {
       >
         🕊️
       </button>
-    )
+    )*/}
+    return null
   }
 
   // Option selection screen - RESPONSIVE

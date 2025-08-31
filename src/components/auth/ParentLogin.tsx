@@ -491,6 +491,20 @@ export const ParentLogin: React.FC = () => {
               </div>
             </div>
 
+            {/* New User Section */}
+            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Don't have an account yet?
+              </p>
+              <Button
+                onClick={() => window.location.href = '/parent-signup'}
+                variant="outline"
+                className="w-full border-2 border-indigo-300 text-indigo-600 hover:bg-indigo-50"
+              >
+                Create New Parent Account
+              </Button>
+            </div>
+            
             {/* Error Message - Responsive */}
             {error && (
               <div className="flex items-center gap-2 sm:gap-3 

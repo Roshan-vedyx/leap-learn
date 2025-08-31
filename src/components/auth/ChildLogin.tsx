@@ -150,7 +150,8 @@ export const ChildLogin: React.FC = () => {
   }
 
   const handleSignUp = () => {
-    // Redirect to parent registration
+    // Always redirect to parent-signup for new account creation
+    console.log('🚀 Redirecting to parent signup from child login')
     window.location.href = '/parent-signup'
   }
 

@@ -8,7 +8,7 @@ import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
 import { SettingsModal } from '@/components/SettingsModal'
 
-import { useAnalyticsIntegration } from './hooks/useAnalyticsIntegration'
+import { useLearningAnalytics } from './hooks/useLearningAnalytics'
 import { useCurrentUserId } from '@/lib/auth-utils'
 
 // NEW: Import auth providers and components
@@ -95,11 +95,10 @@ function AppContent() {
   const [siennaEnabled, setSiennaEnabled] = useState(false)
   
   const userId = useCurrentUserId()
-  useAnalyticsIntegration(userId)
+  useLearningAnalytics(userId)
 
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
-  useAnalyticsIntegration()
   const [ttsAccent, setTtsAccent] = useState<TtsAccent>(() => 
     storage.get('tts-accent', 'GB') as TtsAccent
   )
@@ -479,6 +478,11 @@ function AppContent() {
               <AuthGate requireParent>
                 <ParentDashboard />
               </AuthGate>
+            </Route>
+
+            {/* Parent login - separate route for existing users */}
+            <Route path="/parent-login">
+              <ParentLogin />
             </Route>
 
             {/* Math activities placeholder - Protected */}

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
 import { AdaptiveWordBank } from '@/data/wordBank'
 import type { TtsAccent } from '@/types'
-import { useUserAnalytics } from '../hooks/useUserAnalytics'
+import { useLearningAnalytics } from '../hooks/useLearningAnalytics'
 import { useSessionStore } from '../stores/sessionStore'
 import { useCurrentUserId } from '@/lib/auth-utils'
 
@@ -78,7 +78,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   
   // ADD ANALYTICS HOOKS
   const userId = useCurrentUserId()
-  const analytics = useUserAnalytics(userId)
+  const analytics = useLearningAnalytics(userId)
   const { currentBrainState } = useSessionStore()
 
   // Performance tracking (invisible to user)
@@ -441,22 +441,18 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         // ADD ANALYTICS TRACKING FOR WORD SUCCESS
         if (userId) {
           analytics.trackWordPractice({
-            wordsAttempted: [currentWord],
-            wordsCorrect: [currentWord],
-            timePerWord: completionTime,
-            hintsUsed: hintsUsed,
-            difficulty: currentWordData?.complexity as any || 'regular'
+            words: [currentWord],
+            correctWords: [currentWord],
+            timeSpent: completionTime,
+            hintsUsed,
+            difficulty: currentWordData?.complexity as any || 'regular',
+            theme
           })
-
-          analytics.trackLearningEvent({
-            eventType: 'success',
-            activityType: 'word_complete',
-            duration: completionTime,
-            hintsUsed: hintsUsed,
-            attempts: resetsUsed + 1,
-            brainState: currentBrainState?.id,
-            wordsPracticed: [currentWord]
-          })
+          
+          // Track breakthrough for challenging words
+          if (currentWord.length > 6 && hintsUsed <= 1) {
+            analytics.trackBreakthrough(`Built challenging word: ${currentWord}`)
+          }
         }
         
         // Auto-play success TTS message
@@ -481,17 +477,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         setShowWrongOrderMessage(true)
         setTimeout(() => setShowWrongOrderMessage(false), 4000)
         
-        // ADD ANALYTICS TRACKING FOR STRUGGLE
-        if (userId) {
-          analytics.trackLearningEvent({
-            eventType: 'struggle',
-            activityType: 'word_wrong_order',
-            struggledWith: [currentWord],
-            attempts: resetsUsed + 1,
-            difficulty: currentWordData?.complexity as any || 'regular',
-            brainState: currentBrainState?.id
-          })
-        }
+        
       }
     }
     
@@ -678,7 +664,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }
 
-  const handleNextWord = () => {
+  const handleNextWord = async () => {
     if (currentWordIndex < currentWords.length - 1) {
       setCurrentWordIndex(prev => prev + 1)
       setShowCelebration(false)
@@ -695,14 +681,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     } else {
       // Theme completed - ADD ANALYTICS TRACKING
       if (userId) {
-        analytics.trackLearningEvent({
-          eventType: 'success',
-          activityType: 'word_theme_complete',
-          duration: Date.now() - wordStartTime,
-          completionRate: 100,
-          brainState: currentBrainState?.id,
-          wordsPracticed: wordsCompleted
-        })
+        await analytics.trackBreakthrough(`Completed ${theme} theme with ${wordsCompleted.length} words!`)
       }
 
       // Check if we should show theme choice
@@ -714,7 +693,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (adaptiveWordBank.current) {
       let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
       if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
@@ -731,18 +710,14 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
       // ADD ANALYTICS TRACKING FOR RESET
       if (userId) {
-        analytics.trackLearningEvent({
-          eventType: 'struggle',
-          activityType: 'word_reset',
-          struggledWith: [currentWord],
-          attempts: resetsUsed + 1,
-          brainState: currentBrainState?.id
-        })
+        if (resetsUsed > 1) {
+          await analytics.trackChallengeOvercome(`Persisted through ${currentWord} difficulty`)
+        }
       }
     }
   }
 
-  const handleHint = () => {
+  const handleHint = async () => {
     if (adaptiveWordBank.current && arrangedChunks.length < currentWord.length) {
       let correctChunks = adaptiveWordBank.current.getWordChunks(currentWord)
       if (correctChunks.length > 3 || correctChunks.some(chunk => chunk.length === 1)) {
@@ -759,13 +734,10 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
         // ADD ANALYTICS TRACKING FOR HINT USAGE
         if (userId) {
-          analytics.trackLearningEvent({
-            eventType: 'reading',
-            activityType: 'hint_used',
-            hintsUsed: hintsUsed + 1,
-            wordsPracticed: [currentWord],
-            brainState: currentBrainState?.id,
-            appSection: 'word_building'
+          await analytics.trackSupportUsage({
+            type: 'visual_aid',
+            triggeredBy: `word_building_${currentWord}`,
+            effectiveness: 'helped'
           })
         }
       }
