@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
-// CHANGE THIS LINE - import EnhancedCalmCorner instead of CalmCorner
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
+
+import { useAnalyticsIntegration } from './hooks/useAnalyticsIntegration'
+import { useCurrentUserId } from '@/lib/auth-utils'
 
 // NEW: Import auth providers and components
 import { ParentAuthProvider } from './contexts/ParentAuthContext'
@@ -84,13 +86,17 @@ const Footer = () => (
 )
 
 // Main App Content Component (extracted to work within auth providers)
-function AppContent() {
+function AppContent() {  
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [reducedMotion, setReducedMotion] = useState(false)
   const [location, setLocation] = useLocation()
-
+  
+  const userId = useCurrentUserId()
+  useAnalyticsIntegration(userId)
+  
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
+  useAnalyticsIntegration()
   const [ttsAccent, setTtsAccent] = useState<TtsAccent>(() => 
     storage.get('tts-accent', 'GB') as TtsAccent
   )
