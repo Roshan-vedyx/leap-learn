@@ -1,4 +1,4 @@
-// src/config/firebase.ts - UPDATE YOUR EXISTING FILE
+// src/lib/firebase-config.ts - REPLACE YOUR EXISTING FILE
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
@@ -13,12 +13,11 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 }
 
-// Initialize Firebase
+// Single Firebase app instance
 const app = initializeApp(firebaseConfig)
 
 // Initialize services
 export const db = getFirestore(app)
 export const auth = getAuth(app)
-
 export { app }
 export default app

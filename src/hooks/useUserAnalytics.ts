@@ -1,4 +1,4 @@
-// src/hooks/useUserAnalytics.ts
+// src/hooks/useUserAnalytics.ts - REPLACE YOUR EXISTING FILE
 import { useEffect } from 'react'
 import { useSessionStore } from '../stores/sessionStore'
 import { userAnalytics } from '../services/userAnalytics'
@@ -14,27 +14,33 @@ export const useUserAnalytics = (userId?: string) => {
     }
   }, [userId])
 
-  // Track session start with brain state
+  // Track session start with brain state - ONLY if brain state exists
   useEffect(() => {
-    if (session.currentBrainState && userId) {
+    if (session.currentBrainState?.id && userId) {
       userAnalytics.trackLearningEvent({
         eventType: 'success',
         activityType: 'brain_state_selection',
-        brainState: session.currentBrainState.id,
+        brainState: session.currentBrainState.id, // Safe - we checked it exists
         appSection: 'brain_check'
       })
     }
   }, [session.currentBrainState?.id, userId])
 
-  // Track app section navigation
+  // Track app section navigation - ONLY include brainState if it exists
   useEffect(() => {
     if (session.currentAppSection && userId) {
-      userAnalytics.trackLearningEvent({
+      const eventData: any = {
         eventType: 'reading',
         activityType: 'navigation',
-        appSection: session.currentAppSection,
-        brainState: session.currentBrainState?.id
-      })
+        appSection: session.currentAppSection
+      }
+      
+      // Only add brainState if it's not undefined
+      if (session.currentBrainState?.id) {
+        eventData.brainState = session.currentBrainState.id
+      }
+      
+      userAnalytics.trackLearningEvent(eventData)
     }
   }, [session.currentAppSection, userId])
 
@@ -46,7 +52,8 @@ export const useUserAnalytics = (userId?: string) => {
         experience: recentUsage.experience,
         duration: recentUsage.duration,
         triggeredFrom: recentUsage.triggeredFrom,
-        returnedToLearning: recentUsage.returnedToLearning
+        returnedToLearning: recentUsage.returnedToLearning,
+        brainState: session.currentBrainState?.id // Safe - undefined is handled
       })
     }
   }, [session.calmCornerHistory.length, userId])
@@ -55,13 +62,19 @@ export const useUserAnalytics = (userId?: string) => {
   useEffect(() => {
     const lastSession = session.completedSessions[session.completedSessions.length - 1]
     if (lastSession && userId) {
-      userAnalytics.trackLearningEvent({
+      const eventData: any = {
         eventType: 'success',
         activityType: 'session_complete',
         duration: parseInt(lastSession.sessionDuration),
-        brainState: lastSession.brainState,
         completionRate: 100
-      })
+      }
+      
+      // Only add brainState if it exists
+      if (lastSession.brainState) {
+        eventData.brainState = lastSession.brainState
+      }
+      
+      userAnalytics.trackLearningEvent(eventData)
     }
   }, [session.completedSessions.length, userId])
 

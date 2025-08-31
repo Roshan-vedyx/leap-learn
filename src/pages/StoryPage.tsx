@@ -187,12 +187,21 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     if (story) {
       const storyText = getCurrentStoryText()
       const result = parseStoryBlocks(storyText)
+      
+      // CRITICAL FIX: Ensure we always have at least one block
+      if (result.blocks.length === 0) {
+        console.warn('⚠️ Story parsing failed, creating fallback block')
+        result.blocks = [{
+          type: 'narration',
+          text: 'Story content is being prepared. Please try refreshing the page.',
+        }]
+      }
+      
       setBlocks(result.blocks)
       setCollectedReflections(result.reflections)
-      // Reset section if it's out of bounds
       setCurrentSection(prev => Math.min(prev, result.blocks.length - 1))
     }
-  }, [story, complexityLevel]) // Only re-parse when story or complexity changes
+  }, [story, complexityLevel])
 
   // FIXED: Clean text for TTS
   const handleReadAloud = async (textToRead?: string) => {
@@ -200,7 +209,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     await new Promise(resolve => setTimeout(resolve, 100))
     const currentAccent = storage.get('tts-accent', 'GB') as 'US' | 'GB' | 'IN'
     
-    let text = textToRead || (blocks[currentSection]?.text) || getCurrentStoryText()
+    let text = textToRead || (blocks[currentSection]?.text) || 'Story content not available'
     
     // FIXED: Remove prefixes for TTS
     text = text.replace(/\[CONSEQUENCE .\]\s*/g, '')
@@ -316,6 +325,11 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         <div className="bg-white rounded-xl p-6 border shadow-sm min-h-[150px]">
           {blocks.length > 0 && currentSection < blocks.length ? (
             renderBlock(blocks[currentSection], currentSection)
+          ) : story ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600 mb-4">Story parsing in progress...</p>
+              <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
+            </div>
           ) : (
             <p className="text-gray-500">Loading story section...</p>
           )}

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
 import { AdaptiveWordBank } from '@/data/wordBank'
 import type { TtsAccent } from '@/types'
-import { useAnalyticsIntegration } from '../hooks/useAnalyticsIntegration'
+import { useUserAnalytics } from '../hooks/useUserAnalytics'
 import { useSessionStore } from '../stores/sessionStore'
 import { useCurrentUserId } from '@/lib/auth-utils'
 
@@ -78,7 +78,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   
   // ADD ANALYTICS HOOKS
   const userId = useCurrentUserId()
-  const analytics = useAnalyticsIntegration(userId)
+  const analytics = useUserAnalytics(userId)
   const { currentBrainState } = useSessionStore()
 
   // Performance tracking (invisible to user)
@@ -210,7 +210,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       setResetsUsed(0)
     }
   }, [currentWordIndex, currentWord])
-  
+
   // Track when activity starts
   useEffect(() => {
     if (isInitialized && currentWords.length > 0 && userId) {

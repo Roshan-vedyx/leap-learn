@@ -1,5 +1,5 @@
-// src/services/userAnalytics.ts
-import { collection, doc, addDoc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+// src/services/userAnalytics.ts - REPLACE YOUR EXISTING FILE
+import { collection, doc, addDoc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../lib/firebase-config'
 
 // Individual user event types
@@ -9,7 +9,7 @@ interface UserLearningEvent {
   eventType: 'reading' | 'word_practice' | 'story_complete' | 'calm_corner' | 'struggle' | 'success'
   timestamp: number
   
-  // Context
+  // Context - all optional to handle undefined values
   brainState?: string
   activityType?: string
   difficulty?: 'easy' | 'regular' | 'challenge'
@@ -107,9 +107,26 @@ class UserAnalyticsService {
     console.log('📊 User analytics active for:', userId)
   }
 
+  // Clean event data to remove undefined values
+  private cleanEventData(event: any): any {
+    const cleaned = {} as any
+    
+    Object.keys(event).forEach(key => {
+      const value = event[key]
+      if (value !== undefined && value !== null) {
+        cleaned[key] = value
+      }
+    })
+    
+    return cleaned
+  }
+
   // Track individual learning events
   async trackLearningEvent(event: Omit<UserLearningEvent, 'userId' | 'sessionId' | 'timestamp'>) {
-    if (!this.userId) return
+    if (!this.userId) {
+      console.log('📊 Analytics: No user set, skipping event')
+      return
+    }
 
     const fullEvent: UserLearningEvent = {
       ...event,
@@ -118,12 +135,15 @@ class UserAnalyticsService {
       timestamp: Date.now()
     }
 
+    // Clean undefined values before sending to Firestore
+    const cleanedEvent = this.cleanEventData(fullEvent)
+
     // Add to queue for batch processing
     this.eventQueue.push(fullEvent)
 
     // Save to Firestore (individual events for detailed tracking)
     try {
-      await addDoc(collection(db, 'user_events'), fullEvent)
+      await addDoc(collection(db, 'user_events'), cleanedEvent)
       console.log('📝 Learning event tracked:', event.eventType)
     } catch (error) {
       console.error('❌ Failed to track learning event:', error)
@@ -135,8 +155,10 @@ class UserAnalyticsService {
 
   // Process events for aggregated user progress
   private async processEventForInsights(event: UserLearningEvent) {
+    if (!this.userId) return
+
     try {
-      const userProgressRef = doc(db, 'user_progress', this.userId!)
+      const userProgressRef = doc(db, 'user_progress', this.userId)
       const progressDoc = await getDoc(userProgressRef)
       
       let currentProgress: UserProgress
@@ -144,42 +166,48 @@ class UserAnalyticsService {
       if (progressDoc.exists()) {
         currentProgress = progressDoc.data() as UserProgress
       } else {
-        // Initialize new user progress
-        currentProgress = {
-          userId: this.userId!,
-          totalSessions: 0,
-          totalTimeSpent: 0,
-          lastActive: Date.now(),
-          currentLevel: 'beginner',
-          readingSpeed: { current: 0, trend: 'stable', history: [] },
-          preferredDifficulty: 'regular',
-          adaptationHistory: [],
-          favoriteActivities: [],
-          preferredBrainStates: [],
-          averageSessionLength: 0,
-          commonStruggles: [],
-          improvementAreas: [],
-          accessibilityUsage: {
-            ttsUsageRate: 0,
-            preferredFontSize: 'default',
-            calmCornerUsageRate: 0
-          },
-          weeklyProgress: {
-            sessionsCompleted: 0,
-            skillsImproved: [],
-            recommendedFocus: []
-          }
-        }
+        // Initialize new user progress document
+        currentProgress = this.createInitialUserProgress(this.userId)
+        console.log('📊 Creating new user progress document for:', this.userId)
       }
 
       // Update progress based on event type
       currentProgress = this.updateProgressWithEvent(currentProgress, event)
       
-      // Save updated progress
-      await updateDoc(userProgressRef, currentProgress)
+      // Use setDoc instead of updateDoc to handle both create and update
+      await setDoc(userProgressRef, currentProgress)
       
     } catch (error) {
       console.error('❌ Failed to update user progress:', error)
+    }
+  }
+
+  // Create initial user progress document
+  private createInitialUserProgress(userId: string): UserProgress {
+    return {
+      userId,
+      totalSessions: 0,
+      totalTimeSpent: 0,
+      lastActive: Date.now(),
+      currentLevel: 'beginner',
+      readingSpeed: { current: 0, trend: 'stable', history: [] },
+      preferredDifficulty: 'regular',
+      adaptationHistory: [],
+      favoriteActivities: [],
+      preferredBrainStates: [],
+      averageSessionLength: 0,
+      commonStruggles: [],
+      improvementAreas: [],
+      accessibilityUsage: {
+        ttsUsageRate: 0,
+        preferredFontSize: 'default',
+        calmCornerUsageRate: 0
+      },
+      weeklyProgress: {
+        sessionsCompleted: 0,
+        skillsImproved: [],
+        recommendedFocus: []
+      }
     }
   }
 
@@ -230,7 +258,7 @@ class UserAnalyticsService {
         break
     }
 
-    // Track brain state preferences
+    // Track brain state preferences (only if brainState exists)
     if (event.brainState) {
       const existing = updated.preferredBrainStates.find(s => s.state === event.brainState!)
       if (existing) {
@@ -255,6 +283,7 @@ class UserAnalyticsService {
     timePerWord: number
     hintsUsed: number
     difficulty: 'easy' | 'regular' | 'challenge'
+    brainState?: string // Made optional
   }) {
     await this.trackLearningEvent({
       eventType: 'word_practice',
@@ -265,7 +294,8 @@ class UserAnalyticsService {
       difficulty: data.difficulty,
       wordsPracticed: data.wordsAttempted,
       struggledWith: data.wordsAttempted.filter(w => !data.wordsCorrect.includes(w)),
-      accuracy: (data.wordsCorrect.length / data.wordsAttempted.length) * 100
+      accuracy: (data.wordsCorrect.length / data.wordsAttempted.length) * 100,
+      brainState: data.brainState // Only include if provided
     })
   }
 
@@ -274,7 +304,7 @@ class UserAnalyticsService {
     readingTime: number
     wordsRead: number
     completionRate: number
-    brainState: string
+    brainState?: string // Made optional
     difficulty: string
   }) {
     const wpm = data.wordsRead / (data.readingTime / 60000) // convert ms to minutes
@@ -286,7 +316,7 @@ class UserAnalyticsService {
       duration: data.readingTime,
       completionRate: data.completionRate,
       wordsPerMinute: wpm,
-      brainState: data.brainState,
+      brainState: data.brainState, // Only include if provided
       difficulty: data.difficulty as any
     })
   }
@@ -296,6 +326,7 @@ class UserAnalyticsService {
     duration: number
     triggeredFrom: string
     returnedToLearning: boolean
+    brainState?: string // Made optional
   }) {
     await this.trackLearningEvent({
       eventType: 'calm_corner',
@@ -303,7 +334,8 @@ class UserAnalyticsService {
       duration: data.duration,
       appSection: data.triggeredFrom,
       calmCornerExperience: data.experience,
-      returnedToLearning: data.returnedToLearning
+      returnedToLearning: data.returnedToLearning,
+      brainState: data.brainState // Only include if provided
     })
   }
 

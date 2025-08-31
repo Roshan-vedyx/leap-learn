@@ -521,3 +521,24 @@ textarea {
     display: none !important;
   }
 }
+
+/* ========================================
+   SIENNA ACCESSIBILITY WIDGET CONTROL
+   ======================================== */
+
+/* Sienna loads only when enabled, but add smooth appearance */
+.asw-menu-btn {
+  animation: gentle-fade-in 0.3s ease-out;
+}
+
+@keyframes gentle-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

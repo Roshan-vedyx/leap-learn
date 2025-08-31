@@ -144,7 +144,12 @@ const BrainCheckPage: React.FC = () => {
           </h1>
           
           {/* Description - Responsive sizing and line height */}
-          <p className="text-base sm:text-lg md:text-xl text-body-text leading-relaxed max-w-2xl mx-auto mb-3 px-4 sm:px-6">
+          <p className="text-base sm:text-lg md:text-xl text-body-text leading-relaxed max-w-2xl mx-auto mb-3 px-4 sm:px-6 block sm:hidden">
+            {/* Empty for mobile - just shows the heading */}
+          </p>
+
+          {/* Tablet and Desktop: Full description */}
+          <p className="text-base sm:text-lg md:text-xl text-body-text leading-relaxed max-w-2xl mx-auto mb-3 px-4 sm:px-6 hidden sm:block">
             Your brain works differently every day - sometimes it's buzzing with energy, sometimes it wants to chill.
             I want to find you something that actually fits how you're feeling right now - there are NO wrong answers here!
           </p>

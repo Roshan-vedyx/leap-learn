@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/Card'
 import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
+import { SettingsModal } from '@/components/SettingsModal'
 
 import { useAnalyticsIntegration } from './hooks/useAnalyticsIntegration'
 import { useCurrentUserId } from '@/lib/auth-utils'
@@ -90,16 +91,42 @@ function AppContent() {
   const [fontSize, setFontSize] = useState<FontSize>('default')
   const [reducedMotion, setReducedMotion] = useState(false)
   const [location, setLocation] = useLocation()
+  const [showSettings, setShowSettings] = useState(false)
+  const [siennaEnabled, setSiennaEnabled] = useState(false)
   
   const userId = useCurrentUserId()
   useAnalyticsIntegration(userId)
-  
+
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()
   useAnalyticsIntegration()
   const [ttsAccent, setTtsAccent] = useState<TtsAccent>(() => 
     storage.get('tts-accent', 'GB') as TtsAccent
   )
+
+  // Load Sienna preference on mount (add to existing useEffect or create new one)
+  useEffect(() => {
+    const loadSiennaIfEnabled = () => {
+      const savedSienna = localStorage.getItem('sienna-enabled')
+      if (savedSienna === 'true') {
+        // Only load Sienna if it's not already loaded
+        if (!document.querySelector('script[src*="sienna"]')) {
+          const script = document.createElement('script')
+          script.src = 'https://website-widgets.pages.dev/dist/sienna.min.js'
+          script.defer = true
+          script.onload = () => {
+            console.log('✅ Sienna loaded and ready')
+            document.body.classList.add('sienna-enabled')
+          }
+          document.head.appendChild(script)
+        } else {
+          document.body.classList.add('sienna-enabled')
+        }
+      }
+    }
+  
+    loadSiennaIfEnabled()
+  }, [])
 
   // Load preferences on app start
   useEffect(() => {
@@ -182,7 +209,7 @@ function AppContent() {
               </Link>
               
               {/* Desktop-only tagline and credentials */}
-              <div className="hidden lg:flex flex-col gap-1">
+              <div className="hidden xl:flex flex-col gap-1">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full">
                     <CheckCircle className="w-3 h-3 text-sage-green" />
@@ -271,6 +298,7 @@ function AppContent() {
                 <Button 
                   variant="ghost" 
                   size="icon" 
+                  onClick={() => setShowSettings(true)}  // <-- Add this
                   className="
                     min-h-[44px] min-w-[44px] p-2
                     text-warm-charcoal hover:text-deep-ocean-blue 
@@ -504,6 +532,14 @@ function AppContent() {
 
       {/* FIXED: Use EnhancedCalmCorner instead of CalmCorner */}
       <EnhancedCalmCorner />
+
+      {/* Settings Modal */}
+      <SettingsModal 
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        ttsAccent={ttsAccent}
+        onTtsAccentChange={handleTtsAccentChange}
+      />
 
       {/* Screen Reader Announcements */}
       <div 
