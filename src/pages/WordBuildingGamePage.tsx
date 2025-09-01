@@ -774,8 +774,8 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   if (!isInitialized) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky flex items-center justify-center p-4">
-        <Card className="bg-white/80 border-2 border-blue-300 shadow-lg">
+      <div className="flex-1 bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky flex items-center justify-center p-4">
+        <Card className="bg-white/80 border-2 border-blue-300 shadow-lg opacity-0 animate-[fade-in_0.3s_ease-in-out_0.2s_forwards]">
           <CardContent className="p-6 text-center">
             <div className="text-4xl mb-4">🎯</div>
             <h2 className="text-xl font-medium text-blue-800 mb-2">Loading Your Word Adventure...</h2>
@@ -787,7 +787,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+    <div className="flex-1 bg-gradient-to-b from-autism-calm-mint to-autism-calm-sky px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Context Introduction - appears before word building */}

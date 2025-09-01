@@ -171,8 +171,8 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         parsedBlocks.push({ type: 'conclusion', text: block })
       }
       // FIXED: Only add substantial content as narration
-      else if (block.length > 20) {
-        parsedBlocks.push({ type: 'narration', text: block })
+      else if (block.trim().length > 0 && !block.match(/^\[.*\]$/)) {
+        parsedBlocks.push({ type: 'narration', text: block.trim() })
       }
     }
 
@@ -294,7 +294,13 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
       case 'conclusion':
         return <div key={idx} className="bg-purple-50 border border-purple-200 rounded-lg p-4 my-4 font-bold">⭐ {block.text.replace('[FINAL CONCLUSION]', '').trim()}</div>
       default:
-        return <p key={idx} className="mb-3">{block.text}</p>
+        let cleanText = block.text
+        cleanText = cleanText.replace(/\[CONSEQUENCE .\]\s*/g, '')
+        cleanText = cleanText.replace(/\[PERSONAL REFLECTION\]\s*/g, '')
+        cleanText = cleanText.replace(/\[ACTION REFLECTION\]\s*/g, '')
+        cleanText = cleanText.replace(/\[STORY CONTINUATION\]\s*/g, '')
+        cleanText = cleanText.replace(/\[FINAL CONCLUSION\]\s*/g, '')
+        return <p key={idx} className="mb-3">{cleanText}</p>
     }
   }
 

@@ -38,7 +38,6 @@ import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 
-
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
 
@@ -240,7 +239,7 @@ function AppContent() {
               </div>
             )}
 
-            {/* Right Actions - Mobile Optimized */}
+            {/* Right Side - Calm Corner + Desktop Controls */}
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Calm Corner - Enhanced for touch */}
               <Button 
@@ -264,7 +263,7 @@ function AppContent() {
                 <span className="sm:hidden">Calm</span>
               </Button>
               
-              {/* TTS Accent Settings Only - Desktop */}
+              {/* TTS Accent Settings - Desktop Only */}
               <div className="hidden lg:flex items-center space-x-3">
                 <span className="text-sm font-medium text-warm-charcoal">Change Accent:</span>
                 <div className="relative">
@@ -292,23 +291,23 @@ function AppContent() {
                   </select>
                   <ChevronDown className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                 </div>
-
-                {/* Settings Button - Professional */}
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => setShowSettings(true)}  // <-- Add this
-                  className="
-                    min-h-[44px] min-w-[44px] p-2
-                    text-warm-charcoal hover:text-deep-ocean-blue 
-                    hover:bg-gray-100 rounded-lg
-                    transition-all duration-200
-                  "
-                >
-                  <Settings className="w-5 h-5" />
-                  <span className="sr-only">Settings</span>
-                </Button>
               </div>
+
+              {/* Settings Button - Always visible */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setShowSettings(true)}
+                className="
+                  min-h-[44px] min-w-[44px] p-2
+                  text-warm-charcoal hover:text-deep-ocean-blue 
+                  hover:bg-gray-100 rounded-lg
+                  transition-all duration-200
+                "
+                aria-label="Open accessibility settings"
+              >
+                <Settings className="w-5 h-5" />
+              </Button>
             </div>
           </div>
 
@@ -363,7 +362,7 @@ function AppContent() {
             </div>
 
             {/* Mobile/Tablet Credentials - Responsive badges */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 lg:hidden">
+            <div className="hidden md:flex lg:hidden flex-wrap items-center justify-center gap-1.5 sm:gap-2">
               <div className="flex items-center gap-1 bg-sage-green/10 px-2 py-1 rounded-full min-h-[32px]">
                 <CheckCircle className="w-3 h-3 text-sage-green" />
                 <span className="text-xs font-medium text-sage-green">UDL Aligned</span>

@@ -49,8 +49,8 @@ export const AuthGate: React.FC<AuthGateProps> = ({
   if (requireChild) {
     if (childLoading) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center opacity-0 animate-[fade-in_0.3s_ease-in-out_0.1s_forwards]">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading...</p>
           </div>

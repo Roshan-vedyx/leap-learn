@@ -271,6 +271,16 @@
   .border-soft-lavender { border-color: var(--soft-lavender); }
   .border-muted-coral { border-color: var(--muted-coral); }
   .border-cool-mint { border-color: var(--cool-mint); }
+
+  /* iPad Safari loading fix */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-in-out forwards;
+  }
 }
 
 /* Print styles */
