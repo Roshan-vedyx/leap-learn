@@ -87,7 +87,7 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
       const childProfile: ChildProfile = {
         childId,
         parentId: user.uid,
-        username: formData.username,
+        username: formData.username.trim().toLowerCase(),
         pinHash: hashedPin,
         createdAt: new Date(),
         lastActive: new Date(),

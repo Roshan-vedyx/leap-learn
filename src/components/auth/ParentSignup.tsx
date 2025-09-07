@@ -25,6 +25,8 @@ export const ParentSignup: React.FC = () => {
   const [step, setStep] = useState(1) // 1: Parent signup, 2: Ownership transition, 3: Create children, 4: Complete
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showSecurityPrompt, setShowSecurityPrompt] = useState<Record<number, boolean>>({})
+  const [showUsernameError, setShowUsernameError] = useState(false)
   
   // Parent data
   const [parentData, setParentData] = useState({
@@ -185,8 +187,8 @@ export const ParentSignup: React.FC = () => {
     newChildren[index] = { 
       ...newChildren[index], 
       showSecurityQuestions: show,
-      selectedQuestions: show ? newChildren[index].selectedQuestions : [],
-      answers: show ? newChildren[index].answers : {}
+      selectedQuestions: [],  // Always clear when toggling
+      answers: {}             // Always clear when toggling
     }
     setChildren(newChildren)
   }
@@ -288,9 +290,9 @@ export const ParentSignup: React.FC = () => {
           }
           
           const childProfile: ChildProfile = {
-            childId: '', // Will be set by Firestore
+            childId: 'temp_id',
             parentId: createdParentId,
-            username: child.username.trim(),
+            username: child.username.trim().toLowerCase(),
             age: parseInt(child.age),
             pinHash: hashedPin,
             createdAt: new Date(),
@@ -315,6 +317,8 @@ export const ParentSignup: React.FC = () => {
           }
           
           const docRef = await addDoc(collection(db, 'children'), childProfile)
+          // Update the document with its own ID
+          await setDoc(doc(db, 'children', docRef.id), { childId: docRef.id }, { merge: true })
           childIds.push(docRef.id)
         }
       }
@@ -333,8 +337,10 @@ export const ParentSignup: React.FC = () => {
 
   const handleUsernameBlur = async (index: number, username: string) => {
     if (username.trim() && await checkUsernameExists(username)) {
-      setError('Oops, that username already exists. Choose another one')
+      setShowUsernameError(true)
+      setError('') // Clear main error
     } else {
+      setShowUsernameError(false)
       setError('')
     }
   }
@@ -379,6 +385,24 @@ export const ParentSignup: React.FC = () => {
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 
                           dark:border-red-800 rounded-lg">
               <p className="text-red-700 dark:text-red-300 text-sm font-medium">{error}</p>
+            </div>
+          )}
+
+          {/* Username Error Popup */}
+          {showUsernameError && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full">
+                <h3 className="text-lg font-semibold text-amber-600 mb-3">Oops..that username is already taken</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  Choose another one that matches your style !!
+                </p>
+                <Button
+                  onClick={() => setShowUsernameError(false)}
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-white"
+                >
+                  Got it!
+                </Button>
+              </div>
             </div>
           )}
 
@@ -709,7 +733,7 @@ export const ParentSignup: React.FC = () => {
                     )}
                     
                     {/* Security Questions Toggle */}
-                    {child.pin.length === 4 && child.confirmPin.length === 4 && child.pin === child.confirmPin && (
+                    {child.pin.length === 4 && child.confirmPin.length === 4 && child.pin === child.confirmPin && showSecurityPrompt[index] !== false && (
                       <div className="mt-6 bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
                         <div className="flex items-center gap-3 mb-4">
                           <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
@@ -734,7 +758,10 @@ export const ParentSignup: React.FC = () => {
                           </Button>
                           <Button
                             type="button"
-                            onClick={() => toggleSecurityQuestions(index, false)}
+                            onClick={() => {
+                              toggleSecurityQuestions(index, false)
+                              setShowSecurityPrompt(prev => ({ ...prev, [index]: false }))
+                            }}
                             className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
                           >
                             Skip for Now
@@ -806,10 +833,18 @@ export const ParentSignup: React.FC = () => {
                         </div>
 
                         <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                            Selected: {child.selectedQuestions.length}/3 questions
-                            <span className="text-yellow-600 dark:text-yellow-400 ml-2">
-                                {child.selectedQuestions.length === 0 ? "Optional - you can skip this" : "✓ Ready to continue"}
-                            </span>
+                          Selected: {child.selectedQuestions.length}/3 questions
+                          <span 
+                            className="text-yellow-600 dark:text-yellow-400 ml-2 cursor-pointer hover:underline"
+                            onClick={() => {
+                              if (child.selectedQuestions.length === 0) {
+                                toggleSecurityQuestions(index, false)
+                                setShowSecurityPrompt(prev => ({ ...prev, [index]: false }))
+                              }
+                            }}
+                          >
+                            {child.selectedQuestions.length === 0 ? "Optional - you can skip this" : "✓ Ready to continue"}
+                          </span>
                         </div>
                       </div>
                     )}
