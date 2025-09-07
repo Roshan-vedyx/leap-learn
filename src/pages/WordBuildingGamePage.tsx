@@ -78,7 +78,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   
   // ADD ANALYTICS HOOKS
   const userId = useCurrentUserId()
-  const analytics = useLearningAnalytics(userId)
+  const { trackBreakthrough, trackChallengeOvercome, trackSupportUsage, trackWordPractice } = useLearningAnalytics(userId)
   const { currentBrainState } = useSessionStore()
 
   // Performance tracking (invisible to user)
@@ -211,19 +211,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }, [currentWordIndex, currentWord])
 
-  // Track when activity starts
-  useEffect(() => {
-    if (isInitialized && currentWords.length > 0 && userId) {
-      analytics.trackLearningEvent({
-        eventType: 'reading',
-        activityType: 'word_building_start',
-        appSection: 'word_building',
-        difficulty: 'regular',
-        brainState: currentBrainState?.id
-      })
-    }
-  }, [isInitialized, currentWords.length, userId])
-
+  
   // Context generation helpers
   const generateContextIntro = (word: string, theme: string): string => {
     const contexts: Record<string, string[]> = {
@@ -440,7 +428,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         
         // ADD ANALYTICS TRACKING FOR WORD SUCCESS
         if (userId) {
-          analytics.trackWordPractice({
+          trackWordPractice({
             words: [currentWord],
             correctWords: [currentWord],
             timeSpent: completionTime,
@@ -451,7 +439,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
           
           // Track breakthrough for challenging words
           if (currentWord.length > 6 && hintsUsed <= 1) {
-            analytics.trackBreakthrough(`Built challenging word: ${currentWord}`)
+            trackBreakthrough(`Built challenging word: ${currentWord}`)
           }
         }
         
@@ -681,7 +669,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     } else {
       // Theme completed - ADD ANALYTICS TRACKING
       if (userId) {
-        await analytics.trackBreakthrough(`Completed ${theme} theme with ${wordsCompleted.length} words!`)
+        await trackBreakthrough(`Completed ${theme} theme with ${wordsCompleted.length} words!`)
       }
 
       // Check if we should show theme choice
@@ -711,7 +699,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       // ADD ANALYTICS TRACKING FOR RESET
       if (userId) {
         if (resetsUsed > 1) {
-          await analytics.trackChallengeOvercome(`Persisted through ${currentWord} difficulty`)
+          await trackChallengeOvercome(`Persisted through ${currentWord} difficulty`)
         }
       }
     }
@@ -734,7 +722,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
         // ADD ANALYTICS TRACKING FOR HINT USAGE
         if (userId) {
-          await analytics.trackSupportUsage({
+          await trackSupportUsage({
             type: 'visual_aid',
             triggeredBy: `word_building_${currentWord}`,
             effectiveness: 'helped'
@@ -755,15 +743,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }
 
   const handleThemeChoice = (selectedTheme: string) => {
-    if (userId) {
-      analytics.trackLearningEvent({
-        eventType: 'reading',
-        activityType: 'theme_change',
-        appSection: 'word_building',
-        brainState: currentBrainState?.id
-      })
-    }
-    
+    // Simply navigate without analytics for theme choice
     setLocation(`/word-building/${selectedTheme}`)
   }
 

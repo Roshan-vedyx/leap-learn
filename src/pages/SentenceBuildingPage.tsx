@@ -1,11 +1,11 @@
 // src/pages/SentenceBuildingPage.tsx
 // Enhanced click-to-build system optimized for motor planning accessibility
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useLocation } from 'wouter'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
-import { sentenceTemplates, getWordsByThemeAndDifficulty } from '@/data/wordBank'
+import { sentenceTemplates, getWordsByThemeAndDifficulty, AdaptiveWordBank } from '@/data/wordBank'
 
 interface SentenceBuildingPageProps {
   theme: string
@@ -35,16 +35,34 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   const [lastClickTime, setLastClickTime] = useState<number>(0)
   const [lastClickedSlot, setLastClickedSlot] = useState<number>(-1)
   const [, setLocation] = useLocation()
+  const adaptiveWordBank = useRef<AdaptiveWordBank | null>(null)
+  const [wordsLoaded, setWordsLoaded] = useState(false)
 
   // Get theme-specific templates
   const templates = sentenceTemplates[theme as keyof typeof sentenceTemplates] || sentenceTemplates.animals
   const currentTemplate = templates[currentTemplateIndex]
   
   // Get words built in previous session
-  const themeWords = [
-    ...getWordsByThemeAndDifficulty(theme, 'easy'),
-    ...getWordsByThemeAndDifficulty(theme, 'regular')
-  ].map(word => word.toUpperCase())
+  const themeWords = useMemo(() => {
+    if (!adaptiveWordBank.current || !wordsLoaded) {
+      return getWordsByThemeAndDifficulty(theme, 'easy').concat(
+        getWordsByThemeAndDifficulty(theme, 'regular')
+      ).map(word => word.toUpperCase())
+    }
+    
+    // Use JSON words
+    return adaptiveWordBank.current.getWordsForTheme(theme).slice(0, 8)
+  }, [theme, wordsLoaded])
+
+  // Initialize AdaptiveWordBank to load JSON words
+  useEffect(() => {
+    const initWordBank = async () => {
+      adaptiveWordBank.current = new AdaptiveWordBank(12)
+      // Wait for JSON to load
+      setTimeout(() => setWordsLoaded(true), 500)
+    }
+    initWordBank()
+  }, [])
 
   // Parse template into visual sentence slots
   const parseTemplateIntoSlots = (template: string) => {
@@ -118,6 +136,18 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
         
       case 'part':
         return currentTemplate.parts?.slice(0, 4) || ['WHEELS', 'DOORS', 'SEATS', 'ENGINE']
+
+      case 'space':
+        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
+          ['SUN', 'MOON', 'STAR']
+          
+      case 'food':
+        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
+          ['CAKE', 'PIZZA', 'APPLE']
+          
+      case 'vehicle':
+        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
+          ['CAR', 'BUS', 'BIKE']  
         
       default:
         return []
@@ -152,7 +182,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       setShowCelebration(false)
       setWordFeedback('')
     }
-  }, [currentTemplate, theme])
+  }, [currentTemplate, theme, wordsLoaded])
 
   // Check if sentence is complete
   useEffect(() => {

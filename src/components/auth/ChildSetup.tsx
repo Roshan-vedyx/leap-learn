@@ -8,6 +8,7 @@ import { useParentAuth } from '../../contexts/ParentAuthContext'
 import { Button } from '@/components/ui/Button'
 import { SECURITY_QUESTIONS, type SecurityQuestion, type RecoveryAttempts } from '../../types/auth'
 import type { ChildProfile } from '../../types/auth'
+import { checkUsernameExists } from '../../utils/usernameValidation'
 
 interface ChildSetupProps {
   onComplete: () => void
@@ -49,6 +50,11 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
     setError('')
     
     try {
+      const usernameTaken = await checkUsernameExists(formData.username)
+      if (usernameTaken) {
+        setError('Oops, that username already exists. Choose another one')
+        return
+      }
       const childId = generateChildId()
       const hashedPin = await bcrypt.hash(formData.pin, 10)
       
@@ -171,6 +177,14 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
     setAnswers(prev => ({ ...prev, [questionId]: answer }))
   }
 
+  const handleUsernameBlur = async (username: string) => {
+    if (username.trim() && await checkUsernameExists(username)) {
+      setError('Oops, that username already exists. Choose another one')
+    } else {
+      setError('')
+    }
+  }
+
   // Step 1: Username - RESPONSIVE
   if (step === 1) {
     return (
@@ -208,6 +222,7 @@ export const ChildSetup: React.FC<ChildSetupProps> = ({ onComplete, onCancel }) 
               type="text"
               value={formData.username}
               onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+              onBlur={(e) => handleUsernameBlur(e.target.value)}
               placeholder="Your cool username"
               className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-600 rounded-lg 
                        bg-white dark:bg-gray-700 text-gray-900 dark:text-white

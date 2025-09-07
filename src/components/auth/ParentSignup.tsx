@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button'
 import bcrypt from 'bcryptjs'
 import type { ParentProfile, ChildProfile } from '../../types/auth'
 import { SECURITY_QUESTIONS, type SecurityQuestion, type RecoveryAttempts } from '../../types/auth'
+import { checkUsernameExists } from '../../utils/usernameValidation'
 
 const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -212,12 +213,18 @@ export const ParentSignup: React.FC = () => {
     setChildren(newChildren)
   }
 
-  const validateChildren = () => {
+  const validateChildren = async () => {
     for (const child of children) {
       if (!child.username.trim()) return 'All children need usernames'
       if (!child.age) return 'Please select age for all children'
       if (child.pin.length !== 4) return 'All PINs must be 4 digits'
       if (child.pin !== child.confirmPin) return 'PINs must match'
+      if (child.username.trim()) {
+        const usernameTaken = await checkUsernameExists(child.username)
+        if (usernameTaken) {
+          return 'Oops, that username already exists. Choose another one'
+        }
+      }
       
       // Validate security questions if they're shown
       if (child.showSecurityQuestions && child.selectedQuestions.length > 0) {
@@ -238,7 +245,7 @@ export const ParentSignup: React.FC = () => {
   }
 
   const createChildren = async () => {
-    const validationError = validateChildren()
+    const validationError = await validateChildren()
     if (validationError) {
       setError(validationError)
       return
@@ -321,6 +328,14 @@ export const ParentSignup: React.FC = () => {
       setError(err.message || 'Failed to create child profiles')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleUsernameBlur = async (index: number, username: string) => {
+    if (username.trim() && await checkUsernameExists(username)) {
+      setError('Oops, that username already exists. Choose another one')
+    } else {
+      setError('')
     }
   }
 
@@ -590,6 +605,7 @@ export const ParentSignup: React.FC = () => {
                           type="text"
                           value={child.username}
                           onChange={(e) => updateChild(index, 'username', e.target.value)}
+                          onBlur={(e) => handleUsernameBlur(index, e.target.value)}
                           className="w-full px-4 py-4 text-base border-2 border-purple-300 dark:border-purple-600 rounded-lg
                                    bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                    focus:ring-2 focus:ring-purple-500 focus:border-purple-500
