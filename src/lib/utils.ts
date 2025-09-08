@@ -183,7 +183,7 @@ export const audio = {
         utterance.volume = options.volume ?? 0.8
         
         // Set voice and language
-        if (voice) {
+        if (voice && voice.name) {  // Add name check
           utterance.voice = voice
           utterance.lang = voice.lang
           console.log(`🗣️ Using voice: ${voice.name} (${voice.lang})`)

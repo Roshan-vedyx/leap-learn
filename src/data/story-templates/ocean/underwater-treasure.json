@@ -7,7 +7,7 @@
       "narrative": [
         "Alex adjusted the snorkel mask and dove beneath the surface.",
         "The underwater world sparkled with clear blue light as tropical fish swirled in colorful schools.",
-        "Something unusual glinted between the rocks - an old glass bottle covered in barnacles and seaweed."
+        "Something unusual glinted between the rocks... an old glass bottle covered in barnacles and seaweed."
       ],
       "choice_points": [
         {
@@ -16,11 +16,11 @@
           "options": [
             {
               "letter": "A",
-              "text": "Examine the bottle underwater before surfacing"
+              "text": "Check out the bottle underwater before surfacing"
             },
             {
               "letter": "B", 
-              "text": "Bring it to shore immediately to investigate"
+              "text": "Bring it to shore right away to investigate"
             }
           ]
         }
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Alex peered through the glass and spotted something rolled up inside - definitely not just an empty bottle."
+          "text": "Alex peered through the glass and spotted something rolled up inside... definitely not just an empty bottle."
         },
         {
           "choice_id": 1,
@@ -40,8 +40,8 @@
       "continuation": [
         "Alex surfaced for air, then dove back down to carefully work the bottle free from its rocky home.",
         "Inside the bottle was a weathered map showing the coastline with mysterious symbols and marked locations.",
-        "Alex's pulse quickened - this felt like a real historical discovery.",
-        "This discovery might be important beyond just personal excitement."
+        "Alex's pulse quickened... this felt like a real historical discovery.",
+        "This discovery might be way more important than just personal excitement."
       ],
       "reflections": [
         {
@@ -57,14 +57,14 @@
     
     "regular": {
       "narrative": [
-        "Alex descended through the crystalline water, breathing steadily through the snorkel tube.",
-        "The underwater terrain revealed a thriving marine ecosystem with coral formations creating natural sculptures among the rocks.",
-        "As Alex explored the deeper crevices, an unusual object caught attention - an encrusted glass bottle wedged firmly between limestone formations."
+        "Alex went deeper through the crystal-clear water, breathing steadily through the snorkel tube.",
+        "The underwater landscape revealed a thriving sea ecosystem with coral formations creating natural sculptures among the rocks.",
+        "As Alex explored the deeper cracks, an unusual object caught attention... a crusty glass bottle wedged firmly between limestone formations."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Alex approach this archaeological find?",
+          "question": "How should Alex approach this historical find?",
           "options": [
             {
               "letter": "A",
@@ -86,14 +86,14 @@
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Through the glass, Alex could see rolled parchment with faded markings - definitely something significant."
+          "text": "Through the glass, Alex could see rolled parchment with faded markings... definitely something significant."
         }
       ],
       "continuation": [
-        "After surfacing to plan the retrieval, Alex carefully maneuvered the artifact free without disturbing the surrounding marine life.",
-        "The bottle contained an authentic maritime chart from the colonial era, complete with navigation markers and coastal landmarks.",
+        "After surfacing to plan the retrieval, Alex carefully worked the artifact free without disturbing the surrounding sea life.",
+        "The bottle contained an authentic old-time sea chart from the colonial era, complete with navigation markers and coastal landmarks.",
         "Alex had stumbled upon a genuine piece of local history.",
-        "Realizing the potential historical importance, Alex faced decisions about sharing this discovery responsibly."
+        "Realizing how historically important this could be, Alex faced decisions about sharing this discovery responsibly."
       ],
       "reflections": [
         {
@@ -109,9 +109,9 @@
     
     "challenge": {
       "narrative": [
-        "Alex executed a methodical underwater survey of the coastal geological formations during optimal visibility conditions.",
-        "The marine biodiversity was exceptional - complex coral ecosystems supported intricate food webs while limestone substrates provided habitat for specialized communities.",
-        "During systematic exploration of deeper crevices, Alex identified an anomalous artifact: a heavily encrusted glass vessel secured within sedimentary deposits."
+        "Alex executed a methodical underwater survey of the coastal rock formations during the best visibility conditions.",
+        "The marine variety was exceptional... complex coral ecosystems supported intricate food webs while limestone areas provided habitat for specialized communities.",
+        "During systematic exploration of deeper cracks, Alex identified an unusual artifact: a heavily encrusted glass vessel secured within rock deposits."
       ],
       "choice_points": [
         {
@@ -120,11 +120,11 @@
           "options": [
             {
               "letter": "A",
-              "text": "Conduct preliminary artifact analysis and research its origins"
+              "text": "Conduct initial artifact analysis and research its origins"
             },
             {
               "letter": "B",
-              "text": "Establish proper documentation with maritime heritage authorities"
+              "text": "Set up proper documentation with maritime heritage authorities"
             }
           ]
         }
@@ -133,7 +133,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Alex's initial research suggested the bottle dated to early colonial maritime trade routes, potentially containing navigation documents."
+          "text": "Alex's initial research suggested the bottle dated to early colonial sea trade routes, potentially containing navigation documents."
         },
         {
           "choice_id": 1,
@@ -143,8 +143,8 @@
       ],
       "continuation": [
         "Following archaeological documentation protocols, Alex recorded GPS coordinates and environmental context before carefully extracting the historically significant container.",
-        "The sealed container held an authentic eighteenth-century nautical chart documenting previously unknown coastal navigation routes and trading post locations.",
-        "Recognizing the research implications, Alex considered how to maximize the discovery's contribution to maritime historical scholarship.",
+        "The sealed container held an authentic eighteenth-century sea chart documenting previously unknown coastal navigation routes and trading post locations.",
+        "Understanding the research implications, Alex considered how to maximize the discovery's contribution to maritime historical scholarship.",
         "Through rigorous research and community engagement, Alex transformed a chance discovery into lasting contributions to maritime historical knowledge."
       ],
       "reflections": [

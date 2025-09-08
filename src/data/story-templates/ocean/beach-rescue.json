@@ -6,8 +6,8 @@
     "simple": {
       "narrative": [
         "Maya was walking on the beach when she saw something that made her heart race.",
-        "A young dolphin was lying on the sand, breathing hard and looking very scared.",
-        "Maya knew she had to help fast!"
+        "A young dolphin was lying on the sand, breathing hard and looking really scared.",
+        "Maya knew she had to help... and fast!"
       ],
       "choice_points": [
         {
@@ -56,8 +56,8 @@
     
     "regular": {
       "narrative": [
-        "Maya was enjoying a peaceful walk along the beach when she spotted something alarming.",
-        "A bottlenose dolphin lay stranded on the sand, its breathing rapid and shallow.", 
+        "Maya was enjoying a peaceful walk along the beach when she spotted something totally scary.",
+        "A dolphin lay stranded on the sand, breathing really fast and shallow.", 
         "The morning sun was getting hot, and Maya realized this beautiful creature was in serious danger."
       ],
       "choice_points": [
@@ -92,7 +92,7 @@
         "Sam called the marine rescue hotline while Alex helped Maya keep the dolphin comfortable.",
         "Maya spoke softly to the animal, trying to keep it calm.",
         "When the rescue team arrived, they worked together to guide the dolphin back into the waves.",
-        "The dolphin paused for a moment at the water's edge, as if saying thank you, before swimming strongly back to the deep ocean."
+        "The dolphin paused for a moment at the water's edge... as if saying thank you... before swimming strongly back to the deep ocean."
       ],
       "reflections": [
         {
@@ -108,22 +108,22 @@
     
     "challenge": {
       "narrative": [
-        "Maya was exploring a remote section of coastline when an urgent situation unfolded before her eyes.",
-        "A juvenile bottlenose dolphin had become stranded on the beach, its respirations labored and skin beginning to show signs of sun exposure.",
-        "Maya understood that marine mammals could suffer serious health consequences within hours of being out of water."
+        "Maya was exploring a quiet part of the beach when something urgent happened right in front of her.",
+        "A young dolphin had washed up on the sand, breathing hard and its skin starting to dry out in the sun.",
+        "Maya knew that dolphins could get really sick if they stayed out of water too long."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Maya begin this critical rescue?",
+          "question": "How should Maya start this rescue?",
           "options": [
             {
               "letter": "A",
-              "text": "Coordinate with Sam and Alex as a rescue team"
+              "text": "Work with Sam and Alex as a rescue team"
             },
             {
               "letter": "B",
-              "text": "Implement immediate hydration protocols to buy time"
+              "text": "Start keeping the dolphin wet right away to buy some time"
             }
           ]
         }
@@ -132,28 +132,28 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Sam and Alex responded to Maya's call, bringing additional problem-solving skills and resources to the emergency."
+          "text": "Sam and Alex answered Maya's call, bringing extra hands and smart thinking to help with the emergency."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Maya's quick hydration efforts helped stabilize the dolphin's condition while she developed a comprehensive rescue plan."
+          "text": "Maya's quick water-splashing helped the dolphin stay stable while she figured out what to do next."
         }
       ],
       "continuation": [
-        "Maya coordinated a systematic response: maintaining the dolphin's moisture levels, monitoring its vital signs, and ensuring someone contacted professional marine rescuers.",
-        "The team worked with focused efficiency, understanding that every minute mattered.",
-        "When the rescue specialists arrived with proper equipment, they successfully transported the dolphin to deeper water.",
-        "The animal's powerful tail created joyful splashes as it disappeared beneath the surface, returning to its ocean home."
+        "Maya organized everything: keeping the dolphin wet, checking that it was breathing okay, and making sure someone called the professional marine rescuers.",
+        "The team worked super efficiently, knowing that every minute really mattered.",
+        "When the rescue experts arrived with the right equipment, they successfully got the dolphin back to deeper water.",
+        "The dolphin's powerful tail made happy splashes as it disappeared under the surface... finally home again in the ocean!"
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "How do you handle high-pressure situations where quick thinking and teamwork are essential?"
+          "question": "How do you handle stressful situations where you need to think fast and work with others?"
         },
         {
           "type": "action", 
-          "question": "What steps could you take to become better prepared for wildlife emergency situations in your community?"
+          "question": "What steps could you take to get better at helping wildlife emergencies in your area?"
         }
       ]
     }

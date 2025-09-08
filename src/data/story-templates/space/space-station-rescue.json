@@ -5,7 +5,7 @@
   "stories": {
     "simple": {
       "narrative": [
-        "Alex got an urgent transmission from the space station - their oxygen recycling system had totally failed.",
+        "Alex got an urgent transmission from the space station... their oxygen recycling system had totally failed.",
         "This was a life-threatening emergency because without fresh air, the astronauts had only hours before carbon dioxide levels became dangerous.",
         "Time was running out fast, so Alex launched the emergency rescue shuttle with steady hands despite the pressure."
       ],
@@ -58,7 +58,7 @@
     "regular": {
       "narrative": [
         "Alex was monitoring mission control communications when an emergency alert totally disrupted the routine shift.",
-        "The International Space Station reported cascading failures in their environmental control systems - oxygen levels dropping while carbon dioxide built up to dangerous concentrations.",
+        "The International Space Station reported cascading failures in their environmental control systems... oxygen levels dropping while carbon dioxide built up to dangerous concentrations.",
         "The crew had approximately six hours before the situation became life-threatening, so Alex immediately prepped the emergency response vehicle."
       ],
       "choice_points": [
@@ -90,10 +90,10 @@
         }
       ],
       "continuation": [
-        "Alex ran through rapid-deployment protocols that had been drilled countless times but never used in an actual crisis.",
+        "Alex ran through rapid-deployment procedures that had been drilled countless times but never used in an actual crisis.",
         "Aboard the station, Alex worked in microgravity to access the environmental control panels while the primary atmospheric processor had multiple component failures.",
         "With the crew's assistance, Alex developed a systematic repair strategy that addressed both immediate and long-term safety concerns.",
-        "The successful rescue operation became a case study for improving emergency response protocols and spacecraft design standards."
+        "The successful rescue operation became a case study for improving emergency response procedures and spacecraft design standards."
       ],
       "reflections": [
         {
@@ -110,8 +110,8 @@
     "challenge": {
       "narrative": [
         "Alex received priority emergency communications indicating critical environmental system failures aboard the orbital research facility.",
-        "Atmospheric regulation equipment had suffered multiple component breakdowns threatening crew survival - a cascade failure involving oxygen generation units, carbon dioxide scrubbing systems, and atmospheric pressure regulation.",
-        "Alex initiated emergency launch protocols, coordinating with mission control while executing complex orbital mechanics calculations to achieve rapid rendezvous with the compromised station."
+        "Atmospheric regulation equipment had suffered multiple component breakdowns threatening crew survival... a cascade failure involving oxygen generation units, carbon dioxide scrubbing systems, and atmospheric pressure regulation.",
+        "Alex initiated emergency launch procedures, coordinating with mission control while executing complex orbital mechanics calculations to achieve rapid rendezvous with the compromised station."
       ],
       "choice_points": [
         {
@@ -142,7 +142,7 @@
         }
       ],
       "continuation": [
-        "Working in microgravity conditions, Alex combined advanced technical knowledge with innovative problem-solving to address interconnected system failures that standard protocols hadn't anticipated.",
+        "Working in microgravity conditions, Alex combined advanced technical knowledge with innovative problem-solving to address interconnected system failures that standard procedures hadn't anticipated.",
         "Recognizing the broader implications for space safety, Alex considered how this crisis could improve future mission planning and equipment design.",
         "Through technical excellence and systematic documentation, Alex had transformed a life-threatening crisis into valuable knowledge that would protect future space explorers.",
         "Alex had demonstrated how emergency response expertise combined with engineering knowledge could save lives and advance human capabilities in space."

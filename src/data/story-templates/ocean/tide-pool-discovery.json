@@ -7,12 +7,12 @@
       "narrative": [
         "Anusha walked toward the tide pools as the ocean pulled back.",
         "Each rocky pool held its own secret world.",
-        "She spotted a bright red crab scuttling under a ledge, and in another pool, a small fish darted between green seaweed."
+        "She spotted a bright red crab scuttling under a ledge, and in another pool... a small fish darted between green seaweed."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "What should Anusha observe more closely?",
+          "question": "What should Anusha check out more closely?",
           "options": [
             {
               "letter": "A",
@@ -40,8 +40,8 @@
       "continuation": [
         "Purple sea stars clung to the rocks, their arms moving in slow motion.",
         "Each creature had developed amazing ways to survive between the tides.",
-        "Anusha knelt carefully, amazed by how much life existed in such small spaces.",
-        "As the tide began returning, she knew she needed to act quickly."
+        "Anusha knelt carefully, totally amazed by how much life existed in such small spaces.",
+        "As the tide began returning, she knew she needed to move quickly."
       ],
       "reflections": [
         {
@@ -57,9 +57,9 @@
     
     "regular": {
       "narrative": [
-        "Anusha approached the tide pools during low tide, when the retreating ocean revealed hidden marine communities.",
-        "Each depression in the rocks contained a complete miniature ecosystem.",
-        "Vibrant sea anemones extended their tentacles to capture plankton, while hermit crabs evaluated empty shells for potential upgrades."
+        "Anusha approached the tide pools during low tide, when the pulling-back ocean revealed hidden sea communities.",
+        "Each dip in the rocks contained a complete miniature ecosystem.",
+        "Colorful sea anemones stretched out their tentacles to catch tiny floating creatures, while hermit crabs checked out empty shells for potential upgrades."
       ],
       "choice_points": [
         {
@@ -68,7 +68,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Study the octopus's remarkable color-changing abilities"
+              "text": "Study the octopus's incredible color-changing abilities"
             },
             {
               "letter": "B",
@@ -81,19 +81,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "A young octopus demonstrated incredible adaptive camouflage, shifting colors and textures to blend seamlessly with its surroundings."
+          "text": "A young octopus showed off incredible camouflage skills, shifting colors and textures to blend perfectly with its surroundings."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Anusha discovered each pool hosted different communities - some preferred shallow, warm water while others thrived in deeper, cooler spots."
+          "text": "Anusha discovered each pool hosted different communities... some preferred shallow, warm water while others thrived in deeper, cooler spots."
         }
       ],
       "continuation": [
         "She pulled out her phone to document these amazing discoveries.",
         "Each tide pool revealed creatures perfectly adapted to their challenging environment.",
         "Some animals could survive being pounded by waves, while others hid in crevices during high tide.",
-        "Anusha realized she was witnessing evolution in action."
+        "Anusha realized she was witnessing evolution in action... right here in these tiny pools!"
       ],
       "reflections": [
         {
@@ -109,9 +109,9 @@
     
     "challenge": {
       "narrative": [
-        "Anusha approached the intertidal zone during optimal low tide conditions, when marine ecosystems became accessible for detailed observation.",
-        "Each tidal pool represented a distinct microhabitat with specific environmental conditions and species adaptations.",
-        "She observed complex ecological relationships - predator-prey dynamics, symbiotic partnerships, and territorial behaviors occurring within these confined spaces."
+        "Anusha approached the area between high and low tide during the best low tide conditions, when sea ecosystems became accessible for detailed observation.",
+        "Each tidal pool represented a unique mini-habitat with specific environmental conditions and species adaptations.",
+        "She observed complex relationships... predator-prey dynamics, partnerships between species, and territorial behaviors happening within these small spaces."
       ],
       "choice_points": [
         {
@@ -124,7 +124,7 @@
             },
             {
               "letter": "B",
-              "text": "Create systematic documentation of biodiversity patterns and habitat preferences"
+              "text": "Create systematic documentation of variety patterns and habitat preferences"
             }
           ]
         }
@@ -133,24 +133,24 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Anusha documented fascinating behavioral adaptations - gastropods using chemical trails to navigate, cnidarians employing specialized stinging cells for both defense and feeding."
+          "text": "Anusha documented fascinating behavioral adaptations... snails using chemical trails to navigate, anemones using specialized stinging cells for both defense and feeding."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Her systematic approach revealed distinct zonation patterns, with different species dominating based on their tolerance for exposure, salinity changes, and wave action."
+          "text": "Her systematic approach revealed distinct zone patterns, with different species taking over based on their tolerance for exposure, salt changes, and wave action."
         }
       ],
       "continuation": [
-        "Advanced cephalopod camouflage demonstrated the evolutionary pressure for survival in these exposed environments.",
-        "Anusha recognized that these small ecosystems served as natural laboratories for understanding marine adaptation.",
+        "Advanced octopus camouflage showed the evolutionary pressure for survival in these exposed environments.",
+        "Anusha recognized that these small ecosystems served as natural laboratories for understanding ocean adaptation.",
         "Her detailed observations would contribute valuable data to local marine biology research.",
         "The tide pools had revealed the intricate complexity hidden within seemingly simple coastal environments."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "How does understanding complex ecological relationships change the way you see natural environments?"
+          "question": "How does understanding complex relationships in nature change the way you see natural environments?"
         },
         {
           "type": "action",

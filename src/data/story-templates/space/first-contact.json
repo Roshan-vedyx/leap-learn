@@ -5,9 +5,9 @@
   "stories": {
     "simple": {
       "narrative": [
-        "Sam focused the telescope on a distant constellation when something unexpected happened.",
+        "Sam focused the telescope on a distant constellation when something totally unexpected happened.",
         "A soft light descended from the night sky, landing silently in the nearby field.",
-        "Sam's heart pounded as a figure emerged from the small craft - definitely not human, but moving with careful, peaceful gestures."
+        "Sam's heart pounded as a figure emerged from the small craft... definitely not human, but moving with careful, peaceful gestures."
       ],
       "choice_points": [
         {
@@ -29,19 +29,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Sam's calm approach worked. The visitor seemed to understand the peaceful intention and responded with similar gestures."
+          "text": "Sam's calm approach totally worked! The visitor seemed to understand the peaceful intention and responded with similar gestures."
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "From a safe distance, Sam's wave was returned with a similar gesture - universal body language that both understood."
+          "text": "From a safe distance, Sam's wave was returned with a similar gesture... universal body language that both understood!"
         }
       ],
       "continuation": [
         "The visitor had large, intelligent eyes and skin that shimmered slightly blue.",
         "Despite having no shared language, Sam and the visitor found ways to connect.",
         "The alien showed Sam crystalline objects that glowed with inner light, while Sam offered an apple and demonstrated how Earth food worked.",
-        "As the visitor prepared to leave, Sam realized this moment would change everything."
+        "As the visitor prepared to leave, Sam realized this moment would change everything forever."
       ],
       "reflections": [
         {
@@ -57,9 +57,9 @@
     
     "regular": {
       "narrative": [
-        "Sam was conducting detailed observations of the Andromeda galaxy when an unidentified object entered Earth's atmosphere without triggering any defense systems.",
-        "The craft executed a precise landing sequence in the field behind Sam's house, its design unlike any human technology.",
-        "When a clearly non-human figure emerged, Sam's scientific training battled with natural fear."
+        "Sam was doing detailed observations of the Andromeda galaxy when an unidentified object entered Earth's atmosphere without triggering any defense systems.",
+        "The craft pulled off a precise landing sequence in the field behind Sam's house, its design unlike any human technology.",
+        "When a clearly non-human figure emerged, Sam's scientific training battled with natural fear and excitement."
       ],
       "choice_points": [
         {
@@ -68,11 +68,11 @@
           "options": [
             {
               "letter": "A",
-              "text": "Use scientific protocols to establish peaceful communication"
+              "text": "Use scientific methods to establish peaceful communication"
             },
             {
               "letter": "B",
-              "text": "Follow instincts about body language and universal gestures"
+              "text": "Follow gut feelings about body language and universal gestures"
             }
           ]
         }
@@ -81,19 +81,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Sam's methodical approach - showing empty hands, speaking calmly, and moving predictably - seemed to reassure the visitor."
+          "text": "Sam's methodical approach - showing empty hands, speaking calmly, and moving predictably - seemed to totally reassure the visitor."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Reading the alien's posture and movements, Sam mirrored the visitor's careful, non-threatening gestures successfully."
+          "text": "Reading the alien's posture and movements, Sam mirrored the visitor's careful, non-threatening gestures perfectly."
         }
       ],
       "continuation": [
         "The being appeared curious rather than threatening, with features that suggested high intelligence and peaceful intentions.",
-        "Communication began through mathematics - Sam drew geometric shapes in the dirt while the visitor created glowing symbols in the air.",
-        "They exchanged basic information about their respective worlds through pictures, numbers, and demonstrations.",
-        "When the encounter ended, both species had gained their first glimpse of intelligence beyond their own world."
+        "Communication began through math... Sam drew geometric shapes in the dirt while the visitor created glowing symbols in the air.",
+        "They exchanged basic information about their worlds through pictures, numbers, and demonstrations.",
+        "When the encounter ended, both species had gotten their first glimpse of intelligence beyond their own world."
       ],
       "reflections": [
         {
@@ -109,22 +109,22 @@
     
     "challenge": {
       "narrative": [
-        "Sam was analyzing deep-space electromagnetic signatures when an anomalous craft achieved atmospheric entry without detection by global monitoring systems.",
-        "The vessel demonstrated technology that violated known principles of physics, executing controlled descent protocols that suggested advanced propulsion understanding.",
-        "The extraterrestrial entity that emerged exhibited morphological characteristics indicating evolution under different planetary conditions while displaying behavioral patterns suggesting high-level cognitive abilities."
+        "Sam was analyzing deep-space electromagnetic signals when a weird craft entered the atmosphere without being detected by global monitoring systems.",
+        "The ship showed off technology that broke known rules of physics, pulling off controlled descent moves that suggested crazy advanced propulsion understanding.",
+        "The alien that emerged had features showing it evolved under different planetary conditions while displaying behavior patterns that suggested super high-level thinking abilities."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Which approach should guide Sam's first contact protocol?",
+          "question": "Which approach should guide Sam's first contact strategy?",
           "options": [
             {
               "letter": "A",
-              "text": "Apply xenobiological theories and establish systematic communication frameworks"
+              "text": "Use alien biology theories and establish systematic communication frameworks"
             },
             {
               "letter": "B",
-              "text": "Rely on fundamental principles of peaceful cross-species interaction"
+              "text": "Rely on basic principles of peaceful cross-species interaction"
             }
           ]
         }
@@ -133,24 +133,24 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Sam's systematic approach - using mathematical constants, atomic structures, and universal physical laws - provided a foundation for complex information exchange."
+          "text": "Sam's systematic approach - using math constants, atomic structures, and universal physical laws - provided a foundation for complex information exchange."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Focusing on non-threatening postures and reciprocal behavioral patterns, Sam established trust that enabled deeper communication."
+          "text": "Focusing on non-threatening postures and copying behavioral patterns, Sam built trust that enabled way deeper communication."
         }
       ],
       "continuation": [
-        "The encounter evolved into humanity's first interspecies scientific collaboration, with both parties sharing technological and philosophical concepts.",
-        "Sam documented detailed physiological observations while the visitor demonstrated advanced understanding of quantum mechanics and biological systems.",
-        "Their exchange established communication protocols that would serve as templates for future extraterrestrial diplomatic encounters.",
-        "Through this historic meeting, Sam had fundamentally altered humanity's relationship with the cosmos and our understanding of our place in the universe."
+        "The encounter turned into humanity's first interspecies scientific collaboration, with both parties sharing technological and philosophical concepts.",
+        "Sam documented detailed observations while the visitor demonstrated advanced understanding of quantum mechanics and biological systems.",
+        "Their exchange established communication methods that would serve as templates for future alien diplomatic encounters.",
+        "Through this historic meeting, Sam had totally changed humanity's relationship with the cosmos and our understanding of our place in the universe."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "How might encountering a completely different form of intelligence change your perspective on human knowledge and capabilities?"
+          "question": "How might encountering a completely different form of intelligence change your perspective on human knowledge and abilities?"
         },
         {
           "type": "action",

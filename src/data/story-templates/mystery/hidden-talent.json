@@ -34,13 +34,13 @@
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "Friends mention seeing someone with chalk-covered fingers, and Rishi notices Jordan's hands look pretty dusty."
+          "text": "Friends mention seeing someone with chalk-covered fingers... and Rishi notices Jordan's hands look pretty dusty."
         }
       ],
       "continuation": [
-        "When Rishi talks to Jordan, Jordan looks scared about being found out.",
-        "Jordan explains they love making art but don't want people judging their work.",
-        "Rishi promises to keep the secret and asks how they can help Jordan feel better about sharing their talent."
+        "When Rishi talks to Jordan, Jordan looks totally scared about being found out.",
+        "Jordan explains, \"I love making art, but... I don't want people judging my work.\"",
+        "Rishi promises to keep the secret and asks, \"How can I help you feel better about sharing your talent?\""
       ],
       "reflections": [
         {
@@ -80,7 +80,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "By hiding behind campus trees before dawn, Rishi discovers Jordan's amazing artistic skills and sees their whole creative process."
+          "text": "By hiding behind campus trees before dawn, Rishi discovers Jordan's amazing artistic skills... and sees their whole creative process."
         },
         {
           "choice_id": 1,
@@ -90,7 +90,7 @@
       ],
       "continuation": [
         "When Rishi approaches Jordan about it, Jordan admits to making the artwork but seems really anxious about being discovered.",
-        "Jordan explains they worry people might criticize their art or make a big deal about it.",
+        "Jordan explains, \"I worry people might criticize my art, or... make a big deal about it.\"",
         "Rishi realizes Jordan needs support to feel confident about their incredible talent.",
         "They talk about ways Jordan could share their art that would feel safe and comfortable."
       ],
@@ -108,22 +108,22 @@
     
     "challenge": {
       "narrative": [
-        "Sophisticated chalk art installations appear systematically across the school campus each morning.",
-        "The anonymous artist demonstrates exceptional technical skill through detailed botanical illustrations and realistic animal portraits.",
-        "Despite widespread appreciation from students and teachers, the creator's identity remains completely hidden."
+        "Amazing chalk art shows up all around school every morning, like clockwork.",
+        "The mystery artist has serious skills... creating detailed nature drawings and realistic animal portraits that wow everyone.",
+        "Even though students and teachers love the artwork, nobody knows who's behind it."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Rishi develops a comprehensive plan to respectfully identify this talented person. What approach should they take?",
+          "question": "Rishi comes up with a solid plan to figure out who this talented person is. What approach should they take?",
           "options": [
             {
               "letter": "A",
-              "text": "Execute strategic observation during early morning hours when the artist likely works"
+              "text": "Set up some strategic early-morning watching to catch the artist at work"
             },
             {
               "letter": "B",
-              "text": "Analyze the artistic techniques and compositional elements to identify the creator's signature style"
+              "text": "Analyze the art techniques and style to identify the creator's signature moves"
             }
           ]
         }
@@ -132,24 +132,24 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Through methodical early-morning surveillance, Rishi discovers Jordan's extraordinary capabilities and their deliberate choice to create during solitary hours when expression feels psychologically safer."
+          "text": "Through careful early-morning watching, Rishi discovers Jordan's extraordinary skills... and realizes they choose these quiet hours when creating feels safer."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Detailed analysis of advanced shading methods, perspective mastery, and compositional sophistication enables Rishi to recognize Jordan's distinctive artistic voice from classroom observations."
+          "text": "Detailed analysis of the advanced shading methods, perspective work, and composition helps Rishi recognize Jordan's distinctive style from classroom observations."
         }
       ],
       "continuation": [
-        "Upon respectful confrontation, Jordan acknowledges their artistic contributions while expressing significant anxiety about public recognition and potential judgment.",
-        "Jordan reveals they chose anonymity because previous experiences with sharing creative work led to unwanted attention and critical comments.",
-        "Rishi recognizes that Jordan's exceptional talent requires supportive strategies that honor their need for emotional safety.",
+        "When Rishi respectfully confronts Jordan, they admit to creating the art... while expressing major anxiety about public recognition and potential judgment.",
+        "Jordan reveals, \"I chose to stay anonymous because... well, past experiences with sharing creative work led to unwanted attention and critical comments.\"",
+        "Rishi recognizes that Jordan's exceptional talent needs supportive strategies that honor their need for emotional safety.",
         "Together, they explore approaches that could help Jordan gain confidence while maintaining control over how much attention they receive."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "Consider times when your abilities felt vulnerable to others' opinions - what helped you feel secure enough to share your authentic talents?"
+          "question": "Think about times when your abilities felt vulnerable to others' opinions... what helped you feel secure enough to share your authentic talents?"
         },
         {
           "type": "action", 

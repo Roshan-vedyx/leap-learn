@@ -29,17 +29,17 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Maya's rock scanner found crystals that only form when there's water around - these rocks were millions of years old!"
+          "text": "Maya's rock scanner found crystals that only form when there's water around... these rocks were millions of years old!"
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "She found what looked like old dried-up riverbeds carved right into the ground - water definitely used to flow here."
+          "text": "She found what looked like old dried-up riverbeds carved right into the ground... water definitely used to flow here."
         }
       ],
       "continuation": [
         "Her scanner kept beeping at mineral stuff that showed water had been all over this place once.",
-        "Everything Maya found proved that Mars used to be totally different - warm, wet, and maybe even perfect for life.",
+        "Everything Maya found proved that Mars used to be totally different... warm, wet, and maybe even perfect for life.",
         "As Maya kept exploring, she realized she was finding stuff that would blow everyone's minds.",
         "Her discoveries were going to help scientists figure out if humans could actually live on Mars someday."
       ],
@@ -57,7 +57,7 @@
     
     "regular": {
       "narrative": [
-        "Maya had just done something no teenager ever had - she was actually standing on Mars as the mission commander.",
+        "Maya had just done something no teenager ever had... she was actually standing on Mars as the mission commander.",
         "The red, empty landscape was so different from Earth's green and blue colors, and it reminded her how far from home she really was.",
         "Her geological equipment immediately started picking up interesting mineral readings that suggested water had been active here way back in Mars's history."
       ],
@@ -86,7 +86,7 @@
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Maya's systematic search turned up organic compounds in the rock layers - the exact kind of molecules that could mean ancient life existed here."
+          "text": "Maya's systematic search turned up organic compounds in the rock layers... the exact kind of molecules that could mean ancient life existed here."
         }
       ],
       "continuation": [
@@ -109,7 +109,7 @@
     
     "challenge": {
       "narrative": [
-        "Maya was running the most advanced Mars exploration mission humans had ever attempted, using cutting-edge equipment designed to revolutionize what we know about the planet's history.",
+        "Maya was running the most advanced Mars exploration mission humans had ever attempted, using cutting-edge equipment designed to totally change what we know about the planet's history.",
         "The mission combined years of planning with incredible technology that could analyze the atmosphere, drill underground, and examine rocks in ways never possible before.",
         "Early readings suggested Mars had gone through complex changes involving volcanoes, asteroid hits, and climate shifts that created different environments where life might have been possible."
       ],

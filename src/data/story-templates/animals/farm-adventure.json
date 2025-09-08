@@ -6,7 +6,7 @@
     "simple": {
       "narrative": [
         "Alex visited a real working farm for the first time and it was absolutely amazing!",
-        "There were so many different animals everywhere - cows giving fresh milk, chickens laying eggs, and pigs rolling around in mud to stay cool.",
+        "There were so many different animals everywhere... cows giving fresh milk, chickens laying eggs, and pigs rolling around in mud to stay cool.",
         "The farmer smiled and asked if Alex wanted to help with the morning chores."
       ],
       "choice_points": [
@@ -29,12 +29,12 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Feeding time was incredible - Alex learned that cows eat tons of hay while chickens love scattered corn and pigs get excited about vegetable scraps!"
+          "text": "Feeding time was incredible! Alex learned that cows eat tons of hay while chickens love scattered corn and pigs get excited about vegetable scraps!"
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Gathering warm eggs right from the nests was like finding treasure, and Alex discovered that chickens have very different personalities."
+          "text": "Gathering warm eggs right from the nests was like finding treasure... and Alex discovered that chickens have very different personalities."
         }
       ],
       "continuation": [
@@ -50,15 +50,15 @@
         },
         {
           "type": "action",
-          "question": "How could you learn more about where your food comes from and support local farmers in your area?"
+          "question": "What could you do to learn more about where your food comes from and support local farmers in your area?"
         }
       ]
     },
 
     "regular": {
       "narrative": [
-        "Alex embarked on an incredible educational farm visit to learn about how the food system actually works from farm to table.",
-        "The diverse operation featured dairy cattle producing fresh milk, heritage breed chickens laying eggs, and intelligent pigs wallowing in mud for temperature regulation.",
+        "Alex went on an incredible educational farm visit to learn about how the food system actually works from farm to table.",
+        "The farm had dairy cattle producing fresh milk, heritage breed chickens laying eggs, and intelligent pigs wallowing in mud for temperature control.",
         "The farmer explained that every animal had specific needs and played an important role in the farm's ecosystem."
       ],
       "choice_points": [
@@ -81,7 +81,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The feeding stations became like highway rest stops for birds - they could fuel up with exactly what they needed before continuing their epic journey."
+          "text": "Learning about animal nutrition was fascinating... Alex discovered that cattle need different protein levels than chickens, and how pigs can actually turn farm waste into high-quality protein."
         },
         {
           "choice_id": 1,
@@ -109,9 +109,9 @@
 
     "challenge": {
       "narrative": [
-        "Alex participated in an immersive agricultural education program designed to demonstrate contemporary livestock management and sustainable farming systems.",
-        "The diversified operation showcased Holstein dairy cattle, Rhode Island Red heritage poultry, and Romney sheep breeds specifically selected for climate adaptation and optimal production.",
-        "This wasn't just a farm tour - it was a deep dive into the science and complexity behind modern agriculture."
+        "Alex participated in an intensive agricultural education program designed to show modern livestock management and sustainable farming systems.",
+        "The farm showcased Holstein dairy cattle, Rhode Island Red heritage chickens, and Romney sheep breeds specifically selected for climate adaptation and optimal production.",
+        "This wasn't just a farm tour... it was a deep dive into the science and complexity behind modern agriculture."
       ],
       "choice_points": [
         {
@@ -120,7 +120,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Focus on livestock feeding protocols and nutritional management"
+              "text": "Focus on livestock feeding methods and nutritional management"
             },
             {
               "letter": "B",
@@ -133,7 +133,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Alex dove into the science of animal nutrition - learning how cattle need different protein levels than chickens, and how pigs can actually convert farm waste into high-quality protein."
+          "text": "Alex dove into the science of animal nutrition... learning how cattle need different protein levels than chickens, and how pigs can actually convert farm waste into high-quality protein."
         },
         {
           "choice_id": 1,
@@ -144,7 +144,7 @@
       "continuation": [
         "The farm's goat population demonstrated natural intelligence and social structures while providing insights into sustainable grazing management.",
         "Alex discovered how modern farmers use technology like GPS-guided tractors and computerized feeding systems to increase efficiency while reducing environmental impact.",
-        "The economic realities of farming became clear - how farmers must balance animal welfare, environmental sustainability, and financial viability.",
+        "The economic realities of farming became clear... how farmers must balance animal welfare, environmental sustainability, and financial viability.",
         "This experience showed Alex that farming is actually a sophisticated blend of biology, chemistry, economics, and technology."
       ],
       "reflections": [

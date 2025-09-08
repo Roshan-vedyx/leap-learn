@@ -6,7 +6,7 @@
     "simple": {
       "narrative": [
         "Piya fired up the crazy fast spaceship that was built for visiting multiple planets in one day.",
-        "Her mission was nuts - hit four different planets and collect data to compare them all.",
+        "Her mission was nuts... hit four different planets and collect data to compare them all.",
         "First stop: Jupiter, where the Great Red Spot was raging like a hurricane bigger than Earth itself."
       ],
       "choice_points": [
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Piya discovered the storm had been raging for over 400 years - way longer than any weather system on Earth."
+          "text": "Piya discovered the storm had been raging for over 400 years... way longer than any weather system on Earth!"
         },
         {
           "choice_id": 1,
@@ -39,9 +39,9 @@
       ],
       "continuation": [
         "The gas giant's swirling bands of color created patterns that no photograph could ever capture.",
-        "Each planet revealed crazy secrets - Saturn's ice rings sparkled like cosmic jewelry, Venus hid beneath toxic clouds hot enough to melt metal.",
+        "Each planet revealed crazy secrets... Saturn's ice rings sparkled like cosmic jewelry, Venus hid beneath toxic clouds hot enough to melt metal.",
         "As her day-long journey continued, Piya realized she was gathering data that could change space exploration forever.",
-        "In just one incredible day, Piya had visited more worlds than any human in history."
+        "In just one incredible day, Piya had visited more worlds than any human in history!"
       ],
       "reflections": [
         {
@@ -59,12 +59,12 @@
       "narrative": [
         "Piya launched the most ambitious single-day space mission humans had ever attempted, piloting an experimental ship with breakthrough propulsion technology.",
         "Her plan included systematic surveys of four major worlds, each one presenting totally different challenges and research opportunities.",
-        "Jupiter's immense gravitational field and radiation environment required careful navigation as Piya studied the planet's atmosphere and moon systems."
+        "Jupiter's massive gravitational field and radiation environment required careful navigation as Piya studied the planet's atmosphere and moon systems."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Which planetary research should Piya prioritize during her limited time?",
+          "question": "Which planetary research should Piya focus on during her limited time?",
           "options": [
             {
               "letter": "A",
@@ -110,8 +110,8 @@
     "challenge": {
       "narrative": [
         "Piya commanded the first rapid-deployment interplanetary survey mission, using cutting-edge fusion propulsion systems to achieve incredible transit speeds between major solar system destinations.",
-        "The mission demanded systematic comparative analysis across diverse gravitational and atmospheric environments.",
-        "Jupiter's turbulent magnetosphere and radiation belts required sophisticated shielding protocols while Piya conducted detailed analysis of the Great Red Spot's three-century-old storm dynamics."
+        "The mission required systematic comparative analysis across totally different gravitational and atmospheric environments.",
+        "Jupiter's turbulent magnetosphere and radiation belts required sophisticated shielding while Piya conducted detailed analysis of the Great Red Spot's three-century-old storm dynamics."
       ],
       "choice_points": [
         {
@@ -144,7 +144,7 @@
       "continuation": [
         "Saturn's intricate ring system provided unique opportunities for studying physics concepts that help explain how planets form from cosmic dust.",
         "Venus's extreme greenhouse conditions and Mars's ancient water evidence provided contrasting examples of how planetary atmospheres evolve under different circumstances.",
-        "With comprehensive data from multiple worlds, Piya prepared to synthesize findings that could influence humanity's approach to space exploration.",
+        "With comprehensive data from multiple worlds, Piya prepared to put together findings that could influence humanity's approach to space exploration.",
         "Through systematic exploration and rigorous analysis, Piya had established new foundations for understanding planetary diversity and human expansion into space."
       ],
       "reflections": [

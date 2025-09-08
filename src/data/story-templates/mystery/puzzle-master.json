@@ -7,7 +7,7 @@
       "narrative": [
         "The town posted this incredibly tricky riddle that had everyone stumped for weeks.",
         "It said: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'",
-        "Aryaan was totally obsessed with puzzles and brain teasers - the harder the better!"
+        "Aryaan was totally obsessed with puzzles and brain teasers... the harder the better!"
       ],
       "choice_points": [
         {
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "While walking to school every morning, Aryaan keeps turning the riddle over in their mind, looking for connections everywhere."
+          "text": "While walking to school every morning, Aryaan keeps turning the riddle over in their mind... looking for connections everywhere."
         },
         {
           "choice_id": 1,
@@ -38,7 +38,7 @@
         }
       ],
       "continuation": [
-        "Then one morning, walking past a street sign, Aryaan suddenly gets it - the answer is a MAP!",
+        "Then one morning, walking past a street sign, Aryaan suddenly gets it... the answer is a MAP!",
         "Maps show cities, forests, and water, but they don't actually contain houses, trees, or fish.",
         "Aryaan races to the town square to write the answer and becomes the celebrated Puzzle Master!",
         "The whole community cheers and Aryaan feels incredible about cracking the toughest puzzle anyone had ever seen."
@@ -59,7 +59,7 @@
       "narrative": [
         "The town had posted this extremely challenging riddle on a huge public board, and for weeks absolutely nobody could crack it.",
         "The puzzle read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'", 
-        "Aryaan lived for these kinds of mental challenges - the more complex and mind-twisting, the better."
+        "Aryaan lived for these kinds of mental challenges... the more complex and mind-twisting, the better."
       ],
       "choice_points": [
         {
@@ -81,7 +81,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "During daily walks and quiet moments, Aryaan continuously processes the riddle's elements, searching for connections and patterns that others might have missed."
+          "text": "During daily walks and quiet moments, Aryaan continuously processes the riddle's elements... searching for connections and patterns that others might have missed."
         },
         {
           "choice_id": 1,
@@ -90,7 +90,7 @@
         }
       ],
       "continuation": [
-        "The breakthrough comes suddenly while observing a street map - Aryaan realizes the answer has to be 'a map'!",
+        "The breakthrough comes suddenly while observing a street map... Aryaan realizes the answer has to be 'a map'!",
         "Maps show cities, forests, and water without containing the actual living elements.",
         "Aryaan decides to verify the answer thoroughly by testing it against every element of the original riddle.",
         "After confirming the solution is perfect, Aryaan shares the discovery with friends first to build excitement.",
@@ -110,9 +110,9 @@
     
     "challenge": {
       "narrative": [
-        "The town had posted this absolutely brutal riddle that had been stumping people for weeks - even the smartest adults couldn't crack it.",
+        "The town had posted this absolutely brutal riddle that had been stumping people for weeks... even the smartest adults couldn't crack it.",
         "The challenge read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'",
-        "Aryaan was completely addicted to these kinds of intellectual puzzles - the more impossible they seemed, the more obsessed Aryaan became with solving them."
+        "Aryaan was completely addicted to these kinds of intellectual puzzles... the more impossible they seemed, the more obsessed Aryaan became with solving them."
       ],
       "choice_points": [
         {
@@ -121,7 +121,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Develop intensive daily analysis sessions focusing on deconstructing each paradoxical element to identify logical patterns"
+              "text": "Develop intensive daily analysis sessions focusing on breaking down each contradictory element to identify logical patterns"
             },
             {
               "letter": "B",
@@ -134,7 +134,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Through relentless daily mental processing during routine activities, Aryaan continuously dissects the riddle's contradictory elements, searching for patterns that conventional thinking might overlook."
+          "text": "Through relentless daily mental processing during routine activities, Aryaan continuously breaks apart the riddle's contradictory elements... searching for patterns that conventional thinking might overlook."
         },
         {
           "choice_id": 1,
@@ -143,7 +143,7 @@
         }
       ],
       "continuation": [
-        "The eureka moment hits like lightning while studying a geography textbook - suddenly Aryaan realizes that maps contain representations of cities, forests, and water without actually housing the living elements themselves.",
+        "The eureka moment hits like lightning while studying a geography textbook... suddenly Aryaan realizes that maps contain representations of cities, forests, and water without actually housing the living elements themselves.",
         "Having cracked the seemingly impossible puzzle, Aryaan decides to build strategic anticipation by sharing the discovery process with trusted friends before staging a community-wide reveal.",
         "The carefully planned presentation creates an electric atmosphere of excitement that makes the final reveal feel like a genuine celebration of intellectual achievement.",
         "The entire town is amazed by Aryaan's breakthrough thinking, and requests pour in for Aryaan to create even more challenging puzzles for the community to tackle.",

@@ -122,7 +122,7 @@ export class AdaptiveWordBank {
   private async loadEnhancedWordBank(): Promise<void> {
     try {
       console.log('🔍 Attempting to load wordBank.json...')
-      const response = await fetch('/wordBank.json')
+      const response = await fetch('/words.json')
       
       if (response.ok) {
         this.enhancedWordBank = await response.json()
@@ -143,20 +143,25 @@ export class AdaptiveWordBank {
     console.log(`🎯 Getting words for theme: ${theme}, difficulty: ${this.session.currentDifficulty}`)
     
     if (this.enhancedWordBank && this.isJsonLoaded) {
-      const difficultyWords = this.enhancedWordBank.words[this.session.currentDifficulty]
+      // NEW: Handle your flat array structure
+      const allWords = this.enhancedWordBank.words
       
-      const filteredWords = difficultyWords.filter(wordEntry => {
-        // If theme is 'all', return everything
-        if (theme === 'all') return true
-        return wordEntry.themes.includes(theme)
+      const filteredWords = allWords.filter(entry => {
+        // Filter by complexity/difficulty
+        const matchesDifficulty = entry.complexity === this.session.currentDifficulty
+        
+        // Filter by theme
+        const matchesTheme = entry.themes.includes(theme) || entry.themes.includes('universal')
+        
+        return matchesDifficulty && matchesTheme
       })
       
       const wordStrings = filteredWords.map(entry => entry.word.toUpperCase())
       const randomizedWords = wordStrings.sort(() => Math.random() - 0.5)
-      console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (randomized from JSON)`)
+      console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (from JSON)`)
       return randomizedWords
     }
-
+  
     // Fallback to hardcoded word bank
     const themeWords = wordBank[theme]
     if (!themeWords) {
@@ -167,8 +172,60 @@ export class AdaptiveWordBank {
     
     const words = themeWords[this.session.currentDifficulty] || []
     const randomizedWords = words.sort(() => Math.random() - 0.5)
-    console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (randomized from hardcoded)`)
+    console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (from hardcoded)`)
     return randomizedWords.map(w => w.toUpperCase())
+  }
+
+  // NEW: Get words by slot type and theme from JSON
+  getAllWordsForSlotType(slotType: string, theme: string): string[] {
+    if (!this.enhancedWordBank || !this.isJsonLoaded) return []
+    
+    // NEW: Handle your flat array structure
+    const allWords = this.enhancedWordBank.words
+    
+    const filtered = allWords.filter(entry => {
+      // Filter by theme
+      const matchesTheme = entry.themes.includes(theme) || entry.themes.includes('universal')
+      
+      // Filter by slot type
+      const matchesSlotType = this.getSlotTypeForWord(entry, slotType)
+      
+      return matchesTheme && matchesSlotType
+    })
+    
+    return filtered.map(entry => entry.word.toUpperCase()).slice(0, 8)
+  }
+
+  private getSlotTypeForWord(entry: WordEntry, slotType: string): boolean {
+    // Map slot types to your actual JSON themes and word patterns
+    switch (slotType) {
+      case 'adjective':
+        // Look for descriptive words, emotions, or check the word itself
+        return entry.themes.includes('emotions') || 
+               entry.themes.includes('universal') ||
+               ['big', 'small', 'fast', 'slow', 'hot', 'cold', 'bright', 'dark', 'round', 'tall', 'wide', 'soft', 'hard'].includes(entry.word.toLowerCase())
+               
+      case 'action': 
+        // Look for action-related words or check phonics patterns
+        return entry.phonics_focus === 'suffix_ing' ||
+               ['run', 'jump', 'swim', 'fly', 'walk', 'play', 'eat', 'sleep', 'help'].includes(entry.word.toLowerCase())
+               
+      case 'space':
+        return entry.themes.includes('space')
+        
+      case 'animal':
+        return entry.themes.includes('animals')
+        
+      case 'food':
+        return entry.themes.includes('universal') && 
+               ['cake', 'milk', 'bread', 'apple', 'orange', 'food'].includes(entry.word.toLowerCase())
+               
+      case 'color':
+        return ['blue', 'green', 'yellow', 'white', 'black', 'brown', 'purple', 'pink', 'gray'].includes(entry.word.toLowerCase())
+        
+      default:
+        return entry.themes.includes(slotType) || entry.themes.includes('universal')
+    }
   }
 
   // UPDATED: Get visual chunks for game pieces

@@ -5,9 +5,9 @@
   "stories": {
     "simple": {
       "narrative": [
-        "At recess, Alex noticed two kids arguing really loudly about who got to use the basketball court.",
-        "Other kids were picking sides and the whole situation was getting more heated and dramatic.",
-        "Alex knew someone needed to help before this turned into a bigger fight."
+        "At recess, Alex noticed two kids arguing really loudly about who got to use the basketball court... and it was getting pretty intense.",
+        "Other kids were picking sides and the whole situation was getting more heated and dramatic by the minute.",
+        "Alex knew someone needed to step in and help before this turned into a way bigger fight."
       ],
       "choice_points": [
         {
@@ -29,19 +29,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "When Alex listened carefully to both sides, it turned out one kid thought the other was hogging the ball, while the other kid insisted they had claimed the court first."
+          "text": "When Alex listened carefully to both sides, it turned out one kid thought the other was hogging the ball, while the other kid insisted they had claimed the court first. Classic misunderstanding!"
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "Alex's suggestion to take turns and share time equally made both kids realize fighting was pointless when they could just play together."
+          "text": "Alex's suggestion to take turns and share time equally made both kids realize fighting was totally pointless when they could just play together."
         }
       ],
       "continuation": [
-        "Soon everyone was shooting hoops and having fun again instead of arguing.",
+        "Soon everyone was shooting hoops and having fun again instead of arguing... problem solved!",
         "The kids who had been fighting actually ended up on the same team and played really well together.",
         "Other students saw how Alex helped solve the problem and started asking for advice when they had conflicts too.",
-        "By the end of the week, recess was way more fun because people were sharing and cooperating instead of fighting over stuff."
+        "By the end of the week, recess was way more fun because people were sharing and cooperating instead of fighting over stupid stuff."
       ],
       "reflections": [
         {
@@ -57,9 +57,9 @@
     
     "regular": {
       "narrative": [
-        "Alex witnessed an escalating conflict between two student groups competing for basketball court access during the limited recess period.",
-        "The disagreement was rapidly expanding beyond the original dispute as classmates began choosing sides, creating broader playground tension.",
-        "Effective conflict resolution in this charged situation would require careful mediation approaches and diplomatic skills."
+        "Alex witnessed a conflict escalating between two groups competing for basketball court access during their limited recess time.",
+        "The disagreement was rapidly expanding beyond the original dispute as classmates began choosing sides, creating broader playground tension that was getting out of hand.",
+        "Effective conflict resolution in this charged situation was going to require some careful thinking and diplomatic skills."
       ],
       "choice_points": [
         {
@@ -86,7 +86,7 @@
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Practical sharing solutions immediately defused tensions by addressing the underlying resource competition while demonstrating that collaboration benefits everyone."
+          "text": "Practical sharing solutions immediately defused tensions by addressing the underlying competition while demonstrating that collaboration benefits everyone way more than fighting."
         }
       ],
       "continuation": [
@@ -109,9 +109,9 @@
     
     "challenge": {
       "narrative": [
-        "Alex observed a serious interpersonal conflict escalating between competing student factions over basketball court access during limited recreational periods.",
-        "The territorial dispute was rapidly expanding into broader social drama as various peer groups began forming alliances and taking sides, threatening to disrupt the entire playground ecosystem.",
-        "Stopping this drama before it got completely out of hand would take some real skill and careful thinking about how to get everyone to calm down."
+        "Alex observed a serious conflict escalating between competing student groups over basketball court access during their limited recreational periods.",
+        "The territorial dispute was rapidly expanding into broader social drama as various friend groups began forming alliances and taking sides, threatening to disrupt the entire playground dynamic.",
+        "Stopping this drama before it got completely out of hand was going to take some real skill and careful thinking about how to get everyone to calm down and work together."
       ],
       "choice_points": [
         {
@@ -120,7 +120,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Deploy neutral mediation techniques including active listening and facilitated dialogue to help parties articulate underlying needs"
+              "text": "Use neutral mediation techniques including active listening and facilitated dialogue to help parties express their underlying needs"
             },
             {
               "letter": "B",
@@ -142,7 +142,7 @@
         }
       ],
       "continuation": [
-        "The comprehensive resolution established sustainable frameworks for equitable recreational space usage while building stronger relationships and conflict resolution skills among all participants.",
+        "The comprehensive resolution established sustainable frameworks for fair recreational space usage while building stronger relationships and conflict resolution skills among all participants.",
         "Alex's intervention created a model for peer leadership that influenced school policies around playground management and conflict prevention.",
         "Students developed enhanced empathy, negotiation skills, and collaborative problem-solving abilities that extended far beyond playground interactions.",
         "The successful initiative became a template for community-building approaches that other schools began implementing to improve their social environments."
@@ -154,7 +154,7 @@
         },
         {
           "type": "action", 
-          "question": "What could you do to help create more cooperation and less drama in your school or friend groups?"
+          "question": "What systems could you help create to reduce drama and increase cooperation in your school or friend groups?"
         }
       ]
     }

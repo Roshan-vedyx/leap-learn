@@ -1,26 +1,26 @@
 {
-  "id": "cultural-exchange",
-  "title": "Learning from Each Other",
-  "theme": "Cultural Exchange",
+  "id": "new-kid",
+  "title": "Starting Fresh",
+  "theme": "New Kid",
   "stories": {
     "simple": {
       "narrative": [
-        "Suha met a new student named Aryaan who came from a different country and spoke two languages.",
-        "At first, some of Aryaan's customs seemed really different and confusing to Suha.",
-        "She wanted to be friends but wasn't sure how to handle feeling uncertain about these cultural differences."
+        "Maya was standing outside Jefferson Middle School, holding her schedule and trying not to look as nervous as she felt... This was her third school in two years.",
+        "Everyone else seemed to know exactly where they were going, while she was just hoping she could find her locker without getting completely lost.",
+        "The hallways were loud and crowded, and Maya wasn't sure if anyone would even notice she existed."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Suha handle feeling uncertain about these cultural differences?",
+          "question": "How should Maya handle her first day at a new school?",
           "options": [
             {
               "letter": "A",
-              "text": "Ask Aryaan friendly questions to learn more about their background"
+              "text": "Try to blend in and observe how things work before talking to anyone"
             },
             {
               "letter": "B", 
-              "text": "Watch and listen quietly to understand before asking anything"
+              "text": "Be friendly and introduce herself to people in her classes"
             }
           ]
         }
@@ -29,50 +29,50 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Aryaan was excited to share stories about their homeland and taught Suha some awesome words in their native language."
+          "text": "Maya spent lunch quietly watching different groups, figuring out the social dynamics and finding a few people who seemed genuinely nice."
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "Observing carefully helped Suha notice how respectful and kind Aryaan's family traditions were."
+          "text": "Maya's friendly approach worked! A girl named Sam helped her find her classes and invited her to sit with her friend group at lunch."
         }
       ],
       "continuation": [
-        "Suha shared her favorite family traditions and foods with Aryaan too.",
-        "They discovered they both absolutely loved soccer, music, and funny movies!",
-        "Their friendship grew stronger as they learned about each other's cultures.",
-        "Soon they were teaching other classmates about the cool things they'd learned from each other."
+        "By the end of the week, Maya had found her rhythm... and some potential friends too!",
+        "She discovered that being the new kid wasn't always terrible - sometimes people were actually curious and welcoming.",
+        "Maya realized that her experience moving around had made her pretty good at reading people and adapting to new situations.",
+        "When another new student arrived the next month, Maya was the first person to offer help and friendship."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "Have you ever felt nervous about differences between you and someone new? What helped you feel more comfortable?"
+          "question": "Have you ever been the new kid somewhere? What would have made you feel more welcome?"
         },
         {
           "type": "action",
-          "question": "How could you help create welcoming spaces for people from different backgrounds?"
+          "question": "How could you help new students feel included and welcomed at your school?"
         }
       ]
     },
     
     "regular": {
       "narrative": [
-        "Suha developed an incredible friendship with Aryaan, a recently immigrated student whose cultural background and family traditions differed significantly from her own experiences.",
-        "Initially, language barriers and unfamiliar customs created some awkward moments that made both students feel uncertain about connecting.",
-        "Building this cross-cultural friendship would require patience, curiosity, and respectful approaches to learning about differences."
+        "Maya stared at the imposing brick facade of Jefferson Middle School, clutching her schedule while trying to calm her racing heartbeat... This was her third school in two years due to her mom's job transfers.",
+        "The hallways buzzed with established friend groups and inside jokes she'd never understand, while she navigated crowds of students who'd known each other since elementary school.",
+        "Being perpetually 'the new kid' had taught Maya some survival skills, but each transition still felt like starting over from scratch."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "What's the best approach for Suha to build this cross-cultural friendship?",
+          "question": "What's Maya's best strategy for navigating this new social environment?",
           "options": [
             {
               "letter": "A",
-              "text": "Start genuine conversations asking respectful questions about Aryaan's background and traditions"
+              "text": "Study the social landscape carefully before making any moves to find her place"
             },
             {
               "letter": "B",
-              "text": "Observe and listen carefully to understand Aryaan's style before making assumptions"
+              "text": "Jump in with genuine friendliness and let her personality shine through"
             }
           ]
         }
@@ -81,50 +81,50 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Open conversations revealed fascinating insights about Aryaan's homeland traditions and family celebrations while creating opportunities for mutual cultural sharing."
+          "text": "Maya's observational approach helped her identify the truly welcoming students versus those who were just being polite, leading to more authentic connections."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Thoughtful observation helped Suha recognize the wisdom and beauty in Aryaan's cultural practices while avoiding misunderstandings."
+          "text": "Maya's genuine enthusiasm and interesting stories from living in different places made her an instant hit with several groups who appreciated her fresh perspective."
         }
       ],
       "continuation": [
-        "Through patient relationship building, they discovered remarkable common ground in their love for athletics, music, and academic challenges.",
-        "Both families began sharing cultural celebrations, foods, and stories that enriched everyone's understanding.",
-        "Their friendship became a bridge that helped other students feel more comfortable connecting across cultural differences.",
-        "The school community grew stronger as more students followed their example of celebrating diversity."
+        "Maya discovered that her unique experiences moving around had given her valuable perspectives that other students found fascinating.",
+        "She became known as someone who could relate to almost anyone because she'd learned to adapt and connect across different social environments.",
+        "When conflicts arose between friend groups, Maya often served as a bridge because she wasn't tied to old grudges or established dynamics.",
+        "By winter break, Maya realized this school felt more like home than anywhere she'd lived before - not because of the place, but because of the people."
       ],
       "reflections": [
         {
           "type": "personal", 
-          "question": "What experiences have taught you the most about appreciating cultural differences, and how has learning about other cultures enriched your perspective?"
+          "question": "What unique experiences or perspectives do you bring that might help you connect with others in unexpected ways?"
         },
         {
           "type": "action",
-          "question": "How could you actively contribute to creating more inclusive environments where students from diverse backgrounds feel valued and connected?"
+          "question": "How could you use your own experiences to help make your school more welcoming for students who feel like outsiders?"
         }
       ]
     },
     
     "challenge": {
       "narrative": [
-        "Suha forged an extraordinary intercultural friendship with Aryaan, whose recent immigration experience and distinct cultural heritage represented a significant departure from her familiar social environment.",
-        "Initial relationship development involved navigating complex linguistic barriers, unfamiliar social customs, and unconscious cultural assumptions that required deliberate cultural competency development.",
-        "Establishing authentic cross-cultural connection would demand sophisticated intercultural communication strategies and genuine commitment to mutual understanding."
+        "Maya approached Jefferson Middle School with a complex mix of resignation and determination... After multiple relocations due to her military family's assignments, she'd become an expert in the art of reinvention and social navigation.",
+        "The challenge wasn't just academic integration, but decoding established social hierarchies, unspoken cultural norms, and regional differences that could make or break her acceptance in this new community.",
+        "Each transition had taught Maya valuable lessons about resilience and adaptation, but she wondered if constantly starting over was preventing her from forming truly deep, lasting friendships."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Suha approach building authentic cross-cultural understanding with Aryaan?",
+          "question": "How should Maya approach building meaningful connections in this new environment?",
           "options": [
             {
               "letter": "A",
-              "text": "Engage in systematic cultural dialogue through respectful questioning and reciprocal sharing of experiences and values"
+              "text": "Leverage her diverse experiences to offer unique perspectives while carefully studying local social dynamics"
             },
             {
               "letter": "B",
-              "text": "Practice patient observational learning to understand Aryaan's communication patterns before making interpretive assumptions"
+              "text": "Be authentic about her challenges as a frequent mover while remaining open to genuine connection"
             }
           ]
         }
@@ -133,28 +133,28 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Deep cultural conversations revealed incredible insights about Aryaan's homeland experiences and migration journey while creating opportunities for authentic mutual cultural exchange."
+          "text": "Maya's strategic approach and rich life experiences made her a valued addition to multiple social circles, as students appreciated her worldly perspective and diplomatic skills."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Mindful observation helped Suha recognize the sophistication embedded in Aryaan's cultural practices while avoiding superficial judgments based on unfamiliar behaviors."
+          "text": "Maya's vulnerability about the challenges of constant relocation resonated deeply with students facing their own transitions, creating opportunities for meaningful mutual support."
         }
       ],
       "continuation": [
-        "The more time they spent together, they realized they had way more in common than they first thought.",
-        "Their friendship became a model for intercultural competency that influenced school policies around immigrant student support and cultural celebration.",
-        "Both students developed enhanced global perspectives and advocacy skills that prepared them for leadership in increasingly diverse communities.",
-        "Their collaborative efforts created lasting institutional changes that benefited future students from diverse cultural backgrounds."
+        "Maya realized that her transient lifestyle had developed her emotional intelligence and cultural adaptability in ways that benefited not just her, but her entire school community.",
+        "She became a mentor figure for other students facing transitions - whether moving, changing friend groups, or dealing with family changes.",
+        "Teachers began recognizing Maya's unique ability to bridge differences and facilitate inclusive discussions in group projects and classroom activities.",
+        "By the end of the year, Maya had created a support network that felt more like chosen family than temporary friendships, proving that depth of connection mattered more than length of time."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "How has exposure to different cultural perspectives challenged your assumptions and expanded your understanding of human diversity and shared experiences?"
+          "question": "How have challenging experiences in your life developed strengths and perspectives that you might not have recognized before?"
         },
         {
           "type": "action", 
-          "question": "What specific actions could you take to actively promote cultural inclusion while celebrating the unique contributions that diverse backgrounds bring to your community?"
+          "question": "What systems or programs could you help create at your school to better support students going through major life transitions?"
         }
       ]
     }

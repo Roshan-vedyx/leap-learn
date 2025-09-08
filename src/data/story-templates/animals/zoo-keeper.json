@@ -5,7 +5,7 @@
   "stories": {
     "simple": {
       "narrative": [
-        "Aryaan got to work as a junior zoo keeper for a whole day - living the dream of working with amazing animals!",
+        "Aryaan got to work as a junior zoo keeper for a whole day... living the dream of working with amazing animals!",
         "First up was feeding the enormous elephants who ate massive piles of hay and fruit like it was nothing.",
         "Every single animal needed different kinds of food, care, and attention based on where they came from in the wild."
       ],
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Preparing meals was like cooking for a huge, diverse family - lions needed meat, penguins got fish, and monkeys loved fruits and vegetables!"
+          "text": "Preparing meals was like cooking for a huge, diverse family... lions needed meat, penguins got fish, and monkeys loved fruits and vegetables!"
         },
         {
           "choice_id": 1,
@@ -39,7 +39,7 @@
       ],
       "continuation": [
         "Helping the vet check on a tall giraffe with a sore leg taught Aryaan how much medical knowledge zoo keepers need.",
-        "Each animal had its own personality and needed individual attention - just like people do.",
+        "Each animal had its own personality and needed individual attention... just like people do.",
         "Aryaan learned that zoos help protect endangered species while educating people about wildlife.",
         "By the end of the day, Aryaan realized that being a zoo keeper takes way more science and dedication than most people think."
       ],
@@ -57,9 +57,9 @@
 
     "regular": {
       "narrative": [
-        "Aryaan participated in an intensive junior zookeeper apprenticeship program, gaining incredible hands-on experience with professional animal care.",
-        "The day began with preparing specialized diets for different species - African elephants requiring tons of fresh produce and hay, while carnivores needed precisely calculated meat portions.",
-        "This comprehensive learning experience offered multiple areas of specialization to explore in the fascinating world of modern zoology."
+        "Aryaan joined an intensive junior zookeeper program, getting incredible hands-on experience with professional animal care.",
+        "The day began with preparing specialized diets for different species... African elephants needing tons of fresh produce and hay, while carnivores needed precisely calculated meat portions.",
+        "This comprehensive learning experience offered multiple areas to explore in the fascinating world of modern zoo work."
       ],
       "choice_points": [
         {
@@ -81,7 +81,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Nutritional management revealed the incredible complexity of feeding diverse species - understanding natural diets, dietary restrictions, seasonal variations, and how nutrition affects animal behavior and health."
+          "text": "Nutrition management revealed the incredible complexity of feeding diverse species... understanding natural diets, dietary restrictions, seasonal changes, and how nutrition affects animal behavior and health."
         },
         {
           "choice_id": 1,
@@ -92,13 +92,13 @@
       "continuation": [
         "Working with veterinarians showed Aryaan the incredible medical expertise required for exotic animal care.",
         "The fascinating primate enrichment activities demonstrated how modern zoos prioritize mental stimulation with puzzle feeders and problem-solving challenges.",
-        "Aryaan discovered that contemporary zoological science combines cutting-edge research with hands-on animal relationships.",
+        "Aryaan discovered that contemporary zoo science combines cutting-edge research with hands-on animal relationships.",
         "The experience revealed how zoo work connects directly with broader wildlife protection and conservation education missions."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "What aspects of working with animals in professional settings appeal to you most - the science, the relationships, or the conservation mission?"
+          "question": "What aspects of working with animals in professional settings appeal to you most... the science, the relationships, or the conservation mission?"
         },
         {
           "type": "action",
@@ -109,14 +109,14 @@
 
     "challenge": {
       "narrative": [
-        "Aryaan immersed himself in the sophisticated world of contemporary zoological science, discovering how modern animal care combines advanced research with conservation impact.",
-        "This wasn't just feeding animals - it was mastering complex systems of nutrition science, behavioral psychology, veterinary medicine, and species preservation.",
+        "Aryaan immersed himself in the sophisticated world of contemporary zoo science, discovering how modern animal care combines advanced research with conservation impact.",
+        "This wasn't just feeding animals... it was mastering complex systems of nutrition science, behavioral psychology, veterinary medicine, and species preservation.",
         "The experience revealed how today's zoo professionals contribute directly to saving endangered species while advancing our understanding of animal intelligence and welfare."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Which area of zoological science should Aryaan explore in depth?",
+          "question": "Which area of zoo science should Aryaan explore in depth?",
           "options": [
             {
               "letter": "A",
@@ -133,7 +133,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Advanced nutritional science revealed how modern zoos use cutting-edge research to optimize animal health - calculating precise caloric needs, understanding digestive biochemistry, and designing feeding strategies that promote natural behaviors."
+          "text": "Advanced nutrition science revealed how modern zoos use cutting-edge research to optimize animal health... calculating precise caloric needs, understanding digestive biochemistry, and designing feeding strategies that promote natural behaviors."
         },
         {
           "choice_id": 1,
@@ -142,9 +142,9 @@
         }
       ],
       "continuation": [
-        "Veterinary collaboration exposed Aryaan to the incredible medical expertise required for exotic animal care - from understanding species-specific anatomy to developing treatment protocols for animals that can't communicate symptoms.",
+        "Veterinary collaboration exposed Aryaan to the incredible medical expertise required for exotic animal care... from understanding species-specific anatomy to developing treatment protocols for animals that can't communicate symptoms.",
         "Working with intelligent species like chimpanzees and orangutans revealed how modern zoos provide cognitive challenges that mirror wild mental demands.",
-        "Aryaan learned that contemporary zoological work drives conservation research, species preservation efforts, and public education about environmental protection.",
+        "Aryaan learned that contemporary zoo work drives conservation research, species preservation efforts, and public education about environmental protection.",
         "The experience showed how animal care professionals contribute to scientific knowledge that helps protect entire ecosystems and endangered species in the wild."
       ],
       "reflections": [

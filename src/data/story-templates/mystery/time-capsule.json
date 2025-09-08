@@ -7,7 +7,7 @@
       "narrative": [
         "While digging in the school garden, Suha's shovel hit something really hard buried deep in the dirt.",
         "It was an old metal box covered in rust and dirt!",
-        "Inside, Suha found incredible treasures from fifty years ago - old photos, handwritten letters, and a diary from students who used to go to this exact school."
+        "Inside, Suha found incredible treasures from fifty years ago... old photos, handwritten letters, and a diary from students who used to go to this exact school."
       ],
       "choice_points": [
         {
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The diary reveals that students had the same worries about tests, crushes, and friendships that kids have today - just with different technology!"
+          "text": "The diary reveals that students had the same worries about tests, crushes, and friendships that kids have today... just with different technology!"
         },
         {
           "choice_id": 1,
@@ -58,8 +58,8 @@
     
     "regular": {
       "narrative": [
-        "While working on the school's garden restoration project, Suha's excavation work unexpectedly uncovered something remarkable buried beneath decades of accumulated soil.",
-        "A carefully sealed metal container had been waiting underground for discovery - a fascinating time capsule from fifty years earlier.", 
+        "While working on the school's garden restoration project, Suha's digging unexpectedly uncovered something remarkable buried beneath decades of old soil.",
+        "A carefully sealed metal container had been waiting underground for discovery... a fascinating time capsule from fifty years earlier.", 
         "Opening this treasure revealed authentic artifacts including vintage photographs, personal letters, and detailed diary entries created by students who had attended this same school generations ago."
       ],
       "choice_points": [
@@ -82,20 +82,20 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Diary analysis reveals striking similarities in fundamental teenage concerns - academic stress, friendship dynamics, and future aspirations - demonstrating universal patterns across generations."
+          "text": "Reading the diaries reveals striking similarities in fundamental teenage concerns... academic stress, friendship drama, and future worries, showing universal patterns across generations."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Photographic comparison highlights dramatic transformations in fashion, classroom technology, and campus development while revealing enduring architectural features."
+          "text": "Comparing old photos highlights dramatic transformations in fashion, classroom technology, and campus development while revealing some things that stayed exactly the same."
         }
       ],
       "continuation": [
-        "Despite significant technological and cultural evolution, Suha recognizes remarkable continuities in the essential human experiences of adolescence and friendship challenges.",
-        "Having connected deeply with past students through their preserved memories, Suha decides to organize a comprehensive contemporary time capsule project.",
+        "Despite all the technological and cultural changes, Suha recognizes remarkable similarities in the essential human experiences of being a teenager.",
+        "Having connected deeply with past students through their preserved memories, Suha decides to organize a comprehensive modern time capsule project.",
         "The initiative captures current student experiences for future generations to discover, creating a meaningful bridge across time.",
         "Students contribute photos, letters, technology samples, and personal reflections that represent their unique historical moment.",
-        "The project helps the school community connect meaningfully with their institutional history while creating something special for the future."
+        "The project helps the school community connect meaningfully with their history while creating something special for the future."
       ],
       "reflections": [
         {
@@ -111,18 +111,18 @@
     
     "challenge": {
       "narrative": [
-        "While participating in intensive garden restoration work, Suha's excavation efforts led to an absolutely incredible archaeological discovery - a perfectly preserved metal time capsule that had been deliberately buried by students exactly fifty years ago.",
+        "While participating in intensive garden restoration work, Suha's excavation efforts led to an absolutely incredible discovery... a perfectly preserved metal time capsule that had been deliberately buried by students exactly fifty years ago.",
         "This treasure trove contained authentic historical artifacts including vintage photographs, personal correspondence, and comprehensive diary documentation that provided a direct window into teenage life during the 1970s.",
-        "The sophisticated preservation and deliberate curation suggested this had been a serious academic project designed to communicate across generational boundaries."
+        "The sophisticated preservation and deliberate organization suggested this had been a serious academic project designed to communicate across generational boundaries."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "This remarkable historical find demands sophisticated analytical approaches to fully appreciate its significance. What method should Suha use?",
+          "question": "This remarkable historical find demands thoughtful analytical approaches to fully appreciate its significance. What method should Suha use?",
           "options": [
             {
               "letter": "A",
-              "text": "Conduct detailed comparative analysis between diary entries and contemporary student experiences to identify evolutionary changes and timeless continuities"
+              "text": "Do detailed comparative analysis between diary entries and contemporary student experiences to identify changes and timeless similarities"
             },
             {
               "letter": "B",
@@ -135,7 +135,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "In-depth diary analysis reveals fascinating insights - despite radical technological advancement, core teenage experiences around academic pressure, social dynamics, and identity formation remained remarkably consistent across generational boundaries."
+          "text": "In-depth diary analysis reveals fascinating insights... despite radical technological advancement, core teenage experiences around academic pressure, social dynamics, and identity formation remained remarkably consistent across generational boundaries."
         },
         {
           "choice_id": 1,
@@ -145,10 +145,10 @@
       ],
       "continuation": [
         "Through careful historical investigation, Suha recognizes profound connections between past and present student experiences that transcend superficial technological and cultural differences.",
-        "The discovery inspires Suha to design and execute a comprehensive modern time capsule project that captures contemporary student culture, technology, and experiences for future archaeological discovery.",
+        "The discovery inspires Suha to design and execute a comprehensive modern time capsule project that captures contemporary student culture, technology, and experiences for future discovery.",
         "The initiative develops into educational programs that help current students forge meaningful connections with institutional history while understanding their place in ongoing generational continuity.",
-        "Suha launches historical research projects aimed at potentially connecting with surviving original time capsule contributors to facilitate direct intergenerational dialogue.",
-        "The project transforms from a simple discovery into a sophisticated exploration of human continuity, technological evolution, and the timeless nature of adolescent experience across cultural boundaries."
+        "Suha launches historical research projects aimed at potentially connecting with surviving original time capsule contributors to facilitate direct conversations across generations.",
+        "The project transforms from a simple discovery into a sophisticated exploration of human continuity, technological evolution, and the timeless nature of teenage experience across cultural boundaries."
       ],
       "reflections": [
         {

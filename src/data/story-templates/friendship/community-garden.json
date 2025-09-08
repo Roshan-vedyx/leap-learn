@@ -5,22 +5,22 @@
   "stories": {
     "simple": {
       "narrative": [
-        "Piya had an awesome idea to start a neighborhood garden where everyone could grow food together and become better friends.",
-        "She talked to the city and got permission to use the empty lot that nobody was using.",
-        "Now she needed to get neighbors excited about joining this garden project!"
+        "Piya had this awesome idea... What if everyone in the neighborhood could grow food together? Like, imagine having a huge garden where families could hang out and become actual friends!",
+        "She went to city hall and somehow convinced them to let her use that empty lot that's been sitting there forever, doing absolutely nothing.",
+        "Now came the hard part... getting her neighbors excited about getting their hands dirty!"
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Piya get neighbors excited about the garden?",
+          "question": "How should Piya get people pumped about this garden idea?",
           "options": [
             {
               "letter": "A",
-              "text": "Make colorful flyers and put them in mailboxes"
+              "text": "Make bright, colorful flyers and stick them in everyone's mailbox"
             },
             {
               "letter": "B", 
-              "text": "Go door-to-door talking to people personally"
+              "text": "Go door-to-door and talk to people face-to-face"
             }
           ]
         }
@@ -29,50 +29,50 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The bright flyers grabbed attention and families started calling Piya with questions and offers to help."
+          "text": "Those bright flyers totally worked! People started calling Piya with questions like, 'Wait, this is real?' and 'How can we help?'"
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "Personal conversations worked amazingly well - people loved hearing Piya's enthusiasm and started volunteering right away."
+          "text": "Going door-to-door was amazing! When people saw how excited Piya was, they got excited too. Some neighbors even volunteered on the spot!"
         }
       ],
       "continuation": [
-        "Families came with shovels, seeds, and huge smiles ready to work!",
-        "All summer long, people took turns watering, weeding, and caring for everyone's plants.",
-        "The garden brought neighbors together who had never really talked before.",
-        "By harvest time, they had tons of fresh vegetables and some great new friendships too."
+        "On the first day, families showed up with shovels, seeds, and huge grins... ready to get to work!",
+        "All summer long, people took turns watering and weeding. It was like the plants weren't the only things growing - friendships were too!",
+        "The garden brought together neighbors who'd lived next to each other for years but had never really talked.",
+        "By harvest time? They had tons of fresh veggies AND some really great new friendships too."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "What kind of project would you want to organize that brings your neighborhood together?"
+          "question": "What kind of project would you want to start that could bring your neighborhood together?"
         },
         {
           "type": "action",
-          "question": "How could you help create something positive in your community that would last for years?"
+          "question": "How could you help create something awesome in your community that would stick around for years?"
         }
       ]
     },
     
     "regular": {
       "narrative": [
-        "Piya had a vision for creating an incredible neighborhood garden that would provide fresh food while building stronger connections among families from different backgrounds.",
-        "After researching city policies and getting the permits for the abandoned lot, she needed to develop a smart plan to get everyone excited about the project.",
-        "This was going to take some serious community organizing skills."
+        "Piya had this incredible vision... a neighborhood garden that would give everyone fresh food while actually bringing families together - even the ones who barely knew each other.",
+        "After figuring out all the city paperwork and getting permission for that abandoned lot on Maple Street, she needed a solid plan to get everyone on board.",
+        "This was going to take some serious people skills!"
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "What's the best way to build community support for this garden project?",
+          "question": "What's the smartest way to get the whole community excited about this garden?",
           "options": [
             {
               "letter": "A",
-              "text": "Launch a comprehensive campaign using flyers, social media, and community boards"
+              "text": "Go all-out with flyers, social media posts, and signs on community boards"
             },
             {
               "letter": "B",
-              "text": "Do personal door-to-door visits to build relationships and discuss each family's interests"
+              "text": "Visit people personally to build real relationships and find out what they're interested in"
             }
           ]
         }
@@ -81,37 +81,37 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The multi-platform campaign successfully generated widespread awareness and attracted diverse families with different cultural backgrounds and gardening experience."
+          "text": "The multi-platform approach worked great! Families from all different backgrounds and experience levels started signing up."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Personal relationship-building created strong foundations for collaboration and helped identify specific skills and resources each family could contribute."
+          "text": "Personal visits created solid friendships right from the start, and helped Piya figure out what skills and resources each family could bring."
         }
       ],
       "continuation": [
-        "The project required coordinated planning for soil preparation, watering systems, plot assignments, and maintenance schedules throughout the growing season.",
-        "Families shared cultural knowledge about different vegetables and growing techniques from their backgrounds.",
-        "Kids and adults worked side by side, learning from each other and building genuine friendships.",
-        "The garden became a place where people gathered not just to work, but to share stories and celebrate their successes together."
+        "The project needed serious coordination - soil prep, watering schedules, plot assignments, and maintenance throughout the growing season.",
+        "Families shared cool knowledge about different vegetables and growing techniques from their cultural backgrounds.",
+        "Kids and adults worked side by side, learning from each other and building real friendships.",
+        "The garden became way more than just a place to work... it was where people gathered to share stories and celebrate wins together."
       ],
       "reflections": [
         {
           "type": "personal", 
-          "question": "What draws you to projects that require long-term commitment and working with others who might have different perspectives?"
+          "question": "What draws you to projects that need long-term commitment and working with people who might see things differently than you?"
         },
         {
           "type": "action",
-          "question": "How could you start community projects that address real needs while bringing people together around shared goals?"
+          "question": "How could you start community projects that tackle real problems while bringing people together around shared goals?"
         }
       ]
     },
     
     "challenge": {
       "narrative": [
-        "Piya conceived an ambitious community-supported agriculture initiative designed to tackle local food access challenges while strengthening neighborhood social connections and environmental awareness.",
-        "After extensive research into municipal regulations, soil assessments, and community demographics, she successfully navigated complex bureaucratic processes to secure long-term land use agreements.",
-        "Now came the real challenge: mobilizing diverse community participation through sophisticated outreach and inclusive engagement strategies."
+        "Piya had this ambitious idea for a community garden that could tackle food access problems while bringing neighbors together AND raising environmental awareness all at once.",
+        "After doing tons of research on city regulations, soil testing, and community demographics, she managed to navigate all the bureaucratic red tape to get long-term permission for the land.",
+        "Now came the real challenge... getting diverse community participation through smart outreach and making sure everyone felt included."
       ],
       "choice_points": [
         {
@@ -120,11 +120,11 @@
           "options": [
             {
               "letter": "A",
-              "text": "Design comprehensive multicultural communication campaigns with translated materials and culturally responsive messaging"
+              "text": "Create comprehensive outreach with translated materials and culturally respectful messaging"
             },
             {
               "letter": "B",
-              "text": "Implement direct relationship-building through personal visits, cultural liaisons, and community leader collaboration"
+              "text": "Build relationships directly through personal visits, cultural connections, and working with community leaders"
             }
           ]
         }
@@ -133,28 +133,28 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Strategic inclusive outreach successfully engaged families from multiple ethnic communities and economic backgrounds, creating rich diversity that strengthened the project's impact."
+          "text": "Smart, inclusive outreach successfully brought in families from multiple ethnic communities and economic backgrounds, creating amazing diversity that made the project way stronger."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Personal relationship-building established deep community trust and identified valuable cultural knowledge and resources that individual families contributed to enhance collective success."
+          "text": "Personal relationship-building established deep community trust and helped identify valuable cultural knowledge and resources that families contributed to make everyone more successful."
         }
       ],
       "continuation": [
-        "This sophisticated initiative encompassed sustainable infrastructure development, multicultural knowledge sharing, and intergenerational skill transfer systems.",
-        "The project demonstrated remarkable success across multiple community development objectives while maintaining equitable resource distribution.",
-        "Participants developed leadership skills, environmental awareness, and cross-cultural competencies that extended far beyond gardening.",
-        "The garden became a model for community-led initiatives that other neighborhoods began replicating with their own local adaptations."
+        "This sophisticated project included sustainable infrastructure, multicultural knowledge sharing, and teaching skills across generations.",
+        "The project succeeded amazingly well across multiple community goals while making sure resources were distributed fairly.",
+        "Participants developed leadership skills, environmental awareness, and cross-cultural understanding that went way beyond just gardening.",
+        "The garden became a model that other neighborhoods started copying with their own local tweaks and improvements."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "What motivates you to tackle complex long-term projects that require sustained collaboration with people who bring different perspectives and cultural backgrounds?"
+          "question": "What motivates you to tackle complex, long-term projects that require sustained teamwork with people who bring different perspectives and cultural backgrounds?"
         },
         {
           "type": "action", 
-          "question": "How could you design community initiatives that address genuine local needs while building lasting social connections and creating replicable models for positive change?"
+          "question": "How could you design community projects that address real local needs while building lasting social connections and creating models that other places could copy?"
         }
       ]
     }

@@ -6,8 +6,8 @@
     "simple": {
       "narrative": [
         "Suha stood on her small boat when a deep, trembling sound reached her ears.",
-        "It was a whale song - slow and mournful, with calls sharp with panic.",
-        "Scanning the waves, she spotted a young whale moving in tight circles. The calf was clearly lost."
+        "It was a whale song... slow and sad, with calls that sounded totally panicked.",
+        "Looking across the waves, she spotted a young whale moving in tight circles. The baby was clearly lost."
       ],
       "choice_points": [
         {
@@ -16,7 +16,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Call Rishi on the radio for support"
+              "text": "Call Rishi on the radio for help"
             },
             {
               "letter": "B", 
@@ -29,20 +29,20 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Rishi answers right away and begins guiding her through what to do next."
+          "text": "Rishi answers right away and starts telling her exactly what to do next."
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "The calf turns its head, listening to the familiar sounds, though still looking unsettled."
+          "text": "The baby whale turns its head, listening to the familiar sounds... but still looking really worried."
         }
       ],
       "continuation": [
-        "Soon Rishi joins by boat and they begin searching for the pod, scanning the horizon and listening for distant calls.",
-        "They use hydrophones to play whale songs across the water, and a faint reply comes from miles away - the pod is out there!",
-        "Guided by the sounds, the calf swims eagerly until it reaches its mother.",
-        "The reunion is powerful, with the ocean filling with layered songs of joy and recognition.",
-        "Suha and Rishi feel relief and wonder - they've helped a family come back together."
+        "Soon Rishi shows up in his boat and they start searching for the whale family, scanning the horizon and listening for distant calls.",
+        "They use underwater speakers to play whale songs across the water, and a faint reply comes from miles away... the family is out there!",
+        "Following the sounds, the baby whale swims eagerly until it reaches its mother.",
+        "The reunion is incredible, with the ocean filling with layered songs of joy and recognition.",
+        "Suha and Rishi feel amazing relief... they've helped a family come back together."
       ],
       "reflections": [
         {
@@ -58,22 +58,22 @@
     
     "regular": {
       "narrative": [
-        "While sailing near the coastline, Suha heard an unusual pattern of whale calls through the water - the tones were high-pitched and urgent.",
-        "She soon spotted a juvenile humpback circling in distress, its pod nowhere in sight.", 
-        "A chill of responsibility washed over her, knowing that separation could mean serious danger for the young whale."
+        "While sailing near the coast, Suha heard an unusual pattern of whale calls through the water... the sounds were high-pitched and urgent.",
+        "She soon spotted a young humpback whale circling in distress, its family nowhere in sight.", 
+        "A chill of responsibility washed over her, knowing that being separated could mean serious danger for the young whale."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "What should Suha's first response be?",
+          "question": "What should Suha's first move be?",
           "options": [
             {
               "letter": "A",
-              "text": "Radio Rishi, the marine rescue operator"
+              "text": "Radio Rishi, the marine rescue guy"
             },
             {
               "letter": "B",
-              "text": "Shadow the calf to prevent it from drifting into shipping lanes"
+              "text": "Follow the baby whale to keep it away from shipping lanes"
             }
           ]
         }
@@ -82,51 +82,51 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Rishi confirms the urgency and begins coordinating rescue efforts from his vessel."
+          "text": "Rishi confirms how urgent this is and starts coordinating rescue efforts from his boat."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Suha keeps the calf in sight, preventing it from moving toward riskier waters where ships travel."
+          "text": "Suha keeps the baby whale in sight, stopping it from swimming toward dangerous waters where big ships travel."
         }
       ],
       "continuation": [
-        "Working together, Suha and Rishi widen their search and deploy hydrophones to project whale communication across the sea, hoping for a response.",
-        "Minutes later, faint replies filter back through the hydrophones, and they spot a cluster of spouts appearing near the horizon.",
-        "The low, resonant call of the mother echoes across the water, and the calf accelerates toward the sound.",
-        "The reunion is breathtaking - sweeping tails and rolling songs of recognition fill the ocean.",
-        "Suha feels both humbled and proud, knowing she's played a part in protecting bonds older than any human tradition."
+        "Working together, Suha and Rishi spread out their search and use underwater speakers to broadcast whale communication across the sea, hoping for a response.",
+        "Minutes later, faint replies come back through the speakers, and they spot a cluster of whale spouts appearing near the horizon.",
+        "The low, deep call of the mother echoes across the water, and the baby whale speeds up toward the sound.",
+        "The reunion is breathtaking... sweeping tails and rolling songs of recognition fill the ocean.",
+        "Suha feels both humbled and proud, knowing she's helped protect bonds older than any human tradition."
       ],
       "reflections": [
         {
           "type": "personal", 
-          "question": "Have you ever faced a situation where patience and persistence were just as important as quick action?"
+          "question": "Have you ever faced a situation where being patient and not giving up were just as important as acting fast?"
         },
         {
           "type": "action",
-          "question": "What actions could you take to protect whales and other marine species in your lifetime?"
+          "question": "What actions could you take to protect whales and other sea creatures in your lifetime?"
         }
       ]
     },
     
     "challenge": {
       "narrative": [
-        "During an offshore research survey, Suha intercepted dissonant vocalizations through her acoustic equipment - distress signals from a juvenile humpback whale.",
-        "On surfacing, she confirmed the calf was alone, exhibiting repetitive, anxious circling behavior that indicated severe distress.",
-        "Such separation could lead to dehydration, disorientation, and predation, so she immediately consulted Rishi, a marine mammal specialist, and initiated an emergency reunification protocol."
+        "During a research trip offshore, Suha picked up weird sounds through her underwater listening equipment... distress signals from a young humpback whale.",
+        "When she surfaced, she confirmed the baby whale was totally alone, swimming in repetitive, anxious circles that showed it was severely stressed.",
+        "This kind of separation could lead to dehydration, getting lost, and predator attacks, so she immediately called Rishi, a marine mammal expert, and started an emergency reunion plan."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "What strategic step should they prioritize?",
+          "question": "What strategic step should they focus on first?",
           "options": [
             {
               "letter": "A",
-              "text": "Deploy hydrophones with calibrated playback of maternal calls"
+              "text": "Set up underwater speakers with recorded mother whale calls"
             },
             {
               "letter": "B",
-              "text": "Maintain close observation of the calf's stress responses and physiological condition"
+              "text": "Keep close watch on the baby's stress levels and physical condition"
             }
           ]
         }
@@ -135,29 +135,29 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The playback travels across miles of open water, prompting faint replies that suggest the pod is within range but displaced by commercial vessel traffic."
+          "text": "The recorded calls travel across miles of open water, getting faint replies that suggest the family is within range but pushed away by big shipping traffic."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Monitoring heart rate and breathing patterns provides vital insight into the calf's stamina and stress levels, helping predict how long it can survive alone."
+          "text": "Monitoring heart rate and breathing patterns gives crucial insight into the baby's energy levels and stress, helping predict how long it can survive alone."
         }
       ],
       "continuation": [
-        "Combining acoustic attraction with visual navigation, Suha and Rishi triangulate the pod's position, with evidence suggesting recent displacement from commercial shipping traffic.",
-        "They coordinate with shipping authorities to reduce interference, allowing the pod to navigate more safely back toward the calf.",
-        "Their systematic approach and field documentation contribute valuable data to global stranding-response knowledge.",
-        "The calf races forward as the mother and siblings appear, and the ocean erupts in a chorus of recognition that demonstrates the raw depth of cetacean family bonds.",
-        "The reunion reinforces Suha's belief in the power of research-driven action to safeguard marine life, showing how science, empathy, and persistence can work together to protect these magnificent creatures."
+        "Combining sound attraction with visual tracking, Suha and Rishi figure out where the whale family is, with evidence suggesting they were recently pushed away by commercial shipping traffic.",
+        "They work with shipping authorities to reduce interference, allowing the family to navigate more safely back toward the baby.",
+        "Their systematic approach and field notes contribute valuable data to global whale rescue knowledge.",
+        "The baby whale races forward as the mother and siblings appear, and the ocean erupts in a chorus of recognition that shows the raw depth of whale family bonds.",
+        "The reunion reinforces Suha's belief in the power of research-driven action to protect marine life... showing how science, empathy, and persistence can work together to save these magnificent creatures."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "Have you ever faced a problem where science, empathy, and persistence all had to work together for success?"
+          "question": "Have you ever faced a problem where science, empathy, and never giving up all had to work together for success?"
         },
         {
           "type": "action", 
-          "question": "What systemic measures could you support to reduce human disruption of marine ecosystems?"
+          "question": "What big-picture changes could you support to reduce human disruption of ocean ecosystems?"
         }
       ]
     }

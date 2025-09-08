@@ -7,7 +7,7 @@
       "narrative": [
         "Alex totally loved this amazing pirate adventure book from the library.",
         "It had incredible treasure maps and epic sea battles that made Alex dream about sailing adventures.",
-        "But when it was time to return the book - disaster! The thing had completely disappeared!"
+        "But when it was time to return the book... disaster! The thing had completely disappeared!"
       ],
       "choice_points": [
         {
@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Alex searches through bedrooms, living room, and even closets, finding tons of random lost stuff but no treasure book."
+          "text": "Alex searches through bedrooms, living room, and even closets... finding tons of random lost stuff but no treasure book."
         },
         {
           "choice_id": 1,
@@ -56,9 +56,9 @@
     
     "regular": {
       "narrative": [
-        "Alex had gotten completely hooked on this awesome first-edition pirate adventure book from the library.",
-        "The book featured detailed treasure maps and thrilling sea battles that sparked incredible daydreams about maritime adventures.", 
-        "When the time came to return this beloved library treasure, total catastrophe struck - the irreplaceable book had mysteriously vanished."
+        "Alex had gotten completely hooked on this awesome pirate adventure book from the library.",
+        "The book had detailed treasure maps and exciting sea battles that sparked incredible daydreams about sailing adventures.", 
+        "When the time came to return this beloved library book... total disaster struck! The irreplaceable book had mysteriously vanished."
       ],
       "choice_points": [
         {
@@ -67,7 +67,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Conduct systematic searches throughout the entire house, checking every possible spot"
+              "text": "Do systematic searches throughout the entire house, checking every possible spot"
             },
             {
               "letter": "B",
@@ -80,17 +80,17 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Methodical room-by-room searches turn up several forgotten belongings but somehow the missing literary treasure remains elusive."
+          "text": "Room-by-room searches turn up several forgotten belongings... but somehow the missing book remains nowhere to be found."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Carefully reconstructing the book's recent travels - bedroom reading sessions, kitchen homework time, backpack transportation, outdoor adventures - reveals some crucial patterns."
+          "text": "Carefully reconstructing the book's recent travels - bedroom reading sessions, kitchen homework time, backpack trips, outdoor adventures - reveals some crucial patterns."
         }
       ],
       "continuation": [
-        "The concerned librarian emphasizes the book's exceptional value, noting its popularity among young adventure enthusiasts throughout the community.",
-        "Family discussions uncover valuable information, particularly Mom's recollection of yesterday's outdoor reading session at the neighborhood park.",
+        "The concerned librarian emphasizes the book's special value, noting its popularity among young adventure fans throughout the community.",
+        "Family discussions uncover valuable information... particularly Mom's memory of yesterday's outdoor reading session at the neighborhood park.",
         "Based on all the evidence gathered, Alex realizes the park deserves the most thorough investigation.",
         "Racing back to the park, Alex discovers the precious book safely tucked under the old picnic table where yesterday's reading adventure had happened."
       ],
@@ -108,9 +108,9 @@
     
     "challenge": {
       "narrative": [
-        "Alex had become completely absorbed in a fascinating first-edition maritime adventure novel featuring sophisticated treasure maps and epic naval battles.",
-        "This rare library acquisition had sparked incredible daydreams about sailing the high seas and discovering legendary treasures.",
-        "When the return deadline approached, absolute disaster struck - this irreplaceable literary treasure had completely vanished without any logical explanation."
+        "Alex had become completely absorbed in this fascinating pirate adventure novel with awesome treasure maps and epic naval battles.",
+        "This special library book had sparked incredible daydreams about sailing the high seas and discovering legendary treasures.",
+        "When the return deadline approached... absolute disaster struck! This irreplaceable book had completely vanished without any logical explanation."
       ],
       "choice_points": [
         {
@@ -123,7 +123,7 @@
             },
             {
               "letter": "B",
-              "text": "Develop a detailed chronological timeline tracking the book's movements to identify the most probable locations"
+              "text": "Develop a detailed timeline tracking the book's movements to identify the most probable locations"
             }
           ]
         }
@@ -132,7 +132,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Extensive house-wide investigations uncover numerous random lost items but somehow the pirate adventure book remains mysteriously absent, forcing expansion beyond home base."
+          "text": "Extensive house-wide investigations uncover numerous random lost items... but somehow the pirate adventure book remains mysteriously absent, forcing expansion beyond home base."
         },
         {
           "choice_id": 1,
@@ -141,16 +141,16 @@
         }
       ],
       "continuation": [
-        "The librarian explains this isn't just any book - it's a rare edition that numerous students treasure, making its disappearance particularly catastrophic for the community.",
-        "Family interrogation sessions uncover key intelligence, especially Mom's memory of Alex reading outside yesterday during the park expedition.",
+        "The librarian explains this isn't just any book - it's a special edition that numerous students treasure, making its disappearance particularly devastating for the community.",
+        "Family discussions uncover key information... especially Mom's memory of Alex reading outside yesterday during the park expedition.",
         "Based on comprehensive evidence analysis, Alex determines the park scene deserves intensive investigation of yesterday's reading spots and surrounding areas.",
         "Swift examination of the park recreation area leads to triumphant discovery - the precious book rests safely beneath the sturdy picnic table where yesterday's reading adventure had unfolded.",
-        "The delighted librarian expresses genuine gratitude for the book's safe return, ensuring its continued availability for future young treasure hunters and reading enthusiasts."
+        "The relieved librarian expresses genuine gratitude for the book's safe return, ensuring its continued availability for future young treasure hunters and reading enthusiasts."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "Consider your experiences with losing valuable items - what detective strategies proved most effective for successful recovery operations?"
+          "question": "Consider your experiences with losing valuable items - what detective strategies proved most effective for successful recovery?"
         },
         {
           "type": "action", 

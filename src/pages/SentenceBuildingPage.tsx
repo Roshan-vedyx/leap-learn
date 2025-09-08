@@ -97,6 +97,13 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   // Get valid words for each slot type - LIMITED TO 3-4 APPROPRIATE WORDS
   const getValidWordsForSlotType = (slotType: string): string[] => {
     // Get theme words first
+    if (adaptiveWordBank.current && wordsLoaded) {
+      const allWords = adaptiveWordBank.current.getAllWordsForSlotType(slotType, theme)
+      if (allWords.length > 0) {
+        return allWords.slice(0, 4) // Limit to 4 words
+      }
+    }
+    
     const availableThemeWords = themeWords.slice(0, 4) // Limit theme words to 4
     
     switch (slotType) {

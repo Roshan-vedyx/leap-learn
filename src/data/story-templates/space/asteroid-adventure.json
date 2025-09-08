@@ -5,22 +5,22 @@
   "stories": {
     "simple": {
       "narrative": [
-        "Rishi guided the spacecraft into the asteroid belt, where massive space rocks tumbled through the darkness.",
-        "The navigation computer beeped warnings as house-sized boulders spun past the viewports.",
-        "Smaller fragments peppered the area like cosmic hailstones, and Rishi's hands gripped the controls tightly."
+        "Rishi steered the spacecraft into the asteroid belt, where huge space rocks tumbled through the darkness.",
+        "The navigation computer kept beeping warnings as house-sized rocks spun past the windows.",
+        "Smaller chunks peppered the area like cosmic hail... and Rishi's hands gripped the controls super tight."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "How should Rishi navigate this dangerous field?",
+          "question": "How should Rishi get through this dangerous rock field?",
           "options": [
             {
               "letter": "A",
-              "text": "Trust the computer's calculated safe route"
+              "text": "Trust the computer's safe route"
             },
             {
               "letter": "B", 
-              "text": "Use manual controls to thread between the rocks"
+              "text": "Use manual controls to weave between the rocks"
             }
           ]
         }
@@ -29,19 +29,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The computer's route worked perfectly, guiding them through the safest channels between the spinning rocks."
+          "text": "The computer's route worked perfectly! It guided them through the safest paths between the spinning rocks."
         },
         {
           "choice_id": 1,
           "letter": "B", 
-          "text": "Rishi's piloting skills proved crucial when unexpected rocks appeared in their path - quick reflexes saved the day!"
+          "text": "Rishi's flying skills totally saved the day when surprise rocks appeared in their path... quick reflexes for the win!"
         }
       ],
       "continuation": [
-        "Hours passed as Rishi maintained constant focus, weaving the ship between obstacles.",
-        "Each decision could mean the difference between safe passage and disaster.",
-        "Suddenly, the ship's sensors detected something unusual among the asteroids.",
-        "What started as a navigation challenge was about to become something much more interesting."
+        "Hours passed as Rishi stayed super focused, weaving the ship between obstacles.",
+        "Each decision could mean the difference between safe passage... and total disaster.",
+        "Suddenly, the ship's sensors picked up something weird among the asteroids.",
+        "What started as dodging rocks was about to become something way more interesting!"
       ],
       "reflections": [
         {
@@ -50,29 +50,29 @@
         },
         {
           "type": "action",
-          "question": "What challenging situation have you navigated that taught you something important?"
+          "question": "What challenging situation have you gotten through that taught you something important?"
         }
       ]
     },
     
     "regular": {
       "narrative": [
-        "Rishi piloted the spacecraft deeper into the asteroid belt, where debris from an ancient planetary collision created a treacherous obstacle course.",
-        "The navigation array constantly updated trajectory calculations as rocks ranging from pebble-size to mountain-scale drifted in unpredictable patterns.",
-        "Gravitational forces from larger asteroids pulled smaller fragments into chaotic orbits, requiring split-second adjustments to avoid catastrophic impacts."
+        "Rishi piloted the spacecraft deeper into the asteroid belt, where chunks from an ancient planet crash created a crazy obstacle course.",
+        "The navigation system constantly updated its calculations as rocks ranging from pebble-size to mountain-huge drifted in totally random patterns.",
+        "The gravity from bigger asteroids pulled smaller pieces into chaotic spins, needing split-second moves to avoid getting smashed."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Which navigation strategy should Rishi employ?",
+          "question": "Which navigation plan should Rishi use?",
           "options": [
             {
               "letter": "A",
-              "text": "Follow the computer's probability-based routing system"
+              "text": "Follow the computer's probability-based route system"
             },
             {
               "letter": "B",
-              "text": "Rely on instinct and manual piloting through the gaps"
+              "text": "Trust instincts and fly manually through the gaps"
             }
           ]
         }
@@ -81,24 +81,24 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The algorithmic route proved reliable, threading them safely through the densest rock concentrations."
+          "text": "The computer route was solid, threading them safely through the thickest rock zones."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Rishi's intuitive flying saved them when sensors failed to detect a tumbling boulder in their blind spot."
+          "text": "Rishi's gut feelings saved them when sensors failed to spot a tumbling boulder in their blind spot!"
         }
       ],
       "continuation": [
         "Rishi's training kicked in as muscle memory guided precise thruster burns and course corrections.",
         "Three hours into the crossing, Rishi had developed an almost supernatural feel for reading the asteroid field's rhythms and dangers.",
-        "Deep in the belt, the ship's geological scanners detected unusual readings from a cluster of metallic asteroids.",
-        "The asteroid field had transformed from obstacle into opportunity - yielding both scientific knowledge and resources for humanity's expansion into space."
+        "Deep in the belt, the ship's rock scanners detected unusual readings from a cluster of metallic asteroids.",
+        "The asteroid field had transformed from obstacle into opportunity... giving both scientific knowledge and resources for humanity's expansion into space."
       ],
       "reflections": [
         {
           "type": "personal",
-          "question": "When mastering something difficult, how do you know when you've moved from following rules to developing real intuition?"
+          "question": "When learning something difficult, how do you know when you've moved from following rules to developing real gut feelings?"
         },
         {
           "type": "action",
@@ -109,22 +109,22 @@
     
     "challenge": {
       "narrative": [
-        "Rishi initiated transit through the asteroid belt's most densely populated sector, where remnants of a primordial planetary formation event had created a dynamic debris field spanning millions of cubic kilometers.",
-        "The spacecraft's quantum navigation system processed gravitational interactions between thousands of rocky bodies while calculating safe passage vectors through constantly shifting spatial configurations.",
-        "Massive metallic asteroids generated complex magnetic fields that interfered with standard navigation protocols, demanding adaptive piloting strategies."
+        "Rishi started crossing through the asteroid belt's most jam-packed sector, where leftover pieces from when planets first formed had created a massive debris field spanning millions of cubic kilometers.",
+        "The spacecraft's quantum navigation system processed gravity interactions between thousands of rocky bodies while calculating safe paths through constantly shifting space configurations.",
+        "Massive metal asteroids created complex magnetic fields that messed with standard navigation... demanding totally adaptive flying strategies."
       ],
       "choice_points": [
         {
           "id": 1,
-          "question": "Which approach should guide Rishi's navigation philosophy?",
+          "question": "Which approach should guide Rishi's navigation strategy?",
           "options": [
             {
               "letter": "A",
-              "text": "Integrate AI-assisted trajectory modeling with human judgment"
+              "text": "Combine AI-assisted path modeling with human judgment"
             },
             {
               "letter": "B",
-              "text": "Employ traditional dead-reckoning techniques adapted for three-dimensional space"
+              "text": "Use traditional dead-reckoning techniques adapted for 3D space"
             }
           ]
         }
@@ -133,19 +133,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The hybrid approach proved optimal - computers calculated possibilities while human intuition made final decisions in real-time."
+          "text": "The hybrid approach proved perfect... computers calculated possibilities while human intuition made final decisions in real-time."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Classical navigation principles, modified for microgravity environments, provided reliable backup when sensors failed due to magnetic interference."
+          "text": "Old-school navigation principles, modified for zero-gravity environments, provided reliable backup when sensors failed due to magnetic interference."
         }
       ],
       "continuation": [
-        "Four hours of intense piloting had taught Rishi that successful space navigation required balancing technological capabilities with fundamental understanding of celestial mechanics.",
-        "Deep within the belt, spectroscopic analysis detected anomalous readings suggesting the presence of rare earth elements critical for advanced propulsion systems.",
+        "Four hours of intense piloting had taught Rishi that successful space navigation required balancing high-tech capabilities with fundamental understanding of how celestial mechanics work.",
+        "Deep within the belt, spectroscopic analysis detected weird readings suggesting the presence of rare earth elements critical for advanced propulsion systems.",
         "Rishi's navigation challenge had evolved into groundbreaking research that would influence humanity's relationship with space exploration for generations.",
-        "Through combining technical expertise with scientific curiosity, Rishi had transformed a dangerous passage into a landmark discovery."
+        "Through combining technical expertise with scientific curiosity... Rishi had transformed a dangerous passage into a landmark discovery."
       ],
       "reflections": [
         {

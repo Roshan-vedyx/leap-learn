@@ -29,7 +29,7 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "The feeding stations were like restaurants for tired birds - they flocked to eat seeds and drink water before continuing their journey."
+          "text": "The feeding stations were like restaurants for tired birds... they flocked to eat seeds and drink water before continuing their journey!"
         },
         {
           "choice_id": 1,
@@ -38,10 +38,10 @@
         }
       ],
       "continuation": [
-        "Piya learned that birds travel thousands of miles twice every year - that's like flying across the whole country!",
+        "Piya learned that birds travel thousands of miles twice every year... that's like flying across the whole country!",
         "She started using a phone app to track which birds she saw and when they arrived.",
-        "Her observations helped scientists understand how migration patterns were changing.",
-        "Watching the birds return each spring filled Piya with joy - she had become part of their incredible journey."
+        "Her observations helped scientists understand how bird travel patterns were changing.",
+        "Watching the birds return each spring filled Piya with joy... she had become part of their incredible journey."
       ],
       "reflections": [
         {
@@ -57,9 +57,9 @@
 
     "regular": {
       "narrative": [
-        "Piya became fascinated by the incredible annual bird migration when thousands of different species traveled through her region.",
-        "These birds followed ancient flyway routes that had been used for centuries.",
-        "During peak migration season, exhausted songbirds, graceful waterfowl, and powerful raptors faced serious challenges from habitat loss and extreme weather."
+        "Piya became fascinated by the incredible yearly bird migration, when thousands of different bird types traveled through her area.",
+        "These birds followed ancient flight paths that had been used for hundreds of years.",
+        "During the busiest migration time, exhausted songbirds, graceful water birds, and powerful hawks faced serious challenges from lost habitats and terrible weather."
       ],
       "choice_points": [
         {
@@ -68,7 +68,7 @@
           "options": [
             {
               "letter": "A",
-              "text": "Create comprehensive feeding stations with diverse seeds and water sources"
+              "text": "Create complete feeding stations with different seeds and water sources"
             },
             {
               "letter": "B",
@@ -81,19 +81,19 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Strategic feeding station placement created vital refueling stops where different bird species could restore energy reserves essential for completing their demanding journeys."
+          "text": "Smart feeding station placement created vital refueling stops where different bird species could restore energy needed for completing their demanding journeys."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Native plant ecosystems attracted diverse insects and produced seasonal berries that provided natural, sustainable nutrition perfectly timed with migration periods."
+          "text": "Native plant systems attracted many insects and produced seasonal berries that provided natural, sustainable nutrition perfectly timed with migration periods."
         }
       ],
       "continuation": [
-        "Using citizen science apps, Piya began documenting species observations and migration timing patterns.",
+        "Using citizen science apps, Piya began documenting which species she saw and tracking migration timing patterns.",
         "Her data contributed to important research databases that scientists use to track changes in bird populations.",
         "Piya partnered with a local bird-watching group to learn advanced identification techniques.",
-        "She discovered that some birds she was tracking had traveled from as far as the Arctic Circle to Central America."
+        "She discovered that some birds she was tracking had traveled from as far as the Arctic Circle to Central America!"
       ],
       "reflections": [
         {
@@ -110,8 +110,8 @@
     "challenge": {
       "narrative": [
         "Piya immersed herself in the extraordinary phenomenon of continental bird migration, joining an international citizen science network.",
-        "This incredible seasonal movement involved diverse avian families navigating thousands of miles using ancient routes passed down through genetic programming and learned behavior.",
-        "The complexity of flyway utilization patterns across multiple biogeographic regions revealed the sophisticated nature of avian navigation systems."
+        "This incredible seasonal movement involved different bird families navigating thousands of miles using ancient routes passed down through genetics and learned behavior.",
+        "The complexity of flight path usage patterns across multiple geographic regions revealed the sophisticated nature of bird navigation systems."
       ],
       "choice_points": [
         {
@@ -120,11 +120,11 @@
           "options": [
             {
               "letter": "A",
-              "text": "Implement comprehensive habitat enhancement using scientific protocols"
+              "text": "Implement comprehensive habitat improvement using scientific methods"
             },
             {
               "letter": "B",
-              "text": "Establish systematic monitoring programs with advanced research methods"
+              "text": "Establish systematic monitoring programs with advanced research techniques"
             }
           ]
         }
@@ -133,12 +133,12 @@
         {
           "choice_id": 1,
           "letter": "A",
-          "text": "Strategic habitat enhancement created high-quality stopover sites that significantly improved migration success rates while providing essential resources during critical refueling periods."
+          "text": "Strategic habitat improvement created high-quality stopover sites that significantly improved migration success rates while providing essential resources during critical refueling periods."
         },
         {
           "choice_id": 1,
           "letter": "B",
-          "text": "Systematic research participation generated valuable phenological data and population monitoring information that contributed to continental migration databases used by professional ornithologists."
+          "text": "Systematic research participation generated valuable timing data and population monitoring information that contributed to continental migration databases used by professional bird scientists."
         }
       ],
       "continuation": [
@@ -150,7 +150,7 @@
       "reflections": [
         {
           "type": "personal",
-          "question": "How has studying the complexity of animal migration patterns influenced your understanding of environmental interconnectedness?"
+          "question": "How has studying the complexity of animal migration patterns influenced your understanding of environmental connections?"
         },
         {
           "type": "action",
