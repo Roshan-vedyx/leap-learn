@@ -63,6 +63,7 @@ export const ParentLogin: React.FC = () => {
       }
       
       console.log('Email authentication successful')
+      window.location.href = '/parent'
       
     } catch (err: any) {
       setError(err.message || 'Authentication failed')
@@ -492,7 +493,7 @@ export const ParentLogin: React.FC = () => {
             </div>
 
             {/* New User Section */}
-            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+            {/*<div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Don't have an account yet?
               </p>
@@ -503,7 +504,7 @@ export const ParentLogin: React.FC = () => {
               >
                 Create New Parent Account
               </Button>
-            </div>
+            </div>*/}
             
             {/* Error Message - Responsive */}
             {error && (

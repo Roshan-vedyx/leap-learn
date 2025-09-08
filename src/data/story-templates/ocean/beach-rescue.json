@@ -3,10 +3,159 @@
   "title": "Dolphin in Trouble",
   "theme": "Beach Rescue",
   "stories": {
-    "simple": "Maya was walking on the beach when she saw something that made her heart race. A young dolphin was lying on the sand, breathing hard and looking very scared. Maya knew she had to help fast!\n\n[CHOICE POINT 1] What should Maya do first?\nA) Run to get her friends Sam and Alex\nB) Pour seawater on the dolphin to keep it wet\n\n[CONSEQUENCE A] Sam and Alex came running when Maya called. \"We'll help!\" they said.\n[CONSEQUENCE B] Maya gently splashed cool water on the dolphin. It seemed to feel a little better.\n\nWorking together, the friends kept the dolphin calm and wet while Sam called for help on his phone. Soon, some adults came to help them carry the dolphin back to the water.\n\nThe dolphin swam away strong and free! Maya felt amazing - she had saved a life.\n\n[PERSONAL REFLECTION] Have you ever helped an animal that was in trouble? How did it make you feel?\n\n[ACTION REFLECTION] What could you do to help protect ocean animals?",
+    "simple": {
+      "narrative": [
+        "Maya was walking on the beach when she saw something that made her heart race.",
+        "A young dolphin was lying on the sand, breathing hard and looking very scared.",
+        "Maya knew she had to help fast!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Maya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Run to get her friends Sam and Alex"
+            },
+            {
+              "letter": "B", 
+              "text": "Pour seawater on the dolphin to keep it wet"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex came running when Maya called. 'We'll help!' they said."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Maya gently splashed cool water on the dolphin. It seemed to feel a little better."
+        }
+      ],
+      "continuation": [
+        "Working together, the friends kept the dolphin calm and wet while Sam called for help on his phone.",
+        "Soon, some adults came to help them carry the dolphin back to the water.",
+        "The dolphin swam away strong and free! Maya felt amazing - she had saved a life."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever helped an animal that was in trouble? How did it make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help protect ocean animals?"
+        }
+      ]
+    },
     
-    "regular": "Maya was enjoying a peaceful walk along the beach when she spotted something alarming. A bottlenose dolphin lay stranded on the sand, its breathing rapid and shallow. The morning sun was getting hot, and Maya realized this beautiful creature was in serious danger.\n\n[CHOICE POINT 1] What should Maya do first?\nA) Get Sam and Alex to help immediately\nB) Keep the dolphin's skin wet with seawater\n\n[CONSEQUENCE A] Sam and Alex arrived quickly, ready to help with the rescue mission.\n[CONSEQUENCE B] Maya carefully poured seawater over the dolphin, and its breathing seemed to slow down a bit.\n\nSam called the marine rescue hotline while Alex helped Maya keep the dolphin comfortable. Maya spoke softly to the animal, trying to keep it calm. When the rescue team arrived, they worked together to guide the dolphin back into the waves.\n\nThe dolphin paused for a moment at the water's edge, as if saying thank you, before swimming strongly back to the deep ocean.\n\n[PERSONAL REFLECTION] When you see someone or something in trouble, what helps you stay calm and think clearly?\n\n[ACTION REFLECTION] How could you learn more about helping marine animals in your area?",
+    "regular": {
+      "narrative": [
+        "Maya was enjoying a peaceful walk along the beach when she spotted something alarming.",
+        "A bottlenose dolphin lay stranded on the sand, its breathing rapid and shallow.", 
+        "The morning sun was getting hot, and Maya realized this beautiful creature was in serious danger."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Maya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Get Sam and Alex to help immediately"
+            },
+            {
+              "letter": "B",
+              "text": "Keep the dolphin's skin wet with seawater"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex arrived quickly, ready to help with the rescue mission."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya carefully poured seawater over the dolphin, and its breathing seemed to slow down a bit."
+        }
+      ],
+      "continuation": [
+        "Sam called the marine rescue hotline while Alex helped Maya keep the dolphin comfortable.",
+        "Maya spoke softly to the animal, trying to keep it calm.",
+        "When the rescue team arrived, they worked together to guide the dolphin back into the waves.",
+        "The dolphin paused for a moment at the water's edge, as if saying thank you, before swimming strongly back to the deep ocean."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "When you see someone or something in trouble, what helps you stay calm and think clearly?"
+        },
+        {
+          "type": "action",
+          "question": "How could you learn more about helping marine animals in your area?"
+        }
+      ]
+    },
     
-    "challenge": "Maya was exploring a remote section of coastline when an urgent situation unfolded before her eyes. A juvenile bottlenose dolphin had become stranded on the beach, its respirations labored and skin beginning to show signs of sun exposure. Maya understood that marine mammals could suffer serious health consequences within hours of being out of water.\n\n[CHOICE POINT 1] How should Maya begin this critical rescue?\nA) Coordinate with Sam and Alex as a rescue team\nB) Implement immediate hydration protocols to buy time\n\n[CONSEQUENCE A] Sam and Alex responded to Maya's call, bringing additional problem-solving skills and resources to the emergency.\n[CONSEQUENCE B] Maya's quick hydration efforts helped stabilize the dolphin's condition while she developed a comprehensive rescue plan.\n\nMaya coordinated a systematic response: maintaining the dolphin's moisture levels, monitoring its vital signs, and ensuring someone contacted professional marine rescuers. The team worked with focused efficiency, understanding that every minute mattered.\n\nWhen the rescue specialists arrived with proper equipment, they successfully transported the dolphin to deeper water. The animal's powerful tail created joyful splashes as it disappeared beneath the surface, returning to its ocean home.\n\n[PERSONAL REFLECTION] How do you handle high-pressure situations where quick thinking and teamwork are essential?\n\n[ACTION REFLECTION] What steps could you take to become better prepared for wildlife emergency situations in your community?"
+    "challenge": {
+      "narrative": [
+        "Maya was exploring a remote section of coastline when an urgent situation unfolded before her eyes.",
+        "A juvenile bottlenose dolphin had become stranded on the beach, its respirations labored and skin beginning to show signs of sun exposure.",
+        "Maya understood that marine mammals could suffer serious health consequences within hours of being out of water."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya begin this critical rescue?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Coordinate with Sam and Alex as a rescue team"
+            },
+            {
+              "letter": "B",
+              "text": "Implement immediate hydration protocols to buy time"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex responded to Maya's call, bringing additional problem-solving skills and resources to the emergency."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya's quick hydration efforts helped stabilize the dolphin's condition while she developed a comprehensive rescue plan."
+        }
+      ],
+      "continuation": [
+        "Maya coordinated a systematic response: maintaining the dolphin's moisture levels, monitoring its vital signs, and ensuring someone contacted professional marine rescuers.",
+        "The team worked with focused efficiency, understanding that every minute mattered.",
+        "When the rescue specialists arrived with proper equipment, they successfully transported the dolphin to deeper water.",
+        "The animal's powerful tail created joyful splashes as it disappeared beneath the surface, returning to its ocean home."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you handle high-pressure situations where quick thinking and teamwork are essential?"
+        },
+        {
+          "type": "action", 
+          "question": "What steps could you take to become better prepared for wildlife emergency situations in your community?"
+        }
+      ]
+    }
   }
 }

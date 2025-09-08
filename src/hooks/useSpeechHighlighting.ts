@@ -117,70 +117,73 @@ export const useSpeechHighlighting = (
       console.warn('Speech synthesis not supported')
       return
     }
-
+  
     // Stop any current speech
     stop()
-
+  
     setIsReading(true)
     setCurrentWordIndex(-1)
     currentElementRef.current = elementId
-
+  
     // Get current accent preference
     const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
-
+  
     // Store original content for reset
     const element = document.getElementById(elementId)
     if (element) {
       originalContentRef.current = element.textContent || ''
     }
-
+  
     try {
       options.onSpeechStart?.()
-
-      // Get the best calm voice for selected accent
-      const bestVoice = audio.getBestVoiceForAccent(savedAccent) || selectedVoice
-
-      // Use the existing audio.speak method with highlighting simulation
+  
+      // FIXED: Get voice asynchronously for mobile compatibility
+      const bestVoice = await audio.getBestVoiceForAccent(savedAccent)
       const words = text.split(/\s+/)
-
+  
       const speakWord = async (word: string, index: number): Promise<void> => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           setCurrentWordIndex(index)
           options.onWordStart?.(word, index)
           
           // Highlight current word
           highlightWord(elementId, index, true)
-
-          // Create utterance for single word with accent-specific voice
-          const utterance = new SpeechSynthesisUtterance(word)
-          utterance.voice = bestVoice
-          utterance.rate = options.rate ?? 0.65 // Extra slow for neurodivergent children
-          utterance.pitch = options.pitch ?? 0.9 // Calm pitch
-          utterance.volume = options.volume ?? 0.8
-
-          utterance.onend = () => {
-            // Remove highlight with longer pause for processing
+  
+          try {
+            // FIXED: Use the centralized audio.speak function
+            await audio.speak(word, {
+              voice: bestVoice,
+              accent: savedAccent,
+              rate: options.rate ?? 0.65,
+              pitch: options.pitch ?? 0.9,
+              volume: options.volume ?? 0.8
+            })
+            
+            // Remove highlight with pause
             setTimeout(() => {
               highlightWord(elementId, index, false)
               options.onWordEnd?.(word, index)
               resolve()
-            }, options.pauseBetweenWords ?? 250) // Slightly longer pauses
+            }, options.pauseBetweenWords ?? 250)
+            
+          } catch (error) {
+            console.error('Word speak error:', error)
+            // Don't reject, just continue to next word
+            setTimeout(() => {
+              highlightWord(elementId, index, false)
+              options.onWordEnd?.(word, index)
+              resolve()
+            }, options.pauseBetweenWords ?? 250)
           }
-
-          utterance.onerror = (event) => {
-            reject(event.error)
-          }
-
-          speechSynthesis.speak(utterance)
         })
       }
-
+  
       // Speak words sequentially with highlighting
       for (let i = 0; i < words.length; i++) {
         if (!isReading) break // Check if stopped
         await speakWord(words[i], i)
       }
-
+  
       options.onSpeechEnd?.()
     } catch (error) {
       console.error('Speech error:', error)
@@ -196,7 +199,7 @@ export const useSpeechHighlighting = (
       setCurrentWordIndex(-1)
       currentSpeechRef.current = null
     }
-  }, [isSupported, selectedVoice, options])
+  }, [isSupported, options]) 
 
   const stop = useCallback(() => {
     audio.stop()

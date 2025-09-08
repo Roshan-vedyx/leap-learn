@@ -1,11 +1,162 @@
 {
-  "id": "lost-pet-8952",
+  "id": "lost-pet",
   "title": "Finding Home",
   "theme": "Lost Pet",
   "stories": {
-  "simple": "Rishi found a sad-looking dog wandering around the park all by itself, with no owner anywhere in sight. The dog looked really hungry and tired, like it had been lost for a while. [CHOICE POINT 1] How should Rishi help this lost pet safely? A) Give the dog some water and food while checking for ID tags, B) Try to follow the dog to see if it knows the way home, or C) Ask other people in the park if they recognize the dog. [CONSEQUENCE 1A] The dog gratefully drank water and ate crackers while Rishi found a collar with a name tag that said 'Buddy' and had a phone number! [CONSEQUENCE 1B] Following Buddy showed that he was just wandering in circles, confused and lost in an unfamiliar area. [CONSEQUENCE 1C] Several park visitors recognized Buddy and said his family had been posting missing dog flyers everywhere yesterday. Rishi called the phone number on Buddy's collar and a worried family answered immediately - they had been searching frantically all day and night! [CHOICE POINT 2] How can Rishi make the reunion even better? A) Stay with Buddy until the family arrives to make sure he feels safe, B) Help the family understand how Buddy might have gotten lost so it doesn't happen again, or C) Exchange contact information to check on Buddy later. [PERSONAL REFLECTION] Have you ever lost something really important to you? How did it feel when you found it or got it back? [ACTION REFLECTION] What could you do to help lost pets in your neighborhood find their way home?",
-    "regular": "Rishi encountered a disoriented golden retriever wandering aimlessly through the neighborhood park without any visible supervision or familiar human companions nearby. The distressed animal displayed obvious signs of exhaustion, dehydration, and anxiety from extended separation from its family. [CHOICE POINT 1] This lost pet situation required immediate but careful intervention to ensure both animal and human safety. A) Provide emergency care including fresh water and basic nutrition while thoroughly examining identification tags and contact information, B) Attempt to follow the dog's natural instincts and movement patterns to determine if it could navigate toward familiar territory, or C) Engage with local park visitors and residents who might have valuable information about the dog's identity and home location. [CONSEQUENCE 1A] Emergency care protocols revealed that the well-cared-for dog named Buddy wore current identification tags with owner contact information, suggesting recent separation rather than abandonment. [CONSEQUENCE 1B] Observational tracking demonstrated that Buddy was genuinely lost and disoriented, unable to navigate toward any familiar landmarks or routes. [CONSEQUENCE 1C] Community outreach quickly identified Buddy as a beloved family pet whose disappearance had triggered extensive neighborhood search efforts and social media campaigns. Contacting the registered owners immediately connected Rishi with a distraught family who had been conducting round-the-clock search operations since Buddy's escape during a thunderstorm. [CHOICE POINT 2] How could Rishi enhance this successful reunion while preventing future incidents? A) Provide emotional support and companionship to Buddy while awaiting family arrival to minimize continued stress and anxiety, B) Share insights about Buddy's probable escape route and current condition to help the family implement better security measures, or C) Establish ongoing communication to monitor Buddy's recovery and offer assistance with any future pet-related emergencies. [PERSONAL REFLECTION] What experiences have you had with losing or finding important things, and how do those feelings motivate you to help others in similar situations? [ACTION REFLECTION] How could you develop systems in your community to help reunite lost pets with their families more quickly and effectively?",
-    
-    "challenge": "Rishi discovered a seriously disoriented golden retriever exhibiting classic symptoms of separation anxiety and stress-related exhaustion while wandering aimlessly through the municipal park without any human supervision or apparent direction. This beautiful, well-groomed dog was obviously someone's beloved family member, not a stray, but was clearly in distress from being separated from everything familiar. [CHOICE POINT 1] This emergency pet rescue situation demanded quick thinking and strategic approaches to ensure everyone's safety and the best possible outcome. A) Implement immediate animal care protocols including hydration, basic nutrition, and comprehensive identification documentation review while establishing trust and minimizing additional trauma, B) Utilize behavioral observation techniques to assess whether the dog retained any navigation instincts or directional awareness that might lead toward familiar territory, or C) Deploy community networking strategies to gather intelligence from local residents, park regulars, and neighborhood social media groups about recent missing pet reports. [CONSEQUENCE 1A] Professional-level animal care revealed that Buddy was a well-maintained family pet with current tags and vaccination records, indicating very recent separation from responsible owners. [CONSEQUENCE 1B] Behavioral assessment confirmed that Buddy had completely lost his bearings and was trapped in anxiety-driven repetitive movement patterns with no coherent navigation strategy. [CONSEQUENCE 1C] Strategic community outreach immediately connected the situation to active missing pet campaigns, revealing that Buddy's family had mobilized extensive search operations across multiple platforms and neighborhoods. Direct contact with Buddy's registered owners revealed a frantic family who had been conducting systematic search efforts since their beloved pet had bolted during severe storm conditions the previous evening. [CHOICE POINT 2] Having successfully located Buddy's family, what's the most comprehensive approach to ensuring positive outcomes and preventing future separations? A) Provide continuous emotional support and supervision for Buddy during the waiting period while monitoring for any signs of injury, illness, or continued psychological distress, B) Conduct detailed debriefing with the family about probable escape circumstances, current pet condition, and practical recommendations for enhanced home security and storm anxiety management, or C) Establish long-term supportive relationships that could provide backup assistance during future emergencies while contributing to broader community pet safety networks. [PERSONAL REFLECTION] How do your own experiences with loss, anxiety, or being separated from important things help you understand what both pets and families go through in these situations? [ACTION REFLECTION] What kind of community systems or neighborhood networks could you help create to make sure lost pets get home faster while supporting families during these stressful experiences?"
+    "simple": {
+      "narrative": [
+        "Rishi found a sad-looking dog wandering around the park all by itself, with no owner anywhere in sight.",
+        "The dog looked really hungry and tired, like it had been lost for a while.",
+        "Rishi knew this beautiful golden retriever belonged to someone who was probably worried sick."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi help this lost pet safely?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Give the dog water and food while checking for ID tags"
+            },
+            {
+              "letter": "B",
+              "text": "Ask other people in the park if they recognize the dog"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The dog gratefully drank water and ate crackers while Rishi found a collar with a name tag that said 'Buddy' and had a phone number!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Several park visitors recognized Buddy and said his family had been posting missing dog flyers everywhere yesterday."
+        }
+      ],
+      "continuation": [
+        "Rishi called the phone number on Buddy's collar and a worried family answered immediately - they had been searching frantically all day and night!",
+        "Rishi stayed with Buddy until the family arrived to make sure he felt safe.",
+        "When Buddy's family showed up, the reunion was incredible - everyone was crying happy tears, including Rishi.",
+        "The family was so grateful they exchanged contact info with Rishi and promised to keep in touch about Buddy's adventures."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever lost something really important to you? How did it feel when you found it or got it back?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help lost pets in your neighborhood find their way home?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Rishi encountered a confused golden retriever wandering aimlessly through the neighborhood park without any supervision.",
+        "The distressed animal showed obvious signs of exhaustion and anxiety from being separated from its family.",
+        "This wasn't a stray - this was clearly someone's beloved pet who had gotten lost and needed help getting home."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the smartest approach to help this lost pet?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Provide emergency care and check thoroughly for identification"
+            },
+            {
+              "letter": "B",
+              "text": "Connect with local people who might know about missing pets"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Emergency care revealed that Buddy was a well-cared-for family pet with current ID tags and contact information, showing he'd only recently gotten separated from his owners."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Community outreach quickly identified Buddy as a beloved family pet whose disappearance had triggered extensive neighborhood search efforts and social media campaigns."
+        }
+      ],
+      "continuation": [
+        "Contacting the registered owners immediately connected Rishi with a frantic family who had been conducting round-the-clock search operations since Buddy's escape during a thunderstorm.",
+        "Rishi provided emotional support to Buddy while awaiting the family's arrival to minimize his continued stress and anxiety.",
+        "He shared insights about where he found Buddy and his condition to help the family understand what happened and prevent future escapes.",
+        "The experience taught Rishi how much pets mean to families and how one person's quick action can turn a family's worst day into their best day."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What experiences have you had with losing or finding important things, and how do those feelings motivate you to help others?"
+        },
+        {
+          "type": "action",
+          "question": "How could you develop systems in your community to help reunite lost pets with their families more quickly?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Rishi discovered a seriously disoriented golden retriever showing classic symptoms of separation anxiety and stress-related exhaustion while wandering aimlessly through the park.",
+        "This beautiful, well-groomed dog was obviously someone's beloved family member, not a stray, but was clearly in distress from being separated from everything familiar.",
+        "The situation demanded quick thinking and strategic approaches to ensure everyone's safety and the best possible outcome."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi approach this complex rescue situation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use immediate animal care protocols while building trust and minimizing trauma"
+            },
+            {
+              "letter": "B",
+              "text": "Deploy community networking to gather intelligence about missing pet reports"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Professional-level animal care revealed that Buddy was a well-maintained family pet with current tags and vaccination records, indicating very recent separation from responsible owners."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Strategic community outreach immediately connected the situation to active missing pet campaigns, revealing that Buddy's family had mobilized extensive search operations across multiple platforms."
+        }
+      ],
+      "continuation": [
+        "Direct contact with Buddy's registered owners revealed a frantic family who had been conducting systematic search efforts since their beloved pet had bolted during severe storm conditions.",
+        "Rishi provided continuous emotional support and supervision for Buddy during the waiting period while monitoring for any signs of injury or continued psychological distress.",
+        "He conducted detailed debriefing with the family about probable escape circumstances and shared practical recommendations for enhanced home security and storm anxiety management.",
+        "This experience revealed how community networks and individual action can work together to solve emergencies and support families during their most stressful moments."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do your own experiences with loss or anxiety help you understand what both pets and families go through in these situations?"
+        },
+        {
+          "type": "action",
+          "question": "What kind of community systems or neighborhood networks could you help create to make sure lost pets get home faster?"
+        }
+      ]
+    }
   }
-  }
+}

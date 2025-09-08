@@ -3,10 +3,159 @@
   "title": "The Secret Artist",
   "theme": "Hidden Talent",
   "stories": {
-    "simple": "Every morning, amazing chalk art appeared around school. The drawings showed beautiful animals and flowers that made everyone stop and smile. But who was the mystery artist? [CHOICE POINT 1] Rishi really wanted to solve this puzzle. A) Wait and watch quietly, B) Ask friends if they saw anything, or C) Look for clues around the artwork. [CONSEQUENCE 1A] Hiding behind the big oak tree early one morning, Rishi discovered Jordan creating the incredible art before anyone arrived. [CONSEQUENCE 1B] Friends shared they'd seen someone with chalk-covered fingers, leading Rishi to notice Jordan's artistic hands. [CONSEQUENCE 1C] Following chalk dust trails, Rishi found Jordan's secret art supplies hidden in their backpack. Jordan felt scared about being discovered but Rishi promised to keep the secret safe. [CHOICE POINT 2] How should Rishi help Jordan feel confident about their amazing talent? A) Invite Jordan to join art club with understanding friends, B) Suggest Jordan teach others their chalk techniques, or C) Help Jordan display art with their name proudly. [PERSONAL REFLECTION] Have you ever had a talent you were nervous to share? How did it feel when someone appreciated your abilities? [ACTION REFLECTION] What's one way you could encourage a friend's hidden talents this week?",
+    "simple": {
+      "narrative": [
+        "Every morning, amazing chalk art shows up around school.",
+        "Someone draws beautiful animals and flowers that make everyone stop and stare.",
+        "But nobody knows who the mystery artist is!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi really wants to figure out this puzzle. What should they do?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Hide and watch quietly to see who comes early"
+            },
+            {
+              "letter": "B", 
+              "text": "Ask friends if they noticed anyone with chalk on their hands"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Hiding behind the big oak tree early one morning, Rishi sees Jordan creating the incredible art before anyone gets to school."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Friends mention seeing someone with chalk-covered fingers, and Rishi notices Jordan's hands look pretty dusty."
+        }
+      ],
+      "continuation": [
+        "When Rishi talks to Jordan, Jordan looks scared about being found out.",
+        "Jordan explains they love making art but don't want people judging their work.",
+        "Rishi promises to keep the secret and asks how they can help Jordan feel better about sharing their talent."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever had a skill or hobby you were nervous to share? What made you feel that way?"
+        },
+        {
+          "type": "action",
+          "question": "What's one way you could support a friend who's hiding their talents?"
+        }
+      ]
+    },
     
-    "regular": "Spectacular chalk murals mysteriously appeared across campus each dawn, featuring intricate wildlife portraits and botanical masterpieces that captivated the entire school community. Despite widespread admiration, the talented creator remained completely anonymous, sparking curiosity throughout the halls. [CHOICE POINT 1] Rishi felt determined to uncover this delightful mystery through careful investigation. A) Conduct early morning surveillance to observe the artistic process, B) Analyze the artwork styles and techniques for identifying clues, or C) Organize a friendly investigation team with trusted classmates. [CONSEQUENCE 1A] Strategic observation from behind campus trees revealed Jordan's extraordinary artistic abilities and methodical creative process during the peaceful pre-dawn hours. [CONSEQUENCE 1B] Studying the sophisticated shading techniques and composition styles, Rishi recognized Jordan's distinctive artistic signature from art class projects. [CONSEQUENCE 1C] Collaborative detective work with friends led to discovering chalk residue patterns that pointed directly to Jordan's locker area. When confronted gently, Jordan admitted to creating the artwork but expressed anxiety about public recognition and potential criticism. [CHOICE POINT 2] How could Rishi best support Jordan's artistic confidence while respecting their comfort level? A) Connect Jordan with supportive art communities where talent is celebrated, B) Propose anonymous art showcases that protect Jordan's privacy preferences, or C) Encourage gradual public sharing starting with close friends only. [PERSONAL REFLECTION] Think about times when you've hidden your strengths - what made you feel safe enough to share them eventually? [ACTION REFLECTION] How can you create supportive spaces where others feel comfortable expressing their unique abilities?",
+    "regular": {
+      "narrative": [
+        "Amazing chalk murals mysteriously appear across campus every morning.",
+        "The artwork shows detailed wildlife portraits and beautiful plant drawings that make the whole school buzz with excitement.", 
+        "Everyone loves the art, but the talented creator stays completely anonymous."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi is determined to solve this mystery. What's their first move?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do some early morning detective work to catch the artist in action"
+            },
+            {
+              "letter": "B",
+              "text": "Study the art style carefully to find clues about who made it"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "By hiding behind campus trees before dawn, Rishi discovers Jordan's amazing artistic skills and sees their whole creative process."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Looking closely at the shading techniques and drawing style, Rishi recognizes Jordan's work from art class projects."
+        }
+      ],
+      "continuation": [
+        "When Rishi approaches Jordan about it, Jordan admits to making the artwork but seems really anxious about being discovered.",
+        "Jordan explains they worry people might criticize their art or make a big deal about it.",
+        "Rishi realizes Jordan needs support to feel confident about their incredible talent.",
+        "They talk about ways Jordan could share their art that would feel safe and comfortable."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "When you see someone struggling with confidence, what helps you stay supportive and understanding?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create a space where people feel safe sharing their creative work?"
+        }
+      ]
+    },
     
-    "challenge": "Extraordinary chalk art installations materialized systematically across the educational campus each morning, featuring sophisticated botanical illustrations and zoological portraits that demonstrated remarkable technical proficiency and aesthetic vision. The anonymous artist's exceptional creative contributions generated widespread institutional appreciation, yet their identity remained mysteriously concealed despite intensive curiosity from students and faculty alike. [CHOICE POINT 1] Rishi developed comprehensive investigative strategies to respectfully identify this talented individual while honoring their apparent desire for anonymity. A) Execute systematic temporal surveillance operations using strategic positioning and observational methodologies, B) Conduct detailed artistic analysis examining compositional techniques, material usage, and stylistic signatures, or C) Coordinate collaborative investigation protocols with trusted associates to triangulate evidence sources. [CONSEQUENCE 1A] Methodical early-morning reconnaissance operations revealed Jordan's extraordinary artistic capabilities and their deliberate choice to create during solitary pre-institutional hours when creative expression felt psychologically safer. [CONSEQUENCE 1B] Comprehensive aesthetic analysis of advanced shading techniques, perspective mastery, and compositional sophistication enabled Rishi to recognize Jordan's distinctive artistic voice from previous classroom observations. [CONSEQUENCE 1C] Strategic collaborative intelligence gathering with trustworthy peers uncovered material evidence patterns and behavioral indicators that conclusively identified Jordan's anonymous contributions. Upon respectful confrontation, Jordan acknowledged their artistic activities while expressing significant social anxiety regarding public recognition and potential evaluative judgment from peers. [CHOICE POINT 2] What approach would most effectively support Jordan's artistic confidence while respecting their psychological comfort parameters and individual autonomy preferences? A) Facilitate connections with established artistic communities that prioritize supportive creative development over competitive evaluation, B) Develop anonymous exhibition frameworks that celebrate artistic contributions while protecting individual privacy and emotional security, or C) Implement graduated exposure strategies beginning with intimate friend groups before expanding to broader community recognition. [PERSONAL REFLECTION] Consider moments when your exceptional abilities felt vulnerable to others' opinions - what environmental factors and interpersonal approaches helped you feel secure enough to share your authentic talents? [ACTION REFLECTION] How can you intentionally cultivate supportive spaces where peers feel empowered to express their unique capabilities without fear of judgment or unwanted attention?"
+    "challenge": {
+      "narrative": [
+        "Sophisticated chalk art installations appear systematically across the school campus each morning.",
+        "The anonymous artist demonstrates exceptional technical skill through detailed botanical illustrations and realistic animal portraits.",
+        "Despite widespread appreciation from students and teachers, the creator's identity remains completely hidden."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi develops a comprehensive plan to respectfully identify this talented person. What approach should they take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Execute strategic observation during early morning hours when the artist likely works"
+            },
+            {
+              "letter": "B",
+              "text": "Analyze the artistic techniques and compositional elements to identify the creator's signature style"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Through methodical early-morning surveillance, Rishi discovers Jordan's extraordinary capabilities and their deliberate choice to create during solitary hours when expression feels psychologically safer."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Detailed analysis of advanced shading methods, perspective mastery, and compositional sophistication enables Rishi to recognize Jordan's distinctive artistic voice from classroom observations."
+        }
+      ],
+      "continuation": [
+        "Upon respectful confrontation, Jordan acknowledges their artistic contributions while expressing significant anxiety about public recognition and potential judgment.",
+        "Jordan reveals they chose anonymity because previous experiences with sharing creative work led to unwanted attention and critical comments.",
+        "Rishi recognizes that Jordan's exceptional talent requires supportive strategies that honor their need for emotional safety.",
+        "Together, they explore approaches that could help Jordan gain confidence while maintaining control over how much attention they receive."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Consider times when your abilities felt vulnerable to others' opinions - what helped you feel secure enough to share your authentic talents?"
+        },
+        {
+          "type": "action", 
+          "question": "How can you intentionally create supportive environments where peers feel empowered to express their capabilities without fear of judgment?"
+        }
+      ]
+    }
   }
 }

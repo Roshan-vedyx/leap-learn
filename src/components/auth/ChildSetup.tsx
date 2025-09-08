@@ -1,6 +1,6 @@
 // src/components/auth/ChildSetup.tsx - FULLY RESPONSIVE
 import React, { useState } from 'react'
-import { Star, Lock, ArrowRight, ArrowLeft, Shield, CheckCircle } from 'lucide-react'
+import { Star, Lock, ArrowRight, ArrowLeft, Shield, CheckCircle, Eye, EyeOff } from 'lucide-react'
 import bcrypt from 'bcryptjs'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../../config/firebase'

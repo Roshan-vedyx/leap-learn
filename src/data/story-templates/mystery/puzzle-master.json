@@ -3,10 +3,162 @@
   "title": "The Riddle Champion",
   "theme": "Puzzle Master",
   "stories": {
-    "simple": "The town posted this incredibly tricky riddle that had everyone stumped for weeks. It said: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?' Aryaan was obsessed with puzzles and brain teasers - the harder the better! [CHOICE POINT 1] How should Aryaan tackle this mind-bending challenge? A) Think about it constantly while doing daily activities, B) Research similar riddles online for pattern clues, or C) Draw pictures to visualize the riddle's parts. [CONSEQUENCE 1A] While walking to school every morning, Aryaan kept turning the riddle over in their mind, looking for connections everywhere. [CONSEQUENCE 1B] Studying other riddle patterns helped Aryaan understand how these puzzles use metaphors and hidden meanings. [CONSEQUENCE 1C] Drawing cities without houses and forests without trees helped Aryaan see the puzzle from a totally new angle. Then one morning, walking past a street sign, Aryaan suddenly got it - the answer was a MAP! [CHOICE POINT 2] How should Aryaan share this breakthrough moment? A) Run straight to the town square to write the answer, B) Double-check the solution by testing it against each riddle clue, or C) Find friends to share the excitement before revealing the answer publicly. [CONSEQUENCE 2A] Racing to post the answer, Aryaan became the town's celebrated Puzzle Master and everyone wanted to know the secret to solving impossible riddles. The whole community cheered and Aryaan felt incredible about cracking the toughest puzzle anyone had ever seen. [PERSONAL REFLECTION] What kinds of puzzles or brain teasers do you enjoy most? How does it feel when you finally solve something really challenging? [ACTION REFLECTION] How could you help create more puzzle challenges that other kids would find exciting and fun?",
+    "simple": {
+      "narrative": [
+        "The town posted this incredibly tricky riddle that had everyone stumped for weeks.",
+        "It said: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'",
+        "Aryaan was totally obsessed with puzzles and brain teasers - the harder the better!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Aryaan tackle this mind-bending challenge?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Think about it constantly while doing daily stuff like walking to school"
+            },
+            {
+              "letter": "B", 
+              "text": "Draw pictures to visualize what the riddle is describing"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "While walking to school every morning, Aryaan keeps turning the riddle over in their mind, looking for connections everywhere."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Drawing cities without houses and forests without trees helps Aryaan see the puzzle from a totally new angle."
+        }
+      ],
+      "continuation": [
+        "Then one morning, walking past a street sign, Aryaan suddenly gets it - the answer is a MAP!",
+        "Maps show cities, forests, and water, but they don't actually contain houses, trees, or fish.",
+        "Aryaan races to the town square to write the answer and becomes the celebrated Puzzle Master!",
+        "The whole community cheers and Aryaan feels incredible about cracking the toughest puzzle anyone had ever seen."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What kinds of puzzles or brain teasers do you enjoy most? How does it feel when you finally solve something really challenging?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create more puzzle challenges that other kids would find exciting and fun?"
+        }
+      ]
+    },
     
-    "regular": "The town had posted this extremely challenging riddle on a huge public board, and for weeks absolutely nobody could crack it. The puzzle read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?' Aryaan lived for these kinds of mental challenges - the more complex and mind-twisting, the better. [CHOICE POINT 1] This riddle required some serious strategic thinking to solve. A) Dedicate focused daily thinking sessions to analyze each component of the riddle systematically, B) Research the structure and patterns of similar classical riddles to understand common solving techniques, or C) Use visual mapping and diagram techniques to break down the riddle's logical components. [CONSEQUENCE 1A] During daily walks and quiet moments, Aryaan continuously processed the riddle's elements, searching for connections and patterns that others might have missed. [CONSEQUENCE 1B] Studying the history and structure of famous riddles revealed important insights about metaphorical thinking and abstract representation in puzzle design. [CONSEQUENCE 1C] Creating detailed visual diagrams of cities without houses and forests without trees helped Aryaan approach the problem from multiple analytical perspectives. The breakthrough came suddenly while observing a street map - Aryaan realized the answer had to be 'a map' because maps show cities, forests, and water without containing the actual living elements. [CHOICE POINT 2] Having solved the puzzle, what's the best way to claim victory while inspiring others? A) Immediately announce the solution publicly to claim rightful recognition as the riddle champion, B) Verify the answer thoroughly by testing it against every element of the original riddle, or C) Share the discovery process with friends first to build excitement before the public reveal. [CONSEQUENCE 2A] Confidently presenting the solution earned Aryaan official recognition as the community's Puzzle Master, inspiring other young people to tackle challenging mental puzzles. [CONSEQUENCE 2B] Careful verification confirmed the answer's accuracy, and Aryaan's methodical approach impressed everyone with both the solution and the solving process. [CONSEQUENCE 2C] Building anticipation through friend discussions created a supportive celebration when Aryaan finally revealed the answer to the entire community. The town celebrated having such a brilliant puzzle solver, and Aryaan felt proud to inspire others to embrace challenging thinking. [PERSONAL REFLECTION] What draws you to difficult challenges, and how do you push through when problems seem impossible to solve? [ACTION REFLECTION] How could you encourage others in your community to tackle challenging puzzles and celebrate creative problem-solving?",
+    "regular": {
+      "narrative": [
+        "The town had posted this extremely challenging riddle on a huge public board, and for weeks absolutely nobody could crack it.",
+        "The puzzle read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'", 
+        "Aryaan lived for these kinds of mental challenges - the more complex and mind-twisting, the better."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This riddle requires some serious strategic thinking to solve. What approach should Aryaan take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Dedicate focused daily thinking sessions to analyze each part of the riddle systematically"
+            },
+            {
+              "letter": "B",
+              "text": "Use visual mapping and diagram techniques to break down the riddle's logical components"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "During daily walks and quiet moments, Aryaan continuously processes the riddle's elements, searching for connections and patterns that others might have missed."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Creating detailed visual diagrams of cities without houses and forests without trees helps Aryaan approach the problem from multiple analytical perspectives."
+        }
+      ],
+      "continuation": [
+        "The breakthrough comes suddenly while observing a street map - Aryaan realizes the answer has to be 'a map'!",
+        "Maps show cities, forests, and water without containing the actual living elements.",
+        "Aryaan decides to verify the answer thoroughly by testing it against every element of the original riddle.",
+        "After confirming the solution is perfect, Aryaan shares the discovery with friends first to build excitement.",
+        "The town celebrates having such a brilliant puzzle solver, and Aryaan feels proud to inspire others to embrace challenging thinking."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What draws you to difficult challenges, and how do you push through when problems seem impossible to solve?"
+        },
+        {
+          "type": "action",
+          "question": "How could you encourage others in your community to tackle challenging puzzles and celebrate creative problem-solving?"
+        }
+      ]
+    },
     
-    "challenge": "The town had put up this absolutely brutal riddle that had been destroying people's brains for weeks - even the smartest adults couldn't crack it. The challenge read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?' Aryaan was completely addicted to these kinds of intellectual puzzles - the more impossible they seemed, the more obsessed Aryaan became with solving them. [CHOICE POINT 1] This level of complexity demanded some next-level strategic thinking approaches. A) Develop intensive daily analysis sessions focusing on deconstructing each paradoxical element to identify underlying logical patterns, B) Deep-dive into research about classical riddle construction, metaphorical reasoning, and historical puzzle-solving methodologies, or C) Apply advanced visualization techniques and systematic diagramming to map out all possible interpretations and connections. [CONSEQUENCE 1A] Through relentless daily mental processing during routine activities, Aryaan continuously dissected the riddle's contradictory elements, searching for patterns and connections that conventional thinking might overlook. [CONSEQUENCE 1B] Extensive research into riddle theory and classical puzzle design revealed crucial insights about metaphorical representation, abstract thinking, and the way great riddles use conceptual misdirection. [CONSEQUENCE 1C] Creating complex visual analysis charts and logic diagrams helped Aryaan systematically eliminate impossible interpretations while mapping potential solution pathways. The eureka moment hit like lightning while studying a geography textbook - suddenly Aryaan realized that maps contain representations of cities, forests, and water without actually housing the living elements themselves. [CHOICE POINT 2] Having cracked the seemingly impossible puzzle, what's the most impactful way to reveal this intellectual victory? A) Make a dramatic public announcement demonstrating the solution process to inspire others and claim well-deserved recognition, B) Thoroughly verify the answer by testing it against every single component of the original riddle to ensure absolute accuracy, or C) Build strategic anticipation by sharing the discovery process with trusted friends before staging a community-wide reveal. [CONSEQUENCE 2A] Confidently presenting the solution with detailed explanation of the solving process earned Aryaan legendary status as the community's official Puzzle Master and inspired a wave of intellectual curiosity among peers. [CONSEQUENCE 2B] Meticulous verification of the answer through systematic testing impressed the entire community with both the brilliant solution and the rigorous analytical approach used to achieve it. [CONSEQUENCE 2C] Strategic anticipation-building through peer discussions created an electric atmosphere of excitement that made the final community reveal feel like a genuine celebration of intellectual achievement. The entire town was amazed by Aryaan's breakthrough thinking, and requests poured in for Aryaan to create even more challenging puzzles for the community to tackle. [PERSONAL REFLECTION] What drives your passion for tackling seemingly impossible challenges, and how do you maintain persistence when problems feel overwhelming? [ACTION REFLECTION] How could you design challenging intellectual experiences that would inspire others to push their own thinking boundaries while building confidence in their problem-solving abilities?"
+    "challenge": {
+      "narrative": [
+        "The town had posted this absolutely brutal riddle that had been stumping people for weeks - even the smartest adults couldn't crack it.",
+        "The challenge read: 'I have cities but no houses, forests but no trees, and water but no fish. What am I?'",
+        "Aryaan was completely addicted to these kinds of intellectual puzzles - the more impossible they seemed, the more obsessed Aryaan became with solving them."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This level of complexity demands some next-level strategic thinking approaches. What method should Aryaan use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Develop intensive daily analysis sessions focusing on deconstructing each paradoxical element to identify logical patterns"
+            },
+            {
+              "letter": "B",
+              "text": "Apply advanced visualization techniques and systematic diagramming to map out all possible interpretations and connections"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Through relentless daily mental processing during routine activities, Aryaan continuously dissects the riddle's contradictory elements, searching for patterns that conventional thinking might overlook."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Creating complex visual analysis charts and logic diagrams helps Aryaan systematically eliminate impossible interpretations while mapping potential solution pathways."
+        }
+      ],
+      "continuation": [
+        "The eureka moment hits like lightning while studying a geography textbook - suddenly Aryaan realizes that maps contain representations of cities, forests, and water without actually housing the living elements themselves.",
+        "Having cracked the seemingly impossible puzzle, Aryaan decides to build strategic anticipation by sharing the discovery process with trusted friends before staging a community-wide reveal.",
+        "The carefully planned presentation creates an electric atmosphere of excitement that makes the final reveal feel like a genuine celebration of intellectual achievement.",
+        "The entire town is amazed by Aryaan's breakthrough thinking, and requests pour in for Aryaan to create even more challenging puzzles for the community to tackle.",
+        "Aryaan achieves legendary status as the community's official Puzzle Master and inspires a wave of intellectual curiosity among peers."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What drives your passion for tackling seemingly impossible challenges, and how do you maintain persistence when problems feel overwhelming?"
+        },
+        {
+          "type": "action", 
+          "question": "How could you design challenging intellectual experiences that would inspire others to push their own thinking boundaries while building confidence?"
+        }
+      ]
+    }
   }
 }

@@ -3,10 +3,160 @@
   "title": "After the Storm",
   "theme": "Storm Cleanup",
   "stories": {
-    "simple": "Piya walked the beach after last night's storm. Trash was everywhere—plastic bottles, fishing nets, and broken wood scattered across the sand. Near the water, she spotted a sea turtle with plastic wrapped around its neck. Piya carefully cut the turtle free with her scissors. The turtle splashed back into the waves, safe again. Feeling motivated, Piya started collecting trash. Sam and Maya saw her working and came to help. Together they filled six garbage bags. The beach looked much better, and they knew the sea animals would be safer.",
-
-    "regular": "Piya surveyed the beach after the previous night's violent storm. The coastline was littered with debris—tangled fishing nets, plastic containers, and storm-tossed wood created a dangerous obstacle course for marine life. Among the wreckage, she discovered a sea turtle struggling with fishing line wound tightly around its shell. Using careful precision, she freed the exhausted animal and watched with relief as it swam toward deeper water. The successful rescue sparked an idea. Piya recruited Sam and Maya to join a comprehensive beach cleanup effort. Working methodically, they removed bottles, bags, and sharp fragments that posed ongoing threats to wildlife. By evening, the restored coastline reflected their commitment to protecting the fragile marine ecosystem.",
-
-    "challenge": "Piya conducted a systematic assessment of storm damage along the previously pristine coastline. The beach ecosystem had been severely impacted by debris accumulation—discarded fishing equipment, microplastics, and construction materials created a complex environmental hazard requiring immediate intervention. While documenting the damage, she encountered a distressed hawksbill turtle entangled in monofilament fishing line, its mobility severely compromised. Employing careful disentanglement techniques she'd learned in marine biology class, Piya successfully liberated the threatened reptile while collecting behavioral data for her ongoing conservation research project. Recognizing the broader ecological implications, she organized Sam and Maya into a strategic habitat restoration initiative. Their coordinated debris removal effort and systematic cataloging of waste types provided valuable data for local environmental organizations while demonstrating how community-based conservation efforts can effectively address human-caused ecological disruption."
+    "simple": {
+      "narrative": [
+        "Piya walked the beach after last night's crazy storm.",
+        "Trash was everywhere - plastic bottles, tangled fishing nets, and broken wood scattered across the sand.",
+        "Near the water, she spotted a sea turtle with plastic wrapped around its neck."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Piya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Carefully free the turtle from the plastic"
+            },
+            {
+              "letter": "B", 
+              "text": "Get Sam and Maya to help with the cleanup"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Piya carefully cut the plastic away with her scissors. The turtle splashed back into the waves, free and safe."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Sam and Maya came running when Piya called. 'This mess is huge - we'll need teamwork!' Maya said."
+        }
+      ],
+      "continuation": [
+        "Feeling motivated by helping the turtle, Piya started collecting trash.",
+        "Sam and Maya saw her working hard and came to help without being asked.",
+        "Together they filled six garbage bags with bottles, plastic, and dangerous debris.",
+        "The beach looked so much better, and they knew sea animals would be safer now."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever seen pollution or trash that made you want to take action? What did you do about it?"
+        },
+        {
+          "type": "action",
+          "question": "What's one thing you could do this week to help protect the environment in your area?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Piya walked along the beach after the previous night's violent storm.",
+        "The coastline was a mess - tangled fishing nets, plastic containers, and storm-tossed wood created a dangerous obstacle course for marine life.",
+        "Among the wreckage, she discovered a sea turtle struggling with fishing line wound tightly around its shell."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya help the turtle?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use careful precision to free the exhausted animal"
+            },
+            {
+              "letter": "B",
+              "text": "Get Sam and Maya to help with the rescue first"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Piya worked carefully to cut away the fishing line. The turtle swam toward deeper water with relief."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Sam and Maya arrived quickly and helped Piya safely free the turtle as a team."
+        }
+      ],
+      "continuation": [
+        "The successful rescue sparked an idea in Piya's mind.",
+        "She recruited Sam and Maya to join a comprehensive beach cleanup effort.",
+        "Working methodically, they removed bottles, bags, and sharp fragments that posed ongoing threats to wildlife.",
+        "By evening, the restored coastline reflected their commitment to protecting the marine ecosystem."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you see an environmental problem, what motivates you to take action instead of just walking away?"
+        },
+        {
+          "type": "action",
+          "question": "How could you organize others in your community to tackle environmental issues together?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Piya surveyed the storm damage along the coastline, analyzing the environmental impact.",
+        "The beach ecosystem had been severely affected by debris - discarded fishing equipment, microplastics, and construction materials created complex hazards requiring immediate intervention.",
+        "While documenting the damage, she encountered a distressed hawksbill turtle entangled in monofilament fishing line, its mobility seriously compromised."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya approach this critical situation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Apply marine biology techniques to safely free the turtle while collecting research data"
+            },
+            {
+              "letter": "B",
+              "text": "Coordinate with Sam and Maya to develop a systematic rescue and cleanup strategy"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Using disentanglement techniques from marine biology class, Piya successfully liberated the turtle while gathering behavioral data for her conservation research."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Sam and Maya joined Piya to form a strategic response team, combining their skills to address both immediate rescue needs and long-term environmental restoration."
+        }
+      ],
+      "continuation": [
+        "Recognizing the broader ecological implications, Piya organized a strategic habitat restoration initiative.",
+        "Their coordinated debris removal effort included systematic cataloging of waste types to provide valuable data for local environmental organizations.",
+        "The project demonstrated how community-based conservation efforts can effectively address human-caused ecological disruption.",
+        "By sunset, their work had not only restored the beach but created a model for future environmental action."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you balance immediate action with long-term strategic thinking when facing environmental challenges?"
+        },
+        {
+          "type": "action",
+          "question": "What steps could you take to become better prepared for environmental emergency situations and conservation work in your area?"
+        }
+      ]
+    }
   }
 }

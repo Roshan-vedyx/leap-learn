@@ -1,11 +1,162 @@
 {
-  "id": "new-kid",
-  "title": "Welcome to Our School",
-  "theme": "New Kid",
+  "id": "cultural-exchange",
+  "title": "Learning from Each Other",
+  "theme": "Cultural Exchange",
   "stories": {
-  "simple": "Sam spotted a new student sitting completely alone at lunch, looking nervous and sad about being in a totally unfamiliar place. The new kid seemed overwhelmed by all the noise and unfamiliar faces everywhere. [CHOICE POINT 1] How should Sam help this new student feel more welcome? A) Walk over and introduce yourself, then invite them to sit with your friends, B) Ask your friends to come over together so the new kid meets everyone at once, or C) Sit nearby first to make sure they're okay with company before approaching. [CONSEQUENCE 1A] Sam walked over with a friendly smile and said 'Hi, I'm Sam. Want to join us?' and Alex gratefully accepted the invitation. [CONSEQUENCE 1B] When Sam's whole friend group approached together, Alex felt a bit overwhelmed but appreciated everyone's enthusiasm to include them. [CONSEQUENCE 1C] Sitting nearby first helped Sam notice that Alex seemed ready for company, making the introduction feel more natural. Alex smiled huge and said 'Yes please! I'm Alex and I'm so relieved someone talked to me!' They shared lunch and discovered they both loved basketball, video games, and funny movies. [CHOICE POINT 2] How can Sam help Alex feel truly connected to the school community? A) Invite Alex to hang out after school and on weekends to build stronger friendship, B) Introduce Alex to different friend groups so they can find their perfect social fit, or C) Help Alex discover clubs or activities where they can meet people with similar interests. [PERSONAL REFLECTION] Have you ever been the new person somewhere? How did it feel when someone reached out to include you? [ACTION REFLECTION] How could you notice and help new people feel welcome in your school or community?",
-    "regular": "Sam noticed a solitary new student sitting nervously in the bustling cafeteria, clearly feeling overwhelmed by the chaotic environment and sea of unfamiliar faces during their first week at school. The newcomer's body language suggested they were struggling with the challenging transition that transferring schools represents for most students. [CHOICE POINT 1] Helping someone navigate this difficult social situation would require thoughtful and sensitive approaches. A) Approach directly with genuine warmth to introduce yourself and offer immediate inclusion in your established friend group, B) Coordinate with your friends to make a group introduction that shows the new student they're welcomed by multiple people, or C) Position yourself nearby to gauge their comfort level and readiness for social interaction before making direct contact. [CONSEQUENCE 1A] Direct friendly approach worked perfectly as Sam's genuine warmth immediately put Alex at ease, leading to natural conversation and grateful acceptance of the lunch invitation. [CONSEQUENCE 1B] Group introduction created initial overwhelm, but Alex appreciated seeing that multiple students cared about including newcomers in their social circles. [CONSEQUENCE 1C] Reading social cues first helped Sam time the introduction perfectly when Alex seemed most receptive to making new connections. Through sharing lunch conversations and discovering mutual interests in basketball, gaming, and entertainment, Alex began feeling genuinely comfortable in their new school environment. [CHOICE POINT 2] Having established initial connection, what's the best way to help Alex develop lasting friendships and school belonging? A) Extend friendship beyond school hours through weekend activities and ongoing social connections that build deeper relationships, B) Facilitate introductions to diverse friend groups so Alex can discover where they fit best socially and academically, or C) Connect Alex with extracurricular activities, sports teams, or clubs where they can meet like-minded peers and develop new interests. [PERSONAL REFLECTION] Think about times when you've felt like an outsider - what actions from others made the biggest difference in helping you feel accepted and included? [ACTION REFLECTION] How can you develop better awareness of students who might be feeling isolated and create more inclusive social environments in your daily interactions?",
+    "simple": {
+      "narrative": [
+        "Suha met a new student named Aryaan who came from a different country and spoke two languages.",
+        "At first, some of Aryaan's customs seemed really different and confusing to Suha.",
+        "She wanted to be friends but wasn't sure how to handle feeling uncertain about these cultural differences."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha handle feeling uncertain about these cultural differences?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Ask Aryaan friendly questions to learn more about their background"
+            },
+            {
+              "letter": "B", 
+              "text": "Watch and listen quietly to understand before asking anything"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Aryaan was excited to share stories about their homeland and taught Suha some awesome words in their native language."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Observing carefully helped Suha notice how respectful and kind Aryaan's family traditions were."
+        }
+      ],
+      "continuation": [
+        "Suha shared her favorite family traditions and foods with Aryaan too.",
+        "They discovered they both absolutely loved soccer, music, and funny movies!",
+        "Their friendship grew stronger as they learned about each other's cultures.",
+        "Soon they were teaching other classmates about the cool things they'd learned from each other."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever felt nervous about differences between you and someone new? What helped you feel more comfortable?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create welcoming spaces for people from different backgrounds?"
+        }
+      ]
+    },
     
-    "challenge": "Sam observed a clearly distressed new student experiencing the profound social isolation and cultural adjustment challenges that characterize difficult school transitions, particularly when moving during mid-academic years without established peer networks. The newcomer's visible anxiety and withdrawn behavior indicated they were struggling with the overwhelming social dynamics and institutional navigation that most students take for granted. [CHOICE POINT 1] Facilitating meaningful social integration for struggling new students requires sophisticated interpersonal skills and culturally sensitive approaches. A) Initiate authentic personal connection through genuine conversation, empathetic listening, and immediate inclusion in established social networks while respecting individual comfort levels and social preferences, B) Mobilize collaborative peer support by coordinating group introductions that demonstrate community-wide welcome while avoiding overwhelming social pressure or forced interactions, or C) Practice strategic social assessment by observing behavioral cues, communication patterns, and comfort levels to time interventions appropriately and respect individual autonomy in social engagement. [CONSEQUENCE 1A] Authentic personal outreach created immediate relief for Alex's social anxiety as Sam's genuine empathy and inclusive leadership provided the emotional safety needed for vulnerable relationship formation. [CONSEQUENCE 1B] Coordinated group welcome efforts demonstrated community values around inclusion while requiring careful management to avoid overwhelming Alex during their vulnerable adjustment period. [CONSEQUENCE 1C] Thoughtful social assessment enabled Sam to approach Alex when they seemed most emotionally prepared for connection, resulting in natural relationship development and mutual comfort. Through sustained investment in authentic friendship building, they discovered profound compatibility in athletic interests, technological hobbies, and entertainment preferences that created lasting bonds beyond surface-level social inclusion. [CHOICE POINT 2] Having established foundational friendship, what's the most effective approach to supporting Alex's long-term social integration and academic success? A) Develop comprehensive friendship networks through extended social activities, family involvement, and ongoing emotional support that creates genuine belonging rather than superficial inclusion, B) Facilitate strategic introductions across diverse peer groups, academic partnerships, and social circles that help Alex identify their optimal community connections and personal identity expression, or C) Connect Alex with structured extracurricular opportunities, leadership development programs, and interest-based communities that provide multiple pathways for social engagement and personal growth. [PERSONAL REFLECTION] How do your own experiences with feeling excluded or welcomed influence your capacity for empathy and your commitment to creating inclusive environments for others? [ACTION REFLECTION] What systematic approaches could you develop to identify and support students experiencing social isolation while building more welcoming and inclusive school communities for everyone?"
+    "regular": {
+      "narrative": [
+        "Suha developed an incredible friendship with Aryaan, a recently immigrated student whose cultural background and family traditions differed significantly from her own experiences.",
+        "Initially, language barriers and unfamiliar customs created some awkward moments that made both students feel uncertain about connecting.",
+        "Building this cross-cultural friendship would require patience, curiosity, and respectful approaches to learning about differences."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the best approach for Suha to build this cross-cultural friendship?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Start genuine conversations asking respectful questions about Aryaan's background and traditions"
+            },
+            {
+              "letter": "B",
+              "text": "Observe and listen carefully to understand Aryaan's style before making assumptions"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Open conversations revealed fascinating insights about Aryaan's homeland traditions and family celebrations while creating opportunities for mutual cultural sharing."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Thoughtful observation helped Suha recognize the wisdom and beauty in Aryaan's cultural practices while avoiding misunderstandings."
+        }
+      ],
+      "continuation": [
+        "Through patient relationship building, they discovered remarkable common ground in their love for athletics, music, and academic challenges.",
+        "Both families began sharing cultural celebrations, foods, and stories that enriched everyone's understanding.",
+        "Their friendship became a bridge that helped other students feel more comfortable connecting across cultural differences.",
+        "The school community grew stronger as more students followed their example of celebrating diversity."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What experiences have taught you the most about appreciating cultural differences, and how has learning about other cultures enriched your perspective?"
+        },
+        {
+          "type": "action",
+          "question": "How could you actively contribute to creating more inclusive environments where students from diverse backgrounds feel valued and connected?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Suha forged an extraordinary intercultural friendship with Aryaan, whose recent immigration experience and distinct cultural heritage represented a significant departure from her familiar social environment.",
+        "Initial relationship development involved navigating complex linguistic barriers, unfamiliar social customs, and unconscious cultural assumptions that required deliberate cultural competency development.",
+        "Establishing authentic cross-cultural connection would demand sophisticated intercultural communication strategies and genuine commitment to mutual understanding."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha approach building authentic cross-cultural understanding with Aryaan?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Engage in systematic cultural dialogue through respectful questioning and reciprocal sharing of experiences and values"
+            },
+            {
+              "letter": "B",
+              "text": "Practice patient observational learning to understand Aryaan's communication patterns before making interpretive assumptions"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Deep cultural conversations revealed incredible insights about Aryaan's homeland experiences and migration journey while creating opportunities for authentic mutual cultural exchange."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Mindful observation helped Suha recognize the sophistication embedded in Aryaan's cultural practices while avoiding superficial judgments based on unfamiliar behaviors."
+        }
+      ],
+      "continuation": [
+        "The more time they spent together, they realized they had way more in common than they first thought.",
+        "Their friendship became a model for intercultural competency that influenced school policies around immigrant student support and cultural celebration.",
+        "Both students developed enhanced global perspectives and advocacy skills that prepared them for leadership in increasingly diverse communities.",
+        "Their collaborative efforts created lasting institutional changes that benefited future students from diverse cultural backgrounds."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has exposure to different cultural perspectives challenged your assumptions and expanded your understanding of human diversity and shared experiences?"
+        },
+        {
+          "type": "action", 
+          "question": "What specific actions could you take to actively promote cultural inclusion while celebrating the unique contributions that diverse backgrounds bring to your community?"
+        }
+      ]
+    }
   }
-  }
+}

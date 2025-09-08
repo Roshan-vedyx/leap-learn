@@ -1,4 +1,4 @@
-// src/pages/StoryPage.tsx - Fixed version
+// src/pages/StoryPage.tsx - Updated for new JSON format
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'wouter'
 import { audio, storage } from '@/lib/utils'
@@ -6,22 +6,47 @@ import { DynamicStoryLoader } from '@/utils/dynamicStoryLoader'
 import { useSessionStore } from '@/stores/sessionStore'
 import type { ComplexityLevel } from '@/types'
 
-interface StoryTemplate {
+// NEW: Updated interfaces for new JSON format
+interface NewStoryFormat {
   id: string
   title: string
   theme: string
   stories: {
-    simple: string
-    regular: string
-    challenge: string
+    simple: StoryLevel
+    regular: StoryLevel
+    challenge: StoryLevel
   }
 }
 
-interface StoryPageProps {
-  interest?: string
-  storyName?: string
+interface StoryLevel {
+  narrative: string[]
+  choice_points: ChoicePoint[]
+  consequences: Consequence[]
+  continuation: string[]
+  reflections: Reflection[]
 }
 
+interface ChoicePoint {
+  id: number
+  question: string
+  options: {
+    letter: string
+    text: string
+  }[]
+}
+
+interface Consequence {
+  choice_id: number
+  letter: string
+  text: string
+}
+
+interface Reflection {
+  type: 'personal' | 'action'
+  question: string
+}
+
+// Existing StoryBlock interface (keep for compatibility)
 type StoryBlock = {
   type: 'narration' | 'choice' | 'consequence' | 'reflection' | 'action' | 'continuation' | 'conclusion'
   text: string
@@ -30,23 +55,29 @@ type StoryBlock = {
   options?: { letter: string; text: string }[]
 }
 
+interface StoryPageProps {
+  interest?: string
+  storyName?: string
+}
+
 const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const [currentSection, setCurrentSection] = useState(0)
   const [isReading, setIsReading] = useState(false)
-  const [readingMode, setReadingMode] = useState<'text' | 'audio' | 'both'>('text')
   const [complexityLevel, setComplexityLevel] = useState<ComplexityLevel>('full')
-  const [story, setStory] = useState<StoryTemplate | null>(null)
+  const [story, setStory] = useState<NewStoryFormat | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [choices, setChoices] = useState<{ [choicePointId: number]: string }>({})
   const [showComplexityHint, setShowComplexityHint] = useState(false)
   const [, setLocation] = useLocation()
 
-  // NEW: Store reflections for CreatePage
   const { setStoryReflections } = useSessionStore()
   const [collectedReflections, setCollectedReflections] = useState<string[]>([])
+  const [blocks, setBlocks] = useState<StoryBlock[]>([])
 
-  // Load story template dynamically
+  const totalSections = blocks.length
+
+  // Load story template
   useEffect(() => {
     const loadStory = async () => {
       try {
@@ -55,21 +86,40 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
         const selectedInterests = JSON.parse(localStorage.getItem('selected-interests') || '[]')
         const currentInterest = interest || selectedInterests[0] || 'animals'
-        const currentStoryName = storyName || 'forest-rescue'
+        const currentStoryName = storyName || 'beach-rescue'
         
         const loadedStory = await DynamicStoryLoader.loadStory(currentInterest, currentStoryName)
         
         if (loadedStory) {
-          setStory(loadedStory)
+          setStory(loadedStory as NewStoryFormat)
         } else {
+          // Fallback story in new format
           setStory({
             id: 'fallback-story',
             title: 'Adventure Story',
             theme: 'general',
             stories: {
-              simple: 'There was an adventure. It was fun. The end.',
-              regular: 'There was an exciting adventure that everyone enjoyed.',
-              challenge: 'An extraordinary adventure unfolded, captivating everyone who experienced it.'
+              simple: {
+                narrative: ['There was an adventure.', 'It was fun.', 'The end.'],
+                choice_points: [],
+                consequences: [],
+                continuation: [],
+                reflections: []
+              },
+              regular: {
+                narrative: ['There was an exciting adventure that everyone enjoyed.'],
+                choice_points: [],
+                consequences: [],
+                continuation: [],
+                reflections: []
+              },
+              challenge: {
+                narrative: ['An extraordinary adventure unfolded, captivating everyone who experienced it.'],
+                choice_points: [],
+                consequences: [],
+                continuation: [],
+                reflections: []
+              }
             }
           })
         }
@@ -94,101 +144,82 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     storage.set('current-complexity-level', complexityLevel)
   }, [complexityLevel])
 
-  useEffect(() => {
-    const hasSeenHint = storage.get('complexity-hint-seen', false)
-    if (!hasSeenHint) {
-      setShowComplexityHint(true)
-      storage.set('complexity-hint-seen', true)
-    }
-  }, [])
+  // NEW: Parse new JSON format into StoryBlocks
+  const parseNewFormatStory = (storyLevel: StoryLevel): { blocks: StoryBlock[], reflections: string[] } => {
+    const blocks: StoryBlock[] = []
+    const reflections: string[] = []
 
-  const getCurrentStoryText = (): string => {
-    if (!story) return ''
+    // Add narrative blocks
+    storyLevel.narrative.forEach(text => {
+      if (text.trim()) {
+        blocks.push({
+          type: 'narration',
+          text: text.trim()
+        })
+      }
+    })
+
+    // Add choice points and consequences
+    storyLevel.choice_points.forEach(choicePoint => {
+      // Add choice block
+      blocks.push({
+        type: 'choice',
+        text: choicePoint.question,
+        choicePointId: choicePoint.id,
+        options: choicePoint.options
+      })
+
+      // Add corresponding consequences
+      const choiceConsequences = storyLevel.consequences.filter(c => c.choice_id === choicePoint.id)
+      choiceConsequences.forEach(consequence => {
+        blocks.push({
+          type: 'consequence',
+          text: consequence.text,
+          choicePointId: choicePoint.id,
+          choiceLetter: consequence.letter
+        })
+      })
+    })
+
+    // Add continuation
+    storyLevel.continuation.forEach(text => {
+      if (text.trim()) {
+        blocks.push({
+          type: 'continuation',
+          text: text.trim()
+        })
+      }
+    })
+
+    // Collect reflections for CreatePage
+    storyLevel.reflections.forEach(reflection => {
+      reflections.push(reflection.question)
+      
+      // Also add as action blocks for immediate display
+      blocks.push({
+        type: reflection.type === 'personal' ? 'reflection' : 'action',
+        text: reflection.question
+      })
+    })
+
+    return { blocks, reflections }
+  }
+
+  const getCurrentStoryLevel = (): StoryLevel | null => {
+    if (!story) return null
+    
     const storyKey = complexityLevel === 'simple' ? 'simple' : 
                      complexityLevel === 'challenge' ? 'challenge' : 'regular'
+    
     return story.stories[storyKey] || story.stories.regular
   }
 
-  // FIXED: Parse blocks and collect reflections (moved to useEffect to prevent infinite loop)
-  const parseStoryBlocks = (storyText: string): { blocks: StoryBlock[], reflections: string[] } => {
-    let choicePointCounter = 0
-    const rawBlocks = storyText.split(/\n+/)
-    const parsedBlocks: StoryBlock[] = []
-    const reflections: string[] = []
-
-    for (let i = 0; i < rawBlocks.length; i++) {
-      let block = rawBlocks[i].trim()
-
-      // Skip empty blocks
-      if (block.length === 0) continue
-
-      if (block.startsWith('[CHOICE POINT')) {
-        choicePointCounter++
-        const question = block.replace(/\[CHOICE POINT \d+\]/, '').trim()
-        const options: { letter: string; text: string }[] = []
-        let j = i + 1
-
-        while (j < rawBlocks.length && /^[A-C]\)/.test(rawBlocks[j].trim())) {
-          const line = rawBlocks[j].trim()
-          const match = line.match(/^([A-C])\)\s*(.+)$/)
-          if (match) {
-            options.push({ letter: match[1], text: match[2] })
-          }
-          j++
-        }
-
-        parsedBlocks.push({
-          type: 'choice',
-          text: question,
-          choicePointId: choicePointCounter,
-          options
-        })
-
-        i = j - 1
-      }
-      else if (block.startsWith('[CONSEQUENCE')) {
-        const letter = block.match(/\[CONSEQUENCE (.)\]/)?.[1]
-        parsedBlocks.push({
-          type: 'consequence',
-          text: block,
-          choiceLetter: letter,
-          choicePointId: choicePointCounter
-        })
-      }
-      // COLLECT reflections instead of creating blocks
-      else if (block.startsWith('[PERSONAL REFLECTION]')) {
-        const reflectionText = block.replace('[PERSONAL REFLECTION]', '').trim()
-        reflections.push(reflectionText)
-        // Don't add to parsedBlocks - we'll show these in CreatePage
-      }
-      else if (block.startsWith('[ACTION REFLECTION]')) {
-        parsedBlocks.push({ type: 'action', text: block })
-      }
-      else if (block.startsWith('[STORY CONTINUATION]')) {
-        parsedBlocks.push({ type: 'continuation', text: block })
-      }
-      else if (block.startsWith('[FINAL CONCLUSION]')) {
-        parsedBlocks.push({ type: 'conclusion', text: block })
-      }
-      // FIXED: Only add substantial content as narration
-      else if (block.trim().length > 0 && !block.match(/^\[.*\]$/)) {
-        parsedBlocks.push({ type: 'narration', text: block.trim() })
-      }
-    }
-
-    return { blocks: parsedBlocks, reflections }
-  }
-
-  // FIXED: Parse story and set reflections in useEffect to prevent infinite loop
-  const [blocks, setBlocks] = useState<StoryBlock[]>([])
-  const totalSections = blocks.length
-
+  // Parse story when it changes
   useEffect(() => {
-    if (story) {
-      const storyText = getCurrentStoryText()
-      const result = parseStoryBlocks(storyText)
+    const storyLevel = getCurrentStoryLevel()
+    if (storyLevel) {
+      const result = parseNewFormatStory(storyLevel)
       
-      // CRITICAL FIX: Ensure we always have at least one block
       if (result.blocks.length === 0) {
         console.warn('⚠️ Story parsing failed, creating fallback block')
         result.blocks = [{
@@ -203,20 +234,12 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     }
   }, [story, complexityLevel])
 
-  // FIXED: Clean text for TTS
   const handleReadAloud = async (textToRead?: string) => {
     if (!audio.isSpeechSynthesisSupported()) return
     await new Promise(resolve => setTimeout(resolve, 100))
     const currentAccent = storage.get('tts-accent', 'GB') as 'US' | 'GB' | 'IN'
     
-    let text = textToRead || (blocks[currentSection]?.text) || 'Story content not available'
-    
-    // FIXED: Remove prefixes for TTS
-    text = text.replace(/\[CONSEQUENCE .\]\s*/g, '')
-    text = text.replace(/\[PERSONAL REFLECTION\]\s*/g, '')
-    text = text.replace(/\[ACTION REFLECTION\]\s*/g, '')
-    text = text.replace(/\[STORY CONTINUATION\]\s*/g, '')
-    text = text.replace(/\[FINAL CONCLUSION\]\s*/g, '')
+    let text = textToRead || blocks[currentSection]?.text || 'Story content not available'
     
     setIsReading(true)
     try {
@@ -242,13 +265,10 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const handleComplexityChange = (newLevel: ComplexityLevel) => {
     setComplexityLevel(newLevel)
     setShowComplexityHint(false)
-    // The useEffect will handle re-parsing when complexityLevel changes
   }
 
-  // FIXED: Navigate to CreatePage at story end
   const handleNextSection = () => {
     if (currentSection === totalSections - 1) {
-      // Story finished - save reflections and go to CreatePage
       setStoryReflections(collectedReflections)
       setLocation('/create')
     } else {
@@ -283,29 +303,58 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
       case 'consequence':
         if (choices[block.choicePointId!] === block.choiceLetter) {
-          return <p key={idx} className="text-gray-700 italic">{block.text.replace(/\[CONSEQUENCE .\]/, '')}</p>
+          return <p key={idx} className="text-gray-700 italic my-4">{block.text}</p>
         }
         return null
 
+      case 'reflection':
+        return (
+          <div key={idx} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 my-4">
+            <p className="font-semibold text-yellow-800">🤔 Reflection: {block.text}</p>
+          </div>
+        )
+
       case 'action':
-        return <div key={idx} className="bg-green-50 border border-green-200 rounded-lg p-4 my-4 font-semibold">🌍 {block.text.replace('[ACTION REFLECTION]', '').trim()}</div>
+        return (
+          <div key={idx} className="bg-green-50 border border-green-200 rounded-lg p-4 my-4">
+            <p className="font-semibold text-green-800">🌍 Action: {block.text}</p>
+          </div>
+        )
+
       case 'continuation':
-        return <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">{block.text.replace('[STORY CONTINUATION]', '').trim()}</div>
-      case 'conclusion':
-        return <div key={idx} className="bg-purple-50 border border-purple-200 rounded-lg p-4 my-4 font-bold">⭐ {block.text.replace('[FINAL CONCLUSION]', '').trim()}</div>
+        return (
+          <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">
+            <p className="text-blue-800">{block.text}</p>
+          </div>
+        )
+
       default:
-        let cleanText = block.text
-        cleanText = cleanText.replace(/\[CONSEQUENCE .\]\s*/g, '')
-        cleanText = cleanText.replace(/\[PERSONAL REFLECTION\]\s*/g, '')
-        cleanText = cleanText.replace(/\[ACTION REFLECTION\]\s*/g, '')
-        cleanText = cleanText.replace(/\[STORY CONTINUATION\]\s*/g, '')
-        cleanText = cleanText.replace(/\[FINAL CONCLUSION\]\s*/g, '')
-        return <p key={idx} className="mb-3">{cleanText}</p>
+        return <p key={idx} className="mb-3 text-gray-800">{block.text}</p>
     }
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading story...</div>
-  if (error && !story) return <div className="min-h-screen flex items-center justify-center">Error loading story</div>
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p>Loading story...</p>
+      </div>
+    </div>
+  )
+
+  if (error && !story) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center text-red-600">
+        <p>Error loading story</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Try Again
+        </button>
+      </div>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -331,13 +380,11 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         <div className="bg-white rounded-xl p-6 border shadow-sm min-h-[150px]">
           {blocks.length > 0 && currentSection < blocks.length ? (
             renderBlock(blocks[currentSection], currentSection)
-          ) : story ? (
+          ) : (
             <div className="text-center py-8">
-              <p className="text-gray-600 mb-4">Story parsing in progress...</p>
+              <p className="text-gray-600 mb-4">Story loading...</p>
               <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mx-auto"></div>
             </div>
-          ) : (
-            <p className="text-gray-500">Loading story section...</p>
           )}
         </div>
 
@@ -346,13 +393,13 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
           <button
             onClick={() => setCurrentSection(s => Math.max(0, s - 1))}
             disabled={currentSection === 0}
-            className="px-4 py-2 bg-blue-100 rounded-lg disabled:opacity-40"
+            className="px-4 py-2 bg-blue-100 rounded-lg disabled:opacity-40 min-h-[44px]"
           >
             ← Back
           </button>
           <button
             onClick={handleNextSection}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg min-h-[44px]"
           >
             {currentSection === totalSections - 1 ? 'Create Your Response →' : 'Next →'}
           </button>
@@ -360,13 +407,23 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
         {/* Controls */}
         <div className="flex gap-3 mt-6 flex-wrap">
-          <button onClick={() => handleReadAloud()} disabled={isReading} className="px-4 py-2 bg-green-100 rounded-lg">
+          <button 
+            onClick={() => handleReadAloud()} 
+            disabled={isReading} 
+            className="px-4 py-2 bg-green-100 rounded-lg min-h-[44px]"
+          >
             🔊 {isReading ? 'Reading...' : 'Read Aloud'}
           </button>
-          <button onClick={() => setCurrentSection(0)} className="px-4 py-2 bg-orange-100 rounded-lg">
+          <button 
+            onClick={() => setCurrentSection(0)} 
+            className="px-4 py-2 bg-orange-100 rounded-lg min-h-[44px]"
+          >
             🔄 Start Over
           </button>
-          <button onClick={() => setLocation('/interests')} className="px-4 py-2 bg-purple-100 rounded-lg">
+          <button 
+            onClick={() => setLocation('/interests')} 
+            className="px-4 py-2 bg-purple-100 rounded-lg min-h-[44px]"
+          >
             📚 New Story
           </button>
         </div>

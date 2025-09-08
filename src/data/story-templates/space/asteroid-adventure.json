@@ -3,10 +3,160 @@
   "title": "Rock Field Navigator",
   "theme": "Asteroid Adventure",
   "stories": {
-    "simple": "Rishi guided the spacecraft into the asteroid belt, where massive space rocks tumbled through the darkness. The navigation computer beeped warnings as house-sized boulders spun past the viewports. Smaller fragments peppered the area like cosmic hailstones. Rishi's hands gripped the controls as the ship weaved between the obstacles.\n\n[CHOICE POINT 1] How should Rishi navigate this dangerous field?\nA) Trust the computer's calculated safe route\nB) Use manual controls to thread between the rocks\nC) Find a temporary shelter behind a large asteroid\n\n[CONSEQUENCE A] The computer's route worked perfectly, guiding them through the safest channels.\n[CONSEQUENCE B] Rishi's piloting skills proved crucial when unexpected rocks appeared in their path.\n[CONSEQUENCE C] Taking shelter gave Rishi time to study the asteroid movements and plan ahead.\n\n[STORY CONTINUATION] Hours passed as Rishi maintained constant focus. Each decision could mean the difference between safe passage and disaster.\n\n[PERSONAL REFLECTION] Have you ever had to concentrate really hard on something important for a long time? How did you stay focused?\n\nSudenly, the ship's sensors detected something unusual among the asteroids.\n\n[CHOICE POINT 2] What should Rishi investigate?\nA) Scan the mysterious metallic object drifting nearby\nB) Collect samples from the colorful asteroid minerals\nC) Map the asteroid field for future travelers\n\n[CONSEQUENCE A] The metallic object turned out to be part of an ancient spacecraft—an incredible discovery!\n[CONSEQUENCE B] The mineral samples contained rare elements that could help future space missions.\n[CONSEQUENCE C] Rishi's detailed maps would help other pilots navigate safely through this dangerous region.\n\n[STORY CONTINUATION] What started as a navigation challenge had become an important scientific discovery.\n\n[FINAL CONCLUSION] Rishi had proven that careful observation and steady nerves could turn danger into discovery.\n\n[ACTION REFLECTION] What challenging situation have YOU navigated that taught you something important?",
-
-    "regular": "Rishi piloted the spacecraft deeper into the asteroid belt, where debris from an ancient planetary collision created a treacherous obstacle course. The navigation array constantly updated trajectory calculations as rocks ranging from pebble-size to mountain-scale drifted in unpredictable patterns. Gravitational forces from larger asteroids pulled smaller fragments into chaotic orbits, requiring split-second adjustments to avoid catastrophic impacts. Rishi's training kicked in as muscle memory guided precise thruster burns and course corrections.\n\n[CHOICE POINT 1] Which navigation strategy should Rishi employ?\nA) Follow the computer's probability-based routing system\nB) Rely on instinct and manual piloting through the gaps\nC) Use a larger asteroid's gravity well for temporary protection\n\n[CONSEQUENCE A] The algorithmic route proved reliable, threading them safely through the densest rock concentrations.\n[CONSEQUENCE B] Rishi's intuitive flying saved them when sensors failed to detect a tumbling boulder.\n[CONSEQUENCE C] The gravitational shelter provided time to recalibrate systems and observe movement patterns.\n\n[STORY CONTINUATION] Three hours into the crossing, Rishi had developed an almost supernatural feel for reading the asteroid field's rhythms and dangers.\n\n[PERSONAL REFLECTION] When mastering something difficult, how do you know when you've moved from following rules to developing real intuition?\n\nDeep in the belt, the ship's geological scanners detected unusual readings from a cluster of metallic asteroids.\n\n[CHOICE POINT 2] How should Rishi respond to this discovery?\nA) Analyze the mineral composition of these unique rocks\nB) Document the location for mining operations\nC) Investigate potential signs of ancient spacecraft debris\n\n[CONSEQUENCE A] The analysis revealed rare platinum-group metals essential for advanced space technology.\n[CONSEQUENCE B] Rishi's coordinates would help establish the first asteroid mining operation in this sector.\n[CONSEQUENCE C] Among the rocks, Rishi found hull fragments from a ship that had attempted this crossing decades earlier.\n\n[STORY CONTINUATION] The asteroid field had transformed from obstacle into opportunity—yielding both scientific knowledge and resources for humanity's expansion into space.\n\n[FINAL CONCLUSION] Rishi emerged not just as a skilled pilot, but as an explorer who had expanded the boundaries of human knowledge.\n\n[ACTION REFLECTION] How could YOU turn a challenging situation into an opportunity for discovery or learning?",
-
-    "challenge": "Rishi initiated transit through the asteroid belt's most densely populated sector, where remnants of a primordial planetary formation event had created a dynamic debris field spanning millions of cubic kilometers. The spacecraft's quantum navigation system processed gravitational interactions between thousands of rocky bodies while calculating safe passage vectors through constantly shifting spatial configurations. Massive metallic asteroids generated complex magnetic fields that interfered with standard navigation protocols, demanding adaptive piloting strategies that balanced computational precision with intuitive spatial reasoning.\n\n[CHOICE POINT 1] Which approach should guide Rishi's navigation philosophy?\nA) Integrate AI-assisted trajectory modeling with human judgment\nB) Employ traditional dead-reckoning techniques adapted for three-dimensional space\nC) Develop real-time gravitational mapping to predict asteroid movements\n\n[CONSEQUENCE A] The hybrid approach proved optimal—computers calculated possibilities while human intuition made final decisions.\n[CONSEQUENCE B] Classical navigation principles, modified for microgravity environments, provided reliable backup when sensors failed.\n[CONSEQUENCE C] Gravitational mapping revealed hidden patterns in asteroid clustering that standard charts had missed.\n\n[STORY CONTINUATION] Four hours of intense piloting had taught Rishi that successful space navigation required balancing technological capabilities with fundamental understanding of celestial mechanics.\n\n[PERSONAL REFLECTION] When solving complex problems, how do you decide when to trust technology versus your own analytical abilities?\n\nDeep within the belt, spectroscopic analysis detected anomalous readings suggesting the presence of rare earth elements critical for advanced propulsion systems.\n\n[CHOICE POINT 2] How should Rishi leverage this scientific discovery?\nA) Establish precise mining coordinates for future expeditions\nB) Conduct comprehensive geological surveys of the mineral-rich zone\nC) Investigate evidence of previous exploration attempts in the area\n\n[CONSEQUENCE A] Rishi's coordinates enabled the first successful asteroid mining operation, providing materials for interplanetary expansion.\n[CONSEQUENCE B] The geological data revealed formation processes that advanced understanding of early solar system development.\n[CONSEQUENCE C] Archaeological evidence suggested other explorers had reached this location, adding mystery to the scientific discovery.\n\n[STORY CONTINUATION] Rishi's navigation challenge had evolved into groundbreaking research that would influence humanity's relationship with space exploration for generations.\n\n[FINAL CONCLUSION] Through combining technical expertise with scientific curiosity, Rishi had transformed a dangerous passage into a landmark discovery.\n\n[ACTION REFLECTION] How might YOU approach learning a complex skill that requires both technical knowledge and creative problem-solving?"
+    "simple": {
+      "narrative": [
+        "Rishi guided the spacecraft into the asteroid belt, where massive space rocks tumbled through the darkness.",
+        "The navigation computer beeped warnings as house-sized boulders spun past the viewports.",
+        "Smaller fragments peppered the area like cosmic hailstones, and Rishi's hands gripped the controls tightly."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi navigate this dangerous field?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Trust the computer's calculated safe route"
+            },
+            {
+              "letter": "B", 
+              "text": "Use manual controls to thread between the rocks"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The computer's route worked perfectly, guiding them through the safest channels between the spinning rocks."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Rishi's piloting skills proved crucial when unexpected rocks appeared in their path - quick reflexes saved the day!"
+        }
+      ],
+      "continuation": [
+        "Hours passed as Rishi maintained constant focus, weaving the ship between obstacles.",
+        "Each decision could mean the difference between safe passage and disaster.",
+        "Suddenly, the ship's sensors detected something unusual among the asteroids.",
+        "What started as a navigation challenge was about to become something much more interesting."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever had to concentrate really hard on something important for a long time? How did you stay focused?"
+        },
+        {
+          "type": "action",
+          "question": "What challenging situation have you navigated that taught you something important?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Rishi piloted the spacecraft deeper into the asteroid belt, where debris from an ancient planetary collision created a treacherous obstacle course.",
+        "The navigation array constantly updated trajectory calculations as rocks ranging from pebble-size to mountain-scale drifted in unpredictable patterns.",
+        "Gravitational forces from larger asteroids pulled smaller fragments into chaotic orbits, requiring split-second adjustments to avoid catastrophic impacts."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which navigation strategy should Rishi employ?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Follow the computer's probability-based routing system"
+            },
+            {
+              "letter": "B",
+              "text": "Rely on instinct and manual piloting through the gaps"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The algorithmic route proved reliable, threading them safely through the densest rock concentrations."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Rishi's intuitive flying saved them when sensors failed to detect a tumbling boulder in their blind spot."
+        }
+      ],
+      "continuation": [
+        "Rishi's training kicked in as muscle memory guided precise thruster burns and course corrections.",
+        "Three hours into the crossing, Rishi had developed an almost supernatural feel for reading the asteroid field's rhythms and dangers.",
+        "Deep in the belt, the ship's geological scanners detected unusual readings from a cluster of metallic asteroids.",
+        "The asteroid field had transformed from obstacle into opportunity - yielding both scientific knowledge and resources for humanity's expansion into space."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When mastering something difficult, how do you know when you've moved from following rules to developing real intuition?"
+        },
+        {
+          "type": "action",
+          "question": "How could you turn a challenging situation into an opportunity for discovery or learning?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Rishi initiated transit through the asteroid belt's most densely populated sector, where remnants of a primordial planetary formation event had created a dynamic debris field spanning millions of cubic kilometers.",
+        "The spacecraft's quantum navigation system processed gravitational interactions between thousands of rocky bodies while calculating safe passage vectors through constantly shifting spatial configurations.",
+        "Massive metallic asteroids generated complex magnetic fields that interfered with standard navigation protocols, demanding adaptive piloting strategies."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which approach should guide Rishi's navigation philosophy?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Integrate AI-assisted trajectory modeling with human judgment"
+            },
+            {
+              "letter": "B",
+              "text": "Employ traditional dead-reckoning techniques adapted for three-dimensional space"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The hybrid approach proved optimal - computers calculated possibilities while human intuition made final decisions in real-time."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Classical navigation principles, modified for microgravity environments, provided reliable backup when sensors failed due to magnetic interference."
+        }
+      ],
+      "continuation": [
+        "Four hours of intense piloting had taught Rishi that successful space navigation required balancing technological capabilities with fundamental understanding of celestial mechanics.",
+        "Deep within the belt, spectroscopic analysis detected anomalous readings suggesting the presence of rare earth elements critical for advanced propulsion systems.",
+        "Rishi's navigation challenge had evolved into groundbreaking research that would influence humanity's relationship with space exploration for generations.",
+        "Through combining technical expertise with scientific curiosity, Rishi had transformed a dangerous passage into a landmark discovery."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When solving complex problems, how do you decide when to trust technology versus your own analytical abilities?"
+        },
+        {
+          "type": "action",
+          "question": "How might you approach learning a complex skill that requires both technical knowledge and creative problem-solving?"
+        }
+      ]
+    }
   }
 }

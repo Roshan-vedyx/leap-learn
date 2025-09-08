@@ -3,9 +3,162 @@
   "title": "The Kindness Detective",
   "theme": "School Mystery",
   "stories": {
-  "simple": "Awesome things kept happening around school and nobody could figure out who was behind it! Someone left super encouraging notes in lockers, brought treats for teachers, and secretly fixed broken stuff in classrooms. Piya was determined to crack this mystery. [CHOICE POINT 1] How should Piya investigate these random acts of kindness? A) Watch the hallways during different times to spot patterns, B) Ask teachers and students what they noticed about timing, or C) Follow the trail of supplies and tools being used. [CONSEQUENCE 1A] Watching carefully, Piya noticed the good deeds always happened when Mr. Garcia was working late after school hours. [CONSEQUENCE 1B] Talking to people revealed that kind things appeared right after maintenance rounds in each area. [CONSEQUENCE 1C] Following clues led to discovering colorful paper and small treats in Mr. Garcia's supply cart. When Piya asked Mr. Garcia about it, he smiled huge and admitted he loved making everyone's day brighter. [CHOICE POINT 2] How should Piya respond to discovering the secret kindness hero? A) Promise to keep it secret but ask to help with future projects, B) Suggest Mr. Garcia gets recognition for all his amazing work, or C) Start a kindness club inspired by his example. [PERSONAL REFLECTION] Have you ever done something nice for others without wanting credit? How did it feel? [ACTION REFLECTION] What small acts of kindness could you do at your school to make others smile?",
-    "regular": "A wave of mysterious good deeds had been sweeping through school - encouraging notes appearing in random lockers, surprise snacks for stressed teachers, and broken classroom equipment getting magically repaired overnight. The whole atmosphere felt more positive, but nobody could figure out who was behind these amazing acts of kindness. Piya became fascinated by this puzzle and decided to launch a full investigation. [CHOICE POINT 1] This mystery required some serious detective work to solve. A) Conduct systematic observations during different time periods to identify patterns in when and where kindness strikes, B) Interview teachers, students, and staff to gather witness accounts and timeline information, or C) Analyze the logistics - tracking supplies, tools, and access needed for each good deed. [CONSEQUENCE 1A] Strategic surveillance revealed that mysterious acts of kindness consistently occurred during extended maintenance periods when Mr. Garcia worked alone after hours. [CONSEQUENCE 1B] Comprehensive interviews uncovered a clear pattern connecting kind acts to custodial rounds, with timing that perfectly matched Mr. Garcia's schedule. [CONSEQUENCE 1C] Investigating the supply chain led to discovering craft materials and treats tucked discretely in Mr. Garcia's maintenance equipment. When Piya diplomatically approached Mr. Garcia about the mystery, his face lit up as he confessed that spreading joy around school had become his personal mission. [CHOICE POINT 2] Having solved the case, what's the best way to honor this discovery? A) Respect his preference for anonymity while offering to become a secret kindness partner, B) Help Mr. Garcia get the recognition he deserves for transforming school culture, or C) Use his inspiration to launch a school-wide kindness initiative. [PERSONAL REFLECTION] What motivates people to help others without seeking recognition, and how does witnessing kindness affect your own actions? [ACTION REFLECTION] How could you create a culture of kindness in your own community that celebrates both anonymous and recognized good deeds?",
+    "simple": {
+      "narrative": [
+        "Awesome things kept happening around school and nobody could figure out who was behind it!",
+        "Someone was leaving super encouraging notes in lockers, bringing treats for teachers, and secretly fixing broken stuff in classrooms.",
+        "Piya was determined to crack this mystery and find out who the secret kindness hero was."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya investigate these random acts of kindness?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Watch the hallways during different times to spot patterns"
+            },
+            {
+              "letter": "B", 
+              "text": "Ask teachers and students what they noticed about timing"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Watching carefully, Piya notices the good deeds always happen when Mr. Garcia is working late after school hours."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Talking to people reveals that kind things appear right after maintenance rounds in each area."
+        }
+      ],
+      "continuation": [
+        "Following the clues leads Piya to discover colorful paper and small treats in Mr. Garcia's supply cart.",
+        "When Piya asks Mr. Garcia about it, he smiles huge and admits he loves making everyone's day brighter.",
+        "Piya promises to keep it secret but asks to help with future kindness projects.",
+        "Together they start planning even more creative ways to spread joy around school!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever done something nice for others without wanting credit? How did it make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What small acts of kindness could you do at your school to make others smile?"
+        }
+      ]
+    },
     
-    "challenge": "An incredible surge of strategic kindness operations had been transforming the entire school environment - personalized motivational messages materializing in student lockers, carefully timed refreshment deliveries for overwhelmed faculty, and sophisticated repair work on damaged classroom technology that seemed to happen by magic. This systematic campaign was creating a genuinely positive shift in school culture, but the mastermind behind these brilliant interventions remained completely unknown. Piya became obsessed with solving this fascinating mystery that seemed to combine genuine compassion with serious logistical planning. [CHOICE POINT 1] Cracking this case would require next-level investigative strategies given how cleverly the operations were being executed. A) Deploy comprehensive surveillance techniques analyzing temporal patterns, spatial distributions, and operational timing to identify the window when interventions occur, B) Conduct detailed intelligence gathering through structured interviews with all potential witnesses to reconstruct timeline evidence and behavioral observations, or C) Execute systematic resource analysis tracking the supply chains, access requirements, and specialized knowledge needed for each type of intervention. [CONSEQUENCE 1A] Advanced observational techniques revealed that kindness operations consistently executed during extended evening maintenance periods when Mr. Garcia had exclusive building access and operational freedom. [CONSEQUENCE 1B] Strategic witness interviews uncovered undeniable correlations between custodial maintenance schedules and the precise timing of compassionate interventions throughout the facility. [CONSEQUENCE 1C] Forensic supply analysis led to discovering carefully concealed craft materials, motivational supplies, and repair tools integrated within Mr. Garcia's standard maintenance equipment inventory. When Piya respectfully confronted Mr. Garcia about the evidence, his genuine enthusiasm emerged as he revealed his philosophy that creating positive educational environments through anonymous service had become his deepest source of personal fulfillment. [CHOICE POINT 2] Having identified the architect of this kindness revolution, what's the most impactful way to proceed with this discovery? A) Honor his commitment to anonymity while proposing to join forces as a covert kindness operation team, B) Advocate for Mr. Garcia to receive proper institutional recognition for his extraordinary contributions to school culture transformation, or C) Channel his inspiration into launching a comprehensive student-led kindness movement that could amplify positive impact across the entire community. [PERSONAL REFLECTION] What drives certain individuals to invest significant personal resources in improving others' experiences without seeking recognition, and how does discovering such dedication influence your own perspective on service? [ACTION REFLECTION] How could you design and implement sustainable kindness initiatives in your own environment that balance anonymous contributions with community-building recognition?"
+    "regular": {
+      "narrative": [
+        "A wave of mysterious good deeds had been sweeping through school - encouraging notes appearing in random lockers, surprise snacks for stressed teachers, and broken classroom equipment getting magically repaired overnight.",
+        "The whole atmosphere felt more positive, but nobody could figure out who was behind these amazing acts of kindness.", 
+        "Piya became fascinated by this puzzle and decided to launch a full investigation."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This mystery requires some serious detective work to solve. What approach should Piya take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Conduct systematic observations during different time periods to identify patterns"
+            },
+            {
+              "letter": "B",
+              "text": "Interview teachers, students, and staff to gather witness accounts and timeline information"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Strategic surveillance reveals that mysterious acts of kindness consistently occur during extended maintenance periods when Mr. Garcia works alone after hours."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Comprehensive interviews uncover a clear pattern connecting kind acts to custodial rounds, with timing that perfectly matches Mr. Garcia's schedule."
+        }
+      ],
+      "continuation": [
+        "Investigating the supply chain leads to discovering craft materials and treats tucked discretely in Mr. Garcia's maintenance equipment.",
+        "When Piya diplomatically approaches Mr. Garcia about the mystery, his face lights up as he confesses that spreading joy around school has become his personal mission.",
+        "Piya decides to respect his preference for anonymity while offering to become a secret kindness partner.",
+        "Together they develop even more creative ways to brighten people's days while keeping their operation completely undercover.",
+        "The school continues to feel more positive and welcoming, and Piya feels amazing about being part of something so meaningful."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What motivates people to help others without seeking recognition, and how does witnessing kindness affect your own actions?"
+        },
+        {
+          "type": "action",
+          "question": "How could you create a culture of kindness in your own community that celebrates both anonymous and recognized good deeds?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "An incredible surge of strategic kindness operations had been transforming the entire school environment - personalized motivational messages materializing in student lockers, carefully timed refreshment deliveries for overwhelmed faculty, and sophisticated repair work on damaged classroom technology.",
+        "This systematic campaign was creating a genuinely positive shift in school culture, but the mastermind behind these brilliant interventions remained completely unknown.",
+        "Piya became obsessed with solving this fascinating mystery that seemed to combine genuine compassion with serious logistical planning."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Cracking this case requires next-level investigative strategies given how cleverly the operations are being executed. What method should Piya use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Deploy comprehensive surveillance techniques analyzing temporal patterns and operational timing"
+            },
+            {
+              "letter": "B",
+              "text": "Execute systematic resource analysis tracking supply chains, access requirements, and specialized knowledge needed"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Advanced observational techniques reveal that kindness operations consistently execute during extended evening maintenance periods when Mr. Garcia has exclusive building access and operational freedom."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Forensic supply analysis leads to discovering carefully concealed craft materials, motivational supplies, and repair tools integrated within Mr. Garcia's standard maintenance equipment inventory."
+        }
+      ],
+      "continuation": [
+        "When Piya respectfully confronts Mr. Garcia about the evidence, his genuine enthusiasm emerges as he reveals his philosophy that creating positive educational environments through anonymous service has become his deepest source of personal fulfillment.",
+        "Recognizing the sophistication of his approach, Piya proposes joining forces as a covert kindness operation team while honoring his commitment to anonymity.",
+        "Together they design and implement comprehensive student-led kindness initiatives that balance anonymous contributions with community-building recognition.",
+        "Their collaborative efforts launch a sustainable kindness movement that amplifies positive impact across the entire school community.",
+        "The systematic approach transforms not just individual experiences but creates lasting cultural change that inspires others to develop their own innovative service strategies."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What drives certain individuals to invest significant personal resources in improving others' experiences without seeking recognition?"
+        },
+        {
+          "type": "action", 
+          "question": "How could you design and implement sustainable kindness initiatives that balance anonymous contributions with community-building recognition?"
+        }
+      ]
+    }
   }
-  }
+}

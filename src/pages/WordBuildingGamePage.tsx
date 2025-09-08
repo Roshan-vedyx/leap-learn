@@ -473,66 +473,37 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   }, [arrangedChunks, currentWord, wordStartTime, hintsUsed, resetsUsed, isWordComplete, showCelebration, userId])
 
   // FIXED: Back to your original working TTS implementation
-  const speakText = async (text: string, isChunk: boolean = false): Promise<void> => {
-    return new Promise((resolve) => {
-      if (!('speechSynthesis' in window)) {
+  const speakText = async (text: string, isChunk = false): Promise<void> => {
+    return new Promise(async (resolve) => {
+      if (!audio.isSpeechSynthesisSupported() || !('speechSynthesis' in window)) {
         console.warn('Speech synthesis not supported')
         resolve()
         return
       }
-
+  
       try {
         setIsReading(true)
         console.log(`🔊 Speaking: "${text}"`)
         
-        // Stop any current speech gently
-        if (speechSynthesis.speaking) {
-          speechSynthesis.cancel()
-          setTimeout(() => proceedWithSpeech(), 100)
-        } else {
-          proceedWithSpeech()
-        }
-
-        function proceedWithSpeech() {
-          // Get saved accent preference (default to GB)
-          const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
-          console.log(`🎤 Using accent: ${savedAccent}`)
-          
-          // Create utterance
-          const utterance = new SpeechSynthesisUtterance(text)
-          
-          // Child-friendly speech parameters (consistent for neurodivergent users)
-          utterance.rate = isChunk ? 0.6 : 0.7  // Slower speeds
-          utterance.pitch = 0.9  // Calm pitch
-          utterance.volume = 0.8  // Clear volume
-          
-          // Get the specific hardcoded voice for selected accent
-          const selectedVoice = audio.getBestVoiceForAccent(savedAccent)
-          
-          if (selectedVoice) {
-            utterance.voice = selectedVoice
-            console.log(`🗣️ Using ${savedAccent} voice: ${selectedVoice.name}`)
-          }
-          
-          // Set up event handlers
-          utterance.onend = () => {
-            console.log(`✅ TTS completed: "${text}"`)
-            setIsReading(false)
-            resolve()
-          }
-          
-          utterance.onerror = (event) => {
-            console.error('Speech error:', event)
-            setIsReading(false)
-            resolve()
-          }
-          
-          // Speak
-          speechSynthesis.speak(utterance)
-        }
+        // Stop any current speech
+        speechSynthesis.cancel()
+        await new Promise(r => setTimeout(r, 100))
+  
+        // Get current accent
+        const savedAccent = storage.get('tts-accent', 'GB') as TtsAccent
+        console.log(`🎤 Using accent: ${savedAccent}`)
+        
+        // FIXED: Use the new async voice selection
+        await audio.speak(text, {
+          accent: savedAccent,
+          rate: isChunk ? 0.6 : 0.7,
+          pitch: 0.9,
+          volume: 0.8
+        })
         
       } catch (error) {
         console.error('TTS error:', error)
+      } finally {
         setIsReading(false)
         resolve()
       }

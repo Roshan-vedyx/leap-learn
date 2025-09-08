@@ -374,9 +374,9 @@ export const ChildLogin: React.FC = () => {
               type="submit"
               disabled={loading || !username.trim() || pin.length !== 4}
               className="w-full 
-                        bg-indigo-600 hover:bg-indigo-700 
-                        disabled:bg-gray-400 disabled:cursor-not-allowed
-                        text-white font-semibold 
+                        bg-sky-500 hover:bg-sky-600 
+                        disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed
+                        !text-white font-bold 
                         py-3 sm:py-4 md:py-5 
                         px-4 sm:px-6 
                         rounded-lg sm:rounded-xl 
@@ -384,17 +384,18 @@ export const ChildLogin: React.FC = () => {
                         flex items-center justify-center gap-2 sm:gap-3
                         text-base sm:text-lg md:text-xl
                         min-h-[44px] sm:min-h-[48px] md:min-h-[52px]
-                        focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-800
+                        focus:ring-4 focus:ring-sky-300 focus:ring-offset-2
                         active:scale-95 sm:active:scale-98
-                        shadow-lg hover:shadow-xl">
+                        shadow-lg hover:shadow-xl
+                        border-2 border-sky-600">
               {loading ? (
                 <div className="w-5 h-5 sm:w-6 sm:h-6 
                               border-2 border-white border-t-transparent 
                               rounded-full animate-spin" />
               ) : (
                 <>
-                  <span>Let's Go!</span>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="!text-white">Let's Go!</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 !text-white" />
                 </>
               )}
             </Button>

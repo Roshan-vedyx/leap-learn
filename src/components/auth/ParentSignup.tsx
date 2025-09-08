@@ -972,11 +972,11 @@ export const ParentSignup: React.FC = () => {
                 Already have an account?
               </p>
               <button
-                onClick={() => window.location.href = '/'}
+                onClick={() => window.location.href = '/parent-login'}
                 className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 
                          dark:hover:text-indigo-300 underline transition-colors duration-200"
               >
-                Back to Login
+                Click to Login
               </button>
             </div>
           )}

@@ -55,49 +55,104 @@ export const audio = {
     return typeof window !== 'undefined' && 'speechSynthesis' in window
   },
 
-  // Get available voices
+  // Get available voices with retry logic for mobile
   getVoices: (): SpeechSynthesisVoice[] => {
     if (!audio.isSpeechSynthesisSupported()) return []
-    return speechSynthesis.getVoices()
-  },
-
-  // Original working getChildVoices
-  getChildVoices: (): SpeechSynthesisVoice[] => {
-    const voices = audio.getVoices()
-    return voices.filter(voice => 
-      voice.name.toLowerCase().includes('child') ||
-      voice.name.toLowerCase().includes('kid') ||
-      voice.name.toLowerCase().includes('young') ||
-      voice.name.toLowerCase().includes('female') ||
-      (voice.name.toLowerCase().includes('female') && voice.lang.startsWith('en'))
-    )
-  },
-
-  // Hardcoded single voice per accent for consistency
-  getHardcodedVoice: (accent: TtsAccent): string => {
-    const voiceMap = {
-      'GB': 'Google UK English Female',
-      'US': 'Google US English',  // Changed from 'Google US English Female' 
-      'IN': 'Microsoft Heera - English (India)'  // Female Indian voice
+    
+    // Mobile fix: Force voices to load
+    const voices = speechSynthesis.getVoices()
+    if (voices.length === 0) {
+      // Trigger voice loading on mobile
+      speechSynthesis.speak(new SpeechSynthesisUtterance(''))
+      speechSynthesis.cancel()
+      return speechSynthesis.getVoices()
     }
-    return voiceMap[accent]
+    return voices
   },
 
-  getBestVoiceForAccent: (accent: TtsAccent): SpeechSynthesisVoice | null => {
-    const allVoices = audio.getVoices()
-    const targetVoiceName = audio.getHardcodedVoice(accent)
-    
-    // Find THE specific voice for this accent
-    const voice = allVoices.find(v => v.name === targetVoiceName)
-    
-    if (voice) return voice
-    
-    // Only fallback if the specific voice isn't available
-    return allVoices.find(voice => voice.lang.startsWith('en')) || null
+  // Wait for voices to load (critical for mobile)
+  waitForVoices: (): Promise<SpeechSynthesisVoice[]> => {
+    return new Promise((resolve) => {
+      const voices = audio.getVoices()
+      if (voices.length > 0) {
+        resolve(voices)
+        return
+      }
+      
+      // Wait for voices to load
+      const onVoicesChanged = () => {
+        const loadedVoices = audio.getVoices()
+        if (loadedVoices.length > 0) {
+          speechSynthesis.removeEventListener('voiceschanged', onVoicesChanged)
+          resolve(loadedVoices)
+        }
+      }
+      
+      speechSynthesis.addEventListener('voiceschanged', onVoicesChanged)
+      
+      // Fallback timeout
+      setTimeout(() => {
+        speechSynthesis.removeEventListener('voiceschanged', onVoicesChanged)
+        resolve(audio.getVoices())
+      }, 3000)
+    })
   },
-  
-  
-  // Updated speak function that ACTUALLY uses the accent
+
+  // Hardcoded voice mapping with fallbacks
+  getHardcodedVoice: (accent: TtsAccent): string[] => {
+    const voiceMap = {
+      'GB': [
+        'Google UK English Female',
+        'Microsoft Hazel - English (Great Britain)', 
+        'Karen',
+        'Daniel'
+      ],
+      'US': [
+        'Google US English',
+        'Microsoft Zira - English (United States)',
+        'Alex',
+        'Samantha'
+      ],
+      'IN': [
+        'Microsoft Heera - English (India)',
+        'Google हिन्दी',
+        'Veena'
+      ]
+    }
+    return voiceMap[accent] || voiceMap['GB']
+  },
+
+  // FIXED: Better voice selection with async loading
+  getBestVoiceForAccent: async (accent: TtsAccent): Promise<SpeechSynthesisVoice | null> => {
+    const voices = await audio.waitForVoices()
+    const targetVoiceNames = audio.getHardcodedVoice(accent)
+    
+    // Try each target voice in order
+    for (const voiceName of targetVoiceNames) {
+      const voice = voices.find(v => v.name === voiceName)
+      if (voice) {
+        console.log(`✅ Found ${accent} voice: ${voice.name}`)
+        return voice
+      }
+    }
+    
+    // Fallback based on language
+    const langMap = { 'GB': 'en-GB', 'US': 'en-US', 'IN': 'en-IN' }
+    const targetLang = langMap[accent]
+    
+    const langVoice = voices.find(v => v.lang === targetLang)
+    if (langVoice) {
+      console.log(`⚠️ Using fallback ${accent} voice: ${langVoice.name}`)
+      return langVoice
+    }
+    
+    // Final fallback to any English voice
+    const englishVoice = voices.find(v => v.lang.startsWith('en'))
+    console.log(`⚠️ Using English fallback: ${englishVoice?.name || 'default'}`)
+    return englishVoice || null
+  },
+
+  // FIXED: Simplified speak function with proper accent handling
   speak: async (
     text: string, 
     options: {
@@ -105,67 +160,66 @@ export const audio = {
       pitch?: number
       volume?: number
       voice?: SpeechSynthesisVoice
-      lang?: string
-      accent?: 'US' | 'GB' | 'IN'
+      accent?: TtsAccent
     } = {}
   ): Promise<void> => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (!audio.isSpeechSynthesisSupported()) {
         reject(new Error('Speech synthesis not supported'))
         return
       }
 
-      const utterance = new SpeechSynthesisUtterance(text)
-      
-      // Your original working settings
-      utterance.rate = options.rate ?? 0.8
-      utterance.pitch = options.pitch ?? 1
-      utterance.volume = options.volume ?? 0.8
-      utterance.lang = options.lang ?? 'en-US'
-      
-      // FIXED: Actually use the accent to select voice
-      if (options.voice) {
-        utterance.voice = options.voice
-      } else if (options.accent) {
-        const accentVoice = audio.getBestVoiceForAccent(options.accent)
-        if (accentVoice) {
-          utterance.voice = accentVoice
-          console.log(`🎤 Using ${options.accent} voice: ${accentVoice.name}`)
+      try {
+        // Get saved accent if not provided
+        const accent = options.accent || storage.get('tts-accent', 'GB') as TtsAccent
+        console.log(`🎤 Speaking with accent: ${accent}`)
+        
+        // Get the correct voice for accent
+        const voice = options.voice || await audio.getBestVoiceForAccent(accent)
+        
+        const utterance = new SpeechSynthesisUtterance(text)
+        utterance.rate = options.rate ?? 0.8
+        utterance.pitch = options.pitch ?? 0.9
+        utterance.volume = options.volume ?? 0.8
+        
+        // Set voice and language
+        if (voice) {
+          utterance.voice = voice
+          utterance.lang = voice.lang
+          console.log(`🗣️ Using voice: ${voice.name} (${voice.lang})`)
         } else {
-          console.log(`⚠️ No ${options.accent} voice found, using default`)
+          // Fallback language setting
+          const langMap = { 'GB': 'en-GB', 'US': 'en-US', 'IN': 'en-IN' }
+          utterance.lang = langMap[accent] || 'en-GB'
+          console.log(`⚠️ No voice found, using lang: ${utterance.lang}`)
         }
-      } else {
-        // Fallback to your original method
-        const childVoices = audio.getChildVoices()
-        if (childVoices.length > 0) {
-          utterance.voice = childVoices[0]
+
+        utterance.onend = () => {
+          console.log(`✅ TTS completed: "${text.substring(0, 50)}..."`)
+          resolve()
         }
+        
+        utterance.onerror = (event) => {
+          console.error('TTS error:', event)
+          resolve() // Don't reject, just continue
+        }
+
+        // Cancel any existing speech
+        speechSynthesis.cancel()
+        
+        // Small delay for mobile compatibility
+        setTimeout(() => {
+          speechSynthesis.speak(utterance)
+        }, 100)
+        
+      } catch (error) {
+        console.error('TTS setup error:', error)
+        resolve()
       }
-
-      utterance.onend = () => resolve()
-      utterance.onerror = (event) => reject(event.error)
-
-      speechSynthesis.speak(utterance)
     })
   },
 
-  // Original speakSimple
-  speakSimple: async (text: string, options: any = {}): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      if (!audio.isSpeechSynthesisSupported()) {
-        reject(new Error('Speech synthesis not supported'))
-        return
-      }
-
-      const utterance = new SpeechSynthesisUtterance(text)
-      Object.assign(utterance, options)
-      utterance.onend = () => resolve()
-      utterance.onerror = (event) => reject(event)
-      speechSynthesis.speak(utterance)
-    })
-  },
-
-  // Original stop
+  // Simple stop function
   stop: (): void => {
     if (audio.isSpeechSynthesisSupported()) {
       speechSynthesis.cancel()
