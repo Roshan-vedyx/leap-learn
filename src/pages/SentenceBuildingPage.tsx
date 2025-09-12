@@ -21,6 +21,34 @@ interface SentenceSlot {
 
 type TtsAccent = 'US' | 'GB' | 'AU' | 'CA'
 
+// Helper: Fallback nouns if JSON fails
+const getThemeFallback = (slotType: string): string[] => {
+  const fallbacks = {
+    animal: ['CAT', 'DOG', 'BIRD'],
+    space: ['SUN', 'MOON', 'STAR'],
+    food: ['CAKE', 'PIZZA', 'APPLE'],
+    vehicle: ['CAR', 'BUS', 'BIKE']
+  }
+  return fallbacks[slotType as keyof typeof fallbacks] || []
+}
+
+// Helper: Get words from current template
+const getTemplateWords = (currentTemplate: any, slotType: string): string[] => {
+  const templateMap = {
+    action: currentTemplate.actions,
+    color: ['RED', 'BLUE', 'GREEN', 'YELLOW', 'BROWN'],
+    number: currentTemplate.numbers,
+    taste: currentTemplate.tastes,
+    meal: currentTemplate.meals,
+    temperature: ['HOT', 'COLD', 'WARM'],
+    speed: ['FAST', 'SLOW', 'QUICK'],
+    part: currentTemplate.parts
+  }
+  
+  const words = templateMap[slotType as keyof typeof templateMap]
+  return Array.isArray(words) ? words.slice(0, 3) : []
+}
+
 const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) => {
   const [currentTemplateIndex, setCurrentTemplateIndex] = useState(0)
   const [sentenceSlots, setSentenceSlots] = useState<SentenceSlot[]>([])
@@ -96,69 +124,24 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
 
   // Get valid words for each slot type - LIMITED TO 3-4 APPROPRIATE WORDS
   const getValidWordsForSlotType = (slotType: string): string[] => {
-    // Get theme words first
-    if (adaptiveWordBank.current && wordsLoaded) {
-      const allWords = adaptiveWordBank.current.getAllWordsForSlotType(slotType, theme)
-      if (allWords.length > 0) {
-        return allWords.slice(0, 4) // Limit to 4 words
+    // 1. NOUNS: Get from JSON words for current theme
+    if (['animal', 'space', 'food', 'vehicle'].includes(slotType)) {
+      return themeWords.length > 0 ? themeWords.slice(0, 3) : getThemeFallback(slotType)
+    }
+    
+    // 2. ADJECTIVES: Theme-specific hardcoded lists
+    if (slotType === 'adjective') {
+      const themeAdjectives = {
+        animals: ['BIG', 'SMALL', 'CUTE', 'FURRY'],
+        space: ['BRIGHT', 'HUGE', 'HOT', 'COLD'], 
+        food: ['YUMMY', 'SWEET', 'FRESH', 'SPICY'],
+        vehicles: ['FAST', 'BIG', 'SHINY', 'COOL']
       }
+      return themeAdjectives[theme as keyof typeof themeAdjectives] || ['GOOD', 'NICE', 'COOL']
     }
     
-    const availableThemeWords = themeWords.slice(0, 4) // Limit theme words to 4
-    
-    switch (slotType) {
-      case 'animal':
-        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
-        currentTemplate.animals?.slice(0, 3) || ['CAT', 'DOG', 'BIRD']
-        
-      case 'adjective':
-        return currentTemplate.adjectives?.slice(0, 4) || ['BIG', 'SMALL', 'CUTE', 'FAST']
-        
-      case 'action':
-        return currentTemplate.actions?.slice(0, 4) || ['RUNS', 'JUMPS', 'PLAYS', 'SLEEPS']
-        
-      case 'color':
-        return ['RED', 'BLUE', 'GREEN', 'YELLOW'].slice(0, 4)
-        
-      case 'number':
-        return currentTemplate.numbers?.slice(0, 3) || ['ONE', 'TWO', 'THREE']
-        
-      case 'object':
-        return currentTemplate.objects?.slice(0, 4) || ['BALL', 'BOOK', 'TOY', 'TREE']
-        
-      case 'place':
-        return currentTemplate.places?.slice(0, 4) || ['HOME', 'PARK', 'SCHOOL', 'GARDEN']
-        
-      case 'taste':
-        return currentTemplate.tastes?.slice(0, 3) || ['SWEET', 'YUMMY', 'DELICIOUS']
-        
-      case 'meal':
-        return currentTemplate.meals?.slice(0, 4) || ['LUNCH', 'DINNER', 'SNACK', 'TREAT']
-        
-      case 'temperature':
-        return currentTemplate.temperatures?.slice(0, 3) || ['HOT', 'COLD', 'WARM']
-        
-      case 'speed':
-        return currentTemplate.speeds?.slice(0, 3) || ['FAST', 'SLOW', 'QUICK']
-        
-      case 'part':
-        return currentTemplate.parts?.slice(0, 4) || ['WHEELS', 'DOORS', 'SEATS', 'ENGINE']
-
-      case 'space':
-        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
-          ['SUN', 'MOON', 'STAR']
-          
-      case 'food':
-        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
-          ['CAKE', 'PIZZA', 'APPLE']
-          
-      case 'vehicle':
-        return availableThemeWords.length > 0 ? availableThemeWords.slice(0, 3) : 
-          ['CAR', 'BUS', 'BIKE']  
-        
-      default:
-        return []
-    }
+    // 3. TEMPLATE WORDS: Get from current template
+    return getTemplateWords(currentTemplate, slotType)
   }
 
   // Initialize sentence slots when template changes

@@ -53,11 +53,7 @@ interface EnhancedWordBankData {
     version: string
     description: string
   }
-  words: {
-    easy: WordEntry[]
-    regular: WordEntry[]
-    challenge: WordEntry[]
-  }
+  words: WordEntry[]
 }
 
 // Fallback hardcoded word bank
@@ -231,7 +227,7 @@ export class AdaptiveWordBank {
   // UPDATED: Get visual chunks for game pieces
   getWordChunks(word: string): string[] {
     if (this.enhancedWordBank && this.isJsonLoaded) {
-      const currentWords = this.enhancedWordBank.words[this.session.currentDifficulty]
+      const currentWords = this.enhancedWordBank.words
       const wordEntry = currentWords.find(entry => 
         entry.word.toUpperCase() === word.toUpperCase()
       )
@@ -250,7 +246,7 @@ export class AdaptiveWordBank {
   // NEW: Get TTS chunks for better pronunciation
   getTTSChunks(word: string): string[] {
     if (this.enhancedWordBank && this.isJsonLoaded) {
-      const currentWords = this.enhancedWordBank.words[this.session.currentDifficulty]
+      const currentWords = this.enhancedWordBank.words
       const wordEntry = currentWords.find(entry => 
         entry.word.toUpperCase() === word.toUpperCase()
       )
