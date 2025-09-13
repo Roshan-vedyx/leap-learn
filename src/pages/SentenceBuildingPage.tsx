@@ -24,10 +24,10 @@ type TtsAccent = 'US' | 'GB' | 'AU' | 'CA'
 // Helper: Fallback nouns if JSON fails
 const getThemeFallback = (slotType: string): string[] => {
   const fallbacks = {
-    animal: ['CAT', 'DOG', 'BIRD'],
-    space: ['SUN', 'MOON', 'STAR'],
-    food: ['CAKE', 'PIZZA', 'APPLE'],
-    vehicle: ['CAR', 'BUS', 'BIKE']
+    animal: ['CAT', 'DOG', 'BIRD', 'TIGER', 'ELEPHANT' ],
+    space: ['SUN', 'MOON', 'STAR', 'MARS'],
+    food: ['CAKE', 'PIZZA', 'APPLE', 'BURGER'],
+    vehicle: ['CAR', 'BUS', 'BIKE', 'SPACESHIP', 'BOAT', 'AIRPLANE']
   }
   return fallbacks[slotType as keyof typeof fallbacks] || []
 }

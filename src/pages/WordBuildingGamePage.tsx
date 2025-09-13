@@ -404,6 +404,10 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   // Word completion with enhanced celebrations - FIXED wrong order logic
   useEffect(() => {
+    if (arrangedChunks.length === 0) {
+      setShowWrongOrderMessage(false)  // Clear any lingering message
+      return
+    }
     const checkWordCompletion = () => {
       if (arrangedChunks.length === 0) return
       
@@ -460,6 +464,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
             timestamp: Date.now()
           })
         }
+        return
       } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration && !showMeaningIntegration) {
         // Only show wrong order message if word is NOT complete, NOT celebrating, and NOT in success state
         setShowWrongOrderMessage(true)

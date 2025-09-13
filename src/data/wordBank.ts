@@ -118,7 +118,7 @@ export class AdaptiveWordBank {
 
   private async loadEnhancedWordBank(): Promise<void> {
     try {
-      console.log('🔍 Attempting to load wordBank.json...')
+      console.log('🔍 Attempting to load words.json...')
       const response = await fetch('/words.json')
       
       if (response.ok) {
@@ -140,22 +140,55 @@ export class AdaptiveWordBank {
     console.log(`🎯 Getting words for theme: ${theme}, difficulty: ${this.session.currentDifficulty}`)
     
     if (this.enhancedWordBank && this.isJsonLoaded) {
-      // NEW: Handle your flat array structure
       const allWords = this.enhancedWordBank.words
       
-      const filteredWords = allWords.filter(entry => {
-        // Filter by complexity/difficulty
+      // FIXED: Try current difficulty first, then expand if needed
+      let filteredWords = allWords.filter(entry => {
         const matchesDifficulty = entry.complexity === this.session.currentDifficulty
-        
-        // Filter by theme
         const matchesTheme = entry.themes.includes(theme)
-        
         return matchesDifficulty && matchesTheme
       })
       
+      // If no words found for current difficulty, try easier words
+      if (filteredWords.length === 0 && this.session.currentDifficulty === 'regular') {
+        console.log(`⚠️ No ${theme} words found for 'regular', trying 'easy' difficulty`)
+        filteredWords = allWords.filter(entry => {
+          const matchesDifficulty = entry.complexity === 'easy'
+          const matchesTheme = entry.themes.includes(theme)
+          return matchesDifficulty && matchesTheme
+        })
+      }
+      
+      // If still no words, try challenge words
+      if (filteredWords.length === 0 && this.session.currentDifficulty === 'regular') {
+        console.log(`⚠️ No ${theme} words found for 'easy', trying 'challenge' difficulty`)
+        filteredWords = allWords.filter(entry => {
+          const matchesDifficulty = entry.complexity === 'challenge'
+          const matchesTheme = entry.themes.includes(theme)
+          return matchesDifficulty && matchesTheme
+        })
+      }
+      
+      // LAST RESORT: Add a few universal words
+      if (filteredWords.length < 3) {
+        console.log(`⚠️ Only ${filteredWords.length} ${theme} words found, adding universal backup`)
+        const universalWords = allWords.filter(entry => {
+          const matchesDifficulty = entry.complexity === this.session.currentDifficulty || entry.complexity === 'easy'
+          const isUniversal = entry.themes.includes('universal')
+          return matchesDifficulty && isUniversal
+        })
+        
+        // Add up to 5 total words (prioritize theme words)
+        const remainingSlots = Math.max(0, 5 - filteredWords.length)
+        filteredWords.push(...universalWords.slice(0, remainingSlots))
+      }
+      
       const wordStrings = filteredWords.map(entry => entry.word.toUpperCase())
       const randomizedWords = wordStrings.sort(() => Math.random() - 0.5)
-      console.log(`✅ Found ${randomizedWords.length} ${this.session.currentDifficulty} words for theme: ${theme} (from JSON)`)
+      
+      console.log(`✅ Found ${randomizedWords.length} words for theme: ${theme}`)
+      console.log(`📝 Words: ${randomizedWords.join(', ')}`)
+      
       return randomizedWords
     }
   
@@ -177,11 +210,10 @@ export class AdaptiveWordBank {
   getAllWordsForSlotType(slotType: string, theme: string): string[] {
     if (!this.enhancedWordBank || !this.isJsonLoaded) return []
     
-    // NEW: Handle your flat array structure
     const allWords = this.enhancedWordBank.words
     
     const filtered = allWords.filter(entry => {
-      // Filter by theme
+      // FIXED: Strict theme filtering first
       const matchesTheme = entry.themes.includes(theme)
       
       // Filter by slot type
@@ -189,6 +221,17 @@ export class AdaptiveWordBank {
       
       return matchesTheme && matchesSlotType
     })
+    
+    // If no theme-specific words for this slot, allow some universal words
+    if (filtered.length === 0 && slotType !== 'adjective') {
+      console.log(`⚠️ No ${theme} words for slot ${slotType}, adding universal fallback`)
+      const universalWords = allWords.filter(entry => {
+        const isUniversal = entry.themes.includes('universal')
+        const matchesSlotType = this.getSlotTypeForWord(entry, slotType)
+        return isUniversal && matchesSlotType
+      })
+      filtered.push(...universalWords.slice(0, 2)) // Max 2 universal words
+    }
     
     return filtered.map(entry => entry.word.toUpperCase()).slice(0, 8)
   }
