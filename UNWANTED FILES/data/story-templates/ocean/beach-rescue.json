@@ -1,0 +1,161 @@
+{
+  "id": "beach-rescue",
+  "title": "Dolphin in Trouble",
+  "theme": "Beach Rescue",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Maya was walking on the beach when she saw something that made her heart race.",
+        "A young dolphin was lying on the sand, breathing hard and looking really scared.",
+        "Maya knew she had to help... and fast!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Maya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Run to get her friends Sam and Alex"
+            },
+            {
+              "letter": "B", 
+              "text": "Pour seawater on the dolphin to keep it wet"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex came running when Maya called. 'We'll help!' they said."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Maya gently splashed cool water on the dolphin. It seemed to feel a little better."
+        }
+      ],
+      "continuation": [
+        "Working together, the friends kept the dolphin calm and wet while Sam called for help on his phone.",
+        "Soon, some adults came to help them carry the dolphin back to the water.",
+        "The dolphin swam away strong and free! Maya felt amazing - she had saved a life."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever helped an animal that was in trouble? How did it make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help protect ocean animals?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Maya was enjoying a peaceful walk along the beach when she spotted something totally scary.",
+        "A dolphin lay stranded on the sand, breathing really fast and shallow.", 
+        "The morning sun was getting hot, and Maya realized this beautiful creature was in serious danger."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Maya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Get Sam and Alex to help immediately"
+            },
+            {
+              "letter": "B",
+              "text": "Keep the dolphin's skin wet with seawater"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex arrived quickly, ready to help with the rescue mission."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya carefully poured seawater over the dolphin, and its breathing seemed to slow down a bit."
+        }
+      ],
+      "continuation": [
+        "Sam called the marine rescue hotline while Alex helped Maya keep the dolphin comfortable.",
+        "Maya spoke softly to the animal, trying to keep it calm.",
+        "When the rescue team arrived, they worked together to guide the dolphin back into the waves.",
+        "The dolphin paused for a moment at the water's edge... as if saying thank you... before swimming strongly back to the deep ocean."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "When you see someone or something in trouble, what helps you stay calm and think clearly?"
+        },
+        {
+          "type": "action",
+          "question": "How could you learn more about helping marine animals in your area?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Maya was exploring a quiet part of the beach when something urgent happened right in front of her.",
+        "A young dolphin had washed up on the sand, breathing hard and its skin starting to dry out in the sun.",
+        "Maya knew that dolphins could get really sick if they stayed out of water too long."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya start this rescue?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Work with Sam and Alex as a rescue team"
+            },
+            {
+              "letter": "B",
+              "text": "Start keeping the dolphin wet right away to buy some time"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Sam and Alex answered Maya's call, bringing extra hands and smart thinking to help with the emergency."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya's quick water-splashing helped the dolphin stay stable while she figured out what to do next."
+        }
+      ],
+      "continuation": [
+        "Maya organized everything: keeping the dolphin wet, checking that it was breathing okay, and making sure someone called the professional marine rescuers.",
+        "The team worked super efficiently, knowing that every minute really mattered.",
+        "When the rescue experts arrived with the right equipment, they successfully got the dolphin back to deeper water.",
+        "The dolphin's powerful tail made happy splashes as it disappeared under the surface... finally home again in the ocean!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you handle stressful situations where you need to think fast and work with others?"
+        },
+        {
+          "type": "action", 
+          "question": "What steps could you take to get better at helping wildlife emergencies in your area?"
+        }
+      ]
+    }
+  }
+}

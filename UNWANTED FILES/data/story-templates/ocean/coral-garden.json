@@ -1,0 +1,165 @@
+{
+  "id": "coral-garden",
+  "title": "Rainbow Under the Sea",
+  "theme": "Coral Garden",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Aryaan dove below the surface, bubbles streaming past his mask.",
+        "The underwater world burst with color - orange, pink, and purple coral formations like a living rainbow city.",
+        "Schools of tropical fish swam between the branches, and when Aryaan touched the coral gently... it felt surprisingly rough and alive."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Aryaan check out first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Swim toward the bright orange coral"
+            },
+            {
+              "letter": "B", 
+              "text": "Explore under the big coral archway"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Aryaan swims closer to the orange coral, but up close, he notices scary white patches where the color has totally disappeared."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Aryaan explores the archway and discovers pale, dead-looking coral branches in the shadows."
+        }
+      ],
+      "continuation": [
+        "Aryaan's heart sinks as he realizes the truth... parts of this underwater paradise are dying.",
+        "The water is getting too warm, and it's making the coral turn white and sick.",
+        "Aryaan swims back to shore, thinking hard about what he just saw.",
+        "He decides to organize a beach cleanup to help reduce ocean pollution and protect the reef.",
+        "Through his actions, Aryaan becomes someone who fights for the underwater world he's grown to love."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever discovered that something beautiful was also in danger? How did that make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What's one thing you could do to help protect ocean life?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Aryaan went deeper into the coral garden, adjusting his ears as he kicked down.",
+        "Sunlight filtered through the water in dancing patterns, lighting up an amazing underwater world with huge brain corals and delicate branching formations.", 
+        "Colorful parrotfish munched peacefully nearby, and Aryaan could actually hear the reef's living sounds - clicks, pops, and rustles from countless creatures."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Where should Aryaan focus his underwater exploration?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Watch how clownfish live in their anemone homes"
+            },
+            {
+              "letter": "B",
+              "text": "Draw the different coral types in his waterproof notebook"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Aryaan watches the clownfish, but notices some anemones look stressed and pale... not the bright homes they should be."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "As Aryaan sketches, he realizes he's drawing way too many white, bleached areas where bright colors should exist."
+        }
+      ],
+      "continuation": [
+        "The proof is right there in front of him - Aryaan is seeing coral bleaching caused by the ocean getting too hot because of climate change.",
+        "Back on shore, Aryaan feels the weight of what he's learned and wonders how to tell others.",
+        "He decides to create visual presentations comparing healthy and bleached coral to help people understand how serious this is.",
+        "Aryaan's before-and-after images shock viewers into realizing how bad the problem really is.",
+        "Through education and action, Aryaan turns his underwater discovery into a powerful way to help save the reefs."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "Have you ever realized that a problem was way bigger and more complicated than you first thought? How did that change what you did?"
+        },
+        {
+          "type": "action",
+          "question": "How could you use your interests and skills to tackle an environmental problem in your community?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Aryaan descended through the different water layers into the coral ecosystem, his advanced diving skills letting him explore the reef's deeper areas.",
+        "The variety of life was incredible - massive coral colonies formed the reef's foundation while delicate branching corals created complex underwater neighborhoods.",
+        "Partnerships between different species were happening everywhere, but as Aryaan documented what he saw... a troubling pattern started to emerge."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Aryaan approach his scientific observations?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Check coral health and measure the tiny organisms living inside them"
+            },
+            {
+              "letter": "B",
+              "text": "Test the water chemistry and temperature at different depths"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Aryaan's measurements show widespread loss of the tiny partners that live inside coral - they're abandoning their homes because of stress."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "His instruments document acid levels and temperatures that are way beyond what coral can handle, proving climate change is the cause."
+        }
+      ],
+      "continuation": [
+        "The data tells a clear story: human-caused climate change is triggering massive coral bleaching events that threaten the entire ocean ecosystem's survival.",
+        "Back on the surface with his research, Aryaan faces the challenge of turning complex science into action that people will actually take.",
+        "He develops simple reef monitoring methods that let regular people track and report changes in reef health.",
+        "Aryaan also creates educational programs that connect abstract climate ideas to real local ecosystems people can see and touch.",
+        "Through solid science and smart communication, Aryaan transforms scary observations into organized conservation action... becoming a scientist who knows that protecting ecosystems takes both good data and never giving up on speaking out."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you discover proof of a serious problem that others might want to ignore, how do you decide whether to speak up?"
+        },
+        {
+          "type": "action", 
+          "question": "How might you contribute to scientific understanding of an environmental issue that you care about?"
+        }
+      ]
+    }
+  }
+}

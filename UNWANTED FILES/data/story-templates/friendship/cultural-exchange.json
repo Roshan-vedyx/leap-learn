@@ -1,0 +1,162 @@
+{
+  "id": "cultural-exchange",
+  "title": "Learning from Each Other",
+  "theme": "Cultural Exchange",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Suha met this new student named Aryaan who came from a totally different country and spoke two languages... which was pretty cool, actually!",
+        "At first, some of Aryaan's customs seemed really different and, honestly, kind of confusing to Suha.",
+        "She definitely wanted to be friends, but wasn't sure how to handle feeling weird about these cultural differences."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha handle feeling uncertain about these cultural differences?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Ask Aryaan friendly questions to learn more about their background"
+            },
+            {
+              "letter": "B", 
+              "text": "Watch and listen quietly to understand before asking anything"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Aryaan got super excited to share stories about their homeland and even taught Suha some awesome words in their native language!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Watching carefully helped Suha notice how respectful and kind Aryaan's family traditions actually were."
+        }
+      ],
+      "continuation": [
+        "Suha shared her favorite family traditions and foods with Aryaan too... and it was actually really fun!",
+        "They discovered they both absolutely loved soccer, music, and funny movies! Like, who knew?",
+        "Their friendship grew stronger as they learned about each other's cultures.",
+        "Soon they were teaching other classmates about all the cool things they'd learned from each other."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever felt nervous about differences between you and someone new? What helped you feel more comfortable?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create welcoming spaces for people from different backgrounds?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Suha was building this incredible friendship with Aryaan, who had recently moved here from another country with totally different cultural traditions than what she was used to.",
+        "At first, language barriers and unfamiliar customs created some pretty awkward moments that made both of them feel uncertain about connecting.",
+        "Building this cross-cultural friendship was going to require patience, curiosity, and figuring out respectful ways to learn about their differences."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the best approach for Suha to build this cross-cultural friendship?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Start genuine conversations asking respectful questions about Aryaan's background and traditions"
+            },
+            {
+              "letter": "B",
+              "text": "Observe and listen carefully to understand Aryaan's style before making assumptions"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Open conversations revealed fascinating insights about Aryaan's homeland traditions and family celebrations, while creating opportunities for them to share with each other."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Thoughtful observation helped Suha recognize the wisdom and beauty in Aryaan's cultural practices while avoiding awkward misunderstandings."
+        }
+      ],
+      "continuation": [
+        "Through patient relationship building, they discovered they had remarkable common ground in their love for sports, music, and academic challenges.",
+        "Both families began sharing cultural celebrations, foods, and stories that made everyone's understanding so much richer.",
+        "Their friendship became a bridge that helped other students feel more comfortable connecting across cultural differences.",
+        "The school community grew stronger as more students followed their example of celebrating diversity instead of fearing it."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What experiences have taught you the most about appreciating cultural differences, and how has learning about other cultures enriched your perspective?"
+        },
+        {
+          "type": "action",
+          "question": "How could you actively contribute to creating more inclusive environments where students from diverse backgrounds feel valued and connected?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Suha was developing an extraordinary friendship with Aryaan, whose recent immigration experience and distinct cultural background represented a huge departure from her familiar social world.",
+        "Building their relationship involved navigating complex language barriers, unfamiliar social customs, and unconscious cultural assumptions that required deliberate effort to understand each other.",
+        "Creating authentic cross-cultural connection was going to demand sophisticated communication skills and genuine commitment to mutual understanding."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha approach building authentic cross-cultural understanding with Aryaan?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Engage in deep cultural conversations through respectful questioning and sharing experiences and values"
+            },
+            {
+              "letter": "B",
+              "text": "Practice patient observation to understand Aryaan's communication patterns before making assumptions"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Deep cultural conversations revealed incredible insights about Aryaan's homeland experiences and immigration journey while creating opportunities for authentic mutual cultural exchange."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Mindful observation helped Suha recognize the sophistication embedded in Aryaan's cultural practices while avoiding superficial judgments based on unfamiliar behaviors."
+        }
+      ],
+      "continuation": [
+        "The more time they spent together, the more they realized they had way more in common than they'd first thought.",
+        "Their friendship became a model for cultural understanding that influenced school policies around immigrant student support and cultural celebration.",
+        "Both students developed enhanced global perspectives and advocacy skills that prepared them for leadership in increasingly diverse communities.",
+        "Their collaborative efforts created lasting changes that benefited future students from diverse cultural backgrounds."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has exposure to different cultural perspectives challenged your assumptions and expanded your understanding of human diversity and shared experiences?"
+        },
+        {
+          "type": "action", 
+          "question": "What specific actions could you take to actively promote cultural inclusion while celebrating the unique contributions that diverse backgrounds bring to your community?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "id": "planet-hopping",
+  "title": "Worlds in a Day",
+  "theme": "Planet Hopping",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Piya fired up the crazy fast spaceship that was built for visiting multiple planets in one day.",
+        "Her mission was nuts... hit four different planets and collect data to compare them all.",
+        "First stop: Jupiter, where the Great Red Spot was raging like a hurricane bigger than Earth itself."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Piya check out at Jupiter?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Study those massive storm systems swirling around"
+            },
+            {
+              "letter": "B", 
+              "text": "Scan Jupiter's biggest moons for hidden oceans"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Piya discovered the storm had been raging for over 400 years... way longer than any weather system on Earth!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Her scans confirmed that Europa definitely had a liquid ocean hidden beneath its icy surface."
+        }
+      ],
+      "continuation": [
+        "The gas giant's swirling bands of color created patterns that no photograph could ever capture.",
+        "Each planet revealed crazy secrets... Saturn's ice rings sparkled like cosmic jewelry, Venus hid beneath toxic clouds hot enough to melt metal.",
+        "As her day-long journey continued, Piya realized she was gathering data that could change space exploration forever.",
+        "In just one incredible day, Piya had visited more worlds than any human in history!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "If you could visit any planet in our solar system, what would you most want to discover there?"
+        },
+        {
+          "type": "action",
+          "question": "What would you want to learn about space that could help future explorers?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Piya launched the most ambitious single-day space mission humans had ever attempted, piloting an experimental ship with breakthrough propulsion technology.",
+        "Her plan included systematic surveys of four major worlds, each one presenting totally different challenges and research opportunities.",
+        "Jupiter's massive gravitational field and radiation environment required careful navigation as Piya studied the planet's atmosphere and moon systems."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which planetary research should Piya focus on during her limited time?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Focus on atmospheric analysis to understand weather patterns across different worlds"
+            },
+            {
+              "letter": "B",
+              "text": "Study geological features that reveal each planet's formation history"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Atmospheric data revealed how different distances from the sun created dramatically different weather systems on each world."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Geological analysis showed how planets formed from similar materials but developed completely different characteristics."
+        }
+      ],
+      "continuation": [
+        "Saturn's complex ring structure provided awesome close-up observation opportunities for understanding how planets form.",
+        "At Venus, protective shields defended against crushing atmospheric pressure and temperatures hot enough to melt lead.",
+        "Mars offered easier exploration conditions but held mysteries about its lost atmosphere and dried ocean beds.",
+        "Piya's unprecedented four-planet mission had generated enough data to fuel decades of additional research and exploration planning."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think studying other planets helps us better understand and appreciate our own Earth?"
+        },
+        {
+          "type": "action",
+          "question": "How could you contribute to advancing human understanding of space and planetary science?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Piya commanded the first rapid-deployment interplanetary survey mission, using cutting-edge fusion propulsion systems to achieve incredible transit speeds between major solar system destinations.",
+        "The mission required systematic comparative analysis across totally different gravitational and atmospheric environments.",
+        "Jupiter's turbulent magnetosphere and radiation belts required sophisticated shielding while Piya conducted detailed analysis of the Great Red Spot's three-century-old storm dynamics."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which scientific approach should guide Piya's multi-world research?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Develop standardized measurement techniques that work across different planetary environments"
+            },
+            {
+              "letter": "B",
+              "text": "Focus on collecting data that advances theories about how our solar system formed"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Standardized protocols enabled direct comparison between worlds, revealing universal patterns in how planets develop."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Formation theory data confirmed how gravitational interactions and solar radiation shaped each world's unique characteristics."
+        }
+      ],
+      "continuation": [
+        "Saturn's intricate ring system provided unique opportunities for studying physics concepts that help explain how planets form from cosmic dust.",
+        "Venus's extreme greenhouse conditions and Mars's ancient water evidence provided contrasting examples of how planetary atmospheres evolve under different circumstances.",
+        "With comprehensive data from multiple worlds, Piya prepared to put together findings that could influence humanity's approach to space exploration.",
+        "Through systematic exploration and rigorous analysis, Piya had established new foundations for understanding planetary diversity and human expansion into space."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think comparative planetary studies might help humanity make better decisions about protecting Earth's environment?"
+        },
+        {
+          "type": "action",
+          "question": "What areas of scientific research or exploration would you want to pursue to benefit future generations?"
+        }
+      ]
+    }
+  }
+}

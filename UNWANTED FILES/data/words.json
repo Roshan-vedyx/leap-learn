@@ -3450,7 +3450,7 @@
       "chunks": ["jump", "ing"],
       "alternative_chunks": ["j", "ump", "ing"],
       "phonics_focus": "suffix_ing",
-      "themes": ["adventure"],
+      "themes": ["adventure", "animals"],
       "high_frequency": true,
       "meaning_support": "Pushing off the ground with your feet to fly through air right now",
       "difficulty_level": 2,

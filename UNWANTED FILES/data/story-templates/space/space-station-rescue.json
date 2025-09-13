@@ -1,0 +1,162 @@
+{
+  "id": "space-station-rescue",
+  "title": "Emergency in Orbit",
+  "theme": "Space Station Rescue",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Alex got an urgent transmission from the space station... their oxygen recycling system had totally failed.",
+        "This was a life-threatening emergency because without fresh air, the astronauts had only hours before carbon dioxide levels became dangerous.",
+        "Time was running out fast, so Alex launched the emergency rescue shuttle with steady hands despite the pressure."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex approach the damaged station?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Dock immediately for fastest entry"
+            },
+            {
+              "letter": "B", 
+              "text": "Check out the station's condition first from outside"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Quick docking worked, but Alex discovered the damage was way more extensive than expected."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "External inspection revealed multiple system failures that definitely needed addressing before going inside."
+        }
+      ],
+      "continuation": [
+        "Inside the station, Alex found the main air processor completely offline and backup systems struggling to keep up.",
+        "The astronauts looked worried but tried to stay calm while Alex began the complex repair process with tools floating in zero gravity.",
+        "Working together, Alex and the crew restored all critical life support systems and even improved their reliability.",
+        "Alex had proven that quick thinking and technical skills could save lives even in the harsh environment of space."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you stay focused and helpful when others are counting on you in a stressful situation?"
+        },
+        {
+          "type": "action",
+          "question": "What skills would you want to develop to help others in emergency situations?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Alex was monitoring mission control communications when an emergency alert totally disrupted the routine shift.",
+        "The International Space Station reported cascading failures in their environmental control systems... oxygen levels dropping while carbon dioxide built up to dangerous concentrations.",
+        "The crew had approximately six hours before the situation became life-threatening, so Alex immediately prepped the emergency response vehicle."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which emergency response strategy should Alex use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Execute the fastest possible approach and docking sequence"
+            },
+            {
+              "letter": "B",
+              "text": "Run systematic diagnostics during approach to understand the failures"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Rapid docking succeeded, but Alex discovered the problems were way more complex than initial reports indicated."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Diagnostic data during approach revealed the specific components that needed replacement and repair."
+        }
+      ],
+      "continuation": [
+        "Alex ran through rapid-deployment procedures that had been drilled countless times but never used in an actual crisis.",
+        "Aboard the station, Alex worked in microgravity to access the environmental control panels while the primary atmospheric processor had multiple component failures.",
+        "With the crew's assistance, Alex developed a systematic repair strategy that addressed both immediate and long-term safety concerns.",
+        "The successful rescue operation became a case study for improving emergency response procedures and spacecraft design standards."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you're responsible for solving a problem that affects others, how do you balance speed with thoroughness?"
+        },
+        {
+          "type": "action",
+          "question": "How could you prepare yourself to handle high-pressure situations where others depend on your skills?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Alex received priority emergency communications indicating critical environmental system failures aboard the orbital research facility.",
+        "Atmospheric regulation equipment had suffered multiple component breakdowns threatening crew survival... a cascade failure involving oxygen generation units, carbon dioxide scrubbing systems, and atmospheric pressure regulation.",
+        "Alex initiated emergency launch procedures, coordinating with mission control while executing complex orbital mechanics calculations to achieve rapid rendezvous with the compromised station."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which crisis management approach should Alex use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Implement immediate emergency repairs to restore basic life support functionality"
+            },
+            {
+              "letter": "B",
+              "text": "Conduct comprehensive system analysis to prevent additional failures during repair"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Emergency repairs restored breathable atmosphere but revealed underlying design vulnerabilities requiring further attention."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "System analysis identified cascade failure patterns that helped prevent similar emergencies on other stations."
+        }
+      ],
+      "continuation": [
+        "Working in microgravity conditions, Alex combined advanced technical knowledge with innovative problem-solving to address interconnected system failures that standard procedures hadn't anticipated.",
+        "Recognizing the broader implications for space safety, Alex considered how this crisis could improve future mission planning and equipment design.",
+        "Through technical excellence and systematic documentation, Alex had transformed a life-threatening crisis into valuable knowledge that would protect future space explorers.",
+        "Alex had demonstrated how emergency response expertise combined with engineering knowledge could save lives and advance human capabilities in space."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think emergency situations reveal both individual capabilities and the importance of teamwork and preparation?"
+        },
+        {
+          "type": "action",
+          "question": "How might developing strong problem-solving and technical skills prepare you to contribute to challenging fields like space exploration?"
+        }
+      ]
+    }
+  }
+}

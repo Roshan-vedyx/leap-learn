@@ -1,0 +1,162 @@
+{
+  "id": "zoo-keeper",
+  "title": "A Day at the Zoo",
+  "theme": "Zoo Keeper",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Aryaan got to work as a junior zoo keeper for a whole day... living the dream of working with amazing animals!",
+        "First up was feeding the enormous elephants who ate massive piles of hay and fruit like it was nothing.",
+        "Every single animal needed different kinds of food, care, and attention based on where they came from in the wild."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Aryaan focus on while learning zoo keeper skills?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Help prepare different meals for animals with completely different diets"
+            },
+            {
+              "letter": "B",
+              "text": "Learn how to safely clean enclosures while the animals are nearby"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Preparing meals was like cooking for a huge, diverse family... lions needed meat, penguins got fish, and monkeys loved fruits and vegetables!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Cleaning was trickier than expected because playful monkeys kept trying to grab Aryaan's tools, making everyone laugh."
+        }
+      ],
+      "continuation": [
+        "Helping the vet check on a tall giraffe with a sore leg taught Aryaan how much medical knowledge zoo keepers need.",
+        "Each animal had its own personality and needed individual attention... just like people do.",
+        "Aryaan learned that zoos help protect endangered species while educating people about wildlife.",
+        "By the end of the day, Aryaan realized that being a zoo keeper takes way more science and dedication than most people think."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever wanted to work closely with animals? What kind of animal care appeals to you most?"
+        },
+        {
+          "type": "action",
+          "question": "How could you learn more about animal care or support wildlife conservation in your community?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Aryaan joined an intensive junior zookeeper program, getting incredible hands-on experience with professional animal care.",
+        "The day began with preparing specialized diets for different species... African elephants needing tons of fresh produce and hay, while carnivores needed precisely calculated meat portions.",
+        "This comprehensive learning experience offered multiple areas to explore in the fascinating world of modern zoo work."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which aspect of zoo keeping should Aryaan dive into first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Master the complex science of species-specific nutrition planning"
+            },
+            {
+              "letter": "B",
+              "text": "Focus on habitat maintenance and animal environment management"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Nutrition management revealed the incredible complexity of feeding diverse species... understanding natural diets, dietary restrictions, seasonal changes, and how nutrition affects animal behavior and health."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Habitat maintenance taught Aryaan how cleaning protocols must ensure both safety and animal welfare standards while keeping intelligent animals mentally stimulated."
+        }
+      ],
+      "continuation": [
+        "Working with veterinarians showed Aryaan the incredible medical expertise required for exotic animal care.",
+        "The fascinating primate enrichment activities demonstrated how modern zoos prioritize mental stimulation with puzzle feeders and problem-solving challenges.",
+        "Aryaan discovered that contemporary zoo science combines cutting-edge research with hands-on animal relationships.",
+        "The experience revealed how zoo work connects directly with broader wildlife protection and conservation education missions."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What aspects of working with animals in professional settings appeal to you most... the science, the relationships, or the conservation mission?"
+        },
+        {
+          "type": "action",
+          "question": "How could you gain experience with animal care or conservation education to explore potential career interests?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Aryaan immersed himself in the sophisticated world of contemporary zoo science, discovering how modern animal care combines advanced research with conservation impact.",
+        "This wasn't just feeding animals... it was mastering complex systems of nutrition science, behavioral psychology, veterinary medicine, and species preservation.",
+        "The experience revealed how today's zoo professionals contribute directly to saving endangered species while advancing our understanding of animal intelligence and welfare."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which area of zoo science should Aryaan explore in depth?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Dive into advanced animal nutrition science and dietary optimization"
+            },
+            {
+              "letter": "B",
+              "text": "Focus on habitat design and environmental management systems"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Advanced nutrition science revealed how modern zoos use cutting-edge research to optimize animal health... calculating precise caloric needs, understanding digestive biochemistry, and designing feeding strategies that promote natural behaviors."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Environmental management demonstrated how zoo design has evolved to prioritize animal welfare through habitat complexity, social grouping strategies, and behavioral enrichment programs that keep intelligent animals mentally stimulated."
+        }
+      ],
+      "continuation": [
+        "Veterinary collaboration exposed Aryaan to the incredible medical expertise required for exotic animal care... from understanding species-specific anatomy to developing treatment protocols for animals that can't communicate symptoms.",
+        "Working with intelligent species like chimpanzees and orangutans revealed how modern zoos provide cognitive challenges that mirror wild mental demands.",
+        "Aryaan learned that contemporary zoo work drives conservation research, species preservation efforts, and public education about environmental protection.",
+        "The experience showed how animal care professionals contribute to scientific knowledge that helps protect entire ecosystems and endangered species in the wild."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has learning about the complexity of modern animal care changed your understanding of the relationship between humans and wildlife?"
+        },
+        {
+          "type": "action",
+          "question": "What specific steps could you take to develop expertise in animal science, conservation biology, or wildlife education?"
+        }
+      ]
+    }
+  }
+}

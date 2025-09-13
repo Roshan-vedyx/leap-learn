@@ -1,0 +1,162 @@
+{
+  "id": "team-project",
+  "title": "Working Together",
+  "theme": "Team Project",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Maya, Rishi, and Piya got assigned to work together on a huge science project about clean energy... and honestly, they weren't sure how this was going to go.",
+        "At first, this seemed like it might be a disaster because they all had totally different ideas and ways of working!",
+        "Maya loved doing research and finding cool facts online, Rishi was obsessed with building things with his hands, and Piya was amazing at explaining complicated stuff to people."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should they handle having such different working styles?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Each person picks their favorite part of the project to focus on"
+            },
+            {
+              "letter": "B", 
+              "text": "Try to do everything together even if it takes longer"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Dividing up tasks based on everyone's strengths worked perfectly! Maya researched renewable energy facts, Rishi built an awesome solar panel model, and Piya created an incredible presentation."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Working on everything together was slower, but it helped them all learn new skills and understand each other's approaches way better."
+        }
+      ],
+      "continuation": [
+        "Their final project was absolutely amazing and they all felt super proud of what they'd accomplished together!",
+        "The teacher was impressed and other students kept asking how they made such a cool project.",
+        "They realized that having different strengths actually made their team way stronger than if they were all exactly the same.",
+        "Now they were excited to work together on more projects in the future... who knew teamwork could be this fun?"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever worked on a team where everyone had different strengths? How did you figure out the best way to work together?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help your next team project run more smoothly and be more fun for everyone?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Maya, Rishi, and Piya faced the challenge of working together on an ambitious renewable energy research project despite having completely different working styles and creative approaches.",
+        "Each team member brought distinct strengths: Maya excelled at research and data analysis, Rishi was great at engineering and hands-on construction, while Piya had remarkable communication skills.",
+        "Managing these diverse talents was going to require some strategic planning and effective team coordination."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the best way to coordinate these different talents and working styles?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Divide up tasks systematically so each member can focus on their areas of expertise"
+            },
+            {
+              "letter": "B",
+              "text": "Work collaboratively on every aspect so everyone participates in all parts of the project"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Smart task division enabled each team member to excel in their preferred areas while contributing unique value to create a comprehensive final product."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Working together on all project elements created deeper mutual understanding and skill development while building stronger working relationships."
+        }
+      ],
+      "continuation": [
+        "Their systematic coordination resulted in an outstanding multimedia presentation featuring detailed research findings, functional solar technology demonstrations, and compelling communication.",
+        "The project exceeded teacher expectations and impressed classmates with both its scientific accuracy and creative presentation style.",
+        "They decided to enter their work in the school science fair and share their expertise with other students through peer teaching.",
+        "The experience taught them valuable lessons about leveraging different strengths and working effectively with people who think differently than they do."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What have you learned about working effectively with people who have different strengths and approaches than your own?"
+        },
+        {
+          "type": "action",
+          "question": "How could you apply successful teamwork strategies to other collaborative situations in school, sports, or community activities?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Maya, Rishi, and Piya took on the complex challenge of executing a comprehensive renewable energy research project despite having fundamentally different approaches to problem-solving and project management.",
+        "Maya brought exceptional analytical research capabilities, Rishi contributed advanced engineering expertise and hands-on building talents, while Piya offered sophisticated communication abilities and presentation mastery.",
+        "Getting effective collaboration among team members with such diverse skills was going to require advanced coordination strategies and strong interpersonal communication."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should they coordinate effective collaboration among team members with such diverse skills?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use strategic task allocation that maximizes individual expertise while ensuring integrated project outcomes"
+            },
+            {
+              "letter": "B",
+              "text": "Establish rotating leadership that leverages individual strengths during relevant project phases"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Strategic skill alignment enabled optimal utilization of individual talents while creating collaborative synergy that produced exceptional integrated outcomes."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Rotating leadership allowed each member to guide collaborative efforts through their areas of expertise while developing advanced teamwork skills across all project phases."
+        }
+      ],
+      "continuation": [
+        "Their sophisticated coordination produced an exemplary multimedia educational resource featuring comprehensive scientific documentation, functional renewable energy prototypes, and compelling public engagement presentations.",
+        "The project significantly exceeded academic standards and became a model for other student teams working on complex collaborative initiatives.",
+        "They leveraged their success by developing peer education initiatives and establishing ongoing environmental advocacy efforts that combined their diverse talents.",
+        "The experience prepared them for leadership roles in increasingly complex collaborative environments while demonstrating the power of coordinated diverse expertise."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has working with teammates whose thinking processes differ significantly from your own challenged your assumptions about effective collaboration?"
+        },
+        {
+          "type": "action", 
+          "question": "What systematic approaches could you develop to identify, appreciate, and effectively coordinate diverse talents in future collaborative projects?"
+        }
+      ]
+    }
+  }
+}

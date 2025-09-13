@@ -1,0 +1,162 @@
+{
+  "id": "bird-migration",
+  "title": "Journey of a Lifetime",
+  "theme": "Bird Migration",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Piya watched thousands of amazing birds flying south for winter.",
+        "It was like an incredible sky parade that happened every year.",
+        "Some birds looked super tired and hungry from their crazy long journey."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How could Piya help these traveling birds?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Set up feeding stations with different seeds and fresh water"
+            },
+            {
+              "letter": "B",
+              "text": "Plant flowers and bushes that birds love to eat from"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The feeding stations were like restaurants for tired birds... they flocked to eat seeds and drink water before continuing their journey!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "The special plants attracted insects and provided berries that gave birds the energy they needed for their long trip."
+        }
+      ],
+      "continuation": [
+        "Piya learned that birds travel thousands of miles twice every year... that's like flying across the whole country!",
+        "She started using a phone app to track which birds she saw and when they arrived.",
+        "Her observations helped scientists understand how bird travel patterns were changing.",
+        "Watching the birds return each spring filled Piya with joy... she had become part of their incredible journey."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever watched birds or other animals on their journeys? What did you notice about how they moved or acted?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do in your yard or neighborhood to help wildlife that might be traveling through?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Piya became fascinated by the incredible yearly bird migration, when thousands of different bird types traveled through her area.",
+        "These birds followed ancient flight paths that had been used for hundreds of years.",
+        "During the busiest migration time, exhausted songbirds, graceful water birds, and powerful hawks faced serious challenges from lost habitats and terrible weather."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the best way to support these amazing travelers?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Create complete feeding stations with different seeds and water sources"
+            },
+            {
+              "letter": "B",
+              "text": "Design native plant gardens that provide natural food and shelter"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Smart feeding station placement created vital refueling stops where different bird species could restore energy needed for completing their demanding journeys."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Native plant systems attracted many insects and produced seasonal berries that provided natural, sustainable nutrition perfectly timed with migration periods."
+        }
+      ],
+      "continuation": [
+        "Using citizen science apps, Piya began documenting which species she saw and tracking migration timing patterns.",
+        "Her data contributed to important research databases that scientists use to track changes in bird populations.",
+        "Piya partnered with a local bird-watching group to learn advanced identification techniques.",
+        "She discovered that some birds she was tracking had traveled from as far as the Arctic Circle to Central America!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What aspects of animal migration and seasonal movement patterns fascinate you most?"
+        },
+        {
+          "type": "action",
+          "question": "How could you contribute to wildlife conservation in your community while learning more about local animals?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Piya immersed herself in the extraordinary phenomenon of continental bird migration, joining an international citizen science network.",
+        "This incredible seasonal movement involved different bird families navigating thousands of miles using ancient routes passed down through genetics and learned behavior.",
+        "The complexity of flight path usage patterns across multiple geographic regions revealed the sophisticated nature of bird navigation systems."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya approach creating effective conservation support for these remarkable journeys?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Implement comprehensive habitat improvement using scientific methods"
+            },
+            {
+              "letter": "B",
+              "text": "Establish systematic monitoring programs with advanced research techniques"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Strategic habitat improvement created high-quality stopover sites that significantly improved migration success rates while providing essential resources during critical refueling periods."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Systematic research participation generated valuable timing data and population monitoring information that contributed to continental migration databases used by professional bird scientists."
+        }
+      ],
+      "continuation": [
+        "Piya's detailed data collection using advanced bird-tracking apps revealed crucial information about how climate change was affecting migration timing.",
+        "She worked directly with professional bird scientists to analyze changes in habitat quality and where different species were showing up.",
+        "Her research showed how human development and activities were creating new obstacles for birds following their ancient flight paths.",
+        "The comprehensive dataset she helped create became essential for developing real conservation strategies to protect the routes birds depend on."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has studying the complexity of animal migration patterns influenced your understanding of environmental connections?"
+        },
+        {
+          "type": "action",
+          "question": "What long-term conservation goals could you pursue that would contribute meaningful scientific knowledge while protecting critical wildlife habitats?"
+        }
+      ]
+    }
+  }
+}

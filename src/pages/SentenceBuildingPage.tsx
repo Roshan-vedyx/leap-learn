@@ -49,6 +49,145 @@ const getTemplateWords = (currentTemplate: any, slotType: string): string[] => {
   return Array.isArray(words) ? words.slice(0, 3) : []
 }
 
+const getGrammarLabel = (slotType: string): string => {
+  const labels = {
+    'animal': 'WHO (The main character)',
+    'adjective': 'DESCRIBING word (What is it like?)',
+    'action': 'DOING word (What\'s happening?)',
+    'color': 'COLOR word (What color?)',
+    'number': 'HOW MANY (Count them!)',
+    'object': 'WHAT (What thing?)',
+    'place': 'WHERE (What place?)',
+    'food': 'WHAT (What food?)',
+    'vehicle': 'WHAT (Which vehicle?)',
+    'space': 'WHAT (Which space thing?)',
+    'taste': 'HOW (What does it taste like?)',
+    'meal': 'WHEN (Which meal?)',
+    'temperature': 'HOW (What temperature?)',
+    'speed': 'HOW FAST (What speed?)',
+    'part': 'WHICH PART (What part?)'
+  }
+  return labels[slotType] || `${slotType.toUpperCase()} word`
+}
+
+const getPatternCelebration = (slots: SentenceSlot[]): string => {
+  // Build pattern description from filled slots
+  const pattern = slots
+    .filter(slot => slot.type !== 'fixed' && slot.filled)
+    .map(slot => getGrammarLabel(slot.type).split('(')[0].trim()) // Get just the main part
+    .join(' + ')
+  
+  return `Amazing! You built a ${pattern} sentence!`
+}
+
+const getPatternExample = (slots: SentenceSlot[]): string => {
+  // Create a simple example following the same pattern
+  const examples = {
+    'WHO + DOING': 'Dogs run',
+    'WHO + DESCRIBING': 'Cats are big', 
+    'WHO + DOING + WHERE': 'Birds fly home',
+    'DESCRIBING + WHO + DOING': 'Big dogs run',
+    'WHO + DOING + COLOR': 'Dogs see red'
+  }
+  
+  const pattern = slots
+    .filter(slot => slot.type !== 'fixed' && slot.filled)
+    .map(slot => getGrammarLabel(slot.type).split('(')[0].trim())
+    .join(' + ')
+    
+  const example = examples[pattern] || 'The cat runs'
+  return `This follows the same pattern as '${example}' - can you see it?`
+}
+
+const shouldShowSlot = (slots: SentenceSlot[], slotIndex: number): boolean => {
+  // Always show fixed words
+  if (slots[slotIndex].type === 'fixed') {
+    return true
+  }
+  
+  // Show if this slot is filled
+  if (slots[slotIndex].filled) {
+    return true
+  }
+  
+  // Show if all previous fillable slots are filled
+  for (let i = 0; i < slotIndex; i++) {
+    if (slots[i].type !== 'fixed' && !slots[i].filled) {
+      return false // Previous unfilled slot exists
+    }
+  }
+  
+  return true // All previous slots are filled/fixed
+}
+
+const getProgressiveMessage = (slots: SentenceSlot[], currentIndex: number): string => {
+  const currentSlot = slots[currentIndex]
+  if (!currentSlot || currentSlot.type === 'fixed') return ''
+  
+  const slotPosition = slots.filter((s, i) => i <= currentIndex && s.type !== 'fixed').length
+  const totalSlots = slots.filter(s => s.type !== 'fixed').length
+  
+  if (slotPosition === 1) {
+    return `First, choose ${getGrammarLabel(currentSlot.type)} to start your sentence...`
+  } else if (slotPosition === totalSlots) {
+    return `Finally, choose ${getGrammarLabel(currentSlot.type)} to complete your sentence!`
+  } else {
+    return `Great! Now choose ${getGrammarLabel(currentSlot.type)} to continue...`
+  }
+}
+
+const getEducationalFeedback = (word: string, slotType: string): string => {
+  const feedbackMap = {
+    'animal': `Perfect! "${word}" is a WHO word - it tells us about the main character in our sentence!`,
+    'adjective': `Great choice! "${word}" is a describing word - it tells us what something looks like!`,
+    'action': `Excellent! "${word}" is a doing word - it shows what's happening in our sentence!`,
+    'color': `Nice pick! "${word}" is a color word - it helps us picture what we're talking about!`,
+    'number': `Smart choice! "${word}" tells us how many - counting words make sentences clearer!`,
+    'object': `Good selection! "${word}" is a WHAT word - it names something important!`,
+    'place': `Well done! "${word}" is a WHERE word - it tells us about location!`,
+    'food': `Yummy choice! "${word}" is a food word - it makes our sentence tasty!`,
+    'vehicle': `Cool pick! "${word}" is a vehicle word - now we're moving!`,
+    'space': `Stellar choice! "${word}" is a space word - out of this world!`,
+    'taste': `Tasty pick! "${word}" describes how something tastes!`,
+    'meal': `Perfect timing! "${word}" tells us when we eat!`,
+    'temperature': `Great choice! "${word}" tells us how hot or cold something is!`,
+    'speed': `Fast thinking! "${word}" tells us how quickly something moves!`,
+    'part': `Good eye! "${word}" names an important part!`
+  }
+  
+  return feedbackMap[slotType] || `Great choice! "${word}" fits perfectly here!`
+}
+
+const generateModelSentence = (template: string, theme: string): string => {
+  // Create example sentences for each template
+  const modelExamples = {
+    animals: {
+      "THE [ANIMAL] IS [ADJECTIVE]": "THE DOG IS BIG",
+      "I SEE A [ADJECTIVE] [ANIMAL]": "I SEE A CUTE CAT", 
+      "THE [ANIMAL] CAN [ACTION]": "THE BIRD CAN FLY",
+      "MY [COLOR] [ANIMAL] LIKES TO [ACTION]": "MY BROWN DOG LIKES TO PLAY"
+    },
+    space: {
+      "THE [SPACE] IS [ADJECTIVE]": "THE SUN IS BRIGHT",
+      "I FLY TO THE [SPACE] IN MY [VEHICLE]": "I FLY TO THE MOON IN MY ROCKET",
+      "THE [SPACE] HAS [NUMBER] [OBJECT]": "THE PLANET HAS MANY MOONS"
+    },
+    food: {
+      "THE [FOOD] IS [ADJECTIVE]": "THE CAKE IS SWEET",
+      "I EAT [ADJECTIVE] [FOOD]": "I EAT YUMMY PIZZA",
+      "MY [FOOD] TASTES [TASTE]": "MY SOUP TASTES HOT"
+    },
+    vehicles: {
+      "THE [VEHICLE] IS [ADJECTIVE]": "THE CAR IS FAST",
+      "I RIDE THE [ADJECTIVE] [VEHICLE]": "I RIDE THE BIG BUS",
+      "MY [VEHICLE] CAN [ACTION]": "MY BIKE CAN GO"
+    }
+  }
+  
+  const themeExamples = modelExamples[theme as keyof typeof modelExamples] || modelExamples.animals
+  return themeExamples[template] || "THE CAT RUNS FAST"
+}
+
 const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) => {
   const [currentTemplateIndex, setCurrentTemplateIndex] = useState(0)
   const [sentenceSlots, setSentenceSlots] = useState<SentenceSlot[]>([])
@@ -65,6 +204,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   const [, setLocation] = useLocation()
   const adaptiveWordBank = useRef<AdaptiveWordBank | null>(null)
   const [wordsLoaded, setWordsLoaded] = useState(false)
+  const [showModelSentence, setShowModelSentence] = useState(true)
 
   // Get theme-specific templates
   const templates = sentenceTemplates[theme as keyof typeof sentenceTemplates] || sentenceTemplates.animals
@@ -91,7 +231,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     }
     initWordBank()
   }, [])
-
+  
   // Parse template into visual sentence slots
   const parseTemplateIntoSlots = (template: string) => {
     const words = template.split(' ')
@@ -149,6 +289,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     if (currentTemplate) {
       const slots = parseTemplateIntoSlots(currentTemplate.template)
       setSentenceSlots(slots)
+      setShowModelSentence(true)
       
       // Create word bank from all possible words
       const allValidWords = new Set<string>()
@@ -165,8 +306,17 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       setAvailableWords(Array.from(allValidWords))
       
       // Auto-select first empty slot for better UX
-      const firstEmptySlot = slots.findIndex(slot => !slot.filled && slot.type !== 'fixed')
-      setCurrentSlotIndex(firstEmptySlot === -1 ? null : firstEmptySlot)
+      
+      const firstVisibleEmptySlot = slots.findIndex((slot, index) => 
+        !slot.filled && slot.type !== 'fixed' && shouldShowSlot(slots, index)
+      )
+      setCurrentSlotIndex(firstVisibleEmptySlot === -1 ? null : firstVisibleEmptySlot)
+
+      // Set progressive instruction feedback
+      if (firstVisibleEmptySlot !== -1) {
+        const message = getProgressiveMessage(slots, firstVisibleEmptySlot)
+        setWordFeedback(message)
+      }
       
       setIsSentenceComplete(false)
       setShowCelebration(false)
@@ -187,7 +337,8 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
       if (audioEnabled) {
         setTimeout(() => {
           const sentence = sentenceSlots.map(slot => slot.content).join(' ')
-          handleReadAloud(sentence)
+          const celebration = getPatternCelebration(sentenceSlots)
+          handleReadAloud(`${sentence}. ${celebration}`)
         }, 500)
       }
     } else {
@@ -232,7 +383,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     // Audio feedback for slot selection only if enabled
     if (audioEnabled && audio.isSpeechSynthesisSupported()) {
       const slotType = slot.type.replace('_', ' ')
-      await handleReadAloud(`Choose a ${slotType} word`)
+      await handleReadAloud(`Choose a ${getGrammarLabel(slot.type)}`)
     }
   }
 
@@ -280,23 +431,32 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     // Remove word from available words
     setAvailableWords(prev => prev.filter(w => w !== word))
     
-    // Positive feedback
-    setWordFeedback(`✨ Great choice! "${word}" fits perfectly!`)
+    // Educational feedback - why this works
+    const educationalMessage = getEducationalFeedback(word, currentSlot.type)
+    setWordFeedback(educationalMessage)
     
     // Audio celebration for correct choice only if enabled
     if (audioEnabled && audio.isSpeechSynthesisSupported()) {
-      await handleReadAloud(`Great! ${word}`)
+      await handleReadAloud(educationalMessage)
     }
     
     // Auto-advance to next empty slot
     const nextEmptySlot = newSlots.findIndex((slot, index) => 
-      index > currentSlotIndex && !slot.filled && slot.type !== 'fixed'
+      index > currentSlotIndex && !slot.filled && slot.type !== 'fixed' && shouldShowSlot(newSlots, index)
     )
+    
+    const nextSlotIndex = nextEmptySlot === -1 ? null : nextEmptySlot
+    
+    // Set progressive message for next slot
+    if (nextSlotIndex !== null) {
+      const message = getProgressiveMessage(newSlots, nextSlotIndex)
+      setTimeout(() => setWordFeedback(message), 1000) // Brief delay for better UX
+    }
     
     setCurrentSlotIndex(nextEmptySlot === -1 ? null : nextEmptySlot)
     
     // Clear feedback after 2 seconds
-    setTimeout(() => setWordFeedback(''), 2000)
+    setTimeout(() => setWordFeedback(''), 4000)
   }
 
   // Enhanced slot clearing with confirmation
@@ -370,6 +530,7 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
   }
 
   const handleNextTemplate = () => {
+    setShowModelSentence(true)
     if (currentTemplateIndex < templates.length - 1) {
       setCurrentTemplateIndex(currentTemplateIndex + 1)
     } else {
@@ -396,10 +557,19 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
     })
     themeWords.forEach(word => allValidWords.add(word))
     setAvailableWords(Array.from(allValidWords).sort())
-    
-    // Auto-select first empty slot
-    const firstEmptySlot = slots.findIndex(slot => !slot.filled && slot.type !== 'fixed')
-    setCurrentSlotIndex(firstEmptySlot === -1 ? null : firstEmptySlot)
+        
+    // Auto-select first VISIBLE empty slot
+    const firstVisibleEmptySlot = slots.findIndex((slot, index) => 
+      !slot.filled && slot.type !== 'fixed' && shouldShowSlot(slots, index)
+    )
+    setCurrentSlotIndex(firstVisibleEmptySlot === -1 ? null : firstVisibleEmptySlot)
+
+    // Set progressive instruction feedback
+    if (firstVisibleEmptySlot !== -1) {
+      const message = getProgressiveMessage(slots, firstVisibleEmptySlot)
+      setWordFeedback(message)
+    }
+    setShowModelSentence(true)
     setWordFeedback('')
   }
 
@@ -429,189 +599,238 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
           </p>
         </div>
 
-        {/* Instructions - responsive */}
-        <Card className="mb-6 bg-autism-neutral border-autism-primary border-2">
-          <CardHeader>
-            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
-              📖 How to Build:
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-3">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center text-base md:text-lg">
-              <div className="flex items-center gap-2">
-                <span className="text-xl md:text-2xl">1️⃣</span>
-                <span>Click an empty box</span>
+        {/* Model Sentence Display - Show before building */}
+        {showModelSentence && (
+          <Card className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300 border-2">
+            <CardContent className="text-center py-6">
+              <div className="text-3xl md:text-4xl mb-4">📖</div>
+              <h3 className="text-lg md:text-xl font-bold text-blue-700 mb-3">
+                Here's how this pattern works:
+              </h3>
+              <div className="text-xl md:text-2xl bg-white p-4 rounded-lg border border-blue-200 mb-4 font-bold text-blue-800">
+                "{generateModelSentence(currentTemplate.template, theme)}"
               </div>
-              <div className="hidden sm:block text-autism-primary">→</div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl md:text-2xl">2️⃣</span>
-                <span>Click a word</span>
-              </div>
-              <div className="hidden sm:block text-autism-primary">→</div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl md:text-2xl">3️⃣</span>
-                <span>Build your sentence!</span>
-              </div>
-            </div>
-            <p className="text-xs md:text-sm text-autism-primary/60 mt-4">
-              Template: <strong>"{currentTemplate.template}"</strong>
-            </p>
-            
-            {/* Show/Hide Hint Button */}
-            <div className="mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowHints(!showHints)}
-                className="text-xs md:text-sm"
-              >
-                {showHints ? 'Hide Hint' : 'Show Hint'}
-              </Button>
-            </div>
-            
-            {/* Collapsible Hint */}
-            {showHints && currentTemplate.hint && (
-              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-xs md:text-sm text-blue-700 italic">
-                  💡 {currentTemplate.hint}
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Sentence Frame - responsive */}
-        <Card className="mb-6 bg-white border-autism-secondary border-2">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="text-center text-lg md:text-xl text-autism-primary flex-1">
-                ✍️ Your Sentence
-              </CardTitle>
+              <p className="text-base md:text-lg text-blue-600 mb-6">
+                Now you try making a sentence like this!
+              </p>
               
-              {/* Audio Toggle */}
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-autism-primary">Read aloud:</span>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  variant={audioEnabled ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setAudioEnabled(!audioEnabled)}
-                  className="text-xs px-3 py-1"
+                  onClick={() => setShowModelSentence(false)}
+                  className="min-h-[48px] bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 text-base font-medium"
                 >
-                  {audioEnabled ? 'ON' : 'OFF'}
+                  Let's Build! 🚀
                 </Button>
+                
+                {audioEnabled && (
+                  <Button
+                    variant="outline"
+                    onClick={() => handleReadAloud(generateModelSentence(currentTemplate.template, theme))}
+                    disabled={isReading}
+                    className="min-h-[48px] text-base px-6 py-3 border-blue-300 text-blue-700 hover:bg-blue-50"
+                  >
+                    {isReading ? '🗣️ Reading...' : '🔊 Hear Example'}
+                  </Button>
+                )}
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {/* Mobile-optimized sentence slots */}
-            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
-              {sentenceSlots.map((slot, index) => (
-                <div
-                  key={slot.id}
-                  onClick={() => handleSlotClick(index)}
-                  className={`
-                    relative min-w-[80px] md:min-w-[100px] min-h-[48px] md:min-h-[70px] border-3 rounded-xl flex items-center justify-center
-                    text-sm md:text-lg font-bold cursor-pointer transition-all duration-300 transform
-                    ${slot.type === 'fixed' 
-                      ? 'bg-autism-neutral text-autism-primary border-autism-primary/30 cursor-default shadow-sm' 
-                      : slot.filled
-                        ? 'bg-autism-secondary text-white border-autism-secondary hover:scale-105 shadow-lg'
-                        : currentSlotIndex === index
-                          ? 'bg-blue-50 border-blue-400 border-dashed hover:bg-blue-100 shadow-md'
-                          : 'bg-gray-50 border-gray-300 border-dashed hover:bg-gray-100 hover:border-gray-400'
-                    }
-                  `}
-                >
-                  <div className="text-center px-2">
-                    {slot.filled ? (
-                      slot.content
-                    ) : slot.content ? (
-                      slot.content
-                    ) : (
-                      <span className="text-xs md:text-sm text-gray-500 break-words">
-                        {slot.type.replace('_', ' ')}
-                      </span>
-                    )}
+            </CardContent>
+          </Card>
+        )}
+        {!showModelSentence && (
+          <>
+            {/* Instructions - responsive */}
+            <Card className="mb-6 bg-autism-neutral border-autism-primary border-2">
+              <CardHeader>
+                <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
+                  📖 How to Build:
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center text-base md:text-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl md:text-2xl">1️⃣</span>
+                    <span>Click an empty box</span>
                   </div>
+                  <div className="hidden sm:block text-autism-primary">→</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl md:text-2xl">2️⃣</span>
+                    <span>Click a word</span>
+                  </div>
+                  <div className="hidden sm:block text-autism-primary">→</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl md:text-2xl">3️⃣</span>
+                    <span>Build your sentence!</span>
+                  </div>
+                </div>
+                <p className="text-xs md:text-sm text-autism-primary/60 mt-4">
+                  Template: <strong>"{currentTemplate.template}"</strong>
+                </p>
+                
+                {/* Show/Hide Hint Button */}
+                <div className="mt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowHints(!showHints)}
+                    className="text-xs md:text-sm"
+                  >
+                    {showHints ? 'Hide Hint' : 'Show Hint'}
+                  </Button>
+                </div>
+                
+                {/* Collapsible Hint */}
+                {showHints && currentTemplate.hint && (
+                  <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-xs md:text-sm text-blue-700 italic">
+                      💡 {currentTemplate.hint}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Sentence Frame - responsive */}
+            <Card className="mb-6 bg-white border-autism-secondary border-2">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <CardTitle className="text-center text-lg md:text-xl text-autism-primary flex-1">
+                    ✍️ Your Sentence
+                  </CardTitle>
                   
-                  {/* Mobile-friendly selection indicator */}
-                  {currentSlotIndex === index && slot.type !== 'fixed' && (
-                    <div className="absolute -top-2 -right-2 w-4 h-4 md:w-6 md:h-6 bg-autism-primary rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs md:text-sm font-bold">👆</span>
+                  {/* Audio Toggle */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-autism-primary">Read aloud:</span>
+                    <Button
+                      variant={audioEnabled ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setAudioEnabled(!audioEnabled)}
+                      className="text-xs px-3 py-1"
+                    >
+                      {audioEnabled ? 'ON' : 'OFF'}
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {/* Mobile-optimized sentence slots */}
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6">
+                  {sentenceSlots.map((slot, index) => {
+                    const isVisible = shouldShowSlot(sentenceSlots, index)
+                    
+                    return (
+                      <div
+                        key={slot.id}
+                        onClick={() => handleSlotClick(index)}
+                        className={`
+                          relative min-w-[80px] md:min-w-[100px] min-h-[48px] md:min-h-[70px] border-3 rounded-xl flex items-center justify-center
+                          text-sm md:text-lg font-bold cursor-pointer transition-all duration-300 transform
+                          ${!isVisible 
+                            ? 'opacity-30 bg-gray-100 border-gray-200 cursor-not-allowed pointer-events-none' 
+                            : slot.type === 'fixed' 
+                              ? 'bg-autism-neutral text-autism-primary border-autism-primary/30 cursor-default shadow-sm' 
+                              : slot.filled
+                                ? 'bg-autism-secondary text-white border-autism-secondary hover:scale-105 shadow-lg'
+                                : currentSlotIndex === index
+                                  ? 'bg-blue-50 border-blue-400 border-dashed hover:bg-blue-100 shadow-md'
+                                  : 'bg-gray-50 border-gray-300 border-dashed hover:bg-gray-100 hover:border-gray-400'
+                          }
+                        `}
+                      >
+                        <div className="text-center px-2">
+                          {!isVisible ? (
+                            <span className="text-xs text-gray-400">?</span>
+                          ) : slot.filled ? (
+                            slot.content
+                          ) : slot.content ? (
+                            slot.content
+                          ) : (
+                            <span className="text-xs md:text-sm text-gray-500 break-words">
+                              {getGrammarLabel(slot.type)}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Selection indicator - only show if visible */}
+                        {isVisible && currentSlotIndex === index && slot.type !== 'fixed' && (
+                          <div className="absolute -top-2 -right-2 w-4 h-4 md:w-6 md:h-6 bg-autism-primary rounded-full flex items-center justify-center">
+                            <span className="text-white text-xs md:text-sm font-bold">👆</span>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Double-click instruction */}
+                <div className="text-center mb-4">
+                  <p className="text-xs md:text-sm text-autism-primary/70">
+                    Double-click a word twice to remove
+                  </p>
+                </div>
+
+                {/* Word feedback - responsive */}
+                {wordFeedback && (
+                  <div className="text-center mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm md:text-base text-blue-700">{wordFeedback}</p>
+                  </div>
+                )}
+
+                {/* Hint system - responsive */}
+                {showHints && currentSlotIndex !== null && sentenceSlots[currentSlotIndex] && (
+                  <div className="text-center mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-sm md:text-base text-green-700">
+                      💡 Choose a <strong>{getGrammarLabel(sentenceSlots[currentSlotIndex].type)}</strong> below!
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Word Bank - mobile-optimized - Hide when sentence complete */}
+            {!isSentenceComplete && (
+              <Card className="mb-6 bg-white border-autism-primary border-2">
+                <CardHeader>
+                  <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
+                    {currentSlotIndex !== null && sentenceSlots[currentSlotIndex] 
+                      ? `📝 ${getGrammarLabel(sentenceSlots[currentSlotIndex].type)} Words`
+                      : '📝 Word Bank'
+                    }
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {currentSlotIndex === null ? (
+                    <div className="text-center p-6">
+                      <div className="text-4xl md:text-6xl mb-4">👆</div>
+                      <p className="text-base md:text-lg text-autism-primary/70">
+                        Click on an empty box above to see words for that slot!
+                      </p>
+                    </div>
+                  ) : filteredWords.length === 0 ? (
+                    <div className="text-center p-6">
+                      <div className="text-4xl md:text-6xl mb-4">🎯</div>
+                      <p className="text-base md:text-lg text-autism-primary/70">
+                        No more words available for this slot type!
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                      {filteredWords.map(word => (
+                        <Button
+                          key={word}
+                          onClick={() => handleWordClick(word)}
+                          variant="outline"
+                          size="comfortable"
+                          className="min-h-[48px] md:min-h-[60px] text-base md:text-lg px-4 py-3 border-2 border-autism-primary/30 hover:border-autism-primary hover:bg-autism-primary hover:text-white transition-all duration-200 transform hover:scale-105"
+                        >
+                          {word}
+                        </Button>
+                      ))}
                     </div>
                   )}
-                </div>
-              ))}
-            </div>
-
-            {/* Double-click instruction */}
-            <div className="text-center mb-4">
-              <p className="text-xs md:text-sm text-autism-primary/70">
-                Double-click a word twice to remove
-              </p>
-            </div>
-
-            {/* Word feedback - responsive */}
-            {wordFeedback && (
-              <div className="text-center mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm md:text-base text-blue-700">{wordFeedback}</p>
-              </div>
+                </CardContent>
+              </Card>
             )}
-
-            {/* Hint system - responsive */}
-            {showHints && currentSlotIndex !== null && sentenceSlots[currentSlotIndex] && (
-              <div className="text-center mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-sm md:text-base text-green-700">
-                  💡 Choose a <strong>{sentenceSlots[currentSlotIndex].type.replace('_', ' ')}</strong> word below!
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Word Bank - mobile-optimized - Hide when sentence complete */}
-        {!isSentenceComplete && (
-        <Card className="mb-6 bg-white border-autism-primary border-2">
-          <CardHeader>
-            <CardTitle className="text-center text-lg md:text-xl text-autism-primary">
-              {currentSlotIndex !== null && sentenceSlots[currentSlotIndex] 
-                ? `📝 ${sentenceSlots[currentSlotIndex].type.replace('_', ' ').toUpperCase()} Words`
-                : '📝 Word Bank'
-              }
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {currentSlotIndex === null ? (
-              <div className="text-center p-6">
-                <div className="text-4xl md:text-6xl mb-4">👆</div>
-                <p className="text-base md:text-lg text-autism-primary/70">
-                  Click on an empty box above to see words for that slot!
-                </p>
-              </div>
-            ) : filteredWords.length === 0 ? (
-              <div className="text-center p-6">
-                <div className="text-4xl md:text-6xl mb-4">🎯</div>
-                <p className="text-base md:text-lg text-autism-primary/70">
-                  No more words available for this slot type!
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-                {filteredWords.map(word => (
-                  <Button
-                    key={word}
-                    onClick={() => handleWordClick(word)}
-                    variant="outline"
-                    size="comfortable"
-                    className="min-h-[48px] md:min-h-[60px] text-base md:text-lg px-4 py-3 border-2 border-autism-primary/30 hover:border-autism-primary hover:bg-autism-primary hover:text-white transition-all duration-200 transform hover:scale-105"
-                  >
-                    {word}
-                  </Button>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          </>
         )}
 
         {/* Celebration Banner */}
@@ -624,6 +843,16 @@ const SentenceBuildingPage: React.FC<SentenceBuildingPageProps> = ({ theme }) =>
               </h3>
               <div className="text-lg md:text-xl bg-white p-4 rounded-lg border border-green-200 mb-4">
                 <strong>"{sentenceSlots.map(slot => slot.content).join(' ')}"</strong>
+              </div>
+
+              {/* Pattern Recognition Teaching */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <p className="text-base md:text-lg text-green-700 font-semibold mb-2">
+                  {getPatternCelebration(sentenceSlots)}
+                </p>
+                <p className="text-sm md:text-base text-green-600">
+                  {getPatternExample(sentenceSlots)}
+                </p>
               </div>
               <p className="text-base md:text-lg text-green-600 mb-6">
                 You're officially a sentence building superstar! 🌟

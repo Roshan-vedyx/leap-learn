@@ -1,0 +1,162 @@
+{
+  "id": "farm-adventure",
+  "title": "Down on the Farm",
+  "theme": "Farm Adventure",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Alex visited a real working farm for the first time and it was absolutely amazing!",
+        "There were so many different animals everywhere... cows giving fresh milk, chickens laying eggs, and pigs rolling around in mud to stay cool.",
+        "The farmer smiled and asked if Alex wanted to help with the morning chores."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex help out with the farm work?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Help feed all the different animals their breakfast"
+            },
+            {
+              "letter": "B",
+              "text": "Collect fresh eggs from the chicken coop"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Feeding time was incredible! Alex learned that cows eat tons of hay while chickens love scattered corn and pigs get excited about vegetable scraps!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Gathering warm eggs right from the nests was like finding treasure... and Alex discovered that chickens have very different personalities."
+        }
+      ],
+      "continuation": [
+        "The sheep had thick, fluffy wool that would eventually become cozy sweaters and blankets.",
+        "The playful goats kept trying to nibble Alex's hat and shoelaces, which was hilarious!",
+        "Alex started a journal to remember everything about farm life.",
+        "Walking back to the farmhouse, Alex felt proud to have helped real farmers do their important work."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever been around farm animals or seen where your food comes from? What surprised you most about farm life?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to learn more about where your food comes from and support local farmers in your area?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Alex went on an incredible educational farm visit to learn about how the food system actually works from farm to table.",
+        "The farm had dairy cattle producing fresh milk, heritage breed chickens laying eggs, and intelligent pigs wallowing in mud for temperature control.",
+        "The farmer explained that every animal had specific needs and played an important role in the farm's ecosystem."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the best way to jump into farm operations?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Learn the feeding routines and nutrition needs for different animals"
+            },
+            {
+              "letter": "B",
+              "text": "Master egg collection while understanding chicken behavior"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Learning about animal nutrition was fascinating... Alex discovered that cattle need different protein levels than chickens, and how pigs can actually turn farm waste into high-quality protein."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Egg collection taught Alex about chicken behavior, nesting preferences, and the daily rhythms that keep a poultry operation running smoothly."
+        }
+      ],
+      "continuation": [
+        "The entertaining goat herd showed off their natural curiosity and kept trying to sample Alex's clothing and equipment.",
+        "Alex learned that different animals have completely different daily schedules and social structures.",
+        "The farmer shared stories about how weather, seasons, and market prices all affect farm decisions.",
+        "By the end of the day, Alex understood why farming requires so much knowledge, skill, and dedication."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What aspects of farm life and food production surprised you most, and how has this changed your perspective?"
+        },
+        {
+          "type": "action",
+          "question": "How could you support sustainable farming and connect more meaningfully with the sources of your food?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Alex participated in an intensive agricultural education program designed to show modern livestock management and sustainable farming systems.",
+        "The farm showcased Holstein dairy cattle, Rhode Island Red heritage chickens, and Romney sheep breeds specifically selected for climate adaptation and optimal production.",
+        "This wasn't just a farm tour... it was a deep dive into the science and complexity behind modern agriculture."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex approach mastering complex farm operations?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Focus on livestock feeding methods and nutritional management"
+            },
+            {
+              "letter": "B",
+              "text": "Develop expertise in poultry management and egg production systems"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Alex dove into the science of animal nutrition... learning how cattle need different protein levels than chickens, and how pigs can actually convert farm waste into high-quality protein."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "The poultry operation revealed how farmers balance productivity with animal welfare, using housing systems that let chickens express natural behaviors while staying safe and healthy."
+        }
+      ],
+      "continuation": [
+        "The farm's goat population demonstrated natural intelligence and social structures while providing insights into sustainable grazing management.",
+        "Alex discovered how modern farmers use technology like GPS-guided tractors and computerized feeding systems to increase efficiency while reducing environmental impact.",
+        "The economic realities of farming became clear... how farmers must balance animal welfare, environmental sustainability, and financial viability.",
+        "This experience showed Alex that farming is actually a sophisticated blend of biology, chemistry, economics, and technology."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has understanding the complexity of modern agriculture influenced your perspective on food systems and environmental sustainability?"
+        },
+        {
+          "type": "action",
+          "question": "What specific actions could you take to support sustainable agriculture or even pursue agricultural learning opportunities?"
+        }
+      ]
+    }
+  }
+}

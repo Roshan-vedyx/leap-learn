@@ -1,0 +1,162 @@
+{
+  "id": "underwater-treasure",
+  "title": "The Hidden Gift",
+  "theme": "Underwater Treasure",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Alex adjusted the snorkel mask and dove beneath the surface.",
+        "The underwater world sparkled with clear blue light as tropical fish swirled in colorful schools.",
+        "Something unusual glinted between the rocks... an old glass bottle covered in barnacles and seaweed."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex handle this discovery?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Check out the bottle underwater before surfacing"
+            },
+            {
+              "letter": "B", 
+              "text": "Bring it to shore right away to investigate"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Alex peered through the glass and spotted something rolled up inside... definitely not just an empty bottle."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "On the beach, Alex discovered a piece of old cloth with markings that looked like a map."
+        }
+      ],
+      "continuation": [
+        "Alex surfaced for air, then dove back down to carefully work the bottle free from its rocky home.",
+        "Inside the bottle was a weathered map showing the coastline with mysterious symbols and marked locations.",
+        "Alex's pulse quickened... this felt like a real historical discovery.",
+        "This discovery might be way more important than just personal excitement."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever found something that made you feel like an explorer or detective? What was it?"
+        },
+        {
+          "type": "action",
+          "question": "What historical mysteries in your area would you be excited to help solve?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Alex went deeper through the crystal-clear water, breathing steadily through the snorkel tube.",
+        "The underwater landscape revealed a thriving sea ecosystem with coral formations creating natural sculptures among the rocks.",
+        "As Alex explored the deeper cracks, an unusual object caught attention... a crusty glass bottle wedged firmly between limestone formations."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex approach this historical find?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Document the exact location before removing the bottle"
+            },
+            {
+              "letter": "B",
+              "text": "Examine the contents while still underwater"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Alex's careful documentation preserved crucial context about where the artifact was found."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Through the glass, Alex could see rolled parchment with faded markings... definitely something significant."
+        }
+      ],
+      "continuation": [
+        "After surfacing to plan the retrieval, Alex carefully worked the artifact free without disturbing the surrounding sea life.",
+        "The bottle contained an authentic old-time sea chart from the colonial era, complete with navigation markers and coastal landmarks.",
+        "Alex had stumbled upon a genuine piece of local history.",
+        "Realizing how historically important this could be, Alex faced decisions about sharing this discovery responsibly."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think it feels to discover something that connects you directly to people from centuries ago?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help preserve and share important history in your community?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Alex executed a methodical underwater survey of the coastal rock formations during the best visibility conditions.",
+        "The marine variety was exceptional... complex coral ecosystems supported intricate food webs while limestone areas provided habitat for specialized communities.",
+        "During systematic exploration of deeper cracks, Alex identified an unusual artifact: a heavily encrusted glass vessel secured within rock deposits."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Alex proceed with this archaeological discovery?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Conduct initial artifact analysis and research its origins"
+            },
+            {
+              "letter": "B",
+              "text": "Set up proper documentation with maritime heritage authorities"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Alex's initial research suggested the bottle dated to early colonial sea trade routes, potentially containing navigation documents."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Heritage authorities confirmed the artifact's authenticity and historical value while ensuring proper preservation protocols."
+        }
+      ],
+      "continuation": [
+        "Following archaeological documentation protocols, Alex recorded GPS coordinates and environmental context before carefully extracting the historically significant container.",
+        "The sealed container held an authentic eighteenth-century sea chart documenting previously unknown coastal navigation routes and trading post locations.",
+        "Understanding the research implications, Alex considered how to maximize the discovery's contribution to maritime historical scholarship.",
+        "Through rigorous research and community engagement, Alex transformed a chance discovery into lasting contributions to maritime historical knowledge."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think discovering primary historical sources changes our understanding of the past compared to reading about history in textbooks?"
+        },
+        {
+          "type": "action",
+          "question": "What aspects of your community's history would you be motivated to research and help preserve?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "id": "new-kid",
+  "title": "Starting Fresh",
+  "theme": "New Kid",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Maya was standing outside Jefferson Middle School, holding her schedule and trying not to look as nervous as she felt... This was her third school in two years.",
+        "Everyone else seemed to know exactly where they were going, while she was just hoping she could find her locker without getting completely lost.",
+        "The hallways were loud and crowded, and Maya wasn't sure if anyone would even notice she existed."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya handle her first day at a new school?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Try to blend in and observe how things work before talking to anyone"
+            },
+            {
+              "letter": "B", 
+              "text": "Be friendly and introduce herself to people in her classes"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Maya spent lunch quietly watching different groups, figuring out the social dynamics and finding a few people who seemed genuinely nice."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Maya's friendly approach worked! A girl named Sam helped her find her classes and invited her to sit with her friend group at lunch."
+        }
+      ],
+      "continuation": [
+        "By the end of the week, Maya had found her rhythm... and some potential friends too!",
+        "She discovered that being the new kid wasn't always terrible - sometimes people were actually curious and welcoming.",
+        "Maya realized that her experience moving around had made her pretty good at reading people and adapting to new situations.",
+        "When another new student arrived the next month, Maya was the first person to offer help and friendship."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever been the new kid somewhere? What would have made you feel more welcome?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help new students feel included and welcomed at your school?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Maya stared at the imposing brick facade of Jefferson Middle School, clutching her schedule while trying to calm her racing heartbeat... This was her third school in two years due to her mom's job transfers.",
+        "The hallways buzzed with established friend groups and inside jokes she'd never understand, while she navigated crowds of students who'd known each other since elementary school.",
+        "Being perpetually 'the new kid' had taught Maya some survival skills, but each transition still felt like starting over from scratch."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's Maya's best strategy for navigating this new social environment?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Study the social landscape carefully before making any moves to find her place"
+            },
+            {
+              "letter": "B",
+              "text": "Jump in with genuine friendliness and let her personality shine through"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Maya's observational approach helped her identify the truly welcoming students versus those who were just being polite, leading to more authentic connections."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya's genuine enthusiasm and interesting stories from living in different places made her an instant hit with several groups who appreciated her fresh perspective."
+        }
+      ],
+      "continuation": [
+        "Maya discovered that her unique experiences moving around had given her valuable perspectives that other students found fascinating.",
+        "She became known as someone who could relate to almost anyone because she'd learned to adapt and connect across different social environments.",
+        "When conflicts arose between friend groups, Maya often served as a bridge because she wasn't tied to old grudges or established dynamics.",
+        "By winter break, Maya realized this school felt more like home than anywhere she'd lived before - not because of the place, but because of the people."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What unique experiences or perspectives do you bring that might help you connect with others in unexpected ways?"
+        },
+        {
+          "type": "action",
+          "question": "How could you use your own experiences to help make your school more welcoming for students who feel like outsiders?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Maya approached Jefferson Middle School with a complex mix of resignation and determination... After multiple relocations due to her military family's assignments, she'd become an expert in the art of reinvention and social navigation.",
+        "The challenge wasn't just academic integration, but decoding established social hierarchies, unspoken cultural norms, and regional differences that could make or break her acceptance in this new community.",
+        "Each transition had taught Maya valuable lessons about resilience and adaptation, but she wondered if constantly starting over was preventing her from forming truly deep, lasting friendships."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya approach building meaningful connections in this new environment?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Leverage her diverse experiences to offer unique perspectives while carefully studying local social dynamics"
+            },
+            {
+              "letter": "B",
+              "text": "Be authentic about her challenges as a frequent mover while remaining open to genuine connection"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Maya's strategic approach and rich life experiences made her a valued addition to multiple social circles, as students appreciated her worldly perspective and diplomatic skills."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya's vulnerability about the challenges of constant relocation resonated deeply with students facing their own transitions, creating opportunities for meaningful mutual support."
+        }
+      ],
+      "continuation": [
+        "Maya realized that her transient lifestyle had developed her emotional intelligence and cultural adaptability in ways that benefited not just her, but her entire school community.",
+        "She became a mentor figure for other students facing transitions - whether moving, changing friend groups, or dealing with family changes.",
+        "Teachers began recognizing Maya's unique ability to bridge differences and facilitate inclusive discussions in group projects and classroom activities.",
+        "By the end of the year, Maya had created a support network that felt more like chosen family than temporary friendships, proving that depth of connection mattered more than length of time."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How have challenging experiences in your life developed strengths and perspectives that you might not have recognized before?"
+        },
+        {
+          "type": "action", 
+          "question": "What systems or programs could you help create at your school to better support students going through major life transitions?"
+        }
+      ]
+    }
+  }
+}

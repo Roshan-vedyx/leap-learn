@@ -1,0 +1,162 @@
+{
+  "id": "wildlife-sanctuary",
+  "title": "Healing Helpers",
+  "theme": "Wildlife Sanctuary",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Maya volunteered at a super cool place that helps hurt wild animals get better and return to nature.",
+        "Today she was taking care of a tiny baby owl with a broken wing... it was so fluffy and adorable!",
+        "The little owlet needed constant care and attention to heal properly and stay wild enough to survive on its own."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya help this injured owl recover?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Feed it tiny pieces of fish with special tweezers made for baby birds"
+            },
+            {
+              "letter": "B",
+              "text": "Make sure its wing is wrapped properly so it can heal correctly"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The hungry baby owl eagerly ate the fish pieces, getting stronger every day with proper nutrition designed for growing owls."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Checking the wing bandage daily helped Maya learn how to care for delicate bird bones while the owl healed perfectly."
+        }
+      ],
+      "continuation": [
+        "Maya gave the owl medicine every day and watched it get bigger and healthier.",
+        "After three weeks, the owl's wing was completely healed and ready for the big test!",
+        "Maya took the owl outside and released it back to the wild where it belonged.",
+        "Watching the owl fly strong and free was the most amazing feeling Maya had ever experienced."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever helped something or someone heal or get better? How did it make you feel to see them recover?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help wildlife in your area stay healthy and safe?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Maya volunteered at the local wildlife rehabilitation center, where trained professionals provide medical care for injured wild animals.",
+        "Her current patient was an orphaned great horned owlet with a broken wing from a severe thunderstorm several weeks ago.",
+        "Taking care of this recovering bird meant following strict rehabilitation rules to make sure the owl could eventually survive in the wild."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the most important aspect of owl rehabilitation to focus on?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Provide specialized nutrition and help develop proper hunting instincts"
+            },
+            {
+              "letter": "B",
+              "text": "Monitor healing progress while learning about bird anatomy and care"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Specialized feeding routines using proper tools and nutrition helped the owlet gain weight steadily while developing hunting instincts through controlled feeding experiences."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Daily medical check-ups revealed excellent bone healing progress while teaching Maya about bird anatomy and proper veterinary care techniques."
+        }
+      ],
+      "continuation": [
+        "Maya learned to balance caring for the bird with the critical goal of keeping its wild instincts intact.",
+        "After several weeks of dedicated care, the owlet had recovered completely and was ready for the ultimate test.",
+        "Maya helped with the carefully planned release in appropriate habitat during optimal conditions for the owl's successful return to independence.",
+        "The moment when months of care paid off in successful conservation was absolutely amazing to witness."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What motivates people to spend significant time and effort helping wild animals they'll never see again after release?"
+        },
+        {
+          "type": "action",
+          "question": "How could you contribute to wildlife conservation efforts in your community while learning about local ecosystems?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Maya committed herself to the demanding but incredibly rewarding work at the licensed wildlife rehabilitation facility.",
+        "She specialized in recovery programs for injured native bird species that needed intensive medical care and behavioral management.",
+        "Her current case involved an orphaned great horned owlet that had suffered serious wing fractures and soft tissue damage after being separated from its parents during severe storm conditions."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the most crucial aspect of successfully rehabilitating this magnificent bird?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Focus on advanced nutrition and developing essential survival behaviors"
+            },
+            {
+              "letter": "B",
+              "text": "Provide comprehensive medical care while documenting recovery progress"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Advanced feeding techniques combined with behavioral training successfully developed the owlet's natural hunting instincts while maintaining appropriate fear responses to humans."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Systematic medical documentation and healing assessment provided valuable data for improving rehabilitation techniques while ensuring optimal recovery outcomes through evidence-based care."
+        }
+      ],
+      "continuation": [
+        "Maya's dedication to maintaining detailed behavioral observations and medical records contributed valuable research data while mastering the complex art of wildlife rehabilitation.",
+        "The sophisticated balance between providing necessary care and preserving wild behavioral patterns became essential for successful reintegration.",
+        "When the moment arrived for release, Maya followed the scientifically designed protocol in optimal habitat conditions while conducting post-release monitoring.",
+        "This experience showed Maya how wildlife rehabilitation balances compassionate intervention with conservation science to create profound impact for individual animals and entire species."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has working directly with wild animals changed your understanding of human responsibility for environmental stewardship?"
+        },
+        {
+          "type": "action",
+          "question": "What career paths or volunteer opportunities could you pursue to make meaningful contributions to wildlife conservation and animal care?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "id": "time-capsule",
+  "title": "Buried Memories",
+  "theme": "Time Capsule",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "While digging in the school garden, Suha's shovel hit something really hard buried deep in the dirt.",
+        "It was an old metal box covered in rust and dirt!",
+        "Inside, Suha found incredible treasures from fifty years ago... old photos, handwritten letters, and a diary from students who used to go to this exact school."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Suha explore first in this amazing time capsule?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Read the diary entries to learn about daily life back then"
+            },
+            {
+              "letter": "B", 
+              "text": "Study the old photos to see how the school looked different"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The diary reveals that students had the same worries about tests, crushes, and friendships that kids have today... just with different technology!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Comparing old photos with current school shows amazing changes in clothing, hair, and classroom decorations over five decades."
+        }
+      ],
+      "continuation": [
+        "Even though lots of things were different, these students had the same hopes and dreams as kids today.",
+        "Suha decides to create a modern time capsule with current students to bury for future kids.",
+        "Everyone gets excited about choosing items that show what life is like right now.",
+        "They include photos, letters, and even a flash drive with videos and music from today.",
+        "Suha feels amazing knowing they've created a bridge between past, present, and future students!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What items would you put in a time capsule to show future students what your life is like right now?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help connect your generation with both past and future students?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "While working on the school's garden restoration project, Suha's digging unexpectedly uncovered something remarkable buried beneath decades of old soil.",
+        "A carefully sealed metal container had been waiting underground for discovery... a fascinating time capsule from fifty years earlier.", 
+        "Opening this treasure revealed authentic artifacts including vintage photographs, personal letters, and detailed diary entries created by students who had attended this same school generations ago."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This incredible historical discovery deserves careful exploration and analysis. What should Suha focus on first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Read diary entries to understand how daily student life and challenges compared across different eras"
+            },
+            {
+              "letter": "B",
+              "text": "Compare vintage photographs with current school environments to analyze changes in architecture and culture"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Reading the diaries reveals striking similarities in fundamental teenage concerns... academic stress, friendship drama, and future worries, showing universal patterns across generations."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Comparing old photos highlights dramatic transformations in fashion, classroom technology, and campus development while revealing some things that stayed exactly the same."
+        }
+      ],
+      "continuation": [
+        "Despite all the technological and cultural changes, Suha recognizes remarkable similarities in the essential human experiences of being a teenager.",
+        "Having connected deeply with past students through their preserved memories, Suha decides to organize a comprehensive modern time capsule project.",
+        "The initiative captures current student experiences for future generations to discover, creating a meaningful bridge across time.",
+        "Students contribute photos, letters, technology samples, and personal reflections that represent their unique historical moment.",
+        "The project helps the school community connect meaningfully with their history while creating something special for the future."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What aspects of your current daily life and concerns do you think would surprise students from fifty years in the future?"
+        },
+        {
+          "type": "action",
+          "question": "How could you create meaningful connections between your generation and both the students who came before and those who will come after?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "While participating in intensive garden restoration work, Suha's excavation efforts led to an absolutely incredible discovery... a perfectly preserved metal time capsule that had been deliberately buried by students exactly fifty years ago.",
+        "This treasure trove contained authentic historical artifacts including vintage photographs, personal correspondence, and comprehensive diary documentation that provided a direct window into teenage life during the 1970s.",
+        "The sophisticated preservation and deliberate organization suggested this had been a serious academic project designed to communicate across generational boundaries."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This remarkable historical find demands thoughtful analytical approaches to fully appreciate its significance. What method should Suha use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do detailed comparative analysis between diary entries and contemporary student experiences to identify changes and timeless similarities"
+            },
+            {
+              "letter": "B",
+              "text": "Execute systematic photographic documentation and historical comparison studies to trace transformations across five decades"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "In-depth diary analysis reveals fascinating insights... despite radical technological advancement, core teenage experiences around academic pressure, social dynamics, and identity formation remained remarkably consistent across generational boundaries."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Systematic photographic comparison work highlights dramatic shifts in fashion trends, classroom technology integration, and campus development while identifying surprising elements that had remained constant."
+        }
+      ],
+      "continuation": [
+        "Through careful historical investigation, Suha recognizes profound connections between past and present student experiences that transcend superficial technological and cultural differences.",
+        "The discovery inspires Suha to design and execute a comprehensive modern time capsule project that captures contemporary student culture, technology, and experiences for future discovery.",
+        "The initiative develops into educational programs that help current students forge meaningful connections with institutional history while understanding their place in ongoing generational continuity.",
+        "Suha launches historical research projects aimed at potentially connecting with surviving original time capsule contributors to facilitate direct conversations across generations.",
+        "The project transforms from a simple discovery into a sophisticated exploration of human continuity, technological evolution, and the timeless nature of teenage experience across cultural boundaries."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Considering how rapidly technology and culture evolve, what elements of your current experience represent timeless human concerns versus temporary generational trends?"
+        },
+        {
+          "type": "action", 
+          "question": "How could you actively contribute to creating meaningful bridges between past student experiences, your current generation, and students who will follow after you?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "id": "lost-whale-rescue",
+  "title": "Finding Family",
+  "theme": "Lost at Sea",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Suha stood on her small boat when a deep, trembling sound reached her ears.",
+        "It was a whale song... slow and sad, with calls that sounded totally panicked.",
+        "Looking across the waves, she spotted a young whale moving in tight circles. The baby was clearly lost."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Suha do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Call Rishi on the radio for help"
+            },
+            {
+              "letter": "B", 
+              "text": "Play recorded whale calls from her phone"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Rishi answers right away and starts telling her exactly what to do next."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "The baby whale turns its head, listening to the familiar sounds... but still looking really worried."
+        }
+      ],
+      "continuation": [
+        "Soon Rishi shows up in his boat and they start searching for the whale family, scanning the horizon and listening for distant calls.",
+        "They use underwater speakers to play whale songs across the water, and a faint reply comes from miles away... the family is out there!",
+        "Following the sounds, the baby whale swims eagerly until it reaches its mother.",
+        "The reunion is incredible, with the ocean filling with layered songs of joy and recognition.",
+        "Suha and Rishi feel amazing relief... they've helped a family come back together."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When have you helped someone find their way back to where they belong?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help protect whale families and their ocean home?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "While sailing near the coast, Suha heard an unusual pattern of whale calls through the water... the sounds were high-pitched and urgent.",
+        "She soon spotted a young humpback whale circling in distress, its family nowhere in sight.", 
+        "A chill of responsibility washed over her, knowing that being separated could mean serious danger for the young whale."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Suha's first move be?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Radio Rishi, the marine rescue guy"
+            },
+            {
+              "letter": "B",
+              "text": "Follow the baby whale to keep it away from shipping lanes"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Rishi confirms how urgent this is and starts coordinating rescue efforts from his boat."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Suha keeps the baby whale in sight, stopping it from swimming toward dangerous waters where big ships travel."
+        }
+      ],
+      "continuation": [
+        "Working together, Suha and Rishi spread out their search and use underwater speakers to broadcast whale communication across the sea, hoping for a response.",
+        "Minutes later, faint replies come back through the speakers, and they spot a cluster of whale spouts appearing near the horizon.",
+        "The low, deep call of the mother echoes across the water, and the baby whale speeds up toward the sound.",
+        "The reunion is breathtaking... sweeping tails and rolling songs of recognition fill the ocean.",
+        "Suha feels both humbled and proud, knowing she's helped protect bonds older than any human tradition."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "Have you ever faced a situation where being patient and not giving up were just as important as acting fast?"
+        },
+        {
+          "type": "action",
+          "question": "What actions could you take to protect whales and other sea creatures in your lifetime?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "During a research trip offshore, Suha picked up weird sounds through her underwater listening equipment... distress signals from a young humpback whale.",
+        "When she surfaced, she confirmed the baby whale was totally alone, swimming in repetitive, anxious circles that showed it was severely stressed.",
+        "This kind of separation could lead to dehydration, getting lost, and predator attacks, so she immediately called Rishi, a marine mammal expert, and started an emergency reunion plan."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What strategic step should they focus on first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Set up underwater speakers with recorded mother whale calls"
+            },
+            {
+              "letter": "B",
+              "text": "Keep close watch on the baby's stress levels and physical condition"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The recorded calls travel across miles of open water, getting faint replies that suggest the family is within range but pushed away by big shipping traffic."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Monitoring heart rate and breathing patterns gives crucial insight into the baby's energy levels and stress, helping predict how long it can survive alone."
+        }
+      ],
+      "continuation": [
+        "Combining sound attraction with visual tracking, Suha and Rishi figure out where the whale family is, with evidence suggesting they were recently pushed away by commercial shipping traffic.",
+        "They work with shipping authorities to reduce interference, allowing the family to navigate more safely back toward the baby.",
+        "Their systematic approach and field notes contribute valuable data to global whale rescue knowledge.",
+        "The baby whale races forward as the mother and siblings appear, and the ocean erupts in a chorus of recognition that shows the raw depth of whale family bonds.",
+        "The reunion reinforces Suha's belief in the power of research-driven action to protect marine life... showing how science, empathy, and persistence can work together to save these magnificent creatures."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever faced a problem where science, empathy, and never giving up all had to work together for success?"
+        },
+        {
+          "type": "action", 
+          "question": "What big-picture changes could you support to reduce human disruption of ocean ecosystems?"
+        }
+      ]
+    }
+  }
+}

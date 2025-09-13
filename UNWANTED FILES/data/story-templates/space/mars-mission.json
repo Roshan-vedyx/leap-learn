@@ -1,0 +1,162 @@
+{
+  "id": "mars-mission",
+  "title": "Red Planet Explorer",
+  "theme": "Mars Mission",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Maya stepped onto the Martian surface, her boots crunching into the rust-colored dirt.",
+        "The weird landscape stretched forever under an orange sky that looked nothing like Earth.",
+        "She planted the mission flag and turned on her radio to let everyone back home know she'd made it safely."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Where should Maya start exploring?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Check out those weird-looking rocks"
+            },
+            {
+              "letter": "B", 
+              "text": "Look for places where water used to flow"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Maya's rock scanner found crystals that only form when there's water around... these rocks were millions of years old!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "She found what looked like old dried-up riverbeds carved right into the ground... water definitely used to flow here."
+        }
+      ],
+      "continuation": [
+        "Her scanner kept beeping at mineral stuff that showed water had been all over this place once.",
+        "Everything Maya found proved that Mars used to be totally different... warm, wet, and maybe even perfect for life.",
+        "As Maya kept exploring, she realized she was finding stuff that would blow everyone's minds.",
+        "Her discoveries were going to help scientists figure out if humans could actually live on Mars someday."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think it would feel to be completely alone on another planet, finding things no human had ever seen?"
+        },
+        {
+          "type": "action",
+          "question": "If you could explore any planet, what would you most want to discover there?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Maya had just done something no teenager ever had... she was actually standing on Mars as the mission commander.",
+        "The red, empty landscape was so different from Earth's green and blue colors, and it reminded her how far from home she really was.",
+        "Her geological equipment immediately started picking up interesting mineral readings that suggested water had been active here way back in Mars's history."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Maya focus her research?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Study the geology to understand how Mars formed and changed"
+            },
+            {
+              "letter": "B",
+              "text": "Search for signs that life might have existed here"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The geological data revealed incredible evidence of volcanoes, asteroid impacts, and massive climate changes that transformed Mars over billions of years."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Maya's systematic search turned up organic compounds in the rock layers... the exact kind of molecules that could mean ancient life existed here."
+        }
+      ],
+      "continuation": [
+        "Maya made sure to follow all the scientific procedures so every sample and measurement would be super valuable for researchers back on Earth.",
+        "The data painted an amazing picture of Mars as a world that once had flowing rivers, huge oceans, and conditions where life could actually survive.",
+        "Her discoveries would shape how scientists plan future Mars missions and maybe even colonies.",
+        "Standing alone on another planet, Maya had become humanity's first real ambassador to another world."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you're working on something important by yourself, what keeps you motivated and focused?"
+        },
+        {
+          "type": "action",
+          "question": "How would you prepare yourself for a challenging mission that no one has ever done before?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Maya was running the most advanced Mars exploration mission humans had ever attempted, using cutting-edge equipment designed to totally change what we know about the planet's history.",
+        "The mission combined years of planning with incredible technology that could analyze the atmosphere, drill underground, and examine rocks in ways never possible before.",
+        "Early readings suggested Mars had gone through complex changes involving volcanoes, asteroid hits, and climate shifts that created different environments where life might have been possible."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which research strategy should guide Maya's exploration?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Map out comprehensive geological surveys to track how the planet evolved"
+            },
+            {
+              "letter": "B",
+              "text": "Focus on targeted biological investigations in areas most likely to have supported life"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Maya's systematic geological mapping revealed totally unknown mineral formations that documented how Mars transformed from a potentially livable world to what it is today."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Her focused biological analysis detected complex organic molecules and chemical signatures that were consistent with life processes in multiple underground locations."
+        }
+      ],
+      "continuation": [
+        "Maya's careful methods turned out to be way better than what other scientists had tried before, and her discoveries proved that a lot of textbooks were completely wrong about Mars.",
+        "The data showed that Mars could have supported life for millions of years longer than anyone thought possible.",
+        "Maya's mission changed everything scientists thought they knew about how planets work and whether life could exist elsewhere.",
+        "Through careful work and amazing discoveries, Maya had basically rewritten what humans understand about our solar system."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think making discoveries that change what scientists believe would affect how responsible you feel about sharing your findings?"
+        },
+        {
+          "type": "action",
+          "question": "What scientific skills would you want to develop to contribute to space exploration and research about other planets?"
+        }
+      ]
+    }
+  }
+}

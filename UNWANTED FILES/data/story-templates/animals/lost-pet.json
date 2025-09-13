@@ -1,0 +1,162 @@
+{
+  "id": "lost-pet",
+  "title": "Finding Home",
+  "theme": "Lost Pet",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Rishi found a sad-looking dog wandering around the park all by itself, with no owner anywhere in sight.",
+        "The dog looked really hungry and tired... like it had been lost for a while.",
+        "Rishi knew this beautiful golden retriever belonged to someone who was probably worried sick."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi help this lost pet safely?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Give the dog water and food while checking for ID tags"
+            },
+            {
+              "letter": "B",
+              "text": "Ask other people in the park if they recognize the dog"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The dog gratefully drank water and ate crackers while Rishi found a collar with a name tag that said 'Buddy' and had a phone number!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Several park visitors recognized Buddy and said his family had been posting missing dog flyers everywhere yesterday."
+        }
+      ],
+      "continuation": [
+        "Rishi called the phone number on Buddy's collar and a worried family answered immediately... they had been searching frantically all day and night!",
+        "Rishi stayed with Buddy until the family arrived to make sure he felt safe.",
+        "When Buddy's family showed up, the reunion was incredible... everyone was crying happy tears, including Rishi.",
+        "The family was so grateful they exchanged contact info with Rishi and promised to keep in touch about Buddy's adventures."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever lost something really important to you? How did it feel when you found it or got it back?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help lost pets in your neighborhood find their way home?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Rishi came across a confused golden retriever wandering around the neighborhood park with no owner in sight.",
+        "The stressed-out dog showed obvious signs of being exhausted and anxious from being separated from its family.",
+        "This wasn't a stray... this was clearly someone's beloved pet who had gotten lost and needed help getting home."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the smartest approach to help this lost pet?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Give emergency care and check thoroughly for identification"
+            },
+            {
+              "letter": "B",
+              "text": "Talk to local people who might know about missing pets"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Taking care of the dog's immediate needs revealed that Buddy was a well-cared-for family pet with current ID tags, showing he'd only recently gotten separated from his owners."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Asking around quickly identified Buddy as a beloved family pet whose disappearance had triggered lots of neighborhood search efforts and social media posts."
+        }
+      ],
+      "continuation": [
+        "Calling the registered owners immediately connected Rishi with a frantic family who had been searching nonstop since Buddy escaped during a thunderstorm.",
+        "Rishi stayed with Buddy while waiting for the family to arrive, keeping him calm and comfortable.",
+        "He shared details about where he found Buddy and his condition to help the family understand what happened and prevent future escapes.",
+        "The experience taught Rishi how much pets mean to families and how one person's quick action can turn a family's worst day into their best day."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What experiences have you had with losing or finding important things, and how do those feelings motivate you to help others?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create better systems in your community to reunite lost pets with their families more quickly?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Rishi discovered a seriously confused golden retriever showing clear signs of separation anxiety and exhaustion while wandering aimlessly through the park.",
+        "This beautiful, well-groomed dog was obviously someone's beloved family member, not a stray, but was clearly stressed from being separated from everything familiar.",
+        "The situation needed quick thinking and smart approaches to ensure everyone's safety and the best possible outcome."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi approach this complex rescue situation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use careful animal care methods while building trust and reducing stress"
+            },
+            {
+              "letter": "B",
+              "text": "Network with the community to gather information about missing pet reports"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Using careful animal care techniques revealed that Buddy was a well-maintained family pet with current tags and vaccination records, indicating very recent separation from responsible owners."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Smart community outreach immediately connected the situation to active missing pet campaigns, revealing that Buddy's family had started extensive search operations across multiple platforms."
+        }
+      ],
+      "continuation": [
+        "Direct contact with Buddy's registered owners revealed a frantic family who had been conducting systematic searches since their beloved pet had bolted during severe storm conditions.",
+        "Rishi provided continuous emotional support for Buddy during the waiting period while watching for any signs of injury or continued stress.",
+        "He gave the family detailed information about the likely escape circumstances and shared practical recommendations for better home security and storm anxiety management.",
+        "This experience showed Rishi how community networks and individual action can work together to solve emergencies and support families during their most stressful moments."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do your own experiences with loss or anxiety help you understand what both pets and families go through in these situations?"
+        },
+        {
+          "type": "action",
+          "question": "What kind of community systems or neighborhood networks could you help create to make sure lost pets get home faster?"
+        }
+      ]
+    }
+  }
+}

@@ -148,7 +148,7 @@ export class AdaptiveWordBank {
         const matchesDifficulty = entry.complexity === this.session.currentDifficulty
         
         // Filter by theme
-        const matchesTheme = entry.themes.includes(theme)
+        const matchesTheme = entry.themes.includes(theme) || entry.themes.includes('universal')
         
         return matchesDifficulty && matchesTheme
       })
@@ -182,7 +182,7 @@ export class AdaptiveWordBank {
     
     const filtered = allWords.filter(entry => {
       // Filter by theme
-      const matchesTheme = entry.themes.includes(theme)
+      const matchesTheme = entry.themes.includes(theme) || entry.themes.includes('universal')
       
       // Filter by slot type
       const matchesSlotType = this.getSlotTypeForWord(entry, slotType)
@@ -232,13 +232,13 @@ export class AdaptiveWordBank {
       const wordEntry = currentWords.find(entry => 
         entry.word.toUpperCase() === word.toUpperCase()
       )
-  
+
       if (wordEntry) {
-        console.log(`📝 Using JSON alternative chunks for ${word}:`, wordEntry.alternative_chunks)
-        return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())  // CHANGED THIS LINE
+        console.log(`📝 Using JSON visual chunks for ${word}:`, wordEntry.chunks)
+        return wordEntry.chunks.map(chunk => chunk.toUpperCase())
       }
     }
-  
+
     // Fallback to phonetic chunking
     console.log(`📝 Using fallback chunking for ${word}`)
     return breakWordIntoChunks(word)
@@ -251,15 +251,14 @@ export class AdaptiveWordBank {
       const wordEntry = currentWords.find(entry => 
         entry.word.toUpperCase() === word.toUpperCase()
       )
-  
-      if (wordEntry) {
-        // Use alternative_chunks for TTS since tts_chunks don't exist
-        console.log(`🎵 Using alternative chunks for TTS: ${word}:`, wordEntry.alternative_chunks)
-        return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())
+
+      if (wordEntry && wordEntry.tts_chunks) {
+        console.log(`🎵 Using TTS chunks for ${word}:`, wordEntry.tts_chunks)
+        return wordEntry.tts_chunks
       }
     }
-  
-    // Fallback to regular chunks if no JSON data available
+
+    // Fallback to regular chunks if no TTS chunks available
     console.log(`🎵 Using fallback chunks for TTS: ${word}`)
     return this.getWordChunks(word)
   }

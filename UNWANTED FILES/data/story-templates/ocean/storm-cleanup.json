@@ -1,0 +1,162 @@
+{
+  "id": "storm-cleanup",
+  "title": "After the Storm",
+  "theme": "Storm Cleanup",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Piya walked the beach after last night's crazy storm.",
+        "Trash was everywhere... plastic bottles, tangled fishing nets, and broken wood scattered across the sand.",
+        "Near the water, she spotted a sea turtle with plastic wrapped around its neck."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What should Piya do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Carefully free the turtle from the plastic"
+            },
+            {
+              "letter": "B", 
+              "text": "Get Sam and Maya to help with the cleanup"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Piya carefully cut the plastic away with her scissors. The turtle splashed back into the waves, free and safe."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Sam and Maya came running when Piya called. 'This mess is huge... we'll need teamwork!' Maya said."
+        }
+      ],
+      "continuation": [
+        "Feeling super motivated by helping the turtle, Piya started collecting trash.",
+        "Sam and Maya saw her working hard and came to help without even being asked.",
+        "Together they filled six garbage bags with bottles, plastic, and dangerous debris.",
+        "The beach looked so much better, and they knew sea animals would be way safer now."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever seen pollution or trash that made you want to take action? What did you do about it?"
+        },
+        {
+          "type": "action",
+          "question": "What's one thing you could do this week to help protect the environment in your area?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Piya walked along the beach after last night's violent storm.",
+        "The coastline was a total mess... tangled fishing nets, plastic containers, and storm-tossed wood created a dangerous obstacle course for sea life.",
+        "Among all the wreckage, she discovered a sea turtle struggling with fishing line wound tightly around its shell."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya help the turtle?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Work very carefully to free the tired animal"
+            },
+            {
+              "letter": "B",
+              "text": "Get Sam and Maya to help with the rescue first"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Piya worked super carefully to cut away the fishing line. The turtle swam toward deeper water with obvious relief."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Sam and Maya arrived quickly and helped Piya safely free the turtle as a team."
+        }
+      ],
+      "continuation": [
+        "The successful rescue sparked a big idea in Piya's mind.",
+        "She convinced Sam and Maya to join a huge beach cleanup effort.",
+        "Working step by step, they removed bottles, bags, and sharp pieces that were ongoing threats to wildlife.",
+        "By evening, the cleaned-up coastline showed their commitment to protecting the ocean ecosystem."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you see an environmental problem, what motivates you to take action instead of just walking away?"
+        },
+        {
+          "type": "action",
+          "question": "How could you get others in your community to tackle environmental issues together?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Piya checked out the storm damage along the coastline, figuring out the environmental impact.",
+        "The beach ecosystem had been seriously messed up by debris... thrown-away fishing equipment, tiny plastic pieces, and construction materials created complicated hazards that needed immediate action.",
+        "While documenting the damage, she found a stressed sea turtle tangled in super-thin fishing line, barely able to move."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya approach this serious situation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use marine biology techniques to safely free the turtle while collecting research data"
+            },
+            {
+              "letter": "B",
+              "text": "Work with Sam and Maya to develop a systematic rescue and cleanup plan"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Using untangling techniques from marine biology class, Piya successfully freed the turtle while gathering behavioral data for her conservation research."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Sam and Maya joined Piya to form a strategic response team, combining their skills to handle both immediate rescue needs and long-term environmental restoration."
+        }
+      ],
+      "continuation": [
+        "Understanding the bigger picture, Piya organized a strategic habitat restoration project.",
+        "Their coordinated debris removal effort included systematic recording of waste types to provide valuable data for local environmental organizations.",
+        "The project showed how community-based conservation efforts can effectively tackle human-caused ecological problems.",
+        "By sunset, their work had not only restored the beach but created a model for future environmental action."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you balance taking immediate action with long-term strategic thinking when facing environmental challenges?"
+        },
+        {
+          "type": "action",
+          "question": "What steps could you take to get better prepared for environmental emergency situations and conservation work in your area?"
+        }
+      ]
+    }
+  }
+}

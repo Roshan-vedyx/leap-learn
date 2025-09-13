@@ -444,9 +444,9 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         }
         
         // Auto-play success TTS message
-        setTimeout(() => {
-          handleWordCompletionTTS()
-        }, 500)
+        //setTimeout(() => {
+        //  handleWordCompletionTTS()
+        //}, 500)
         
         // Update adaptive system with your existing recordWordPerformance method
         if (adaptiveWordBank.current) {
@@ -460,12 +460,10 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
             timestamp: Date.now()
           })
         }
-      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration) {
-        // Only show wrong order message if word is NOT complete, NOT celebrating, and we have all chunks arranged
+      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration && !showMeaningIntegration) {
+        // Only show wrong order message if word is NOT complete, NOT celebrating, and NOT in success state
         setShowWrongOrderMessage(true)
         setTimeout(() => setShowWrongOrderMessage(false), 4000)
-        
-        
       }
     }
     

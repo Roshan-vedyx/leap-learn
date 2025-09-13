@@ -1,0 +1,162 @@
+{
+  "id": "missing-library-book",
+  "title": "The Case of the Lost Treasure",
+  "theme": "Missing Library Book",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Alex totally loved this amazing pirate adventure book from the library.",
+        "It had incredible treasure maps and epic sea battles that made Alex dream about sailing adventures.",
+        "But when it was time to return the book... disaster! The thing had completely disappeared!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Alex needs to turn into a detective to solve this mystery. What should they do first?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Search every room in the house super carefully"
+            },
+            {
+              "letter": "B", 
+              "text": "Make a list of everywhere the book went with them"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Alex searches through bedrooms, living room, and even closets... finding tons of random lost stuff but no treasure book."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Making a list of everywhere the book traveled - bedroom, kitchen table, backpack, park - helps Alex remember some important clues."
+        }
+      ],
+      "continuation": [
+        "The librarian explains this is a really special book that lots of kids love reading.",
+        "Alex remembers Mom mentioning something about reading outside yesterday at the park.",
+        "That gives Alex a new idea about where to look next!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever lost something really important to you? How did it feel and what did you do?"
+        },
+        {
+          "type": "action",
+          "question": "What's one strategy you could use to keep track of borrowed books or other special things?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Alex had gotten completely hooked on this awesome pirate adventure book from the library.",
+        "The book had detailed treasure maps and exciting sea battles that sparked incredible daydreams about sailing adventures.", 
+        "When the time came to return this beloved library book... total disaster struck! The irreplaceable book had mysteriously vanished."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Alex decides to approach this investigation like a real detective. What's the best first move?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do systematic searches throughout the entire house, checking every possible spot"
+            },
+            {
+              "letter": "B",
+              "text": "Create a timeline of the book's journey through different locations and activities"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Room-by-room searches turn up several forgotten belongings... but somehow the missing book remains nowhere to be found."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Carefully reconstructing the book's recent travels - bedroom reading sessions, kitchen homework time, backpack trips, outdoor adventures - reveals some crucial patterns."
+        }
+      ],
+      "continuation": [
+        "The concerned librarian emphasizes the book's special value, noting its popularity among young adventure fans throughout the community.",
+        "Family discussions uncover valuable information... particularly Mom's memory of yesterday's outdoor reading session at the neighborhood park.",
+        "Based on all the evidence gathered, Alex realizes the park deserves the most thorough investigation.",
+        "Racing back to the park, Alex discovers the precious book safely tucked under the old picnic table where yesterday's reading adventure had happened."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "Think about times when you've lost something valuable - what investigation strategies actually worked best?"
+        },
+        {
+          "type": "action",
+          "question": "How could you develop a better system for tracking and protecting borrowed books or other important items?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Alex had become completely absorbed in this fascinating pirate adventure novel with awesome treasure maps and epic naval battles.",
+        "This special library book had sparked incredible daydreams about sailing the high seas and discovering legendary treasures.",
+        "When the return deadline approached... absolute disaster struck! This irreplaceable book had completely vanished without any logical explanation."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Alex recognizes this situation requires serious detective work to track down the missing treasure before facing the librarian's disappointment. What investigative approach should they take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Launch a comprehensive search operation through every room, checking locations most people would never consider"
+            },
+            {
+              "letter": "B",
+              "text": "Develop a detailed timeline tracking the book's movements to identify the most probable locations"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Extensive house-wide investigations uncover numerous random lost items... but somehow the pirate adventure book remains mysteriously absent, forcing expansion beyond home base."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Systematically mapping the book's recent adventures - bedroom reading marathons, kitchen homework sessions, backpack transportation, outdoor expeditions - reveals crucial patterns and promising leads."
+        }
+      ],
+      "continuation": [
+        "The librarian explains this isn't just any book - it's a special edition that numerous students treasure, making its disappearance particularly devastating for the community.",
+        "Family discussions uncover key information... especially Mom's memory of Alex reading outside yesterday during the park expedition.",
+        "Based on comprehensive evidence analysis, Alex determines the park scene deserves intensive investigation of yesterday's reading spots and surrounding areas.",
+        "Swift examination of the park recreation area leads to triumphant discovery - the precious book rests safely beneath the sturdy picnic table where yesterday's reading adventure had unfolded.",
+        "The relieved librarian expresses genuine gratitude for the book's safe return, ensuring its continued availability for future young treasure hunters and reading enthusiasts."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Consider your experiences with losing valuable items - what detective strategies proved most effective for successful recovery?"
+        },
+        {
+          "type": "action", 
+          "question": "What comprehensive tracking system could you implement to prevent future losses of borrowed books or other precious possessions?"
+        }
+      ]
+    }
+  }
+}

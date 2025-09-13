@@ -1,0 +1,161 @@
+{
+  "id": "hidden-talent",
+  "title": "The Secret Artist",
+  "theme": "Hidden Talent",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Every morning, amazing chalk art shows up around school.",
+        "Someone draws beautiful animals and flowers that make everyone stop and stare.",
+        "But nobody knows who the mystery artist is!"
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi really wants to figure out this puzzle. What should they do?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Hide and watch quietly to see who comes early"
+            },
+            {
+              "letter": "B", 
+              "text": "Ask friends if they noticed anyone with chalk on their hands"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Hiding behind the big oak tree early one morning, Rishi sees Jordan creating the incredible art before anyone gets to school."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Friends mention seeing someone with chalk-covered fingers... and Rishi notices Jordan's hands look pretty dusty."
+        }
+      ],
+      "continuation": [
+        "When Rishi talks to Jordan, Jordan looks totally scared about being found out.",
+        "Jordan explains, \"I love making art, but... I don't want people judging my work.\"",
+        "Rishi promises to keep the secret and asks, \"How can I help you feel better about sharing your talent?\""
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever had a skill or hobby you were nervous to share? What made you feel that way?"
+        },
+        {
+          "type": "action",
+          "question": "What's one way you could support a friend who's hiding their talents?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Amazing chalk murals mysteriously appear across campus every morning.",
+        "The artwork shows detailed wildlife portraits and beautiful plant drawings that make the whole school buzz with excitement.", 
+        "Everyone loves the art, but the talented creator stays completely anonymous."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi is determined to solve this mystery. What's their first move?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do some early morning detective work to catch the artist in action"
+            },
+            {
+              "letter": "B",
+              "text": "Study the art style carefully to find clues about who made it"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "By hiding behind campus trees before dawn, Rishi discovers Jordan's amazing artistic skills... and sees their whole creative process."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Looking closely at the shading techniques and drawing style, Rishi recognizes Jordan's work from art class projects."
+        }
+      ],
+      "continuation": [
+        "When Rishi approaches Jordan about it, Jordan admits to making the artwork but seems really anxious about being discovered.",
+        "Jordan explains, \"I worry people might criticize my art, or... make a big deal about it.\"",
+        "Rishi realizes Jordan needs support to feel confident about their incredible talent.",
+        "They talk about ways Jordan could share their art that would feel safe and comfortable."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "When you see someone struggling with confidence, what helps you stay supportive and understanding?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help create a space where people feel safe sharing their creative work?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Amazing chalk art shows up all around school every morning, like clockwork.",
+        "The mystery artist has serious skills... creating detailed nature drawings and realistic animal portraits that wow everyone.",
+        "Even though students and teachers love the artwork, nobody knows who's behind it."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Rishi comes up with a solid plan to figure out who this talented person is. What approach should they take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Set up some strategic early-morning watching to catch the artist at work"
+            },
+            {
+              "letter": "B",
+              "text": "Analyze the art techniques and style to identify the creator's signature moves"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Through careful early-morning watching, Rishi discovers Jordan's extraordinary skills... and realizes they choose these quiet hours when creating feels safer."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Detailed analysis of the advanced shading methods, perspective work, and composition helps Rishi recognize Jordan's distinctive style from classroom observations."
+        }
+      ],
+      "continuation": [
+        "When Rishi respectfully confronts Jordan, they admit to creating the art... while expressing major anxiety about public recognition and potential judgment.",
+        "Jordan reveals, \"I chose to stay anonymous because... well, past experiences with sharing creative work led to unwanted attention and critical comments.\"",
+        "Rishi recognizes that Jordan's exceptional talent needs supportive strategies that honor their need for emotional safety.",
+        "Together, they explore approaches that could help Jordan gain confidence while maintaining control over how much attention they receive."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Think about times when your abilities felt vulnerable to others' opinions... what helped you feel secure enough to share your authentic talents?"
+        },
+        {
+          "type": "action", 
+          "question": "How can you intentionally create supportive environments where peers feel empowered to express their capabilities without fear of judgment?"
+        }
+      ]
+    }
+  }
+}

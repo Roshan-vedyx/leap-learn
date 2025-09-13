@@ -1,0 +1,162 @@
+{
+  "id": "forest-rescue",
+  "title": "Trapped in the Woods",
+  "theme": "Forest Rescue",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "While hiking through the forest, Suha heard desperate crying sounds coming from somewhere in the thick trees.",
+        "She followed the sad noises until she found a baby fox completely stuck under some heavy fallen branches from a recent storm.",
+        "The little fox looked scared and hurt, and Suha knew she had to help right away."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha help this trapped animal safely?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Carefully move the branches one by one while talking softly"
+            },
+            {
+              "letter": "B",
+              "text": "Look for adult foxes nearby first to make sure it's safe"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Moving branches slowly while speaking in gentle whispers helped the scared fox stay calm and trust that Suha was trying to help."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Checking the area first revealed the mother fox hiding nearby... anxiously waiting and ready to help once her baby was free."
+        }
+      ],
+      "continuation": [
+        "The little fox was finally free and immediately ran straight to its worried mom waiting in the bushes!",
+        "Suha watched from a distance to make sure the fox family stayed together and was okay.",
+        "She cleared away the remaining dangerous branches so other animals wouldn't get trapped.",
+        "Walking home, Suha felt amazing knowing she had saved a life and reunited a family."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever helped an animal that was scared or in trouble? How did it make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What could you do to help wildlife in your neighborhood stay safe from dangers like storms?"
+        }
+      ]
+    },
+
+    "regular": {
+      "narrative": [
+        "Suha was exploring the dense woodland when she heard urgent animal distress calls echoing through the forest canopy.",
+        "Following the persistent sounds through thick underbrush, she discovered a young red fox trapped beneath substantial fallen timber from a powerful recent storm.",
+        "The fox was clearly in pain and terrified, and Suha realized this rescue would require careful planning to avoid making things worse."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "What's the smartest approach to this wildlife rescue?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Remove debris systematically while using calming techniques"
+            },
+            {
+              "letter": "B",
+              "text": "Check the area thoroughly for family members and potential risks"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Methodical branch removal combined with soothing voice tones successfully kept the frightened animal calm while gradually freeing its trapped limbs without causing more injury."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Environmental scouting revealed the vigilant mother fox monitoring the situation from nearby cover... providing crucial information about the family dynamics."
+        }
+      ],
+      "continuation": [
+        "Once freed, the grateful young fox immediately bounded toward its anxious parent waiting in the protective underbrush nearby.",
+        "Suha maintained discreet observation to ensure the family reunion was successful and watch for any delayed injury symptoms.",
+        "She contacted local wildlife services to document the incident and make sure professional follow-up was available if needed.",
+        "The experience taught Suha that successful wildlife rescue requires both quick thinking and careful consideration of the bigger picture."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What draws you to helping animals in distress, and how do wildlife encounters change your perspective?"
+        },
+        {
+          "type": "action",
+          "question": "How could you contribute to wildlife protection efforts in your community while learning about local ecosystems?"
+        }
+      ]
+    },
+
+    "challenge": {
+      "narrative": [
+        "Suha was conducting independent ecological exploration through pristine old-growth forest habitat when she detected anguished mammalian calls.",
+        "Systematic sound tracking led to the discovery of a juvenile red fox kit severely trapped beneath substantial storm debris, showing signs of physical trauma and extreme stress.",
+        "This critical wildlife emergency demanded sophisticated rescue techniques that would balance immediate intervention with long-term animal welfare considerations."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Suha approach this complex rescue situation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Use professional-grade animal rescue protocols and stress-reduction techniques"
+            },
+            {
+              "letter": "B",
+              "text": "Execute comprehensive environmental assessment before any intervention"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Expert-level rescue techniques combining controlled debris removal with specialized animal behavior management successfully minimized trauma while ensuring efficient liberation."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Thorough ecological reconnaissance identified the adult vixen maintaining protective surveillance from strategically concealed positions... providing essential intelligence about pack dynamics."
+        }
+      ],
+      "continuation": [
+        "The moment the fox was free, it ran straight to its mom who had been watching anxiously from the bushes... it was the most amazing reunion Suha had ever seen.",
+        "Suha kept checking back over the next few weeks to make sure the fox family was doing okay and see if they stayed in the same area.",
+        "She worked with local wildlife experts to share what she learned about rescuing trapped animals so they could help train other people.",
+        "This experience revealed how direct involvement in wildlife crisis intervention deepens understanding of ecological interconnectedness and human environmental responsibility."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How has helping wildlife in crisis situations changed your understanding of how nature is connected?"
+        },
+        {
+          "type": "action",
+          "question": "What specific ways could you help with wildlife conservation and habitat protection in your area?"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "id": "asteroid-adventure",
+  "title": "Rock Field Navigator",
+  "theme": "Asteroid Adventure",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Rishi steered the spacecraft into the asteroid belt, where huge space rocks tumbled through the darkness.",
+        "The navigation computer kept beeping warnings as house-sized rocks spun past the windows.",
+        "Smaller chunks peppered the area like cosmic hail... and Rishi's hands gripped the controls super tight."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Rishi get through this dangerous rock field?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Trust the computer's safe route"
+            },
+            {
+              "letter": "B", 
+              "text": "Use manual controls to weave between the rocks"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The computer's route worked perfectly! It guided them through the safest paths between the spinning rocks."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Rishi's flying skills totally saved the day when surprise rocks appeared in their path... quick reflexes for the win!"
+        }
+      ],
+      "continuation": [
+        "Hours passed as Rishi stayed super focused, weaving the ship between obstacles.",
+        "Each decision could mean the difference between safe passage... and total disaster.",
+        "Suddenly, the ship's sensors picked up something weird among the asteroids.",
+        "What started as dodging rocks was about to become something way more interesting!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever had to concentrate really hard on something important for a long time? How did you stay focused?"
+        },
+        {
+          "type": "action",
+          "question": "What challenging situation have you gotten through that taught you something important?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Rishi piloted the spacecraft deeper into the asteroid belt, where chunks from an ancient planet crash created a crazy obstacle course.",
+        "The navigation system constantly updated its calculations as rocks ranging from pebble-size to mountain-huge drifted in totally random patterns.",
+        "The gravity from bigger asteroids pulled smaller pieces into chaotic spins, needing split-second moves to avoid getting smashed."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which navigation plan should Rishi use?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Follow the computer's probability-based route system"
+            },
+            {
+              "letter": "B",
+              "text": "Trust instincts and fly manually through the gaps"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The computer route was solid, threading them safely through the thickest rock zones."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Rishi's gut feelings saved them when sensors failed to spot a tumbling boulder in their blind spot!"
+        }
+      ],
+      "continuation": [
+        "Rishi's training kicked in as muscle memory guided precise thruster burns and course corrections.",
+        "Three hours into the crossing, Rishi had developed an almost supernatural feel for reading the asteroid field's rhythms and dangers.",
+        "Deep in the belt, the ship's rock scanners detected unusual readings from a cluster of metallic asteroids.",
+        "The asteroid field had transformed from obstacle into opportunity... giving both scientific knowledge and resources for humanity's expansion into space."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When learning something difficult, how do you know when you've moved from following rules to developing real gut feelings?"
+        },
+        {
+          "type": "action",
+          "question": "How could you turn a challenging situation into an opportunity for discovery or learning?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Rishi started crossing through the asteroid belt's most jam-packed sector, where leftover pieces from when planets first formed had created a massive debris field spanning millions of cubic kilometers.",
+        "The spacecraft's quantum navigation system processed gravity interactions between thousands of rocky bodies while calculating safe paths through constantly shifting space configurations.",
+        "Massive metal asteroids created complex magnetic fields that messed with standard navigation... demanding totally adaptive flying strategies."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which approach should guide Rishi's navigation strategy?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Combine AI-assisted path modeling with human judgment"
+            },
+            {
+              "letter": "B",
+              "text": "Use traditional dead-reckoning techniques adapted for 3D space"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The hybrid approach proved perfect... computers calculated possibilities while human intuition made final decisions in real-time."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Old-school navigation principles, modified for zero-gravity environments, provided reliable backup when sensors failed due to magnetic interference."
+        }
+      ],
+      "continuation": [
+        "Four hours of intense piloting had taught Rishi that successful space navigation required balancing high-tech capabilities with fundamental understanding of how celestial mechanics work.",
+        "Deep within the belt, spectroscopic analysis detected weird readings suggesting the presence of rare earth elements critical for advanced propulsion systems.",
+        "Rishi's navigation challenge had evolved into groundbreaking research that would influence humanity's relationship with space exploration for generations.",
+        "Through combining technical expertise with scientific curiosity... Rishi had transformed a dangerous passage into a landmark discovery."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When solving complex problems, how do you decide when to trust technology versus your own analytical abilities?"
+        },
+        {
+          "type": "action",
+          "question": "How might you approach learning a complex skill that requires both technical knowledge and creative problem-solving?"
+        }
+      ]
+    }
+  }
+}

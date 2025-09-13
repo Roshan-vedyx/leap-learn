@@ -1,0 +1,162 @@
+{
+  "id": "cosmic-discovery",
+  "title": "The Deepest Secret",
+  "theme": "Cosmic Discovery",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Anusha peered through the powerful telescope, scanning far-off parts of space.",
+        "Hours of patient watching had become totally routine... until something incredible appeared in the viewfinder.",
+        "A star unlike any in the databases was shifting through colors - brilliant blue to deep red to golden yellow in mesmerizing cycles."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Anusha prove her discovery is real?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Take detailed photos at different times"
+            },
+            {
+              "letter": "B", 
+              "text": "Check the location against existing star catalogs"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Anusha's time-lapse images proved the color changes were totally real and consistent... a clear pattern emerged!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "The star catalog search confirmed this was completely unknown to science - no astronomer had ever seen this before!"
+        }
+      ],
+      "continuation": [
+        "Anusha's breath caught as she realized how huge her discovery was.",
+        "She had found something that could change astronomy textbooks forever.",
+        "Now Anusha faced the challenge of sharing her discovery with the scientific world.",
+        "Within months, Anusha's rainbow star became the focus of telescope observations worldwide!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever been the first person to notice or discover something important? How did it feel?"
+        },
+        {
+          "type": "action",
+          "question": "What field of science or discovery most gets you excited and curious?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "Anusha operated the advanced telescope array during her scheduled deep-space observation session, systematically scanning parts of the galaxy that remained mostly unexplored.",
+        "The equipment detected light waves across multiple types, building detailed profiles of distant stellar objects.",
+        "During routine data collection, a weird signal caught her attention... a star showing light patterns that didn't match any known star type."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Anusha investigate this space anomaly?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Analyze the star's light data for chemical clues"
+            },
+            {
+              "letter": "B",
+              "text": "Compare her observations with old astronomy records"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "The light analysis revealed elements mixed together in ways that shouldn't exist according to what we know about stars!"
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Old records confirmed no astronomer had ever observed or reported this before... she was truly the first."
+        }
+      ],
+      "continuation": [
+        "The star was cycling through impossible color changes, which meant something totally unknown was happening inside it.",
+        "Each test deepened the mystery... Anusha had discovered something that challenged what scientists thought they knew about how stars work.",
+        "Realizing how massive her discovery was, Anusha prepared to present evidence that could change astronomical science.",
+        "Anusha's discovery launched a whole new branch of astronomy focused on understanding these weird stellar phenomena."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "When you see something that doesn't fit the usual patterns, how do you decide whether to trust what you're observing?"
+        },
+        {
+          "type": "action",
+          "question": "How could you help advance human knowledge in a field that interests you?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Anusha ran precision observations using the latest generation telescope arrays, systematically checking out unexplored parts of the galaxy for star formation patterns.",
+        "The high-tech detection equipment monitored light signals across radio, optical, and gamma-ray spectrums at the same time.",
+        "During routine deep-field imaging, her instruments picked up readings that went against established star physics models... a stellar object showing impossible light dynamics."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Which scientific approach should guide Anusha's investigation?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Develop new theories to explain what she observed"
+            },
+            {
+              "letter": "B",
+              "text": "Get multiple telescopes to double-check and eliminate equipment errors"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Anusha's theoretical work proposed changes to star formation equations that could explain the weird behavior she saw."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Independent verification from three separate observatories confirmed her measurements were totally accurate and repeatable."
+        }
+      ],
+      "continuation": [
+        "The evidence showed that scientists were missing something huge about how stars work... they needed completely new theories to explain this.",
+        "Realizing this could change everything, Anusha figured out how to share her findings with other scientists who might not believe her at first.",
+        "By being super careful with her research and working with other astronomers, Anusha turned her weird discovery into accepted scientific fact.",
+        "Anusha had shown how being curious and doing careful science can help humans understand way more about space and the universe."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "How do you think scientists should respond when discoveries challenge theories that everyone believed were true?"
+        },
+        {
+          "type": "action",
+          "question": "What parts of scientific research and discovery most inspire you to want to learn more?"
+        }
+      ]
+    }
+  }
+}

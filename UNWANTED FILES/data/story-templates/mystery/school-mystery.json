@@ -1,0 +1,164 @@
+{
+  "id": "school-mystery",
+  "title": "The Kindness Detective",
+  "theme": "School Mystery",
+  "stories": {
+    "simple": {
+      "narrative": [
+        "Awesome things kept happening around school and nobody could figure out who was behind it!",
+        "Someone was leaving super encouraging notes in lockers, bringing treats for teachers, and secretly fixing broken stuff in classrooms.",
+        "Piya was determined to crack this mystery and find out who the secret kindness hero was."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "How should Piya investigate these random acts of kindness?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Watch the hallways during different times to spot patterns"
+            },
+            {
+              "letter": "B", 
+              "text": "Ask teachers and students what they noticed about timing"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Watching carefully, Piya notices the good deeds always happen when Mr. Garcia is working late after school hours."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B", 
+          "text": "Talking to people reveals that kind things appear right after maintenance rounds in each area."
+        }
+      ],
+      "continuation": [
+        "Following the clues leads Piya to discover colorful paper and small treats in Mr. Garcia's supply cart.",
+        "When Piya asks Mr. Garcia about it, he smiles huge and admits, \"I love making everyone's day brighter.\"",
+        "Piya promises to keep it secret but asks to help with future kindness projects.",
+        "Together they start planning even more creative ways to spread joy around school!"
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "Have you ever done something nice for others without wanting credit? How did it make you feel?"
+        },
+        {
+          "type": "action",
+          "question": "What small acts of kindness could you do at your school to make others smile?"
+        }
+      ]
+    },
+    
+    "regular": {
+      "narrative": [
+        "A wave of mysterious good deeds had been sweeping through school... encouraging notes appearing in random lockers, surprise snacks for stressed teachers, and broken classroom equipment getting magically repaired overnight.",
+        "The whole atmosphere felt more positive, but nobody could figure out who was behind these amazing acts of kindness.", 
+        "Piya became fascinated by this puzzle and decided to launch a full investigation."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "This mystery requires some serious detective work to solve. What approach should Piya take?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do systematic observations during different time periods to identify patterns"
+            },
+            {
+              "letter": "B",
+              "text": "Interview teachers, students, and staff to gather witness accounts and timeline information"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Strategic watching reveals that mysterious acts of kindness consistently occur during extended maintenance periods when Mr. Garcia works alone after hours."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Comprehensive interviews uncover a clear pattern connecting kind acts to custodial rounds... with timing that perfectly matches Mr. Garcia's schedule."
+        }
+      ],
+      "continuation": [
+        "Investigating the supply chain leads to discovering craft materials and treats tucked discretely in Mr. Garcia's maintenance equipment.",
+        "When Piya diplomatically approaches Mr. Garcia about the mystery, his face lights up as he confesses that spreading joy around school has become his personal mission.",
+        "Piya decides to respect his preference for anonymity while offering to become a secret kindness partner.",
+        "Together they develop even more creative ways to brighten people's days while keeping their operation completely undercover.",
+        "The school continues to feel more positive and welcoming, and Piya feels amazing about being part of something so meaningful."
+      ],
+      "reflections": [
+        {
+          "type": "personal", 
+          "question": "What motivates people to help others without seeking recognition, and how does witnessing kindness affect your own actions?"
+        },
+        {
+          "type": "action",
+          "question": "How could you create a culture of kindness in your own community that celebrates both anonymous and recognized good deeds?"
+        }
+      ]
+    },
+    
+    "challenge": {
+      "narrative": [
+        "Someone had been pulling off these incredibly well-planned kindness missions all around school... personalized motivational notes showing up in student lockers, perfectly timed snack deliveries for stressed teachers, and broken classroom tech getting mysteriously fixed overnight.",
+        "This whole operation was seriously changing the school's vibe for the better, but whoever was masterminding these brilliant moves stayed completely invisible.",
+        "Piya became totally obsessed with cracking this fascinating mystery that seemed to mix genuine caring with some seriously smart planning."
+      ],
+      "choice_points": [
+        {
+          "id": 1,
+          "question": "Solving this case is gonna require some next-level detective work since whoever's doing this is pretty clever. What method should Piya try?",
+          "options": [
+            {
+              "letter": "A",
+              "text": "Do some serious watching and timing analysis to figure out when these things happen"
+            },
+            {
+              "letter": "B",
+              "text": "Track down where the supplies are coming from and who has access to everything needed"
+            }
+          ]
+        }
+      ],
+      "consequences": [
+        {
+          "choice_id": 1,
+          "letter": "A",
+          "text": "Careful watching reveals that all the kindness stuff happens during those long evening hours when Mr. Garcia is working alone and has the whole building to himself."
+        },
+        {
+          "choice_id": 1,
+          "letter": "B",
+          "text": "Following the supply trail leads to discovering craft materials, motivational supplies, and repair tools cleverly hidden in Mr. Garcia's maintenance equipment."
+        }
+      ],
+      "continuation": [
+        "When Piya respectfully asks Mr. Garcia about the evidence, his face totally lights up as he explains that making school a better place through secret good deeds has become his favorite thing ever.",
+        "Recognizing how smart his whole approach is, Piya suggests they team up as a secret kindness operation while keeping his preference for staying anonymous.",
+        "Together they come up with even more creative student-led kindness projects that mix anonymous contributions with community recognition.",
+        "Their teamwork launches an amazing kindness movement that spreads positive vibes across the entire school.",
+        "The whole systematic approach doesn't just help individual people... it creates lasting cultural change that inspires others to develop their own creative ways of helping out."
+      ],
+      "reflections": [
+        {
+          "type": "personal",
+          "question": "What drives some people to put serious time and effort into making others' lives better without wanting any credit for it?"
+        },
+        {
+          "type": "action", 
+          "question": "How could you create sustainable kindness projects that balance anonymous contributions with building community recognition?"
+        }
+      ]
+    }
+  }
+}
