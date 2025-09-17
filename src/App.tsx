@@ -33,7 +33,6 @@ import CreatePage from './pages/CreatePage'
 import CelebratePage from './pages/CelebratePage'
 import InterestSelectionPage from './pages/InterestSelectionPage'
 import TodayIWantToPage from './pages/TodayIWantToPage'
-import StoryGenerationPage from './pages/StoryGenerationPage'
 import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
@@ -461,12 +460,6 @@ function AppContent() {
             <Route path="/stories/:interest">
               <AuthGate requireChild>
                 {(params) => <StorySelectionPage interest={params.interest} />}
-              </AuthGate>
-            </Route>
-
-            <Route path="/story-generate">
-              <AuthGate requireChild>
-                <StoryGenerationPage />
               </AuthGate>
             </Route>
 
