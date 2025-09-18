@@ -7,8 +7,7 @@ import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
 import { SettingsModal } from '@/components/SettingsModal'
-
-import { useLearningAnalytics } from './hooks/useLearningAnalytics'
+import { useAnalytics } from './hooks/useAnalytics'
 import { useCurrentUserId } from '@/lib/auth-utils'
 
 // NEW: Import auth providers and components
@@ -57,7 +56,7 @@ const Footer = () => (
             <span className="hidden sm:inline">Neurodivergent Designed</span>
             <span className="sm:hidden">ND Designed</span>
           </span>
-          <span className="flex items-center gap-1 sm:gap-2">
+      `SI5`      <span className="flex items-center gap-1 sm:gap-2">
             <Target className="w-3 h-3 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">Evidence-Based</span>
             <span className="sm:hidden">Evidence-Based</span>
@@ -114,7 +113,7 @@ function AppContent() {
   const [siennaEnabled, setSiennaEnabled] = useState(false)
   
   const userId = useCurrentUserId()
-  useLearningAnalytics(userId)
+  useAnalytics(userId)
 
   // Zustand store for session management
   const { getSessionProgress, toggleCalmCorner, isInCalmCorner } = useSessionStore()

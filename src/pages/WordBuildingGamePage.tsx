@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { audio, storage } from '@/lib/utils'
 import { AdaptiveWordBank } from '@/data/wordBank'
 import type { TtsAccent } from '@/types'
-import { useLearningAnalytics } from '../hooks/useLearningAnalytics'
+import { useAnalytics } from '../hooks/useAnalytics'
 import { useSessionStore } from '../stores/sessionStore'
 import { useCurrentUserId } from '@/lib/auth-utils'
 
@@ -78,7 +78,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   
   // ADD ANALYTICS HOOKS
   const userId = useCurrentUserId()
-  const { trackBreakthrough, trackChallengeOvercome, trackSupportUsage, trackWordPractice } = useLearningAnalytics(userId)
+  const { trackAnyActivity } = useAnalytics(userId)
   const { currentBrainState } = useSessionStore()
 
   // Performance tracking (invisible to user)
@@ -432,18 +432,20 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         
         // ADD ANALYTICS TRACKING FOR WORD SUCCESS
         if (userId) {
-          trackWordPractice({
-            words: [currentWord],
-            correctWords: [currentWord],
-            timeSpent: completionTime,
-            hintsUsed,
-            difficulty: currentWordData?.complexity as any || 'regular',
-            theme
-          })
+          trackAnyActivity(
+            'word_practice',
+            `Built word: ${currentWord}`,
+            Math.round(completionTime / 60000), // convert to minutes
+            {
+              accuracy: 100,
+              skills: ['word_building'],
+              struggles: hintsUsed > 2 ? ['word_assembly'] : []
+            }
+          )
           
           // Track breakthrough for challenging words
           if (currentWord.length > 6 && hintsUsed <= 1) {
-            trackBreakthrough(`Built challenging word: ${currentWord}`)
+            trackAnyActivity('word_practice', `Breakthrough: ${currentWord}`, 0.1, { skills: ['challenging_words'] })
           }
         }
         
@@ -643,7 +645,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     } else {
       // Theme completed - ADD ANALYTICS TRACKING
       if (userId) {
-        await trackBreakthrough(`Completed ${theme} theme with ${wordsCompleted.length} words!`)
+        await trackAnyActivity('word_practice', `Completed ${theme} theme`, 0.1, { skills: ['theme_completion'] })
       }
 
       // Check if we should show theme choice
@@ -671,10 +673,8 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       setResetsUsed(prev => prev + 1)
 
       // ADD ANALYTICS TRACKING FOR RESET
-      if (userId) {
-        if (resetsUsed > 1) {
-          await trackChallengeOvercome(`Persisted through ${currentWord} difficulty`)
-        }
+      if (userId && resetsUsed > 1) {
+        await trackAnyActivity('word_practice', `Reset: ${currentWord}`, 0.1, { skills: ['persistence'] })
       }
     }
   }
@@ -696,11 +696,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
         // ADD ANALYTICS TRACKING FOR HINT USAGE
         if (userId) {
-          await trackSupportUsage({
-            type: 'visual_aid',
-            triggeredBy: `word_building_${currentWord}`,
-            effectiveness: 'helped'
-          })
+          await trackAnyActivity('word_practice', `Hint used: ${currentWord}`, 0.1, { skills: ['hint_usage'] })
         }
       }
     }
