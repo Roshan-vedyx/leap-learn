@@ -1,10 +1,11 @@
 // src/components/SettingsModal.tsx
 import React, { useState, useEffect } from 'react'
-import { X, Settings, Volume2, RotateCcw, Accessibility, ChevronDown, Check } from 'lucide-react'
+import { X, Settings, Volume2, RotateCcw, Accessibility, ChevronDown, Check, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { PinReset } from '@/components/auth/PinReset'
 import type { TtsAccent } from '@/types'
+import { useLocation } from 'wouter'
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [siennaEnabled, setSiennaEnabled] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
+  const [, setLocation] = useLocation()
   
   // LOCAL state for pending changes (not applied until save)
   const [pendingTtsAccent, setPendingTtsAccent] = useState<TtsAccent>(ttsAccent)
@@ -31,6 +33,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   // Track initial values
   const [initialTtsAccent, setInitialTtsAccent] = useState<TtsAccent>(ttsAccent)
   const [initialSiennaEnabled, setInitialSiennaEnabled] = useState(false)
+
+  const handleProgressClick = () => {
+    onClose() // Close the modal first
+    setLocation('/progress') // Navigate to progress page
+  }
 
   // Load preferences when modal opens
   useEffect(() => {
@@ -310,6 +317,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   </div>
                 </div>
 
+                {/* Progress Option - NEW SECTION */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-gray-900 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-green-600" />
+                    My Learning Journey
+                  </h3>
+                  <Button
+                    onClick={handleProgressClick}
+                    variant="outline"
+                    className="w-full flex items-center justify-between p-4 h-auto"
+                  >
+                    <div className="flex items-center gap-3">
+                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      <div className="text-left">
+                        <div className="font-medium">See your achievements</div>
+                        <div className="text-sm text-gray-500"></div>
+                      </div>
+                    </div>
+                    <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
+                  </Button>
+                </div>
                 {/* Accessibility Tools */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">

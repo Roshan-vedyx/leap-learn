@@ -13,12 +13,13 @@ import { useCurrentUserId } from '@/lib/auth-utils'
 
 // NEW: Import auth providers and components
 import { ParentAuthProvider } from './contexts/ParentAuthContext'
-import { ChildAuthProvider } from './contexts/ChildAuthContext'
+import { ChildAuthProvider, useChildAuth } from './contexts/ChildAuthContext'
 import { AuthGate } from './components/auth/AuthGate'
 import { ParentDashboard } from './components/parent/ParentDashboard'
 import { ChildLogin } from './components/auth/ChildLogin'
 import { ParentSignup } from './components/auth/ParentSignup'
 import { ParentLogin } from './components/auth/ParentLogin'
+import ChildDashboard from './components/child/ChildDashboard'
 
 import type { TtsAccent } from './types'
 
@@ -83,6 +84,26 @@ const Footer = () => (
     </div>
   </footer>
 )
+
+function ProgressWrapper() {
+  const { childSession } = useChildAuth()
+  
+  if (!childSession) {
+    return (
+      <div className="text-center p-8">
+        <p>Please log in to view your progress.</p>
+        <Button onClick={() => setLocation('/')}>Go to Login</Button>
+      </div>
+    )
+  }
+  
+  return (
+    <ChildDashboard 
+      childId={childSession.childId}
+      username={childSession.username}
+    />
+  )
+}
 
 // Main App Content Component (extracted to work within auth providers)
 function AppContent() {  
@@ -475,6 +496,13 @@ function AppContent() {
             {/* Parent login - separate route for existing users */}
             <Route path="/parent-login">
               <ParentLogin />
+            </Route>
+
+            {/* Progress Dashboard - Protected route for children */}
+            <Route path="/progress">
+              <AuthGate requireChild>
+                <ProgressWrapper />
+              </AuthGate>
             </Route>
 
             {/* Math activities placeholder - Protected */}

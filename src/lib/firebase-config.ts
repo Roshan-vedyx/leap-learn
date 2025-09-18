@@ -1,6 +1,6 @@
-// src/lib/firebase-config.ts - REPLACE YOUR EXISTING FILE
+
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, runTransaction, writeBatch } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {

@@ -1,6 +1,6 @@
 // src/utils/usernameValidation.ts
 import { collection, query, where, getDocs } from 'firebase/firestore'
-import { db } from '../config/firebase'
+import { db } from '../lib/firebase-config'
 
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
   try {

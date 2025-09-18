@@ -1,5 +1,5 @@
 // src/lib/auth-utils.ts
-import { auth } from '@/lib/firebase-config'
+import { auth } from '../lib/firebase-config'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 // Hook version - use this in components
