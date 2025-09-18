@@ -1,102 +1,144 @@
 // src/hooks/useAnalytics.ts
-// ONE hook to rule them all
+// Clean React hook for analytics - no more console errors
 
 import { useEffect, useState } from 'react'
-import { analytics, type ChildProgress } from '../services/analytics'
-import { useSessionStore } from '../stores/sessionStore'
+import { analytics, type ChildProgress, type ActivityData } from '../services/analytics'
 
 export const useAnalytics = (childId?: string) => {
-  const session = useSessionStore()
   const [progress, setProgress] = useState<ChildProgress | null>(null)
-  const [isSessionActive, setIsSessionActive] = useState(false)
+  const [isTracking, setIsTracking] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  // Set child when provided
+  // Initialize child tracking when childId changes
   useEffect(() => {
     if (childId) {
       analytics.setChild(childId)
+      analytics.startSession()
+      setIsTracking(true)
       loadProgress()
+    } else {
+      setIsTracking(false)
+      setProgress(null)
     }
   }, [childId])
 
-  // Auto-start session when brain state selected
-  useEffect(() => {
-    if (childId && session.currentBrainState?.id && !isSessionActive) {
-      analytics.startSession()
-      setIsSessionActive(true)
-      console.log('🎯 Analytics session started')
-    }
-  }, [childId, session.currentBrainState?.id, isSessionActive])
-
-  // Auto-end session when they complete activities
-  useEffect(() => {
-    const lastSession = session.completedSessions[session.completedSessions.length - 1]
-    if (lastSession && isSessionActive) {
-      analytics.endSession()
-      setIsSessionActive(false)
-      loadProgress() // Refresh data
-      console.log('🎯 Analytics session ended')
-    }
-  }, [session.completedSessions.length, isSessionActive])
-
-  // Load progress data
+  // Load current progress
   const loadProgress = async () => {
-    if (childId) {
-      const data = await analytics.getProgress(childId)
-      setProgress(data)
+    try {
+      setError(null)
+      const currentProgress = await analytics.getProgress()
+      setProgress(currentProgress)
+    } catch (err) {
+      console.error('Failed to load progress:', err)
+      setError('Failed to load progress')
     }
   }
 
-  // Quick tracking methods
-  const trackWordPractice = async (words: string[], correct: string[], minutes: number) => {
-    await analytics.trackWordPractice(words, correct, minutes)
-    await loadProgress() // Refresh dashboard data
+  // Track activity with error handling
+  const trackActivity = async (activity: ActivityData) => {
+    if (!isTracking) {
+      console.warn('Analytics not initialized')
+      return false
+    }
+
+    try {
+      setError(null)
+      await analytics.trackActivity(activity)
+      
+      // Refresh progress after tracking
+      await loadProgress()
+      
+      console.log('✅ Activity tracked successfully')
+      return true
+      
+    } catch (err) {
+      console.error('Failed to track activity:', err)
+      setError('Failed to track activity')
+      return false
+    }
   }
 
-  const trackStoryReading = async (storyTitle: string, minutes: number, completed: boolean) => {
-    await analytics.trackStoryReading(storyTitle, minutes, completed)
-    await loadProgress()
-  }
-
-  const trackCalmCorner = async (minutes: number) => {
-    await analytics.trackCalmCorner(minutes)
-    await loadProgress()
-  }
-
-  const trackAnyActivity = async (
-    type: string,
-    title: string,
-    minutes: number,
-    options: {
-      accuracy?: number
-      completed?: boolean
-      skills?: string[]
-      struggles?: string[]
-    } = {}
-  ) => {
-    await analytics.trackActivity({
+  // Quick track methods for common activities
+  const trackAnyActivity = async (type: string, title: string, duration: number, extraData?: Partial<ActivityData>) => {
+    const activity: ActivityData = {
       type,
       title,
-      duration: minutes,
-      accuracy: options.accuracy,
-      completed: options.completed ?? true,
-      skills: options.skills,
-      struggles: options.struggles
-    })
-    await loadProgress()
+      duration,
+      completed: true,
+      ...extraData
+    }
+    
+    return await trackActivity(activity)
   }
 
+  const trackStoryReading = async (storyTitle: string, minutes: number, wpm?: number) => {
+    return await trackAnyActivity('story_reading', storyTitle, minutes, {
+      accuracy: wpm ? Math.min(100, Math.max(0, (wpm - 50) * 2)) : undefined, // rough accuracy estimate
+      skills: ['reading_fluency', 'comprehension']
+    })
+  }
+
+  const trackWordBuilding = async (gameTitle: string, minutes: number, accuracy?: number) => {
+    return await trackAnyActivity('word_building', gameTitle, minutes, {
+      accuracy,
+      skills: accuracy && accuracy > 80 ? ['phonics', 'spelling'] : undefined,
+      struggles: accuracy && accuracy < 60 ? ['phonics'] : undefined
+    })
+  }
+
+  const trackStruggle = async (activityTitle: string, skillArea: string) => {
+    return await trackAnyActivity('struggle_support', activityTitle, 1, {
+      completed: false,
+      struggles: [skillArea]
+    })
+  }
+
+  // End session
+  const endSession = async () => {
+    if (!isTracking) return
+    
+    try {
+      setError(null)
+      await analytics.endSession()
+      setIsTracking(false)
+      
+      console.log('📊 Session ended successfully')
+      
+    } catch (err) {
+      console.error('Failed to end session:', err)
+      setError('Failed to end session')
+    }
+  }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (isTracking) {
+        analytics.endSession().catch(console.error)
+      }
+    }
+  }, [isTracking])
+
   return {
-    // Data
+    // State
     progress,
-    isSessionActive,
+    isTracking,
+    error,
     
-    // Methods
-    trackWordPractice,
-    trackStoryReading,
-    trackCalmCorner,
+    // Actions
+    trackActivity,
     trackAnyActivity,
+    trackStoryReading,
+    trackWordBuilding,
+    trackStruggle,
+    endSession,
+    refreshProgress: loadProgress,
     
-    // Manual refresh
-    refreshProgress: loadProgress
+    // Quick data access
+    totalSessions: progress?.totalSessions || 0,
+    totalMinutes: progress?.totalMinutes || 0,
+    currentStreak: progress?.currentStreak || 0,
+    strengths: progress?.strengths || [],
+    weekMinutes: progress?.weekMinutes || 0
   }
 }

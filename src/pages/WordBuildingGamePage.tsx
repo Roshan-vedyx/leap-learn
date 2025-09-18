@@ -75,6 +75,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   const [patternProgress, setPatternProgress] = useState<Record<string, PatternProgress>>({})
   const [sessionPatterns, setSessionPatterns] = useState<Set<string>>(new Set())
   const [lastPatternCelebration, setLastPatternCelebration] = useState<string>('')
+  const [useAlternativeChunks, setUseAlternativeChunks] = useState(false)
   
   // ADD ANALYTICS HOOKS
   const userId = useCurrentUserId()
@@ -181,7 +182,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
   // Initialize word chunks when word changes
   useEffect(() => {
     if (currentWord && adaptiveWordBank.current) {
-      let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      let chunks = adaptiveWordBank.current.getWordChunks(currentWord, useAlternativeChunks)
       
       if (!chunks || chunks.length === 0) {
         console.warn(`⚠️ No JSON chunks found for ${currentWord}, using phonetic fallback`)
@@ -211,7 +212,19 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     }
   }, [currentWordIndex, currentWord])
 
-  
+  useEffect(() => {
+    // Reset current word when complexity changes
+    if (adaptiveWordBank.current && currentWord) {
+      const newChunks = adaptiveWordBank.current.getWordChunks(currentWord, useAlternativeChunks)
+      const shuffledChunks = [...newChunks].sort(() => Math.random() - 0.5)
+      setAvailableChunks(shuffledChunks)
+      setArrangedChunks([])
+      setIsWordComplete(false)
+      setShowCelebration(false)
+      setShowWrongOrderMessage(false)
+    }
+  }, [useAlternativeChunks, currentWord])
+
   // Context generation helpers
   const generateContextIntro = (word: string, theme: string): string => {
     const contexts: Record<string, string[]> = {
@@ -430,23 +443,27 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         const completionTime = Date.now() - wordStartTime
         console.log(`📊 Word "${currentWord}" completed in ${completionTime}ms with ${hintsUsed} hints and ${resetsUsed} resets`)
         
-        // ADD ANALYTICS TRACKING FOR WORD SUCCESS
+        // ADD ANALYTICS TRACKING FOR WORD SUCCESS         
         if (userId) {
-          trackAnyActivity(
-            'word_practice',
-            `Built word: ${currentWord}`,
-            Math.round(completionTime / 60000), // convert to minutes
-            {
-              accuracy: 100,
-              skills: ['word_building'],
-              struggles: hintsUsed > 2 ? ['word_assembly'] : []
-            }
-          )
-          
-          // Track breakthrough for challenging words
-          if (currentWord.length > 6 && hintsUsed <= 1) {
-            trackAnyActivity('word_practice', `Breakthrough: ${currentWord}`, 0.1, { skills: ['challenging_words'] })
-          }
+          const timeInMinutes = Math.max(0.1, Math.round(completionTime / 60000))
+          trackAnyActivity(             
+            'word_practice',             
+            `Built word: ${currentWord}`,             
+            timeInMinutes,             
+            {               
+              accuracy: 100,               
+              skills: ['word_building'],               
+              struggles: hintsUsed > 2 ? ['word_assembly'] : undefined             
+            }           
+          ).catch(error => console.log('Analytics tracking failed (non-critical):', error))
+                              
+          // Track breakthrough for challenging words           
+          if (currentWord.length > 6 && hintsUsed <= 1) {             
+            trackAnyActivity('word_practice', `Breakthrough: ${currentWord}`, 0.1, { 
+              skills: ['challenging_words'],
+              completed: true 
+            }).catch(error => console.log('Breakthrough analytics failed (non-critical):', error))          
+          }         
         }
         
         // Auto-play success TTS message
@@ -467,7 +484,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
           })
         }
         return
-      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0) && !isWordComplete && !showCelebration && !showMeaningIntegration) {
+      } else if (arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord, useAlternativeChunks)?.length || 0) && !isWordComplete && !showCelebration && !showMeaningIntegration) {
         // Only show wrong order message if word is NOT complete, NOT celebrating, and NOT in success state
         setShowWrongOrderMessage(true)
         setTimeout(() => setShowWrongOrderMessage(false), 4000)
@@ -574,8 +591,8 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
     
     let ttsToSpeak = chunk
     if (adaptiveWordBank.current) {
-      const ttsChunks = adaptiveWordBank.current.getTTSChunks(currentWord)
-      const visualChunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      const ttsChunks = adaptiveWordBank.current.getTTSChunks(currentWord, useAlternativeChunks)
+      const visualChunks = adaptiveWordBank.current.getWordChunks(currentWord, useAlternativeChunks)
       const chunkIndex = visualChunks.findIndex(visualChunk => 
         visualChunk.toUpperCase() === chunk.toUpperCase()
       )
@@ -606,7 +623,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   const handleListenToAvailableChunks = async () => {
     if (availableChunks.length === 0 || isReading) return
-    const originalChunks = adaptiveWordBank.current?.getWordChunks(currentWord) || [currentWord]
+    const originalChunks = adaptiveWordBank.current?.getWordChunks(currentWord, useAlternativeChunks) || [currentWord]
     const chunksText = originalChunks.join(', ')
     console.log(`🔊 Speaking available chunks: "${chunksText}"`)
     await speakText(`Listen to the word pieces: ${chunksText}`)
@@ -659,7 +676,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
 
   const handleReset = async () => {
     if (adaptiveWordBank.current) {
-      let chunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      let chunks = adaptiveWordBank.current.getWordChunks(currentWord, useAlternativeChunks)
       if (chunks.length > 3 || chunks.some(chunk => chunk.length === 1)) {
         chunks = getPhoneticChunks(currentWord)
       }
@@ -672,16 +689,19 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
       setShowWrongOrderMessage(false)
       setResetsUsed(prev => prev + 1)
 
-      // ADD ANALYTICS TRACKING FOR RESET
-      if (userId && resetsUsed > 1) {
-        await trackAnyActivity('word_practice', `Reset: ${currentWord}`, 0.1, { skills: ['persistence'] })
+      // ADD ANALYTICS TRACKING FOR RESET       
+      if (userId && resetsUsed > 1) {         
+        trackAnyActivity('word_practice', `Reset: ${currentWord}`, 0.1, { 
+          skills: ['persistence'],
+          completed: false 
+        }).catch(error => console.log('Reset analytics failed (non-critical):', error))      
       }
     }
   }
 
   const handleHint = async () => {
     if (adaptiveWordBank.current && arrangedChunks.length < currentWord.length) {
-      let correctChunks = adaptiveWordBank.current.getWordChunks(currentWord)
+      let correctChunks = adaptiveWordBank.current.getWordChunks(currentWord, useAlternativeChunks)
       if (correctChunks.length > 3 || correctChunks.some(chunk => chunk.length === 1)) {
         correctChunks = getPhoneticChunks(currentWord)
       }
@@ -694,9 +714,12 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         setArrangedChunks(prev => [...prev, nextChunk])
         setHintsUsed(prev => prev + 1)
 
-        // ADD ANALYTICS TRACKING FOR HINT USAGE
-        if (userId) {
-          await trackAnyActivity('word_practice', `Hint used: ${currentWord}`, 0.1, { skills: ['hint_usage'] })
+        // ADD ANALYTICS TRACKING FOR HINT USAGE         
+        if (userId) {           
+          trackAnyActivity('word_practice', `Hint used: ${currentWord}`, 0.1, { 
+            skills: ['hint_usage'],
+            completed: false 
+          }).catch(error => console.log('Hint analytics failed (non-critical):', error))        
         }
       }
     }
@@ -943,6 +966,33 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
               </div>
             </div>
 
+            {/* Complexity Toggle */}
+            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-sm font-medium text-blue-700">Word Complexity:</span>
+                <button
+                  onClick={() => setUseAlternativeChunks(false)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    !useAlternativeChunks 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-white text-blue-600 border border-blue-300 hover:bg-blue-50'
+                  }`}
+                >
+                  Whole Words
+                </button>
+                <button
+                  onClick={() => setUseAlternativeChunks(true)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    useAlternativeChunks 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-white text-blue-600 border border-blue-300 hover:bg-blue-50'
+                  }`}
+                >
+                  Break Into Sounds
+                </button>
+              </div>
+            </div>
+
             {/* Available chunks */}
             <div className="mb-6 md:mb-8">
               <div className="text-center mb-3">
@@ -993,7 +1043,7 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button
                 onClick={handleHint}
-                disabled={isWordComplete || isReading || arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord)?.length || 0)}
+                disabled={isWordComplete || isReading || arrangedChunks.length >= (adaptiveWordBank.current?.getWordChunks(currentWord, useAlternativeChunks)?.length || 0)}
                 className="flex-1 min-h-[48px] bg-yellow-500 hover:bg-yellow-600 text-white font-medium text-base"
               >
                 💡 Hint

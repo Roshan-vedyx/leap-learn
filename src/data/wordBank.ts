@@ -269,7 +269,7 @@ export class AdaptiveWordBank {
   }
 
   // UPDATED: Get visual chunks for game pieces
-  getWordChunks(word: string): string[] {
+  getWordChunks(word: string, useAlternative: boolean = false): string[] {
     if (this.enhancedWordBank && this.isJsonLoaded) {
       const currentWords = this.enhancedWordBank.words
       const wordEntry = currentWords.find(entry => 
@@ -277,8 +277,13 @@ export class AdaptiveWordBank {
       )
   
       if (wordEntry) {
-        console.log(`📝 Using JSON alternative chunks for ${word}:`, wordEntry.alternative_chunks)
-        return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())  // CHANGED THIS LINE
+        if (useAlternative) {
+          console.log(`📝 Using JSON alternative chunks for ${word}:`, wordEntry.alternative_chunks)
+          return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())
+        } else {
+          console.log(`📝 Using JSON standard chunks for ${word}:`, wordEntry.chunks)
+          return wordEntry.chunks.map(chunk => chunk.toUpperCase())
+        }
       }
     }
   
@@ -288,7 +293,7 @@ export class AdaptiveWordBank {
   }
 
   // NEW: Get TTS chunks for better pronunciation
-  getTTSChunks(word: string): string[] {
+  getTTSChunks(word: string, useAlternative: boolean = false): string[] {
     if (this.enhancedWordBank && this.isJsonLoaded) {
       const currentWords = this.enhancedWordBank.words
       const wordEntry = currentWords.find(entry => 
@@ -296,15 +301,21 @@ export class AdaptiveWordBank {
       )
   
       if (wordEntry) {
-        // Use alternative_chunks for TTS since tts_chunks don't exist
-        console.log(`🎵 Using alternative chunks for TTS: ${word}:`, wordEntry.alternative_chunks)
-        return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())
+        if (useAlternative) {
+          // Use alternative_chunks for TTS when in phonetic mode
+          console.log(`🎵 Using alternative chunks for TTS: ${word}:`, wordEntry.alternative_chunks)
+          return wordEntry.alternative_chunks.map(chunk => chunk.toUpperCase())
+        } else {
+          // Use standard chunks for TTS when in whole word mode
+          console.log(`🎵 Using standard chunks for TTS: ${word}:`, wordEntry.chunks)
+          return wordEntry.chunks.map(chunk => chunk.toUpperCase())
+        }
       }
     }
   
     // Fallback to regular chunks if no JSON data available
     console.log(`🎵 Using fallback chunks for TTS: ${word}`)
-    return this.getWordChunks(word)
+    return this.getWordChunks(word, useAlternative)
   }
 
   // Performance tracking
