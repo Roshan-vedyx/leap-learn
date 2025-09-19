@@ -93,6 +93,14 @@ export const useAnalytics = (childId?: string) => {
     })
   }
 
+  const startNewSession = async () => {
+    if (userId) {
+      await trackAnyActivity('session_start', 'Learning session started', 0.1, {
+        completed: true
+      })
+    }
+  }
+
   // End session
   const endSession = async () => {
     if (!isTracking) return
@@ -132,6 +140,7 @@ export const useAnalytics = (childId?: string) => {
     trackWordBuilding,
     trackStruggle,
     endSession,
+    startNewSession,
     refreshProgress: loadProgress,
     
     // Quick data access

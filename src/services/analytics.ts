@@ -155,6 +155,11 @@ class FixedAnalytics {
     progress.totalMinutes += activity.duration
     progress.weekMinutes += activity.duration
     
+    // Only increment sessions for major completions, not individual activities
+    if (activity.completed && (activity.type === 'session_complete' || activity.type === 'story_reading')) {
+      progress.totalSessions += 1
+      progress.weekSessions += 1
+    }
     // Add new skills (avoiding duplicates)
     if (activity.skills) {
       activity.skills.forEach(skill => {

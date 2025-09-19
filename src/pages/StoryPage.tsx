@@ -5,6 +5,8 @@ import { audio, storage } from '@/lib/utils'
 import { DynamicStoryLoader } from '@/utils/dynamicStoryLoader'
 import { useSessionStore } from '@/stores/sessionStore'
 import type { ComplexityLevel } from '@/types'
+import { useAnalytics } from '../hooks/useAnalytics'
+import { useCurrentUserId } from '@/lib/auth-utils'
 
 // NEW: Updated interfaces for new JSON format
 interface NewStoryFormat {
@@ -75,6 +77,10 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const [collectedReflections, setCollectedReflections] = useState<string[]>([])
   const [blocks, setBlocks] = useState<StoryBlock[]>([])
 
+  const userId = useCurrentUserId()
+  const { trackAnyActivity } = useAnalytics(userId)
+  const [storyStartTime] = useState(Date.now())
+
   const totalSections = blocks.length
 
   // Load story template
@@ -143,6 +149,21 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   useEffect(() => {
     storage.set('current-complexity-level', complexityLevel)
   }, [complexityLevel])
+
+  // Track reading progress through sections
+  useEffect(() => {
+    if (currentSection > 0 && userId && totalSections > 0) {
+      const progressPercent = Math.round((currentSection / totalSections) * 100)
+      if (progressPercent % 25 === 0) { // Track at 25%, 50%, 75%
+        trackAnyActivity(
+          'story_progress',
+          `Reading ${story?.title || 'story'} - ${progressPercent}%`,
+          0.5,
+          { accuracy: progressPercent, completed: false }
+        ).catch(error => console.log('Story progress analytics failed:', error))
+      }
+    }
+  }, [currentSection, totalSections, userId, story?.title])
 
   // NEW: Parse new JSON format into StoryBlocks
   const parseNewFormatStory = (storyLevel: StoryLevel): { blocks: StoryBlock[], reflections: string[] } => {
@@ -269,6 +290,22 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
   const handleNextSection = () => {
     if (currentSection === totalSections - 1) {
+      // Story completed - track it
+      if (userId) {
+        const readingTimeMinutes = Math.max(1, Math.round((Date.now() - storyStartTime) / 60000))
+        trackAnyActivity(
+          'story_reading',
+          story?.title || 'Story Reading',
+          readingTimeMinutes,
+          {
+            accuracy: 85, // Assume good comprehension if they finished
+            skills: ['reading_fluency', 'comprehension'],
+            completed: true
+          }
+        ).catch(error => console.log('Story completion analytics failed:', error))
+      }
+      
+      // Existing logic
       setStoryReflections(collectedReflections)
       setLocation('/create')
     } else {

@@ -20,7 +20,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
 
   const loadProgress = async () => {
     setLoading(true)
-    const data = await analytics.getProgress(childId)
+    const data = await analytics.getProgress()
     setProgress(data)
     setLoading(false)
   }
@@ -37,7 +37,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
   }
 
   // Show welcome if no progress yet
-  if (!progress || progress.totalSessions === 0) {
+  if (!progress || progress.totalMinutes === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-6">
         <div className="max-w-4xl mx-auto">
@@ -87,7 +87,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
           {/* Total Time */}
           <div className="bg-white rounded-xl shadow-sm p-6 text-center">
             <Clock className="w-8 h-8 text-green-500 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-gray-900">{progress.totalMinutes}</div>
+            <div className="text-2xl font-bold text-gray-900">{Math.round(progress.totalMinutes)}</div>
             <div className="text-sm text-gray-600">Minutes Learning</div>
           </div>
 
@@ -127,7 +127,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-gray-900 capitalize">
-                        {skill.replace('_', ' ')}
+                        {skill.replace(/_/g, ' ')}
                       </div>
                     </div>
                     <Star className="w-5 h-5 text-yellow-500" />
@@ -160,7 +160,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
                   <div className="text-sm text-blue-600">Sessions</div>
                 </div>
                 <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">{progress.weekMinutes}</div>
+                <div className="text-2xl font-bold text-green-600">{Math.round(progress.weekMinutes)}</div>
                   <div className="text-sm text-green-600">Minutes</div>
                 </div>
               </div>
@@ -172,7 +172,7 @@ export default function ChildDashboard({ childId, username = "Learning Champion"
                   <div className="flex flex-wrap gap-2">
                     {progress.weekSkills.map(skill => (
                       <span key={skill} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium capitalize">
-                        {skill.replace('_', ' ')}
+                        {skill.replace(/_/g, ' ')}
                       </span>
                     ))}
                   </div>
