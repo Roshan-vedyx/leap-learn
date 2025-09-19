@@ -239,7 +239,6 @@ class FixedAnalytics {
       await updateDoc(progressRef, {
         totalSessions: increment(1),
         weekSessions: increment(1),
-        totalMinutes: increment(sessionDuration),
         updatedAt: Date.now(),
         lastActive: new Date().toISOString().split('T')[0]
       })

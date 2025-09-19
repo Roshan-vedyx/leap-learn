@@ -280,7 +280,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </h3>
                   </div>
                   
-                  <div className="bg-blue-25 border border-blue-100 rounded-lg p-4">
+                  <div className="bg-sky-50 border border-soft-lavender/30 rounded-lg p-4">
                     <div className="flex items-start gap-4">
                       <div className="flex-1">
                         <h4 className="text-sm font-medium text-gray-900 mb-2">Text-to-Speech Voice</h4>
@@ -326,7 +326,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <Button
                     onClick={handleProgressClick}
                     variant="outline"
-                    className="w-full flex items-center justify-between p-4 h-auto"
+                    className="w-full flex items-center justify-between p-4 h-auto bg-amber-50 border-amber-200 hover:bg-amber-100 hover:border-amber-300"
                   >
                     <div className="flex items-center gap-3">
                       <TrendingUp className="w-5 h-5 text-green-600" />
@@ -349,7 +349,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </h3>
                   </div>
                   
-                  <div className="bg-green-25 border border-green-100 rounded-lg p-4">
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                     <div className="flex items-start gap-4">
                       <div className="flex-1">
                         <h4 className="text-sm font-medium text-gray-900 mb-2">More Reading Support?</h4>
@@ -388,7 +388,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </h3>
                   </div>
                   
-                  <div className="bg-amber-25 border border-amber-100 rounded-lg p-4">
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                     <div className="flex items-start gap-4">
                       <div className="flex-1">
                         <h4 className="text-sm font-medium text-gray-900 mb-2">Reset Your PIN</h4>

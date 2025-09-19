@@ -446,25 +446,20 @@ const WordBuildingGamePage: React.FC<WordBuildingGamePageProps> = ({ theme }) =>
         // ADD ANALYTICS TRACKING FOR WORD SUCCESS
         if (userId) {
           const timeInMinutes = Math.max(0.1, Math.round(completionTime / 60000))
-          trackAnyActivity(             
-            'word_building',             
-            `Built word: ${currentWord}`,             
-            0, // NO TIME TRACKING FOR INDIVIDUAL WORDS             
-            {               
-              accuracy: hintsUsed > 2 ? 60 : 100,               
-              skills: ['word_building', currentWordData?.phonics_focus || 'phonics'],               
-              struggles: hintsUsed > 2 ? ['word_patterns'] : undefined,
-              completed: false // Don't count as session
-            }
-          )
-          ).catch(error => console.log('Word completion analytics failed:', error))
           
           // Track breakthrough for challenging words
           if (currentWord.length > 6 && hintsUsed <= 1) {
-            trackAnyActivity('word_building', `Breakthrough: ${currentWord}`, 0.1, {
-              skills: ['challenging_words'],
-              completed: true 
-            }).catch(error => console.log('Breakthrough analytics failed:', error))
+            trackAnyActivity(
+              'word_building',
+              `Breakthrough: ${currentWord}`,
+              0.1,
+              {
+                skills: ['challenging_words'],
+                completed: true
+              }
+            ).catch(error =>
+              console.log('Breakthrough analytics failed:', error)
+            )
           }
         }
         

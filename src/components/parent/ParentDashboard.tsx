@@ -1,6 +1,8 @@
 // src/components/parent/ParentDashboard.tsx
+// Updated to include insights view
+
 import React, { useState, useEffect } from 'react'
-import { User, Plus, Settings, LogOut, Shield, Eye, EyeOff } from 'lucide-react'
+import { User, Plus, Settings, LogOut, Shield, Eye, EyeOff, BarChart3 } from 'lucide-react'
 import { signOut } from 'firebase/auth'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { auth, db } from '../../config/firebase'
@@ -8,12 +10,17 @@ import { useParentAuth } from '../../contexts/ParentAuthContext'
 import { Button } from '@/components/ui/Button'
 import type { ChildProfile } from '../../types/auth'
 import { ChildSetup } from '../auth/ChildSetup'
+import ParentInsightsView from './ParentInsightsView'
+
+type TabType = 'children' | 'insights'
 
 export const ParentDashboard: React.FC = () => {
   const { user } = useParentAuth()
   const [children, setChildren] = useState<ChildProfile[]>([])
   const [loading, setLoading] = useState(true)
   const [showChildSetup, setShowChildSetup] = useState(false)
+  const [activeTab, setActiveTab] = useState<TabType>('children')
+  const [selectedChildId, setSelectedChildId] = useState<string>('')
 
   const fetchChildren = async () => {
     if (!user) return
@@ -26,6 +33,11 @@ export const ParentDashboard: React.FC = () => {
       const snapshot = await getDocs(childrenQuery)
       const childrenData = snapshot.docs.map(doc => doc.data() as ChildProfile)
       setChildren(childrenData)
+      
+      // Auto-select first child for insights
+      if (childrenData.length > 0 && !selectedChildId) {
+        setSelectedChildId(childrenData[0].id)
+      }
     } catch (error) {
       console.error('Error fetching children:', error)
     } finally {
@@ -73,9 +85,13 @@ export const ParentDashboard: React.FC = () => {
     )
   }
 
+  const selectedChild = children.find(child => child.id === selectedChildId)
+
   return (
     <div className="page-container">
       <div className="container">
+        
+        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-header-primary mb-2">
@@ -96,6 +112,7 @@ export const ParentDashboard: React.FC = () => {
           </Button>
         </div>
 
+        {/* Privacy Notice */}
         <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 
                       rounded-xl p-6 mb-8">
           <div className="flex items-start gap-4">
@@ -105,133 +122,151 @@ export const ParentDashboard: React.FC = () => {
                 Your Child's Privacy is Protected
               </h3>
               <p className="text-green-700 dark:text-green-300 text-sm leading-relaxed">
-                You can see basic progress and manage accounts, but your child's daily activities, 
+                You can see growth patterns and manage accounts, but your child's daily activities, 
                 creative responses, and learning content remain completely private.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-header-primary">
-              Your Children ({children.length})
-            </h2>
-            <Button 
-              onClick={() => setShowChildSetup(true)}
-              className="flex items-center gap-2"
+        {/* Tab Navigation */}
+        {children.length > 0 && (
+          <div className="flex space-x-1 mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab('children')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === 'children'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              Add Child
-            </Button>
+              <User className="w-4 h-4" />
+              Manage Children
+            </button>
+            <button
+              onClick={() => setActiveTab('insights')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeTab === 'insights'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              Learning Insights
+            </button>
           </div>
+        )}
 
-          {children.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 dark:bg-gray-900/30 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700">
-              <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300 mb-2">
-                No children added yet
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6">
-                Add your first child to get started with their learning journey
-              </p>
-              <Button onClick={() => setShowChildSetup(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Your First Child
+        {/* Tab Content */}
+        {activeTab === 'children' && (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold text-header-primary">
+                Your Children ({children.length})
+              </h2>
+              <Button 
+                onClick={() => setShowChildSetup(true)}
+                className="flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Add Child
               </Button>
             </div>
-          ) : (
-            <div className="card-grid">
-              {children.map((child) => (
-                <ChildCard key={child.childId} child={child} />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
 
-const ChildCard: React.FC<{ child: ChildProfile }> = ({ child }) => {
-  const [showDetails, setShowDetails] = useState(false)
-
-  return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 
-                  rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-      
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-full 
-                        flex items-center justify-center">
-            <User className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            {children.length === 0 ? (
+              <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl">
+                <User className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
+                  No children added yet
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6">
+                  Add your first child to get started with their learning journey.
+                </p>
+                <Button onClick={() => setShowChildSetup(true)}>
+                  Add Your First Child
+                </Button>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {children.map((child) => (
+                  <div key={child.id} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center">
+                        <User className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                          {child.username}
+                        </h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Age {child.age} • Added {new Date(child.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Button
+                        onClick={() => {
+                          setSelectedChildId(child.id)
+                          setActiveTab('insights')
+                        }}
+                        variant="outline"
+                        className="w-full flex items-center gap-2"
+                      >
+                        <BarChart3 className="w-4 h-4" />
+                        View Learning Journey
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+        )}
+
+        {activeTab === 'insights' && selectedChild && (
           <div>
-            <h3 className="text-lg font-semibold text-header-primary">
-              {child.username}
+            {/* Child Selector */}
+            {children.length > 1 && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  View insights for:
+                </label>
+                <select
+                  value={selectedChildId}
+                  onChange={(e) => setSelectedChildId(e.target.value)}
+                  className="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 
+                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  {children.map((child) => (
+                    <option key={child.id} value={child.id}>
+                      {child.username}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            
+            <ParentInsightsView 
+              childId={selectedChildId} 
+              childName={selectedChild.username}
+            />
+          </div>
+        )}
+
+        {activeTab === 'insights' && !selectedChild && children.length === 0 && (
+          <div className="text-center py-12">
+            <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+              Add a child to see insights
             </h3>
-            <p className="text-sm text-body-text">
-              {child.metadata.currentLevel}
+            <p className="text-gray-500 mb-6">
+              Once you add a child, their learning insights will appear here.
             </p>
           </div>
-        </div>
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowDetails(!showDetails)}
-          className="flex items-center gap-2"
-        >
-          {showDetails ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-          {showDetails ? 'Hide' : 'Details'}
-        </Button>
+        )}
+
       </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-            {child.metadata.totalSessions}
-          </div>
-          <div className="text-sm text-body-text">Total Sessions</div>
-        </div>
-        
-        <div className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <div className="text-sm font-medium text-green-600 dark:text-green-400">
-            {child.metadata.lastActiveDate 
-              ? new Date(child.metadata.lastActiveDate).toLocaleDateString()
-              : 'Never'
-            }
-          </div>
-          <div className="text-sm text-body-text">Last Active</div>
-        </div>
-      </div>
-
-      {showDetails && (
-        <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div>
-            <h4 className="font-medium text-header-primary mb-2">Privacy Settings</h4>
-            <div className="text-sm text-body-text">
-              Weekly Report: {child.metadata.allowWeeklyReport ? 'Enabled' : 'Disabled'}
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-medium text-header-primary mb-2">Accessibility</h4>
-            <div className="text-sm text-body-text space-y-1">
-              <div>Font Size: {child.preferences.fontSize}</div>
-              <div>High Contrast: {child.preferences.highContrast ? 'On' : 'Off'}</div>
-              <div>Audio Support: {child.preferences.audioSupport ? 'On' : 'Off'}</div>
-            </div>
-          </div>
-
-          <div className="flex gap-2 pt-2">
-            <Button variant="outline" size="sm" className="flex-1">
-              <Settings className="w-4 h-4 mr-2" />
-              Manage
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
