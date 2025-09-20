@@ -169,26 +169,91 @@ export const useSpeechHighlighting = (
           utterance.lang = langMap[savedAccent] || 'en-GB'
         }
 
-        // CORE FIX: Use boundary events to track word positions
-        utterance.onboundary = (event) => {
-          if (event.name === 'word') {
-            const wordIndex = getWordIndexFromCharIndex(event.charIndex || 0, text)
-            
-            // Clear previous highlight using ref
-            if (prevWordIndexRef.current !== -1) {
-              highlightWord(elementId, prevWordIndexRef.current, false)
-              options.onWordEnd?.(wordsRef.current[prevWordIndexRef.current], prevWordIndexRef.current)
+        // FIXED: Use timing-based highlighting instead of unreliable boundary events
+        let wordTimer: NodeJS.Timeout | null = null
+        const wordsPerMinute = (options.rate ?? 0.8) * 200
+        const msPerWord = 60000 / wordsPerMinute
+
+        let currentWordIdx = 0
+        const highlightNextWord = () => {
+          if (currentWordIdx < wordsRef.current.length && currentUtteranceRef.current) {
+            // Clear previous highlight
+            if (currentWordIdx > 0) {
+              highlightWord(elementId, currentWordIdx - 1, false)
+              options.onWordEnd?.(wordsRef.current[currentWordIdx - 1], currentWordIdx - 1)
             }
             
-            // Set new word highlight
-            setCurrentWordIndex(wordIndex)
-            prevWordIndexRef.current = wordIndex
-            highlightWord(elementId, wordIndex, true)
-            options.onWordStart?.(wordsRef.current[wordIndex], wordIndex)
+            // Set new highlight
+            setCurrentWordIndex(currentWordIdx)
+            highlightWord(elementId, currentWordIdx, true)
+            options.onWordStart?.(wordsRef.current[currentWordIdx], currentWordIdx)
+            
+            currentWordIdx++
+            wordTimer = setTimeout(highlightNextWord, msPerWord)
+          }
+        }
+        
+        // Don't start highlighting timer yet - wait for speech to actually begin
+        let speechStarted = false
+        
+        utterance.onstart = () => {
+          // Use pre-calculated word timings if available
+          const wordTimings = (window as any).currentWordTimings
+          
+          if (wordTimings) {
+            // Use precise pre-calculated timings
+            wordTimings.forEach((timing: any, index: number) => {
+              setTimeout(() => {
+                if (currentUtteranceRef.current) {
+                  // Clear previous highlight
+                  if (index > 0) {
+                    highlightWord(elementId, index - 1, false)
+                    options.onWordEnd?.(wordsRef.current[index - 1], index - 1)
+                  }
+                  
+                  // Set new highlight
+                  setCurrentWordIndex(index)
+                  highlightWord(elementId, index, true)
+                  options.onWordStart?.(timing.word, index)
+                }
+              }, Math.max(0, timing.startTime - 170))
+            })
+          } else {
+            // Fallback to previous timing method
+            let currentWordIdx = 0
+            const highlightNextWord = () => {
+              if (currentWordIdx < wordsRef.current.length && currentUtteranceRef.current) {
+                if (currentWordIdx > 0) {
+                  highlightWord(elementId, currentWordIdx - 1, false)
+                  options.onWordEnd?.(wordsRef.current[currentWordIdx - 1], currentWordIdx - 1)
+                }
+                
+                setCurrentWordIndex(currentWordIdx)
+                highlightWord(elementId, currentWordIdx, true)
+                options.onWordStart?.(wordsRef.current[currentWordIdx], currentWordIdx)
+                
+                currentWordIdx++
+                const msPerWord = 60000 / ((options.rate ?? 0.8) * 200)
+                wordTimer = setTimeout(highlightNextWord, msPerWord)
+              }
+            }
+            wordTimer = setTimeout(highlightNextWord, 0)
           }
         }
 
         utterance.onend = () => {
+          // Clear word timer
+          if (wordTimer) {
+            clearTimeout(wordTimer)
+            wordTimer = null
+          }
+          // Clear any remaining timing-based highlights
+          const wordTimings = (window as any).currentWordTimings
+          if (wordTimings) {
+            wordTimings.forEach((timing: any, index: number) => {
+              clearTimeout(setTimeout(() => {}, timing.startTime))
+            })
+          }
           // Clear final highlight
           if (currentWordIndex !== -1) {
             highlightWord(elementId, currentWordIndex, false)
@@ -201,7 +266,7 @@ export const useSpeechHighlighting = (
             element.textContent = originalContentRef.current
           }
           
-          // Reset state - don't call setIsReading, it's handled in the finally block
+          // Reset state
           setCurrentWordIndex(-1)
           currentUtteranceRef.current = null
           options.onSpeechEnd?.()
@@ -212,6 +277,11 @@ export const useSpeechHighlighting = (
         utterance.onerror = (event) => {
           console.error('TTS error:', event)
           
+          // Clear word timer
+          if (wordTimer) {
+            clearTimeout(wordTimer)
+            wordTimer = null
+          }
           // Reset on error
           const element = document.getElementById(elementId)
           if (element && originalContentRef.current) {
@@ -258,6 +328,12 @@ export const useSpeechHighlighting = (
 
   const stop = useCallback(() => {
     speechSynthesis.cancel()
+    
+    // Clear any active word timer
+    if (typeof window !== 'undefined') {
+      const timers = (window as any).wordTimers || []
+      timers.forEach((timer: NodeJS.Timeout) => clearTimeout(timer))
+    }
     
     // Reset element content
     const element = document.getElementById(currentElementRef.current)

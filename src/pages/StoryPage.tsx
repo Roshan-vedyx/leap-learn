@@ -166,6 +166,41 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     }
   }, [currentSection, totalSections, userId, story?.title])
 
+  // NEW: Calculate precise word timings based on text analysis
+  const calculateWordTimings = (text: string, speechRate: number) => {
+    const words = text.split(/\s+/)
+    const timings = []
+    let currentTime = 0
+    
+    words.forEach((word, index) => {
+      // Adjust timing based on word characteristics
+      let baseTime = 60000 / (speechRate * 200) // Base ms per word
+      
+      // Longer words take more time
+      if (word.length > 6) baseTime *= 1.3
+      if (word.length > 10) baseTime *= 1.5
+      
+      // Punctuation adds pause
+      if (word.includes(',')) baseTime *= 1.2
+      if (word.includes('.') || word.includes('!') || word.includes('?')) baseTime *= 1.4
+      
+      // Complex letter combinations slow down speech
+      if (/[aeiou]{2,}|[bcdfghjklmnpqrstvwxyz]{3,}/.test(word.toLowerCase())) {
+        baseTime *= 1.2
+      }
+      
+      timings.push({
+        word,
+        startTime: currentTime,
+        duration: baseTime
+      })
+      
+      currentTime += baseTime
+    })
+    
+    return timings
+  }
+
   // NEW: Parse new JSON format into StoryBlocks
   const parseNewFormatStory = (storyLevel: StoryLevel): { blocks: StoryBlock[], reflections: string[] } => {
     const blocks: StoryBlock[] = []
@@ -250,7 +285,12 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         }]
       }
       
-      setBlocks(result.blocks)
+      // Add word timing data to each block
+      const blocksWithTiming = result.blocks.map(block => ({
+        ...block,
+        wordTimings: calculateWordTimings(block.text, 0.8)
+      }))
+      setBlocks(blocksWithTiming)
       setCollectedReflections(result.reflections)
       setCurrentSection(prev => Math.min(prev, result.blocks.length - 1))
     }
@@ -289,10 +329,18 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     
     const elementId = `story-text-${currentSection}`
     
+    // NEW: Pass pre-calculated word timings
+    if (currentBlock?.wordTimings) {
+      (window as any).currentWordTimings = currentBlock.wordTimings
+    }
+    
     try {
       await speechHighlighting.speak(text, elementId)
     } catch (error) {
       console.error('Text-to-speech error:', error)
+    } finally {
+      // Clean up timing data
+      delete (window as any).currentWordTimings
     }
   }
 
