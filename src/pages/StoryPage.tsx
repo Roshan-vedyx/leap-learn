@@ -7,6 +7,7 @@ import { useSessionStore } from '@/stores/sessionStore'
 import type { ComplexityLevel } from '@/types'
 import { useAnalytics } from '../hooks/useAnalytics'
 import { useCurrentUserId } from '@/lib/auth-utils'
+import { useSpeechHighlighting } from '@/hooks/useSpeechHighlighting'
 
 // NEW: Updated interfaces for new JSON format
 interface NewStoryFormat {
@@ -64,7 +65,6 @@ interface StoryPageProps {
 
 const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const [currentSection, setCurrentSection] = useState(0)
-  const [isReading, setIsReading] = useState(false)
   const [complexityLevel, setComplexityLevel] = useState<ComplexityLevel>('full')
   const [story, setStory] = useState<NewStoryFormat | null>(null)
   const [loading, setLoading] = useState(true)
@@ -80,6 +80,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
   const userId = useCurrentUserId()
   const { trackAnyActivity } = useAnalytics(userId)
   const [storyStartTime] = useState(Date.now())
+  const [isTTSActive, setIsTTSActive] = useState(false)
 
   const totalSections = blocks.length
 
@@ -255,27 +256,43 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
     }
   }, [story, complexityLevel])
 
+  // Initialize the speech highlighting hook
+  const speechHighlighting = useSpeechHighlighting({
+    rate: 0.85,
+    pitch: 0.95,
+    volume: 0.9,
+    highlightClass: 'bg-yellow-300 text-black px-2 py-1 rounded font-bold border-2 border-yellow-600',
+    onSpeechStart: () => setIsTTSActive(true),
+    onSpeechEnd: () => setIsTTSActive(false)
+  })
+
   const handleReadAloud = async (textToRead?: string) => {
-    if (!audio.isSpeechSynthesisSupported()) return
-    await new Promise(resolve => setTimeout(resolve, 100))
-    const currentAccent = storage.get('tts-accent', 'GB') as 'US' | 'GB' | 'IN'
+    if (!speechHighlighting.isSupported) return
     
-    let text = textToRead || blocks[currentSection]?.text || 'Story content not available'
+    const currentBlock = blocks[currentSection]
+    let text = textToRead
     
-    setIsReading(true)
+    if (!text && currentBlock) {
+      // Extract readable text based on block type
+      switch (currentBlock.type) {
+        case 'choice':
+          text = `${currentBlock.text} Your options are: ${currentBlock.options?.map(opt => `${opt.letter}, ${opt.text}`).join('; ')}`
+          break
+        default:
+          text = currentBlock.text
+      }
+    }
+    
+    if (!text) {
+      text = 'Story content not available'
+    }
+    
+    const elementId = `story-text-${currentSection}`
+    
     try {
-      const selectedVoice = audio.getBestVoiceForAccent(currentAccent)
-      await audio.speak(text, {
-        voice: selectedVoice,
-        accent: currentAccent,
-        rate: 0.85,
-        pitch: 0.95,
-        volume: 0.9
-      })
+      await speechHighlighting.speak(text, elementId)
     } catch (error) {
       console.error('Text-to-speech error:', error)
-    } finally {
-      setIsReading(false)
     }
   }
 
@@ -318,7 +335,7 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
       case 'choice':
         return (
           <div key={idx} className="my-6">
-            <p className="font-semibold text-blue-700 mb-3">{block.text}</p>
+            <p id={`story-text-${idx}`} className="font-semibold text-blue-700 mb-3">{block.text}</p>
             <div className="flex flex-col gap-3">
               {block.options?.map(opt => (
                 <button
@@ -340,33 +357,33 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
 
       case 'consequence':
         if (choices[block.choicePointId!] === block.choiceLetter) {
-          return <p key={idx} className="text-gray-700 italic my-4">{block.text}</p>
+          return <p key={idx} id={`story-text-${idx}`} className="text-gray-700 italic my-4">{block.text}</p>
         }
         return null
 
       case 'reflection':
         return (
           <div key={idx} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 my-4">
-            <p className="font-semibold text-yellow-800">🤔 Reflection: {block.text}</p>
+            <p id={`story-text-${idx}`} className="font-semibold text-yellow-800">🤔 Reflection: <span>{block.text}</span></p>
           </div>
         )
 
       case 'action':
         return (
           <div key={idx} className="bg-green-50 border border-green-200 rounded-lg p-4 my-4">
-            <p className="font-semibold text-green-800">🌍 Action: {block.text}</p>
+            <p id={`story-text-${idx}`} className="font-semibold text-green-800">🌍 Action: <span>{block.text}</span></p>
           </div>
         )
 
       case 'continuation':
         return (
           <div key={idx} className="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">
-            <p className="text-blue-800">{block.text}</p>
+            <p id={`story-text-${idx}`} className="text-blue-800">{block.text}</p>
           </div>
         )
 
       default:
-        return <p key={idx} className="mb-3 text-gray-800">{block.text}</p>
+        return <p key={idx} id={`story-text-${idx}`} className="mb-3 text-gray-800">{block.text}</p>
     }
   }
 
@@ -446,10 +463,10 @@ const StoryPage: React.FC<StoryPageProps> = ({ interest, storyName }) => {
         <div className="flex gap-3 mt-6 flex-wrap">
           <button 
             onClick={() => handleReadAloud()} 
-            disabled={isReading} 
+            disabled={speechHighlighting.isReading} 
             className="px-4 py-2 bg-green-100 rounded-lg min-h-[44px]"
           >
-            🔊 {isReading ? 'Reading...' : 'Read Aloud'}
+            🔊 {speechHighlighting.isReading ? 'Reading...' : 'Read Aloud'}
           </button>
           <button 
             onClick={() => setCurrentSection(0)} 
