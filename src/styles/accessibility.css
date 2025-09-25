@@ -115,6 +115,59 @@
   --reduced-motion: 0;
   --gentle-easing: cubic-bezier(0.4, 0, 0.2, 1);
   
+  /* PROFESSIONAL TEACHER COLORS - Clean, corporate SaaS aesthetic */
+  --teacher-primary: #1e40af;           /* Professional blue */
+  --teacher-primary-hover: #1e3a8a;    /* Darker blue on hover */
+  --teacher-secondary: #3b82f6;        /* Lighter blue for accents */
+  --teacher-success: #059669;          /* Professional green */
+  --teacher-warning: #d97706;          /* Professional amber */
+  --teacher-error: #dc2626;            /* Professional red */
+  
+  /* TEACHER NEUTRALS - Sharp, high contrast */
+  --teacher-gray-50: #f9fafb;
+  --teacher-gray-100: #f3f4f6;
+  --teacher-gray-200: #e5e7eb;
+  --teacher-gray-300: #d1d5db;
+  --teacher-gray-400: #9ca3af;
+  --teacher-gray-500: #6b7280;
+  --teacher-gray-600: #4b5563;
+  --teacher-gray-700: #374151;
+  --teacher-gray-800: #1f2937;
+  --teacher-gray-900: #111827;
+  
+  /* TEACHER BACKGROUNDS */
+  --teacher-bg-primary: #ffffff;        /* Clean white */
+  --teacher-bg-secondary: #f9fafb;      /* Very light gray */
+  --teacher-bg-tertiary: #f3f4f6;      /* Light gray */
+  
+  /* TEACHER BORDERS */
+  --teacher-border-light: #e5e7eb;
+  --teacher-border-medium: #d1d5db;
+  --teacher-border-dark: #9ca3af;
+  
+  /* TEACHER SHADOWS - Sharp, professional */
+  --teacher-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --teacher-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --teacher-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* TEACHER TYPOGRAPHY - Professional fonts */
+  --teacher-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --teacher-font-size-xs: 0.75rem;     /* 12px */
+  --teacher-font-size-sm: 0.875rem;    /* 14px */
+  --teacher-font-size-base: 1rem;      /* 16px */
+  --teacher-font-size-lg: 1.125rem;    /* 18px */
+  --teacher-font-size-xl: 1.25rem;     /* 20px */
+  --teacher-font-size-2xl: 1.5rem;     /* 24px */
+  --teacher-font-size-3xl: 1.875rem;   /* 30px */
+  
+  /* TEACHER SPACING - Tighter, more information-dense */
+  --teacher-spacing-xs: 0.25rem;       /* 4px */
+  --teacher-spacing-sm: 0.5rem;        /* 8px */
+  --teacher-spacing-md: 1rem;          /* 16px */
+  --teacher-spacing-lg: 1.5rem;        /* 24px */
+  --teacher-spacing-xl: 2rem;          /* 32px */
+  --teacher-spacing-2xl: 3rem;         /* 48px */
+  
   /* Touch Target Sizes (minimum 44px for accessibility) */
   --touch-target-min: 44px;
   --touch-target-comfortable: 56px;

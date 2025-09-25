@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Router, Route, Switch, Link } from 'wouter'
+import { Router, Route, Switch, Link, useLocation } from 'wouter'
 import { accessibility, preferences, storage } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
-import { useLocation } from 'wouter'
 import { Brain, Heart, Settings, CheckCircle, Target, Users, ChevronDown } from 'lucide-react'
 import EnhancedCalmCorner from '@/components/EnhancedCalmCorner'
 import { SettingsModal } from '@/components/SettingsModal'
@@ -488,24 +487,6 @@ function AppContent() {
               </AuthGate>
             </Route>
 
-            <TeacherAuthProvider>
-              <Route path="/teacher" exact>
-                <TeacherLogin />
-              </Route>
-
-              <Route path="/teacher/dashboard">
-                <TeacherAuthGuard>
-                  <TeacherDashboard />
-                </TeacherAuthGuard>
-              </Route>
-
-              <Route path="/teacher/worksheets/phonics">
-                <TeacherAuthGuard>
-                  <PhonicsWorksheetGenerator />
-                </TeacherAuthGuard>
-              </Route>
-            </TeacherAuthProvider>
-
             <Route path="/parent-signup">
               <ParentSignup />
             </Route>
@@ -670,8 +651,39 @@ function AppContent() {
   )
 }
 
+// Teacher App - Completely separate from student interface
+function TeacherApp() {
+  return (
+    <TeacherAuthProvider>
+      <Router>
+        <Route path="/teacher" exact>
+          <TeacherLogin />
+        </Route>
+        <Route path="/teacher/dashboard">
+          <TeacherAuthGuard>
+            <TeacherDashboard />
+          </TeacherAuthGuard>
+        </Route>
+        <Route path="/teacher/worksheets/phonics">
+          <TeacherAuthGuard>
+            <PhonicsWorksheetGenerator />
+          </TeacherAuthGuard>
+        </Route>
+      </Router>
+    </TeacherAuthProvider>
+  )
+}
+
 // Main App Component with Auth Providers
 function App() {
+  const [location] = useLocation()
+  
+  // Route teacher pages to separate app
+  if (location.startsWith('/teacher')) {
+    return <TeacherApp />
+  }
+  
+  // Student/parent app
   return (
     <ParentAuthProvider>
       <ChildAuthProvider>
