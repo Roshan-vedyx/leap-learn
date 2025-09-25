@@ -66,8 +66,12 @@ export const TeacherDashboard: React.FC = () => {
   const { profile, signOut } = useTeacherAuth()
 
   const handleWorksheetClick = (optionId: string) => {
-    // Navigate to worksheet generator for specific type
-    window.location.href = `/teacher/worksheets/${optionId}`
+    if (optionId === 'phonics') {
+      window.location.href = '/teacher/worksheets/phonics'
+    } else {
+      // Handle other worksheet types (coming soon)
+      console.log(`${optionId} worksheets coming soon!`)
+    }
   }
 
   const handleSignOut = async () => {

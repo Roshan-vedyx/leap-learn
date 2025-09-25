@@ -40,6 +40,7 @@ import TodayIWantToPage from './pages/TodayIWantToPage'
 import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
+import { PhonicsWorksheetGenerator } from './pages/teacher/PhonicsWorksheetGenerator'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -487,17 +488,23 @@ function AppContent() {
               </AuthGate>
             </Route>
 
-            <Route path="/teacher">
-              <TeacherLogin />
-            </Route>
+            <TeacherAuthProvider>
+              <Route path="/teacher" exact>
+                <TeacherLogin />
+              </Route>
 
-            <Route path="/teacher/dashboard">
-              <TeacherAuthProvider>
+              <Route path="/teacher/dashboard">
                 <TeacherAuthGuard>
                   <TeacherDashboard />
                 </TeacherAuthGuard>
-              </TeacherAuthProvider>
-            </Route>
+              </Route>
+
+              <Route path="/teacher/worksheets/phonics">
+                <TeacherAuthGuard>
+                  <PhonicsWorksheetGenerator />
+                </TeacherAuthGuard>
+              </Route>
+            </TeacherAuthProvider>
 
             <Route path="/parent-signup">
               <ParentSignup />
