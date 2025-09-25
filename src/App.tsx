@@ -19,6 +19,10 @@ import { ChildLogin } from './components/auth/ChildLogin'
 import { ParentSignup } from './components/auth/ParentSignup'
 import { ParentLogin } from './components/auth/ParentLogin'
 import ChildDashboard from './components/child/ChildDashboard'
+import { TeacherAuthProvider } from './contexts/TeacherAuthContext'
+import { TeacherLogin } from './components/auth/TeacherLogin'
+import { TeacherDashboard } from './components/teacher/TeacherDashboard'
+import { TeacherAuthGuard } from './components/auth/TeacherAuthGuard'
 
 import type { TtsAccent } from './types'
 
@@ -481,6 +485,18 @@ function AppContent() {
               <AuthGate requireChild>
                 {(params) => <StorySelectionPage interest={params.interest} />}
               </AuthGate>
+            </Route>
+
+            <Route path="/teacher">
+              <TeacherLogin />
+            </Route>
+
+            <Route path="/teacher/dashboard">
+              <TeacherAuthProvider>
+                <TeacherAuthGuard>
+                  <TeacherDashboard />
+                </TeacherAuthGuard>
+              </TeacherAuthProvider>
             </Route>
 
             <Route path="/parent-signup">

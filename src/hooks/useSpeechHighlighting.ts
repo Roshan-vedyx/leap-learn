@@ -216,7 +216,7 @@ export const useSpeechHighlighting = (
                   highlightWord(elementId, index, true)
                   options.onWordStart?.(timing.word, index)
                 }
-              }, Math.max(0, timing.startTime - 170))
+              }, Math.max(0, timing.startTime - 190))
             })
           } else {
             // Fallback to previous timing method
