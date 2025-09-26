@@ -4,6 +4,7 @@ import { ArrowLeft, FileText, Download, Loader2, Settings, Eye, BookOpen } from 
 import { TeacherAppWrapper } from '../../components/teacher/TeacherAppWrapper'
 import { Button } from '../../components/ui/Button'
 import { generatePhonicsWorksheet } from '../../services/worksheetGenerator'
+import { generateAndDownloadPDF } from '../../services/pdfGenerator'
 
 interface Word {
   id: string
@@ -78,9 +79,11 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
 
   const handleDownloadPDF = () => {
     if (worksheetData) {
-      // PDF generation will be implemented in next step
-      console.log('Download PDF for:', worksheetData.selectedPattern)
-      alert('PDF download feature will be available in the next update!')
+      try {
+        generateAndDownloadPDF(worksheetData)
+      } catch (error) {
+        console.error('Error generating PDF:', error)
+      }
     }
   }
 
