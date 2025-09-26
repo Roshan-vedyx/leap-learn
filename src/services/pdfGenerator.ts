@@ -1,5 +1,6 @@
 // src/services/pdfGenerator.ts - Student-Centered Adaptive PDF Generator
 import jsPDF from 'jspdf'
+import type { SightWordWorksheetData, SightWord, SightWordActivity } from './sightWordsGenerator'
 
 interface StudentProfile {
   processingStyle: 'visual' | 'auditory' | 'kinesthetic' | 'mixed'
@@ -680,6 +681,54 @@ export class AdaptivePDFGenerator {
     return this.doc
   }
 
+    public generateSightWordWorksheetPDF(data: any): jsPDF {
+        // Generate cover page
+        this.generateStudentCoverPage(data)
+        
+        // Generate activities based on selected modules
+        data.activities.forEach((activity: any, index: number) => {
+        switch (activity.id) {
+            case 'word_detective':
+            this.generateWordDetectiveActivity(data.selectedWords, activity)
+            break
+            case 'meaning_connections':
+            this.generateMeaningConnectionsActivity(data.selectedWords, activity)
+            break
+            case 'context_champions':
+            this.generateContextActivity(data.selectedWords, activity)
+            break
+            case 'movement_words':
+            this.generateMovementWordsActivity(data.selectedWords, activity)
+            break
+            default:
+            this.generateGenericSightWordActivity(activity, data.selectedWords)
+        }
+        
+        if (index < data.activities.length - 1) {
+            this.addNewPage()
+        }
+        })
+        
+        // Add teacher notes
+        this.addNewPage()
+        this.generateTeacherNotes(data)
+        
+        return this.doc
+    }
+    
+    private generateGenericSightWordActivity(activity: any, words: any[]) {
+        this.addTitle(activity.name)
+        this.addInstructions(activity.description, this.layout.choiceBasedInstructions)
+        
+        this.currentY += this.layout.lineSpacing
+        words.slice(0, 6).forEach((word: any, index: number) => {
+        this.doc.text(`${index + 1}. ${word.word}`, this.layout.margin, this.currentY)
+        this.currentY += this.layout.lineSpacing * 1.5
+        })
+        
+        this.addMovementBreak(activity.name)
+    }
+
   // Fallback for unhandled activity types
   private generateGenericActivity(activity: ActivityModule, words: Word[]) {
     this.addTitle(activity.name)
@@ -701,6 +750,14 @@ export const generateAndDownloadPDF = async (data: any) => {
   try {
     let generator: AdaptivePDFGenerator
     
+    if (data.selectedWords && data.selectedWords[0]?.frequency_tier) {
+        // This is sight word data
+        generator = new AdaptivePDFGenerator(data.config)
+        const pdf = generator.generateSightWordWorksheetPDF(data)
+        const filename = `sight_words_${Date.now()}_worksheet.pdf`
+        pdf.save(filename)
+        return
+      }
     // Check if this is new adaptive data or legacy format
     if (data.config && data.config.studentProfile) {
       // New adaptive format

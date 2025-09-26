@@ -46,7 +46,7 @@ const worksheetOptions: WorksheetOption[] = [
     description: 'Create sight word worksheets and interactive flashcards',
     icon: <Eye className="w-5 h-5" />,
     color: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-    comingSoon: true
+    stats: { totalGenerated: 0, lastUsed: 'Never' }
   },
   {
     id: 'reading-comprehension',
@@ -75,14 +75,17 @@ const worksheetOptions: WorksheetOption[] = [
 ]
 
 export const TeacherDashboard: React.FC = () => {
-  const handleWorksheetClick = (optionId: string) => {
-    if (optionId === 'phonics') {
-      window.location.href = '/teacher/worksheets/phonics'
-    } else {
-      // Show coming soon message for other worksheet types
-      alert(`${optionId.replace('-', ' ')} worksheets are coming soon!`)
+    
+    const handleWorksheetClick = (optionId: string) => {
+        if (optionId === 'phonics') {
+            window.location.href = '/teacher/worksheets/phonics'
+        } else if (optionId === 'sight-words') {
+            window.location.href = '/teacher/worksheets/sight-words'
+        } else {
+            // Show coming soon message for other worksheet types
+            alert(`${optionId.replace('-', ' ')} worksheets are coming soon!`)
+        }
     }
-  }
 
   return (
     <TeacherAppWrapper currentPage="dashboard">

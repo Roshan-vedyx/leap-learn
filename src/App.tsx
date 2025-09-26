@@ -40,6 +40,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 import { PhonicsWorksheetGenerator } from './pages/teacher/PhonicsWorksheetGenerator'
+import { SightWordsWorksheetGenerator } from './pages/teacher/SightWordsWorksheetGenerator'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -667,6 +668,11 @@ function TeacherApp() {
         <Route path="/teacher/worksheets/phonics">
           <TeacherAuthGuard>
             <PhonicsWorksheetGenerator />
+          </TeacherAuthGuard>
+        </Route>
+        <Route path="/teacher/worksheets/sight-words">
+          <TeacherAuthGuard>
+            <SightWordsWorksheetGenerator />
           </TeacherAuthGuard>
         </Route>
       </Router>
