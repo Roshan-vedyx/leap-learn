@@ -1,4 +1,4 @@
-// src/services/worksheetGenerator.ts
+// src/services/worksheetGenerator.ts - Student-Centered Adaptive Generation
 interface Word {
     id: string
     word: string
@@ -7,192 +7,482 @@ interface Word {
     chunks: string[]
     alternative_chunks: string[]
     themes: string[]
+    meaning_support?: string
   }
   
-  interface GenerateWorksheetParams {
-    words: Word[]
-    pattern: string
-    difficulty: 'easy' | 'regular' | 'challenge'
-    wordCount: number
+  interface StudentProfile {
+    processingStyle: 'visual' | 'auditory' | 'kinesthetic' | 'mixed'
+    attentionSpan: 'brief' | 'moderate' | 'extended'
+    sensoryNeeds: string[]
+    motorPlanning: 'high_support' | 'some_support' | 'independent'
+    socialEmotional: 'confidence_building' | 'challenge_ready' | 'mixed'
   }
   
-  interface WorksheetActivity {
-    type: 'word_sort' | 'fill_pattern' | 'build_word'
-    title: string
-    instructions: string
-    content: any
-  }
-  
-  interface WorksheetData {
+  interface WorksheetConfig {
+    studentProfile: StudentProfile
+    energyLevel: 'full_focus' | 'partial' | 'survival_mode'
+    learningGoal: 'pattern_recognition' | 'fluency_practice' | 'confidence_building'
     selectedPattern: string
-    difficulty: string
-    wordCount: number
+    availableTime: number
+    preferredActivities: string[]
+  }
+  
+  interface ActivityModule {
+    id: string
+    name: string
+    description: string
+    estimatedTime: number
+    cognitiveLoad: 'low' | 'medium' | 'high'
+    sensoryDemands: string[]
+    canSkip: boolean
+    successRate: number
+    type: 'recognition' | 'production' | 'application' | 'creative'
+    adaptations: StudentAdaptation[]
+  }
+  
+  interface StudentAdaptation {
+    profileMatch: Partial<StudentProfile>
+    modifications: {
+      layout?: 'spacious' | 'compact' | 'boxes'
+      instructions?: 'brief' | 'detailed' | 'visual_cues'
+      choices?: number
+      movementBreaks?: boolean
+      timeEstimate?: number
+      successSupports?: string[]
+    }
+  }
+  
+  interface AdaptiveWorksheetData {
+    config: WorksheetConfig
     words: Word[]
-    activities: WorksheetActivity[]
+    activities: ActivityModule[]
+    estimatedTime: number
+    adaptations: WorksheetAdaptation[]
+    successPredictors: {
+      confidenceLevel: number
+      engagementFactors: string[]
+      potentialChallenges: string[]
+      supportStrategies: string[]
+    }
   }
   
-  // Helper function to count syllables (simple approximation)
-  const countSyllables = (word: string): number => {
-    const vowels = 'aeiouy'
-    let count = 0
-    let prevWasVowel = false
-    
-    for (let i = 0; i < word.length; i++) {
-      const isVowel = vowels.includes(word[i].toLowerCase())
-      if (isVowel && !prevWasVowel) {
-        count++
+  interface WorksheetAdaptation {
+    reason: string
+    modification: string
+    targetProfile: string
+  }
+  
+  // Student-Centered Word Selection Logic
+  class AdaptiveWordSelector {
+    static selectWordsForStudent(
+      patternWords: Word[], 
+      config: WorksheetConfig
+    ): { words: Word[], rationale: string[] } {
+      const rationale: string[] = []
+      let selectedWords: Word[] = []
+  
+      // Confidence builders: Always start with success-guaranteed words
+      const easyWords = patternWords.filter(w => w.complexity === 'easy')
+      const regularWords = patternWords.filter(w => w.complexity === 'regular')
+      const challengeWords = patternWords.filter(w => w.complexity === 'challenge')
+  
+      // Base selection on learning goal and energy level
+      if (config.energyLevel === 'survival_mode') {
+        selectedWords = [...easyWords.slice(0, 4), ...regularWords.slice(0, 1)]
+        rationale.push("Survival mode: Prioritizing success and confidence with easier words")
+      } else if (config.learningGoal === 'confidence_building') {
+        selectedWords = [...easyWords.slice(0, 3), ...regularWords.slice(0, 3), ...challengeWords.slice(0, 1)]
+        rationale.push("Confidence building: 3 easy wins, 3 practice words, 1 stretch goal")
+      } else if (config.learningGoal === 'pattern_recognition') {
+        selectedWords = [...easyWords.slice(0, 2), ...regularWords.slice(0, 4), ...challengeWords.slice(0, 2)]
+        rationale.push("Pattern recognition: Balanced mix for pattern awareness")
+      } else { // fluency_practice
+        selectedWords = [...easyWords.slice(0, 2), ...regularWords.slice(0, 3), ...challengeWords.slice(0, 3)]
+        rationale.push("Fluency practice: More challenging words for speed building")
       }
-      prevWasVowel = isVowel
-    }
-    
-    // Handle silent 'e'
-    if (word.toLowerCase().endsWith('e') && count > 1) {
-      count--
-    }
-    
-    return Math.max(1, count)
-  }
   
-  // Create word sort activity (1 syllable vs 2+ syllables)
-  const createWordSortActivity = (words: Word[]): WorksheetActivity => {
-    const wordsWithSyllables = words.map(word => ({
-      ...word,
-      syllableCount: countSyllables(word.word)
-    }))
+      // Adjust for attention span
+      const maxWords = config.studentProfile.attentionSpan === 'brief' ? 6 : 
+                      config.studentProfile.attentionSpan === 'moderate' ? 10 : 15
   
-    const oneSyllable = wordsWithSyllables
-      .filter(w => w.syllableCount === 1)
-      .slice(0, 6)
-    
-    const multiSyllable = wordsWithSyllables
-      .filter(w => w.syllableCount > 1)
-      .slice(0, 6)
+      if (selectedWords.length > maxWords) {
+        selectedWords = selectedWords.slice(0, maxWords)
+        rationale.push(`Limited to ${maxWords} words based on attention span`)
+      }
   
-    // Mix them up for the activity
-    const mixedWords = [...oneSyllable, ...multiSyllable]
-      .sort(() => Math.random() - 0.5)
-  
-    return {
-      type: 'word_sort',
-      title: 'Word Sort',
-      instructions: 'Sort these words by the number of syllables. Write each word in the correct column.',
-      content: {
-        wordsToSort: mixedWords.map(w => w.word),
-        columns: ['1 Syllable', '2+ Syllables'],
-        answer: {
-          '1 Syllable': oneSyllable.map(w => w.word),
-          '2+ Syllables': multiSyllable.map(w => w.word)
+      // Theme-based selection for engagement (if available)
+      if (selectedWords.length < maxWords) {
+        const themeWords = patternWords.filter(w => 
+          w.themes && w.themes.some(theme => 
+            ['animals', 'nature', 'friendship', 'adventure'].includes(theme)
+          )
+        )
+        const additionalWords = themeWords
+          .filter(w => !selectedWords.includes(w))
+          .slice(0, maxWords - selectedWords.length)
+        
+        selectedWords.push(...additionalWords)
+        if (additionalWords.length > 0) {
+          rationale.push("Added engaging themed words for motivation")
         }
       }
+  
+      return { words: selectedWords, rationale }
     }
   }
   
-  // Create fill in the pattern activity
-  const createFillPatternActivity = (words: Word[], pattern: string): WorksheetActivity => {
-    const selectedWords = words.slice(0, 8)
-    
-    const fillWords = selectedWords.map(word => {
-      // Create fill-in-the-blank by removing 1-2 letters
-      const wordChars = word.word.split('')
-      const blanksToCreate = Math.min(2, Math.max(1, Math.floor(word.word.length / 3)))
-      
-      // Remove letters from middle positions
-      const positions = []
-      for (let i = 1; i < wordChars.length - 1; i++) {
-        positions.push(i)
+  // Activity Selection Based on Student Needs
+  class AdaptiveActivitySelector {
+    private static ACTIVITY_DATABASE: ActivityModule[] = [
+      {
+        id: 'pattern_detective',
+        name: 'Pattern Detective',
+        description: 'Find and circle the magic pattern in words',
+        estimatedTime: 5,
+        cognitiveLoad: 'low',
+        sensoryDemands: ['visual_scanning'],
+        canSkip: false,
+        successRate: 0.9,
+        type: 'recognition',
+        adaptations: [
+          {
+            profileMatch: { processingStyle: 'visual' },
+            modifications: { 
+              layout: 'boxes',
+              instructions: 'visual_cues',
+              successSupports: ['Large fonts', 'Clear boxes around patterns']
+            }
+          },
+          {
+            profileMatch: { attentionSpan: 'brief' },
+            modifications: { 
+              choices: 4,
+              timeEstimate: 3,
+              successSupports: ['Only 4 words', 'Quick completion']
+            }
+          }
+        ]
+      },
+      {
+        id: 'word_choice_builder',
+        name: 'Choose & Build',
+        description: 'Pick your favorite words and build them from chunks',
+        estimatedTime: 8,
+        cognitiveLoad: 'medium',
+        sensoryDemands: ['decision_making', 'visual_organization'],
+        canSkip: true,
+        successRate: 0.85,
+        type: 'production',
+        adaptations: [
+          {
+            profileMatch: { socialEmotional: 'confidence_building' },
+            modifications: { 
+              choices: 3,
+              instructions: 'brief',
+              successSupports: ['Student choice', 'Success guaranteed']
+            }
+          },
+          {
+            profileMatch: { motorPlanning: 'high_support' },
+            modifications: { 
+              layout: 'spacious',
+              instructions: 'detailed',
+              successSupports: ['Large writing spaces', 'Step-by-step guidance']
+            }
+          }
+        ]
+      },
+      {
+        id: 'movement_spelling',
+        name: 'Body Spelling',
+        description: 'Spell words using your whole body',
+        estimatedTime: 7,
+        cognitiveLoad: 'medium',
+        sensoryDemands: ['kinesthetic', 'gross_motor'],
+        canSkip: true,
+        successRate: 0.95,
+        type: 'application',
+        adaptations: [
+          {
+            profileMatch: { processingStyle: 'kinesthetic' },
+            modifications: { 
+              movementBreaks: true,
+              timeEstimate: 10,
+              successSupports: ['Full body engagement', 'Movement integration']
+            }
+          }
+        ]
+      },
+      {
+        id: 'real_world_hunt',
+        name: 'Pattern Hunter',
+        description: 'Find pattern words in your environment',
+        estimatedTime: 10,
+        cognitiveLoad: 'low',
+        sensoryDemands: ['environmental_scanning'],
+        canSkip: true,
+        successRate: 0.8,
+        type: 'application',
+        adaptations: [
+          {
+            profileMatch: { attentionSpan: 'extended' },
+            modifications: { 
+              timeEstimate: 15,
+              choices: 5,
+              successSupports: ['Extended exploration', 'Multiple examples']
+            }
+          }
+        ]
+      },
+      {
+        id: 'creative_sentence',
+        name: 'Story Starter',
+        description: 'Create sentences with your pattern words',
+        estimatedTime: 12,
+        cognitiveLoad: 'high',
+        sensoryDemands: ['creative_thinking', 'fine_motor'],
+        canSkip: true,
+        successRate: 0.6,
+        type: 'creative',
+        adaptations: [
+          {
+            profileMatch: { learningGoal: 'fluency_practice' },
+            modifications: { 
+              choices: 2,
+              instructions: 'brief',
+              successSupports: ['Just 2 sentences', 'Creative freedom']
+            }
+          }
+        ]
       }
-      positions.sort(() => Math.random() - 0.5)
-      
-      const fillWord = [...wordChars]
-      for (let i = 0; i < blanksToCreate && i < positions.length; i++) {
-        fillWord[positions[i]] = '_'
-      }
-      
-      return {
-        original: word.word,
-        fillIn: fillWord.join(''),
-        missingLetters: positions.slice(0, blanksToCreate).map(pos => wordChars[pos]).join(', ')
-      }
-    })
+    ]
   
-    return {
-      type: 'fill_pattern',
-      title: 'Fill in the Pattern',
-      instructions: 'Complete each word by filling in the missing letters.',
-      content: {
-        words: fillWords,
-        pattern: pattern.replace(/_/g, ' ')
+    static selectActivitiesForStudent(config: WorksheetConfig): {
+      activities: ActivityModule[],
+      adaptations: WorksheetAdaptation[]
+    } {
+      let availableActivities = [...this.ACTIVITY_DATABASE]
+      const adaptations: WorksheetAdaptation[] = []
+  
+      // Filter out inappropriate activities
+      availableActivities = availableActivities.filter(activity => {
+        // Remove high cognitive load for survival mode
+        if (config.energyLevel === 'survival_mode' && activity.cognitiveLoad === 'high') {
+          adaptations.push({
+            reason: 'Survival mode energy level',
+            modification: `Removed ${activity.name} due to high cognitive load`,
+            targetProfile: 'energy_level'
+          })
+          return false
+        }
+  
+        // Prioritize kinesthetic for kinesthetic learners
+        if (config.studentProfile.processingStyle === 'kinesthetic' && 
+            !activity.sensoryDemands.includes('kinesthetic') &&
+            !activity.sensoryDemands.includes('gross_motor') &&
+            activity.id !== 'pattern_detective') {
+          return false
+        }
+  
+        return true
+      })
+  
+      // Sort by appropriateness
+      availableActivities.sort((a, b) => {
+        // Prioritize based on learning goal
+        if (config.learningGoal === 'confidence_building') {
+          return b.successRate - a.successRate
+        }
+        return a.estimatedTime - b.estimatedTime
+      })
+  
+      // Select activities within time constraints
+      const selectedActivities: ActivityModule[] = []
+      let totalTime = 0
+  
+      // Always include pattern recognition (core skill)
+      const coreActivity = availableActivities.find(a => a.id === 'pattern_detective')
+      if (coreActivity) {
+        selectedActivities.push(coreActivity)
+        totalTime += this.getAdaptedTime(coreActivity, config)
       }
+  
+      // Add complementary activities
+      for (const activity of availableActivities) {
+        if (activity.id === 'pattern_detective') continue
+  
+        const adaptedTime = this.getAdaptedTime(activity, config)
+        if (totalTime + adaptedTime <= config.availableTime && selectedActivities.length < 4) {
+          selectedActivities.push(activity)
+          totalTime += adaptedTime
+  
+          // Add adaptation notes
+          const adaptation = this.findBestAdaptation(activity, config)
+          if (adaptation) {
+            adaptations.push({
+              reason: `Adapted for ${config.studentProfile.processingStyle} learner`,
+              modification: `${activity.name}: ${adaptation.modifications.successSupports?.join(', ')}`,
+              targetProfile: 'processing_style'
+            })
+          }
+        }
+      }
+  
+      return { activities: selectedActivities, adaptations }
+    }
+  
+    private static getAdaptedTime(activity: ActivityModule, config: WorksheetConfig): number {
+      const adaptation = this.findBestAdaptation(activity, config)
+      return adaptation?.modifications.timeEstimate || activity.estimatedTime
+    }
+  
+    private static findBestAdaptation(activity: ActivityModule, config: WorksheetConfig): StudentAdaptation | null {
+      return activity.adaptations.find(adaptation => {
+        return Object.keys(adaptation.profileMatch).some(key => 
+          config.studentProfile[key as keyof StudentProfile] === adaptation.profileMatch[key as keyof StudentProfile] ||
+          config.learningGoal === adaptation.profileMatch.socialEmotional
+        )
+      }) || null
     }
   }
   
-  // Create build-a-word activity using chunks
-  const createBuildWordActivity = (words: Word[]): WorksheetActivity => {
-    const selectedWords = words.slice(0, 6)
-    
-    const buildWords = selectedWords.map(word => {
-      // Use the chunks from the word data, or fall back to simple splitting
-      const chunks = word.chunks && word.chunks.length > 1 
-        ? word.chunks 
-        : word.alternative_chunks || [word.word]
-      
-      return {
-        word: word.word,
-        chunks: chunks,
-        scrambledChunks: [...chunks].sort(() => Math.random() - 0.5)
-      }
-    })
-  
-    return {
-      type: 'build_word',
-      title: 'Build-a-Word',
-      instructions: 'Use the letter chunks to build each word. Write the complete word on the line.',
-      content: {
-        buildWords
-      }
-    }
-  }
-  
-  export const generatePhonicsWorksheet = async (params: GenerateWorksheetParams): Promise<WorksheetData> => {
-    const { words, pattern, difficulty, wordCount } = params
-    
-    // Filter words by pattern and difficulty
-    const filteredWords = words.filter(word => 
-      word.phonics_focus === pattern && 
-      word.complexity === difficulty
+  // Main worksheet generation function
+  export const generateAdaptiveWorksheet = async (
+    allWords: Word[],
+    config: WorksheetConfig
+  ): Promise<AdaptiveWorksheetData> => {
+    // Filter words by selected pattern
+    const patternWords = allWords.filter(word => 
+      word.phonics_focus === config.selectedPattern
     )
   
-    if (filteredWords.length === 0) {
-      throw new Error(`No words found for pattern "${pattern}" at ${difficulty} level`)
+    if (patternWords.length === 0) {
+      throw new Error(`No words found for pattern "${config.selectedPattern}"`)
     }
   
-    // Select the requested number of words
-    const selectedWords = filteredWords
-      .sort(() => Math.random() - 0.5) // Shuffle
-      .slice(0, Math.min(wordCount, filteredWords.length))
+    // Select appropriate words for this student
+    const { words: selectedWords, rationale: wordRationale } = 
+      AdaptiveWordSelector.selectWordsForStudent(patternWords, config)
   
-    if (selectedWords.length < 5) {
-      // If too few words, supplement with words from other difficulties
-      const supplementWords = words
-        .filter(word => word.phonics_focus === pattern && word.complexity !== difficulty)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, wordCount - selectedWords.length)
-      
-      selectedWords.push(...supplementWords)
+    // Select appropriate activities for this student
+    const { activities: selectedActivities, adaptations } = 
+      AdaptiveActivitySelector.selectActivitiesForStudent(config)
+  
+    // Calculate success predictors
+    const successPredictors = this.calculateSuccessPredictors(
+      selectedWords,
+      selectedActivities,
+      config
+    )
+  
+    // Estimate total time including adaptations
+    const estimatedTime = selectedActivities.reduce((sum, activity) => 
+      sum + AdaptiveActivitySelector.getAdaptedTime(activity, config), 0
+    )
+  
+    return {
+      config,
+      words: selectedWords,
+      activities: selectedActivities,
+      estimatedTime,
+      adaptations: [
+        ...adaptations,
+        ...wordRationale.map(reason => ({
+          reason: 'Word selection strategy',
+          modification: reason,
+          targetProfile: 'student_needs'
+        }))
+      ],
+      successPredictors
+    }
+  }
+  
+  // Success prediction logic
+  function calculateSuccessPredictors(
+    words: Word[],
+    activities: ActivityModule[],
+    config: WorksheetConfig
+  ): {
+    confidenceLevel: number
+    engagementFactors: string[]
+    potentialChallenges: string[]
+    supportStrategies: string[]
+  } {
+    const avgSuccessRate = activities.reduce((sum, a) => sum + a.successRate, 0) / activities.length
+    const wordComplexityScore = words.reduce((sum, w) => {
+      return sum + (w.complexity === 'easy' ? 1 : w.complexity === 'regular' ? 0.7 : 0.4)
+    }, 0) / words.length
+  
+    const confidenceLevel = (avgSuccessRate + wordComplexityScore) / 2
+  
+    const engagementFactors: string[] = []
+    if (config.studentProfile.processingStyle === 'kinesthetic') {
+      engagementFactors.push('Movement-based activities included')
+    }
+    if (activities.some(a => a.canSkip)) {
+      engagementFactors.push('Student choice and flexibility')
+    }
+    if (config.energyLevel === 'full_focus') {
+      engagementFactors.push('Optimal energy level for learning')
     }
   
-    // Generate activities
-    const activities: WorksheetActivity[] = [
-      createWordSortActivity(selectedWords),
-      createFillPatternActivity(selectedWords, pattern),
-      createBuildWordActivity(selectedWords)
+    const potentialChallenges: string[] = []
+    if (config.energyLevel === 'survival_mode') {
+      potentialChallenges.push('Low energy may affect completion')
+    }
+    if (config.studentProfile.attentionSpan === 'brief') {
+      potentialChallenges.push('Short attention span requires pacing')
+    }
+    if (activities.some(a => a.cognitiveLoad === 'high')) {
+      potentialChallenges.push('Some activities require sustained focus')
+    }
+  
+    const supportStrategies: string[] = [
+      'Movement breaks between activities',
+      'Choice-based completion ("do what feels right")',
+      'Success-first word ordering',
+      'Visual pattern highlighting'
     ]
   
     return {
-      selectedPattern: pattern,
-      difficulty,
-      wordCount: selectedWords.length,
-      words: selectedWords,
-      activities
+      confidenceLevel,
+      engagementFactors,
+      potentialChallenges,
+      supportStrategies
+    }
+  }
+  
+  // Backwards compatibility with existing interface
+  export const generatePhonicsWorksheet = async (params: any): Promise<any> => {
+    // Convert old params to new config format
+    const config: WorksheetConfig = {
+      studentProfile: {
+        processingStyle: 'mixed',
+        attentionSpan: 'moderate',
+        sensoryNeeds: [],
+        motorPlanning: 'some_support',
+        socialEmotional: 'confidence_building'
+      },
+      energyLevel: 'full_focus',
+      learningGoal: 'pattern_recognition',
+      selectedPattern: params.pattern,
+      availableTime: 20,
+      preferredActivities: []
+    }
+  
+    const adaptiveResult = await generateAdaptiveWorksheet(params.words, config)
+  
+    // Convert back to old format for compatibility
+    return {
+      selectedPattern: adaptiveResult.config.selectedPattern,
+      difficulty: 'adaptive',
+      wordCount: adaptiveResult.words.length,
+      words: adaptiveResult.words,
+      activities: adaptiveResult.activities.map(activity => ({
+        type: activity.type,
+        title: activity.name,
+        instructions: activity.description,
+        content: activity
+      }))
     }
   }
