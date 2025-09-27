@@ -22,6 +22,7 @@ import { TeacherAuthProvider } from './contexts/TeacherAuthContext'
 import { TeacherLogin } from './components/auth/TeacherLogin'
 import { TeacherDashboard } from './components/teacher/TeacherDashboard'
 import { TeacherAuthGuard } from './components/auth/TeacherAuthGuard'
+import { OnboardingSystem } from '@/components/onboarding/OnboardingSystem'
 
 import type { TtsAccent } from './types'
 
@@ -403,6 +404,18 @@ function AppContent() {
           </div>
         </div>
       </nav>
+
+      {/* NEW: Add this after your nav but before Router */}
+      <OnboardingSystem 
+        onTtsAccentChange={handleTtsAccentChange}
+        onShowSettings={() => setShowSettings(true)}
+        calmCornerActive={isInCalmCorner}
+        onCalmCornerToggle={handleCalmCornerToggle}
+        speakText={async (text: string, accent: TtsAccent) => {
+          const { audio } = await import('@/lib/utils')
+          return audio.speak(text, { accent, rate: 0.8, pitch: 0.9, volume: 0.8 })
+        }}
+      />
 
       {/* Main Content Area - Responsive container */}
       <main id="main-content" className="content-area">
