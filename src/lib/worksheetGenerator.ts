@@ -28,7 +28,7 @@ interface WorksheetData {
   constraints: MoodConstraints
   words: WordData[]
   distractors: WordData[]
-  familyRows?: string[][] // For breatheCircle activity
+  letterRows?: string[][]
 }
 
 // ============================================================================
@@ -183,25 +183,33 @@ function selectWordsForActivity(
 /**
  * Generate word family rows for "Breathe & Circle" activity
  */
-function generateFamilyRows(targetWords: WordData[]): string[][] {
-    const familyRows: string[][] = []
-
-    targetWords.forEach(wordData => {
-        const word = wordData.word
-        
-        // Find which family this word belongs to
-        for (const [family, words] of Object.entries(WORD_FAMILIES)) {
-        if (words.includes(word)) {
-            // Add a row with this word PLUS 2 others from same family
-            const familyWords = words.filter(w => w !== word) // exclude target
-            const shuffled = shuffle([...familyWords])
-            familyRows.push([word, ...shuffled.slice(0, 2)]) // Include target word in row
-            break
-        }
-        }
+function generateLetterRows(targetWords: WordData[]): string[][] {
+    const letterRows: string[][] = []
+    const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'W', 'F', 'J', 'V', 'Z']
+    
+    // Take first 3-4 words and get their first letters
+    const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
+    
+    targetLetters.forEach(letter => {
+      // Create array with target letter appearing 2-3 times
+      const timesToInclude = Math.random() > 0.5 ? 2 : 3
+      const row = Array(timesToInclude).fill(letter)
+      
+      // Add 4-5 distractor letters (make sure they're different from target)
+      const availableDistractors = distractorLetters.filter(d => d !== letter)
+      const shuffledDistractors = shuffle([...availableDistractors])
+      const numDistractors = 7 - timesToInclude // Total 7 letters per row
+      
+      row.push(...shuffledDistractors.slice(0, numDistractors))
+      
+      // Shuffle the final row so target isn't always first
+      const shuffledRow = shuffle(row)
+      
+      // Store as [targetLetter, ...shuffledLetters] so we know which letter to find
+      letterRows.push([letter, ...shuffledRow])
     })
-
-    return familyRows
+    
+    return letterRows
 }
 
 /**
@@ -253,7 +261,7 @@ export function generateMoodBasedWorksheet(
   
   // Special handling for breatheCircle activity
   if (activityType === 'breatheCircle') {
-    worksheetData.familyRows = generateFamilyRows(words)
+      worksheetData.letterRows = generateLetterRows(words)
   }
   
   return worksheetData

@@ -213,67 +213,63 @@ async function generateTrace3Words(
 // ============================================================================
 
 async function generateBreatheCircle(
-  doc: jsPDF,
-  data: WorksheetData,
-  colors: any
-) {
-  const words = data.words.slice(0, 3)
-  
-  // Title
-  doc.setFont(FONTS.title.family, FONTS.title.weight)
-  doc.setFontSize(FONTS.title.size)
-  doc.setTextColor(0, 0, 0)
-  doc.text('Breathe & Circle', 105, 35, { align: 'center' })
-  
-  doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
-  doc.setFontSize(FONTS.subtitle.size)
-  doc.text('Today', 105, 48, { align: 'center' })
-  
-  addDecorativeLine(doc, 58, colors.accent)
-  
-  // Breathing guide box
-  doc.setFont(FONTS.instructions.family, 'normal')
-  doc.setFontSize(13)
-  setTextColorHex(doc, colors.textGray)
-  doc.text('Breathing Guide:', 105, 75, { align: 'center' })
-  doc.text('In: 1-2-3  •  Out: 1-2-3', 105, 83, { align: 'center' })
-  doc.text('Now circle!', 105, 91, { align: 'center' })
-  
-  // Target words with icons
-  doc.setFont('helvetica', 'bold')
-  doc.setFontSize(18)
-  doc.setTextColor(0, 0, 0)
-  doc.text('Find these words:', 105, 110, { align: 'center' })
-  
-  // Show target words in a row
-  let xPos = 40
-  for (const wordObj of words) {
-    await addWordIcon(doc, wordObj.word, wordObj.icon, xPos, 125)
-    doc.setFontSize(16)
-    doc.text(wordObj.word, xPos, 140, { align: 'center' })
-    xPos += 55
-  }
-  
-  // Word family rows (like Canva PDF page 2)
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(16)
-  doc.text('Find the words below and circle them', 105, 160, { align: 'center' })
-  
-  let yPos = 180
-  if (data.familyRows) {
-    data.familyRows.forEach((row: string[]) => {
-      const rowText = row.join('     ') // Extra spacing between words
-      doc.setFontSize(20)
-      doc.text(rowText, 105, yPos, { align: 'center' })
-      yPos += 25
-    })
-  }
-  
-  // Completion message
-  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
-  doc.setFontSize(FONTS.completion.size)
-  setTextColorHex(doc, colors.textGray)
-  doc.text('You traced 3 words today. That\'s the goal.', 105, 270, { align: 'center' })
+    doc: jsPDF,
+    data: WorksheetData,
+    colors: any
+  ) {
+    // Title
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Breathe & Circle', 105, 35, { align: 'center' })
+    
+    doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+    doc.setFontSize(FONTS.subtitle.size)
+    doc.text('Today', 105, 48, { align: 'center' })
+    
+    addDecorativeLine(doc, 58, colors.accent)
+    
+    // Instructions
+    doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+    doc.setFontSize(FONTS.instructions.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Take a slow breath. Then circle the letter.', 105, 75, { align: 'center' })
+    
+    // Breathing guide
+    doc.setFont(FONTS.instructions.family, 'normal')
+    doc.setFontSize(13)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('Breathing Guide: In: 1-2-3  *  Out: 1-2-3  Now circle!', 105, 88, { align: 'center' })
+    
+    // Letter finding rows
+    let yPos = 110
+    
+    if (data.letterRows) {
+      data.letterRows.forEach((row, index) => {
+        const targetLetter = row[0]
+        const letterArray = row.slice(1)
+        
+        // "Find the letter X:" instruction
+        doc.setFont(FONTS.body.family, FONTS.body.weight)
+        doc.setFontSize(FONTS.body.size)
+        doc.setTextColor(0, 0, 0)
+        doc.text(`Find the letter ${targetLetter}:`, 105, yPos, { align: 'center' })
+        
+        // Letter array
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(24)
+        doc.setTextColor(0, 0, 0)
+        doc.text(letterArray.join('   '), 105, yPos + 15, { align: 'center' })
+        
+        yPos += 45
+      })
+    }
+    
+    // Completion message
+    doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+    doc.setFontSize(FONTS.completion.size)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('Good breathing = good learning 💙', 105, 270, { align: 'center' })
 }
 
 // ============================================================================

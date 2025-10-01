@@ -32,6 +32,7 @@ export default function MoodBasedWorksheetGenerator() {
   const [selectedActivity, setSelectedActivity] = useState<ActivityType>(null)
   const [worksheetData, setWorksheetData] = useState<any>(null)
   const [showPreview, setShowPreview] = useState(false)
+  const [hasGenerated, setHasGenerated] = useState(false)
 
   const moodOptions: MoodOption[] = [
     {
@@ -63,11 +64,11 @@ export default function MoodBasedWorksheetGenerator() {
   const activityOptions: Record<'overwhelmed' | 'highEnergy' | 'lowEnergy', ActivityOption[]> = {
     overwhelmed: [
       { id: 'trace3', label: 'Trace 3 Words', description: 'Just trace 3. That\'s enough.' },
-      { id: 'breatheCircle', label: 'Breathe & Circle', description: 'Find words while breathing calmly' },
+      { id: 'breatheCircle', label: 'Breathe & Circle', description: 'Find letters while breathing calmly' },
     ],
     highEnergy: [
-      { id: 'soundHunt', label: 'Sound Hunt', description: 'Find all the sounds you can!' },
-      { id: 'bodyLetter', label: 'Body Letter Fun', description: 'Make letters with your body' },
+      { id: 'soundHunt', label: 'Sound Hunt', description: 'Circle letters you hear (on paper)' },
+      { id: 'bodyLetter', label: 'Body Letters', description: 'Make letters with arms & legs - no writing!' },
     ],
     lowEnergy: [
       { id: 'pointRest', label: 'Point & Rest', description: 'Just point. No writing needed.' },
@@ -102,6 +103,19 @@ export default function MoodBasedWorksheetGenerator() {
       )
       setWorksheetData(data)
       setShowPreview(true)
+      setHasGenerated(true)
+    }
+  }
+
+  const handleGenerateAnother = () => {
+    // Regenerate with same selections
+    if (selectedMood && selectedPhonics && selectedActivity) {
+      const data = generateMoodBasedWorksheet(
+        selectedMood,
+        selectedPhonics,
+        selectedActivity
+      )
+      setWorksheetData(data)
     }
   }
 
@@ -129,6 +143,20 @@ export default function MoodBasedWorksheetGenerator() {
     setSelectedActivity(null)
     setWorksheetData(null)
     setShowPreview(false)
+  }
+
+  const handleQuickPick = () => {
+    // Auto-select: Overwhelmed + CVC + Trace 3
+    setSelectedMood('overwhelmed')
+    setSelectedPhonics('cvc')
+    setSelectedActivity('trace3')
+    setStep(3)
+    
+    // Generate immediately
+    const data = generateMoodBasedWorksheet('overwhelmed', 'cvc', 'trace3')
+    setWorksheetData(data)
+    setShowPreview(true)
+    setHasGenerated(true)
   }
 
   return (
@@ -177,6 +205,18 @@ export default function MoodBasedWorksheetGenerator() {
                 <h2 className="text-3xl font-semibold text-center text-gray-800">
                   How is your child today?
                 </h2>
+                {/* Quick Pick Button */}
+                <div className="mb-6 p-4 bg-purple-50 rounded-xl border-2 border-purple-300">
+                    <p className="text-sm text-gray-700 mb-3 text-center">
+                    In a rush? Don't want to choose?
+                    </p>
+                    <button
+                    onClick={handleQuickPick}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition-all hover:shadow-xl"
+                    >
+                    ⚡ Quick Pick: Generate Now (Overwhelmed + Easy Words)
+                    </button>
+                </div>
                 <div className="grid md:grid-cols-3 gap-6">
                   {moodOptions.map((mood) => {
                     const Icon = mood.icon
@@ -201,9 +241,9 @@ export default function MoodBasedWorksheetGenerator() {
                 {/* Helper text */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-2xl mx-auto">
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    <strong>Tip:</strong> Choose based on right now, not what the plan was. 
-                    If your child resists a worksheet, try a different mood. Resistance often means 
-                    the cognitive or physical demand doesn't match their current capacity.
+                    <strong>Tip: You don't need to do one worksheet per day.</strong>  <br/>Some days your child might do none. 
+                    Some days they might do two. Match the worksheet to your child's state right now, 
+                    not to external expectations.
                   </p>
                 </div>
               </div>
@@ -288,18 +328,29 @@ export default function MoodBasedWorksheetGenerator() {
             <div className="w-[420px] flex-shrink-0">
               <div className="sticky top-6">
                 <div className="bg-white rounded-2xl shadow-2xl p-6 border-2 border-gray-200">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3 text-gray-700">
-                      <Eye className="w-6 h-6" />
-                      <span className="font-bold text-lg">Preview</span>
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3 text-gray-700">
+                        <Eye className="w-6 h-6" />
+                        <span className="font-bold text-lg">Preview</span>
+                      </div>
+                      <button
+                        onClick={handleDownload}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-sm shadow-lg flex items-center gap-2 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+                      >
+                        <Download className="w-5 h-5" />
+                        Download PDF
+                      </button>
                     </div>
-                    <button
-                      onClick={handleDownload}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-sm shadow-lg flex items-center gap-2 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-                    >
-                      <Download className="w-5 h-5" />
-                      Download PDF
-                    </button>
+                    
+                    {hasGenerated && (
+                      <button
+                        onClick={handleGenerateAnother}
+                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 transition-colors"
+                      >
+                        🔄 Generate another like this (different words)
+                      </button>
+                    )}
                   </div>
                   
                   <WorksheetPreview 
@@ -308,12 +359,18 @@ export default function MoodBasedWorksheetGenerator() {
                     activityType={selectedActivity!}
                   />
 
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-800 leading-relaxed">
-                      <strong>Success = </strong>Your child stayed regulated while touching phonics content. 
-                      Whether they complete the whole page doesn't matter. Participation is the goal.
-                    </p>
-                  </div>
+                  <div className="mb-6 space-y-3">
+                    <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-sm text-green-800 leading-relaxed">
+                        <strong>✓ Success = </strong> = Staying regulated while trying. Completion doesn't matter.
+                        </p>
+                    </div>
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <p className="text-sm text-blue-800 text-center">
+                            ⏱️ Estimated time: {worksheetData.constraints.maxItems <= 3 ? '3-5' : worksheetData.constraints.maxItems <= 5 ? '5-8' : '8-12'} minutes
+                            </p>
+                    </div>
+                  </div>  
                 </div>
               </div>
             </div>

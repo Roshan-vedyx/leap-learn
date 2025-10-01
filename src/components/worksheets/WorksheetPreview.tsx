@@ -174,66 +174,59 @@ function Trace3WordsPreview({ data, colors }: { data: WorksheetData; colors: any
 // ============================================================================
 
 function BreatheCirclePreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 3)
-  
-  return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
-      {/* Title */}
-      <div className="text-center mb-2">
-        <h1 className="font-normal text-4xl">Breathe & Circle</h1>
-        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
-      </div>
-      
-      <div 
-        className="w-4/5 mx-auto mb-6"
-        style={{ height: '2px', backgroundColor: colors.accent }}
-      />
-      
-      {/* Breathing guide */}
-      <div className="text-center mb-6" style={{ color: colors.textGray }}>
-        <p className="text-sm font-semibold">Breathing Guide:</p>
-        <p className="text-sm">In: 1-2-3  •  Out: 1-2-3</p>
-        <p className="text-sm">Now circle!</p>
-      </div>
-      
-      {/* Target words */}
-      <div className="mb-6">
-        <p className="text-center text-base font-semibold mb-3">Find these words:</p>
-        <div className="flex justify-center gap-8">
-          {words.map((wordObj, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <WordIcon word={wordObj.word} icon={wordObj.icon} />
-              <span className="text-base mt-2">{wordObj.word}</span>
-            </div>
-          ))}
+    return (
+      <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
+        {/* Title */}
+        <div className="text-center mb-2">
+          <h1 className="font-normal text-4xl">Breathe & Circle</h1>
+          <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
         </div>
-      </div>
-      
-      {/* Word family rows */}
-      <div className="flex-1">
-        <p className="text-center text-base mb-4">Find the words below and circle them</p>
         
-        {data.familyRows && (
-          <div className="space-y-4">
-            {data.familyRows.map((row, i) => (
-              <div key={i} className="text-center">
-                <span className="text-xl tracking-widest">
-                  {row.join('     ')}
-                </span>
+        <div 
+          className="w-4/5 mx-auto mb-4"
+          style={{ height: '2px', backgroundColor: colors.accent }}
+        />
+        
+        {/* Instructions */}
+        <p className="text-center text-base mb-3">
+          Take a slow breath. Then circle the letter.
+        </p>
+        
+        {/* Breathing guide */}
+        <div className="text-center mb-6" style={{ color: colors.textGray }}>
+          <p className="text-sm">
+            Breathing Guide: In: 1-2-3  *  Out: 1-2-3  Now circle!
+          </p>
+        </div>
+        
+        {/* Letter finding rows */}
+        <div className="flex-1 space-y-6">
+          {data.letterRows && data.letterRows.map((row, index) => {
+            const targetLetter = row[0]
+            const letterArray = row.slice(1)
+            
+            return (
+              <div key={index} className="text-center">
+                <p className="text-base font-semibold mb-2">
+                  Find the letter {targetLetter}:
+                </p>
+                <p className="text-2xl tracking-widest font-normal">
+                  {letterArray.join('   ')}
+                </p>
               </div>
-            ))}
-          </div>
-        )}
+            )
+          })}
+        </div>
+        
+        {/* Completion message */}
+        <p 
+          className="text-center mt-6 text-sm"
+          style={{ color: colors.textGray }}
+        >
+          Good breathing = good learning 💙
+        </p>
       </div>
-      
-      <p 
-        className="text-center mt-4 text-sm"
-        style={{ color: colors.textGray }}
-      >
-        You traced 3 words today. That's the goal.
-      </p>
-    </div>
-  )
+    )
 }
 
 // ============================================================================
