@@ -7,7 +7,6 @@ import { generateMoodPDF } from '../../components/worksheets/pdf/MoodPDFGenerato
 import WorksheetPreview from '../../components/worksheets/WorksheetPreview'
 
 type MoodType = 'overwhelmed' | 'highEnergy' | 'lowEnergy' | null
-type PhonicsType = 'cvc' | 'blends' | 'digraphs' | 'sight' | null
 type ActivityType = string | null
 
 interface MoodOption {
@@ -26,9 +25,8 @@ interface ActivityOption {
 }
 
 export default function MoodBasedWorksheetGenerator() {
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2>(1)
   const [selectedMood, setSelectedMood] = useState<MoodType>(null)
-  const [selectedPhonics, setSelectedPhonics] = useState<PhonicsType>(null)
   const [selectedActivity, setSelectedActivity] = useState<ActivityType>(null)
   const [worksheetData, setWorksheetData] = useState<any>(null)
   const [showPreview, setShowPreview] = useState(false)
@@ -77,16 +75,11 @@ export default function MoodBasedWorksheetGenerator() {
   }
 
   const handleMoodSelect = (mood: MoodType) => {
+    if (!mood) return
+    
     setSelectedMood(mood)
     setStep(2)
     setSelectedActivity(null)
-    setShowPreview(false)
-    setWorksheetData(null)
-  }
-
-  const handlePhonicsSelect = (phonics: PhonicsType) => {
-    setSelectedPhonics(phonics)
-    setStep(3)
     setShowPreview(false)
     setWorksheetData(null)
   }
@@ -95,10 +88,9 @@ export default function MoodBasedWorksheetGenerator() {
     setSelectedActivity(activityId)
     
     // Generate worksheet data immediately for preview
-    if (selectedMood && selectedPhonics) {
+    if (selectedMood) {
       const data = generateMoodBasedWorksheet(
         selectedMood,
-        selectedPhonics,
         activityId
       )
       setWorksheetData(data)
@@ -109,10 +101,9 @@ export default function MoodBasedWorksheetGenerator() {
 
   const handleGenerateAnother = () => {
     // Regenerate with same selections
-    if (selectedMood && selectedPhonics && selectedActivity) {
+    if (selectedMood && selectedActivity) {
       const data = generateMoodBasedWorksheet(
         selectedMood,
-        selectedPhonics,
         selectedActivity
       )
       setWorksheetData(data)
@@ -125,35 +116,30 @@ export default function MoodBasedWorksheetGenerator() {
   }
 
   const handleBack = () => {
-    if (step === 3) {
-      setStep(2)
+    if (step === 2) {
+      setStep(1)
       setShowPreview(false)
       setSelectedActivity(null)
       setWorksheetData(null)
-    } else if (step === 2) {
-      setStep(1)
-      setSelectedPhonics(null)
     }
   }
 
   const handleStartOver = () => {
     setStep(1)
     setSelectedMood(null)
-    setSelectedPhonics(null)
     setSelectedActivity(null)
     setWorksheetData(null)
     setShowPreview(false)
   }
 
   const handleQuickPick = () => {
-    // Auto-select: Overwhelmed + CVC + Trace 3
+    // Auto-select: Overwhelmed + Trace 3
     setSelectedMood('overwhelmed')
-    setSelectedPhonics('cvc')
     setSelectedActivity('trace3')
-    setStep(3)
+    setStep(2)
     
     // Generate immediately
-    const data = generateMoodBasedWorksheet('overwhelmed', 'cvc', 'trace3')
+    const data = generateMoodBasedWorksheet('overwhelmed', 'trace3')
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
@@ -178,11 +164,7 @@ export default function MoodBasedWorksheetGenerator() {
             </span>
             <span>→</span>
             <span className={step >= 2 ? 'font-semibold text-blue-600' : ''}>
-              Phonics Pattern
-            </span>
-            <span>→</span>
-            <span className={step >= 3 ? 'font-semibold text-blue-600' : ''}>
-              Activity
+              Preview
             </span>
           </div>
 
@@ -205,18 +187,20 @@ export default function MoodBasedWorksheetGenerator() {
                 <h2 className="text-3xl font-semibold text-center text-gray-800">
                   How is your child today?
                 </h2>
+                
                 {/* Quick Pick Button */}
                 <div className="mb-6 p-4 bg-purple-50 rounded-xl border-2 border-purple-300">
-                    <p className="text-sm text-gray-700 mb-3 text-center">
+                  <p className="text-sm text-gray-700 mb-3 text-center">
                     In a rush? Don't want to choose?
-                    </p>
-                    <button
+                  </p>
+                  <button
                     onClick={handleQuickPick}
                     className="w-full bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition-all hover:shadow-xl"
-                    >
+                  >
                     ⚡ Quick Pick: Generate Now (Overwhelmed + Easy Words)
-                    </button>
+                  </button>
                 </div>
+                
                 <div className="grid md:grid-cols-3 gap-6">
                   {moodOptions.map((mood) => {
                     const Icon = mood.icon
@@ -241,16 +225,16 @@ export default function MoodBasedWorksheetGenerator() {
                 {/* Helper text */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-2xl mx-auto">
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    <strong>Tip: You don't need to do one worksheet per day.</strong>  <br/>Some days your child might do none. 
-                    Some days they might do two. Match the worksheet to your child's state right now, 
-                    not to external expectations.
+                    <strong>Tip: You don't need to do one worksheet per day.</strong> <br/>
+                    Some days your child might do none. Some days they might do two. 
+                    Match the worksheet to your child's state right now, not to external expectations.
                   </p>
                 </div>
               </div>
             )}
 
-            {/* Step 2: Phonics Pattern */}
-            {step === 2 && (
+            {/* Step 2: Activity Selection */}
+            {step === 2 && selectedMood && (
               <div className="space-y-8">
                 <button
                   onClick={handleBack}
@@ -258,45 +242,6 @@ export default function MoodBasedWorksheetGenerator() {
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span className="text-sm font-medium">Back to mood selection</span>
-                </button>
-                
-                <h2 className="text-3xl font-semibold text-center text-gray-800">
-                  What are you practicing?
-                </h2>
-                
-                <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
-                  {[
-                    { id: 'cvc', label: 'CVC Words', example: 'cat, dog, sun' },
-                    { id: 'blends', label: 'Blends', example: 'stop, tree, swim' },
-                    { id: 'digraphs', label: 'Digraphs', example: 'shop, fish, that' },
-                    { id: 'sight', label: 'Sight Words', example: 'the, said, was' },
-                  ].map((option) => (
-                    <button
-                      key={option.id}
-                      onClick={() => handlePhonicsSelect(option.id as PhonicsType)}
-                      className={`p-8 rounded-xl border-2 text-left transition-all hover:shadow-lg ${
-                        selectedPhonics === option.id
-                          ? 'bg-gray-100 border-gray-400 shadow-md'
-                          : 'bg-white border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <p className="font-bold text-xl text-gray-900 mb-2">{option.label}</p>
-                      <p className="text-sm text-gray-500">{option.example}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Activity Selection */}
-            {step === 3 && selectedMood && (
-              <div className="space-y-8">
-                <button
-                  onClick={handleBack}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Back to phonics selection</span>
                 </button>
                 
                 <h2 className="text-3xl font-semibold text-center text-gray-800">
@@ -314,8 +259,8 @@ export default function MoodBasedWorksheetGenerator() {
                           : 'bg-white border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <h3 className="font-bold text-xl text-gray-900 mb-2">{activity.label}</h3>
-                      <p className="text-sm text-gray-600">{activity.description}</p>
+                      <p className="font-bold text-xl text-gray-900 mb-2">{activity.label}</p>
+                      <p className="text-sm text-gray-500">{activity.description}</p>
                     </button>
                   ))}
                 </div>
@@ -325,52 +270,32 @@ export default function MoodBasedWorksheetGenerator() {
 
           {/* Right Column - Preview */}
           {showPreview && worksheetData && (
-            <div className="w-[420px] flex-shrink-0">
-              <div className="sticky top-6">
-                <div className="bg-white rounded-2xl shadow-2xl p-6 border-2 border-gray-200">
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3 text-gray-700">
-                        <Eye className="w-6 h-6" />
-                        <span className="font-bold text-lg">Preview</span>
-                      </div>
-                      <button
-                        onClick={handleDownload}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-sm shadow-lg flex items-center gap-2 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-                      >
-                        <Download className="w-5 h-5" />
-                        Download PDF
-                      </button>
-                    </div>
-                    
-                    {hasGenerated && (
-                      <button
-                        onClick={handleGenerateAnother}
-                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 transition-colors"
-                      >
-                        🔄 Generate another like this (different words)
-                      </button>
-                    )}
+            <div className="w-2/5 flex flex-col gap-4">
+              <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-5 h-5 text-gray-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Preview</h3>
                   </div>
-                  
-                  <WorksheetPreview 
-                    data={worksheetData}
-                    mood={selectedMood!}
-                    activityType={selectedActivity!}
-                  />
+                </div>
 
-                  <div className="mb-6 space-y-3">
-                    <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                        <p className="text-sm text-green-800 leading-relaxed">
-                        <strong>✓ Success = </strong> = Staying regulated while trying. Completion doesn't matter.
-                        </p>
-                    </div>
-                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                            <p className="text-sm text-blue-800 text-center">
-                            ⏱️ Estimated time: {worksheetData.constraints.maxItems <= 3 ? '3-5' : worksheetData.constraints.maxItems <= 5 ? '5-8' : '8-12'} minutes
-                            </p>
-                    </div>
-                  </div>  
+                <WorksheetPreview data={worksheetData} />
+
+                <div className="mt-6 space-y-3">
+                  <button
+                    onClick={handleDownload}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download PDF
+                  </button>
+
+                  <button
+                    onClick={handleGenerateAnother}
+                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Generate Similar
+                  </button>
                 </div>
               </div>
             </div>

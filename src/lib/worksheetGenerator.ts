@@ -140,10 +140,10 @@ function randomChoice<T>(array: T[]): T {
 /**
  * Select curated words based on mood and activity type
  * CRITICAL: Overwhelmed mood ONLY uses tier 1 easiest words
+ * NOTE: phonicsType is hardcoded to 'cvc' internally
  */
 function selectWordsForActivity(
   mood: MoodType,
-  phonicsType: PhonicsType,
   activityType: string,
   count: number
 ): WordData[] {
@@ -184,40 +184,39 @@ function selectWordsForActivity(
  * Generate word family rows for "Breathe & Circle" activity
  */
 function generateLetterRows(targetWords: WordData[]): string[][] {
-    const letterRows: string[][] = []
-    const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'W', 'F', 'J', 'V', 'Z']
+  const letterRows: string[][] = []
+  const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'W', 'F', 'J', 'V', 'Z']
+  
+  // Take first 3-4 words and get their first letters
+  const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
+  
+  targetLetters.forEach(letter => {
+    // Create array with target letter appearing 2-3 times
+    const timesToInclude = Math.random() > 0.5 ? 2 : 3
+    const row = Array(timesToInclude).fill(letter)
     
-    // Take first 3-4 words and get their first letters
-    const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
+    // Add 4-5 distractor letters (make sure they're different from target)
+    const availableDistractors = distractorLetters.filter(d => d !== letter)
+    const shuffledDistractors = shuffle([...availableDistractors])
+    const numDistractors = 7 - timesToInclude // Total 7 letters per row
     
-    targetLetters.forEach(letter => {
-      // Create array with target letter appearing 2-3 times
-      const timesToInclude = Math.random() > 0.5 ? 2 : 3
-      const row = Array(timesToInclude).fill(letter)
-      
-      // Add 4-5 distractor letters (make sure they're different from target)
-      const availableDistractors = distractorLetters.filter(d => d !== letter)
-      const shuffledDistractors = shuffle([...availableDistractors])
-      const numDistractors = 7 - timesToInclude // Total 7 letters per row
-      
-      row.push(...shuffledDistractors.slice(0, numDistractors))
-      
-      // Shuffle the final row so target isn't always first
-      const shuffledRow = shuffle(row)
-      
-      // Store as [targetLetter, ...shuffledLetters] so we know which letter to find
-      letterRows.push([letter, ...shuffledRow])
-    })
+    row.push(...shuffledDistractors.slice(0, numDistractors))
     
-    return letterRows
+    // Shuffle the final row so target isn't always first
+    const shuffledRow = shuffle(row)
+    
+    // Store as [targetLetter, ...shuffledLetters] so we know which letter to find
+    letterRows.push([letter, ...shuffledRow])
+  })
+  
+  return letterRows
 }
 
 /**
  * Generate distractors (currently unused, keeping for future activities)
  */
 function generateDistractors(
-  targetWords: WordData[],
-  phonicsType: PhonicsType
+  targetWords: WordData[]
 ): WordData[] {
   const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
   const available = allWords.filter(
@@ -237,17 +236,20 @@ function generateDistractors(
 
 /**
  * Generate mood-based worksheet with curated word selection
+ * NOTE: phonicsType parameter removed - now hardcoded to 'cvc' internally
  */
 export function generateMoodBasedWorksheet(
   mood: MoodType,
-  phonicsType: PhonicsType,
   activityType: string
 ): WorksheetData {
   const constraints = MOOD_CONSTRAINTS[mood]
   
+  // Hardcoded phonicsType to 'cvc' - all mood-based worksheets use CVC words
+  const phonicsType: PhonicsType = 'cvc'
+  
   // Select curated words
-  const words = selectWordsForActivity(mood, phonicsType, activityType, constraints.maxItems)
-  const distractors = generateDistractors(words, phonicsType)
+  const words = selectWordsForActivity(mood, activityType, constraints.maxItems)
+  const distractors = generateDistractors(words)
   
   // Base worksheet data
   const worksheetData: WorksheetData = {
@@ -261,7 +263,7 @@ export function generateMoodBasedWorksheet(
   
   // Special handling for breatheCircle activity
   if (activityType === 'breatheCircle') {
-      worksheetData.letterRows = generateLetterRows(words)
+    worksheetData.letterRows = generateLetterRows(words)
   }
   
   return worksheetData
