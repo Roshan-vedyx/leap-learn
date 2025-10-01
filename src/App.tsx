@@ -42,6 +42,7 @@ import StorySelectionPage from './pages/StorySelectionPage'
 import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 import { PhonicsWorksheetGenerator } from './pages/teacher/PhonicsWorksheetGenerator'
 import { SightWordsWorksheetGenerator } from './pages/teacher/SightWordsWorksheetGenerator'
+import MoodBasedWorksheetGenerator from './pages/teacher/MoodBasedWorksheetGenerator'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -509,6 +510,10 @@ function AppContent() {
                 <ParentDashboard />
               </AuthGate>
             </Route>
+            
+            <Route path="/worksheet-generator">
+              <MoodBasedWorksheetGenerator />
+            </Route>
 
             {/* Parent login - separate route for existing users */}
             <Route path="/parent-login">
@@ -688,6 +693,7 @@ function TeacherApp() {
             <SightWordsWorksheetGenerator />
           </TeacherAuthGuard>
         </Route>
+        
       </Router>
     </TeacherAuthProvider>
   )
