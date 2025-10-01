@@ -1,4 +1,5 @@
 // src/components/worksheets/pdf/MoodPDFGenerator.ts
+// Redesigned to match Canva PDF aesthetic - warm, spacious, emotionally safe
 
 import jsPDF from 'jspdf'
 
@@ -12,9 +13,35 @@ interface WorksheetData {
 }
 
 const MOOD_COLORS = {
-  overwhelmed: { bg: '#E8F4F8', accent: '#5BA3BF', bar: '#B8D8E8' },
-  highEnergy: { bg: '#FFF4E6', accent: '#FF8C42', bar: '#FFD4A3' },
-  lowEnergy: { bg: '#F3F0FF', accent: '#9B7EBD', bar: '#D4C5F9' },
+  overwhelmed: { 
+    bg: '#E8F4F8', 
+    accent: '#5BA3BF',
+    textGray: '#666666',
+    traceGray: '#CCCCCC'
+  },
+  highEnergy: { 
+    bg: '#FFF4E6', 
+    accent: '#FF8C42',
+    textGray: '#666666',
+    traceGray: '#CCCCCC'
+  },
+  lowEnergy: { 
+    bg: '#F3F0FF', 
+    accent: '#9B7EBD',
+    textGray: '#666666',
+    traceGray: '#CCCCCC'
+  },
+}
+
+// Font fallback since we can't embed Lexend Deca in jsPDF without custom fonts
+// Using Helvetica with specific weights to approximate the feel
+const FONTS = {
+  title: { family: 'helvetica', weight: 'normal' as const, size: 36 },
+  subtitle: { family: 'helvetica', weight: 'normal' as const, size: 18 },
+  body: { family: 'helvetica', weight: 'normal' as const, size: 16 },
+  traceWord: { family: 'helvetica', weight: 'normal' as const, size: 60 },
+  instructions: { family: 'helvetica', weight: 'normal' as const, size: 15 },
+  completion: { family: 'helvetica', weight: 'normal' as const, size: 14 },
 }
 
 export function generateMoodPDF(
@@ -22,10 +49,15 @@ export function generateMoodPDF(
   mood: string,
   activityType: string
 ) {
-  const doc = new jsPDF()
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  })
+  
   const colors = MOOD_COLORS[mood as keyof typeof MOOD_COLORS]
   
-  // Fill background
+  // Fill entire page with background color - feels immersive, not form-like
   doc.setFillColor(colors.bg)
   doc.rect(0, 0, 210, 297, 'F')
   
@@ -53,12 +85,37 @@ export function generateMoodPDF(
       generateTrace3Words(doc, data, colors)
   }
   
-  // Download
   const filename = `${mood}_${activityType}_${Date.now()}.pdf`
   doc.save(filename)
 }
 
-// OVERWHELMED TEMPLATES
+// Helper: Add thin decorative line (1-2pt, not heavy bar)
+function addDecorativeLine(doc: jsPDF, yPos: number, color: string) {
+  const rgb = hexToRgb(color)
+  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
+  doc.setLineWidth(0.5) // Thin, elegant line
+  doc.line(20, yPos, 190, yPos)
+}
+
+// Helper: Convert hex to RGB
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : { r: 0, g: 0, b: 0 }
+}
+
+// Helper: Set text color from hex
+function setTextColorHex(doc: jsPDF, hex: string) {
+  const rgb = hexToRgb(hex)
+  doc.setTextColor(rgb.r, rgb.g, rgb.b)
+}
+
+// ============================================================================
+// OVERWHELMED TEMPLATES - Maximum calm, maximum space
+// ============================================================================
 
 function generateTrace3Words(
   doc: jsPDF,
@@ -67,53 +124,52 @@ function generateTrace3Words(
 ) {
   const words = data.words.slice(0, 3)
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  // Title - generous top margin for breathing room
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Just 3 Words', 105, 35, { align: 'center' })
   
-  // Title
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Trace 3 Words', 105, 15, { align: 'center' })
+  // Subtitle - "Today" feels personal, not institutional
+  doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+  doc.setFontSize(FONTS.subtitle.size)
+  doc.text('Today', 105, 48, { align: 'center' })
   
-  // Decorative line
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  // Thin decorative line - adds structure without weight
+  addDecorativeLine(doc, 58, colors.accent)
   
-  // Instructions
-  doc.setFontSize(14)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Trace each word one time. Just 3 is perfect.', 105, 45, { align: 'center' })
+  // Instructions - simple, affirming
+  doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+  doc.setFontSize(FONTS.instructions.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Trace these 3 words.', 105, 75, { align: 'center' })
   
-  // Words with tracing guides
-  let yPos = 70
-  words.forEach((wordObj, index) => {
+  // Words with MASSIVE vertical spacing (90-100 units each)
+  let yPos = 115
+  words.forEach((wordObj) => {
     const word = wordObj.word
     
-    // Word in large, light gray for tracing
-    doc.setFontSize(48)
-    doc.setTextColor(200, 200, 200)
+    // Word model in light gray for tracing - MUCH larger font
+    doc.setFont(FONTS.traceWord.family, FONTS.traceWord.weight)
+    doc.setFontSize(FONTS.traceWord.size)
+    setTextColorHex(doc, colors.traceGray)
     doc.text(word, 105, yPos, { align: 'center' })
     
-    // Dotted baseline
-    doc.setDrawColor(180, 180, 180)
-    doc.setLineDash([2, 2])
-    doc.line(40, yPos + 2, 170, yPos + 2)
-    doc.setLineDash([])
+    // Dotted guide line below word - subtle, not demanding
+    setTextColorHex(doc, colors.traceGray)
+    doc.setLineDash([1, 2])
+    doc.setLineWidth(0.3)
+    doc.line(60, yPos + 3, 150, yPos + 3)
+    doc.setLineDash([]) // Reset
     
-    yPos += 60
+    yPos += 48 // Generous spacing between words
   })
   
-  // Completion message at bottom
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
-  doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text('You traced 3 words today. That\'s the goal.', 105, 280, { align: 'center' })
-  
-  // Reset colors
-  doc.setTextColor(0, 0, 0)
+  // Completion message - integrated naturally at bottom, feels like a hug
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  setTextColorHex(doc, colors.textGray)
+  doc.text('You traced 3 words today. That\'s the goal.', 105, 270, { align: 'center' })
 }
 
 function generateBreatheCircle(
@@ -123,63 +179,87 @@ function generateBreatheCircle(
 ) {
   const words = data.words.slice(0, 3)
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  // Title
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Breathe & Circle', 105, 35, { align: 'center' })
   
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Breathe and Circle', 105, 15, { align: 'center' })
+  doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+  doc.setFontSize(FONTS.subtitle.size)
+  doc.text('Today', 105, 48, { align: 'center' })
   
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  addDecorativeLine(doc, 58, colors.accent)
   
-  // Instructions with breathing reminder
-  doc.setFontSize(14)
+  // Breathing guide box - subtle, not shouty
+  doc.setFont(FONTS.instructions.family, 'normal')
+  doc.setFontSize(13)
+  setTextColorHex(doc, colors.textGray)
+  doc.text('Breathing Guide:', 105, 75, { align: 'center' })
+  doc.text('In: 1-2-3  •  Out: 1-2-3', 105, 83, { align: 'center' })
+  doc.text('Now circle!', 105, 91, { align: 'center' })
+  
+  // Thin box around breathing guide - optional, keeps it feeling light
+  doc.setDrawColor(200, 200, 200)
+  doc.setLineWidth(0.3)
+  doc.rect(50, 68, 110, 28, 'S')
+  
+  // Letter hunt with LOTS of space
+  let yPos = 120
+  const allLetters = 'abcdefghijklmnopqrstuvwxyz'.split('')
+  
+  // Get first letters of target words
+  const targetLetters = words.map(w => w.word[0].toLowerCase())
+  
+  // Create mix of target and distractor letters
+  const displayLetters = []
+  targetLetters.forEach(t => displayLetters.push(t))
+  
+  // Add random distractors
+  while (displayLetters.length < 15) {
+    const random = allLetters[Math.floor(Math.random() * allLetters.length)]
+    if (!targetLetters.includes(random)) {
+      displayLetters.push(random)
+    }
+  }
+  
+  // Shuffle
+  displayLetters.sort(() => Math.random() - 0.5)
+  
+  // Display in spacious grid
   doc.setFont('helvetica', 'normal')
-  doc.text('Take a breath. Find the word. Circle it.', 105, 45, { align: 'center' })
-  
-  doc.setFontSize(11)
-  doc.setTextColor(100, 100, 100)
-  doc.text('💙 Breathe in... breathe out... then look', 105, 55, { align: 'center' })
+  doc.setFontSize(24)
   doc.setTextColor(0, 0, 0)
   
-  // Word matching rows
-  let yPos = 80
-  words.forEach((wordObj) => {
-    const word = wordObj.word
+  let col = 0
+  let row = 0
+  displayLetters.forEach((letter) => {
+    const x = 35 + (col * 25)
+    const y = yPos + (row * 30)
+    doc.text(letter, x, y)
     
-    // Target word in color
-    doc.setFontSize(28)
-    doc.setTextColor(colors.accent)
-    doc.text(word, 40, yPos)
-    
-    // Matching options (target + 2 distractors)
-    doc.setFontSize(20)
-    doc.setTextColor(0, 0, 0)
-    const options = getMatchingOptions(word, data.distractors)
-    
-    let xPos = 110
-    options.forEach((opt) => {
-      doc.text(opt, xPos, yPos)
-      xPos += 30
-    })
-    
-    yPos += 50
+    col++
+    if (col >= 7) {
+      col = 0
+      row++
+    }
   })
   
-  // Completion message
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
+  // Target words shown at bottom for reference
+  doc.setFont(FONTS.body.family, 'normal')
   doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text('3 matches found. That\'s enough for today.', 105, 280, { align: 'center' })
+  setTextColorHex(doc, colors.textGray)
+  doc.text(`Find: ${words.map(w => w.word).join(', ')}`, 105, 230, { align: 'center' })
   
-  doc.setTextColor(0, 0, 0)
+  // Completion message
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  doc.text('Good breathing = good learning 💙', 105, 270, { align: 'center' })
 }
 
-// HIGH ENERGY TEMPLATES
+// ============================================================================
+// HIGH ENERGY TEMPLATES - More items, but same spacious feel
+// ============================================================================
 
 function generateSoundHunt(
   doc: jsPDF,
@@ -188,52 +268,57 @@ function generateSoundHunt(
 ) {
   const words = data.words.slice(0, 9)
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Sound Hunt Around You', 105, 35, { align: 'center' })
   
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Sound Hunt', 105, 15, { align: 'center' })
+  addDecorativeLine(doc, 48, colors.accent)
   
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+  doc.setFontSize(FONTS.instructions.size)
+  doc.text('Find things that start with these sounds.', 105, 65, { align: 'center' })
+  doc.text('Draw or write what you find.', 105, 75, { align: 'center' })
   
-  // Instructions
-  doc.setFontSize(14)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Circle all the words you can find. Go fast!', 105, 45, { align: 'center' })
+  // Create boxes for sound hunt - 2 columns
+  let yPos = 95
+  const cols = 2
+  const boxWidth = 70
+  const boxHeight = 60
   
-  // Grid of words (3x3)
-  let yPos = 70
-  for (let row = 0; row < 3; row++) {
-    let xPos = 40
-    for (let col = 0; col < 3; col++) {
-      const index = row * 3 + col
-      if (index < words.length) {
-        doc.setFontSize(20)
-        doc.text(words[index].word, xPos, yPos)
-      }
-      xPos += 50
-    }
-    yPos += 40
+  for (let i = 0; i < Math.min(4, words.length); i++) {
+    const word = words[i]
+    const sound = `/${word.word[0]}/`
+    
+    const col = i % cols
+    const row = Math.floor(i / cols)
+    const x = 30 + (col * 80)
+    const y = yPos + (row * 70)
+    
+    // Label
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(14)
+    doc.setTextColor(0, 0, 0)
+    doc.text(`Things that start with`, x + 35, y, { align: 'center' })
+    doc.text(sound, x + 35, y + 8, { align: 'center' })
+    
+    // Drawing box
+    doc.setDrawColor(150, 150, 150)
+    doc.setLineWidth(0.5)
+    doc.rect(x, y + 12, boxWidth, boxHeight, 'S')
   }
   
-  // Movement break reminder
-  doc.setFontSize(12)
-  doc.setTextColor(100, 100, 100)
-  doc.text('🏃 Take a wiggle break halfway through!', 105, 210, { align: 'center' })
-  doc.setTextColor(0, 0, 0)
+  // Hint words at bottom
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(11)
+  setTextColorHex(doc, colors.textGray)
+  const hints = words.slice(0, 8).map(w => w.word).join(', ')
+  doc.text(`Hints: ${hints}`, 105, 250, { align: 'center' })
   
   // Completion message
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
-  doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text(`You found ${words.length} words. Good focus today.`, 105, 280, { align: 'center' })
-  
-  doc.setTextColor(0, 0, 0)
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  doc.text('Found even one? You\'re a sound detective!', 105, 270, { align: 'center' })
 }
 
 function generateBodyLetter(
@@ -241,53 +326,51 @@ function generateBodyLetter(
   data: WorksheetData,
   colors: any
 ) {
-  const words = data.words.slice(0, 5)
+  const words = data.words.slice(0, 6)
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Body Letter Fun', 105, 35, { align: 'center' })
   
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Body Letter Fun', 105, 15, { align: 'center' })
+  addDecorativeLine(doc, 48, colors.accent)
   
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+  doc.setFontSize(FONTS.instructions.size)
+  doc.text('Make each letter with your body. Then say the word!', 105, 65, { align: 'center' })
   
-  // Instructions
-  doc.setFontSize(14)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Make each letter with your body. Then say the word!', 105, 45, { align: 'center' })
-  
-  // Words with space for movement
-  let yPos = 80
+  // Words with checkboxes - generous spacing
+  let yPos = 95
   words.forEach((wordObj, index) => {
-    doc.setFontSize(32)
+    // Checkbox
+    doc.setDrawColor(150, 150, 150)
+    doc.setLineWidth(0.5)
+    doc.rect(30, yPos - 6, 6, 6, 'S')
+    
+    // Word
     doc.setFont('helvetica', 'bold')
-    doc.text(`${index + 1}. ${wordObj.word}`, 60, yPos)
-    
-    // Movement instruction
-    doc.setFontSize(11)
-    doc.setFont('helvetica', 'normal')
-    doc.setTextColor(100, 100, 100)
-    doc.text('(make letters, say word, jump!)', 65, yPos + 8)
+    doc.setFontSize(24)
     doc.setTextColor(0, 0, 0)
+    doc.text(wordObj.word, 42, yPos)
     
-    yPos += 40
+    yPos += 28 // Generous spacing for movement breaks
   })
   
-  // Completion message
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
-  doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text(`You moved through ${words.length} words. Great energy!`, 105, 280, { align: 'center' })
+  // Movement hint
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+  setTextColorHex(doc, colors.textGray)
+  doc.text('💃 Take a wiggle break anytime!', 105, 250, { align: 'center' })
   
-  doc.setTextColor(0, 0, 0)
+  // Completion message
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  doc.text(`You moved through ${words.length} words. Great energy!`, 105, 270, { align: 'center' })
 }
 
-// LOW ENERGY TEMPLATES
+// ============================================================================
+// LOW ENERGY TEMPLATES - Absolute minimum effort required
+// ============================================================================
 
 function generatePointRest(
   doc: jsPDF,
@@ -296,40 +379,37 @@ function generatePointRest(
 ) {
   const words = data.words.slice(0, 5)
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Point & Rest', 105, 35, { align: 'center' })
   
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Point & Rest', 105, 15, { align: 'center' })
+  doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+  doc.setFontSize(FONTS.subtitle.size)
+  doc.text('Today', 105, 48, { align: 'center' })
   
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  addDecorativeLine(doc, 58, colors.accent)
   
-  // Instructions
-  doc.setFontSize(14)
-  doc.setFont('helvetica', 'normal')
-  doc.text('Just point to the words. No writing needed.', 105, 45, { align: 'center' })
+  doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+  doc.setFontSize(FONTS.instructions.size)
+  doc.text('Just point to the words. No writing needed.', 105, 75, { align: 'center' })
   
-  // Large, spaced words
-  let yPos = 85
+  // HUGE words with MASSIVE spacing - can be done lying down
+  let yPos = 110
   words.forEach((wordObj) => {
-    doc.setFontSize(36)
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(40)
+    doc.setTextColor(0, 0, 0)
     doc.text(wordObj.word, 105, yPos, { align: 'center' })
     
-    yPos += 45
+    yPos += 32 // Huge spacing
   })
   
   // Completion message
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
-  doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text('Slow and steady. You pointed to some words.', 105, 280, { align: 'center' })
-  
-  doc.setTextColor(0, 0, 0)
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  setTextColorHex(doc, colors.textGray)
+  doc.text('Slow and steady. You pointed to some words.', 105, 270, { align: 'center' })
 }
 
 function generateTraceOne(
@@ -339,56 +419,55 @@ function generateTraceOne(
 ) {
   const word = data.words[0].word
   
-  // Title bar
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 0, 210, 25, 'F')
+  doc.setFont(FONTS.title.family, FONTS.title.weight)
+  doc.setFontSize(FONTS.title.size)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Trace One Sentence', 105, 35, { align: 'center' })
   
-  doc.setFontSize(24)
-  doc.setFont('helvetica', 'bold')
-  doc.text('Trace Just One', 105, 15, { align: 'center' })
+  doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+  doc.setFontSize(FONTS.subtitle.size)
+  doc.text('Today', 105, 48, { align: 'center' })
   
-  doc.setDrawColor(colors.accent)
-  doc.setLineWidth(1)
-  doc.line(20, 30, 190, 30)
+  addDecorativeLine(doc, 58, colors.accent)
   
-  // Instructions
-  doc.setFontSize(14)
+  doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+  doc.setFontSize(FONTS.instructions.size)
+  doc.text('Trace this sentence one time. Take your time.', 105, 75, { align: 'center' })
+  
+  // Simple sentence with the word
+  const sentence = `I can ${word}.`
+  
+  // Sentence in HUGE light gray for tracing
   doc.setFont('helvetica', 'normal')
-  doc.text('Trace this word one time. Take your time.', 105, 45, { align: 'center' })
-  
-  // Single large word for tracing
-  doc.setFontSize(72)
-  doc.setTextColor(200, 200, 200)
-  doc.text(word, 105, 150, { align: 'center' })
+  doc.setFontSize(56)
+  setTextColorHex(doc, colors.traceGray)
+  doc.text(sentence, 105, 150, { align: 'center' })
   
   // Baseline
-  doc.setDrawColor(180, 180, 180)
-  doc.setLineDash([3, 3])
-  doc.line(30, 153, 180, 153)
+  setTextColorHex(doc, colors.traceGray)
+  doc.setLineDash([2, 3])
+  doc.setLineWidth(0.4)
+  doc.line(40, 155, 170, 155)
   doc.setLineDash([])
   
   // Completion message
-  doc.setFillColor(colors.bar)
-  doc.rect(0, 260, 210, 37, 'F')
-  doc.setFontSize(14)
-  doc.setTextColor(60, 60, 60)
-  doc.text('One word traced. You did it.', 105, 280, { align: 'center' })
-  
-  doc.setTextColor(0, 0, 0)
+  doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+  doc.setFontSize(FONTS.completion.size)
+  setTextColorHex(doc, colors.textGray)
+  doc.text('One sentence traced. You did it.', 105, 270, { align: 'center' })
 }
 
-// Helper function
+// Helper for matching activities
 function getMatchingOptions(
   targetWord: string,
   distractors: Array<{ word: string }>
 ): string[] {
-  // Get 2 distractors similar to target
   const similar = distractors
-    .filter(d => d.word.length === targetWord.length)
+    .filter(d => d.word.length === targetWord.length || 
+                 d.word[0] === targetWord[0])
     .slice(0, 2)
     .map(d => d.word)
   
-  // Mix target with distractors and shuffle
-  const options = [targetWord, ...similar].sort(() => Math.random() - 0.5)
-  return options.slice(0, 3)
+  const options = [targetWord, ...similar]
+  return options.sort(() => Math.random() - 0.5).slice(0, 3)
 }
