@@ -1,4 +1,5 @@
 // src/lib/worksheetGenerator.ts
+// Curated, tier-based word selection matching Canva PDF quality
 
 type MoodType = 'overwhelmed' | 'highEnergy' | 'lowEnergy'
 type PhonicsType = 'cvc' | 'blends' | 'digraphs' | 'sight'
@@ -9,7 +10,6 @@ interface MoodConstraints {
   includeBreathing?: boolean
   includeMovement?: boolean
   allowNoWriting?: boolean
-  backgroundColor: string
   completionMessage: string
 }
 
@@ -18,6 +18,7 @@ interface WordData {
   phonics_pattern?: string
   chunks?: string[]
   alternative_chunks?: string[]
+  icon?: string // Path to SVG icon
 }
 
 interface WorksheetData {
@@ -27,6 +28,71 @@ interface WorksheetData {
   constraints: MoodConstraints
   words: WordData[]
   distractors: WordData[]
+  familyRows?: string[][] // For breatheCircle activity
+}
+
+// ============================================================================
+// TIER 1: Easiest wins - concrete, high-frequency, imageable
+// ============================================================================
+const TIER_1_WORDS = {
+  common: ['cat', 'dog', 'sun', 'hat', 'bed', 'run', 'sit', 'top', 'bat', 'red', 'mom', 'dad', 'pig', 'fox', 'hen', 'bus', 'cup', 'map'],
+  animals: ['cat', 'dog', 'pig', 'fox', 'hen', 'bug', 'bat', 'rat'],
+  objects: ['sun', 'hat', 'bed', 'map', 'cup', 'bus', 'box', 'pen', 'pot'],
+  actions: ['run', 'sit', 'hop', 'dig', 'hit', 'nap']
+}
+
+// Word families for pattern-based activities (rhyming words)
+const WORD_FAMILIES = {
+  'at': ['cat', 'bat', 'hat', 'mat', 'rat', 'sat', 'fat'],
+  'og': ['dog', 'log', 'fog', 'hog', 'jog'],
+  'un': ['sun', 'run', 'fun', 'bun', 'gun'],
+  'ig': ['pig', 'big', 'dig', 'fig', 'jig', 'wig'],
+  'ed': ['bed', 'red', 'fed', 'led', 'wed'],
+  'op': ['top', 'mop', 'hop', 'pop', 'cop'],
+  'ug': ['bug', 'hug', 'mug', 'rug', 'jug'],
+  'en': ['hen', 'pen', 'ten', 'den', 'men'],
+  'ox': ['fox', 'box', 'sox'],
+  'us': ['bus', 'pus'],
+  'ap': ['map', 'cap', 'gap', 'nap', 'tap', 'lap'],
+  'ot': ['pot', 'hot', 'dot', 'got', 'cot', 'lot']
+}
+
+// Icon mapping (will reference SVG files in /public/icons/words/)
+const WORD_ICONS: Record<string, string> = {
+  'cat': '/icons/words/cat.png',
+  'dog': '/icons/words/dog.png',
+  'sun': '/icons/words/sun.png',
+  'hat': '/icons/words/hat.png',
+  'bed': '/icons/words/bed.png',
+  'run': '/icons/words/run.png',
+  'sit': '/icons/words/sit.png',
+  'top': '/icons/words/top.png',
+  'bat': '/icons/words/bat.png',
+  'red': '/icons/words/red.png',
+  'mom': '/icons/words/mom.png',
+  'dad': '/icons/words/dad.png',
+  'pig': '/icons/words/pig.png',
+  'fox': '/icons/words/fox.png',
+  'hen': '/icons/words/hen.png',
+  'bus': '/icons/words/bus.png',
+  'cup': '/icons/words/cup.png',
+  'map': '/icons/words/map.png',
+  'bug': '/icons/words/bug.png',
+  'box': '/icons/words/box.png',
+  'pen': '/icons/words/pen.png',
+  'pot': '/icons/words/pot.png',
+  'hop': '/icons/words/hop.png',
+  'dig': '/icons/words/dig.png',
+  'mop': '/icons/words/mop.png',
+  'log': '/icons/words/log.png',
+  'fog': '/icons/words/fog.png',
+  'fun': '/icons/words/fun.png',
+  'mat': '/icons/words/mat.png',
+  'cap': '/icons/words/cap.png',
+  'nap': '/icons/words/nap.png',
+  'hug': '/icons/words/hug.png',
+  'mug': '/icons/words/mug.png',
+  'rug': '/icons/words/rug.png'
 }
 
 const MOOD_CONSTRAINTS: Record<MoodType, MoodConstraints> = {
@@ -34,175 +100,135 @@ const MOOD_CONSTRAINTS: Record<MoodType, MoodConstraints> = {
     maxItems: 3,
     fontSize: 'large',
     includeBreathing: true,
-    backgroundColor: '#E8F4F8',
     completionMessage: 'You [action] 3 [items] today. That\'s the goal.',
   },
   highEnergy: {
     maxItems: 9,
     fontSize: 'medium',
     includeMovement: true,
-    backgroundColor: '#FFF4E6',
     completionMessage: 'You [action] [count] [items]. Good focus today.',
   },
   lowEnergy: {
     maxItems: 5,
     fontSize: 'large',
     allowNoWriting: true,
-    backgroundColor: '#F3F0FF',
     completionMessage: 'Slow and steady. You [action] some [items].',
   },
 }
 
-// Cache for loaded words
-let wordsCache: any = null
+// ============================================================================
+// HELPERS
+// ============================================================================
 
-/**
- * Load words from /public/words.json
- */
-async function loadWordsFromJSON(): Promise<any> {
-  if (wordsCache) return wordsCache
-  
-  try {
-    const response = await fetch('/words.json')
-    if (!response.ok) {
-      console.warn('Failed to load words.json, using fallback')
-      return null
-    }
-    wordsCache = await response.json()
-    return wordsCache
-  } catch (error) {
-    console.error('Error loading words.json:', error)
-    return null
+function shuffle<T>(array: T[]): T[] {
+  const arr = [...array]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]]
   }
+  return arr
 }
 
+function randomChoice<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+// ============================================================================
+// CORE WORD SELECTION LOGIC
+// ============================================================================
+
 /**
- * Filter words by phonics pattern from JSON data
+ * Select curated words based on mood and activity type
+ * CRITICAL: Overwhelmed mood ONLY uses tier 1 easiest words
  */
-function filterWordsByPattern(wordsData: any, phonicsType: PhonicsType): WordData[] {
-  if (!wordsData || !wordsData.words) return []
+function selectWordsForActivity(
+  mood: MoodType,
+  phonicsType: PhonicsType,
+  activityType: string,
+  count: number
+): WordData[] {
   
-  // Map phonics types to pattern names in JSON
-  const patternMap: Record<PhonicsType, string[]> = {
-    cvc: ['cvc'],
-    blends: ['consonant_blend'],
-    digraphs: ['consonant_digraph'],
-    sight: ['sight_word'],
+  // For overwhelmed mood, ALWAYS use tier 1 easiest words
+  if (mood === 'overwhelmed') {
+    const easyWords = shuffle([...TIER_1_WORDS.common])
+    return easyWords.slice(0, count).map(word => ({
+      word,
+      icon: WORD_ICONS[word]
+    }))
   }
   
-  const patterns = patternMap[phonicsType] || []
+  // For activities requiring word families (like "Breathe & Circle")
+  if (activityType === 'breatheCircle' || activityType === 'findWord') {
+    const familyKey = randomChoice(Object.keys(WORD_FAMILIES))
+    const family = WORD_FAMILIES[familyKey as keyof typeof WORD_FAMILIES]
+    return shuffle([...family]).slice(0, count).map(word => ({
+      word,
+      icon: WORD_ICONS[word]
+    }))
+  }
   
-  // Flatten all complexity levels
-  const allWords: any[] = [
-    ...(wordsData.words.easy || []),
-    ...(wordsData.words.regular || []),
-    ...(wordsData.words.challenge || []),
-  ]
+  // For high energy and low energy, mix tier 1 words with some variety
+  const words = shuffle([
+    ...TIER_1_WORDS.common,
+    ...TIER_1_WORDS.animals,
+    ...TIER_1_WORDS.objects
+  ])
   
-  // Filter by phonics pattern
-  const filtered = allWords.filter((w: any) => 
-    patterns.includes(w.phonics_pattern)
-  )
-  
-  return filtered.map(w => ({
-    word: w.word,
-    phonics_pattern: w.phonics_pattern,
-    chunks: w.chunks,
-    alternative_chunks: w.alternative_chunks
+  return words.slice(0, count).map(word => ({
+    word,
+    icon: WORD_ICONS[word]
   }))
 }
 
 /**
- * Fallback word bank when JSON fails to load
+ * Generate word family rows for "Breathe & Circle" activity
  */
-function getFallbackWords(phonicsType: PhonicsType): WordData[] {
-  const fallbackBank: Record<PhonicsType, WordData[]> = {
-    cvc: [
-      { word: 'cat' }, { word: 'dog' }, { word: 'sun' },
-      { word: 'hat' }, { word: 'bed' }, { word: 'run' },
-      { word: 'pig' }, { word: 'bat' }, { word: 'cup' },
-      { word: 'log' }, { word: 'mat' }, { word: 'rat' },
-      { word: 'hop' }, { word: 'pen' }, { word: 'jet' },
-    ],
-    blends: [
-      { word: 'stop' }, { word: 'tree' }, { word: 'swim' },
-      { word: 'skip' }, { word: 'flag' }, { word: 'snap' },
-      { word: 'spin' }, { word: 'glad' }, { word: 'step' },
-      { word: 'play' }, { word: 'frog' }, { word: 'slip' },
-    ],
-    digraphs: [
-      { word: 'shop' }, { word: 'fish' }, { word: 'that' },
-      { word: 'chip' }, { word: 'when' }, { word: 'ship' },
-      { word: 'path' }, { word: 'wish' }, { word: 'this' },
-      { word: 'thin' }, { word: 'dash' }, { word: 'mesh' },
-    ],
-    sight: [
-      { word: 'the' }, { word: 'said' }, { word: 'was' },
-      { word: 'are' }, { word: 'you' }, { word: 'they' },
-      { word: 'have' }, { word: 'like' }, { word: 'come' },
-      { word: 'some' }, { word: 'were' }, { word: 'what' },
-    ],
-  }
-  
-  return fallbackBank[phonicsType] || []
+function generateFamilyRows(targetWords: WordData[]): string[][] {
+    const familyRows: string[][] = []
+
+    targetWords.forEach(wordData => {
+        const word = wordData.word
+        
+        // Find which family this word belongs to
+        for (const [family, words] of Object.entries(WORD_FAMILIES)) {
+        if (words.includes(word)) {
+            // Add a row with this word PLUS 2 others from same family
+            const familyWords = words.filter(w => w !== word) // exclude target
+            const shuffled = shuffle([...familyWords])
+            familyRows.push([word, ...shuffled.slice(0, 2)]) // Include target word in row
+            break
+        }
+        }
+    })
+
+    return familyRows
 }
 
 /**
- * Select words for worksheet (async - tries JSON first, falls back)
- */
-export async function selectWords(
-  phonicsType: PhonicsType,
-  count: number
-): Promise<WordData[]> {
-  // Try loading from JSON
-  const wordsData = await loadWordsFromJSON()
-  let availableWords: WordData[] = []
-  
-  if (wordsData) {
-    availableWords = filterWordsByPattern(wordsData, phonicsType)
-  }
-  
-  // Fallback if no words found
-  if (availableWords.length === 0) {
-    console.log('Using fallback words for', phonicsType)
-    availableWords = getFallbackWords(phonicsType)
-  }
-  
-  // Shuffle and return requested count
-  const shuffled = [...availableWords].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, Math.min(count, availableWords.length))
-}
-
-/**
- * Select words synchronously (for immediate preview)
- */
-function selectWordsSync(phonicsType: PhonicsType, count: number): WordData[] {
-  const words = getFallbackWords(phonicsType)
-  const shuffled = [...words].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, Math.min(count, words.length))
-}
-
-/**
- * Generate distractors for matching activities
+ * Generate distractors (currently unused, keeping for future activities)
  */
 function generateDistractors(
   targetWords: WordData[],
   phonicsType: PhonicsType
 ): WordData[] {
-  const allWords = getFallbackWords(phonicsType)
-  
-  // Get words that aren't in the target list
+  const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
   const available = allWords.filter(
-    w => !targetWords.find(t => t.word === w.word)
+    w => !targetWords.find(t => t.word === w)
   )
   
-  // Return 2 distractors per target word
-  const shuffled = [...available].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, targetWords.length * 2)
+  const shuffled = shuffle(available)
+  return shuffled.slice(0, targetWords.length * 2).map(word => ({
+    word,
+    icon: WORD_ICONS[word]
+  }))
 }
 
+// ============================================================================
+// MAIN GENERATION FUNCTION
+// ============================================================================
+
 /**
- * Main worksheet generation function
+ * Generate mood-based worksheet with curated word selection
  */
 export function generateMoodBasedWorksheet(
   mood: MoodType,
@@ -211,21 +237,12 @@ export function generateMoodBasedWorksheet(
 ): WorksheetData {
   const constraints = MOOD_CONSTRAINTS[mood]
   
-  // Use synchronous selection for immediate preview
-  const words = selectWordsSync(phonicsType, constraints.maxItems)
+  // Select curated words
+  const words = selectWordsForActivity(mood, phonicsType, activityType, constraints.maxItems)
   const distractors = generateDistractors(words, phonicsType)
   
-  // Async load better words in background (for future improvements)
-  selectWords(phonicsType, constraints.maxItems).then(realWords => {
-    if (realWords.length > 0) {
-      // Could update cache or trigger re-render here
-      console.log('Better words loaded from JSON:', realWords.length)
-    }
-  }).catch(err => {
-    console.warn('Could not load words from JSON:', err)
-  })
-  
-  return {
+  // Base worksheet data
+  const worksheetData: WorksheetData = {
     mood,
     phonicsType,
     activityType,
@@ -233,6 +250,13 @@ export function generateMoodBasedWorksheet(
     words,
     distractors,
   }
+  
+  // Special handling for breatheCircle activity
+  if (activityType === 'breatheCircle') {
+    worksheetData.familyRows = generateFamilyRows(words)
+  }
+  
+  return worksheetData
 }
 
 /**
@@ -255,8 +279,6 @@ export function formatCompletionMessage(
   return message
 }
 
-/**
- * Export constraints for external use
- */
-export { MOOD_CONSTRAINTS }
+// Export types and constraints
+export { MOOD_CONSTRAINTS, WORD_FAMILIES, WORD_ICONS }
 export type { MoodType, PhonicsType, WordData, WorksheetData, MoodConstraints }

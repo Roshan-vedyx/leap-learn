@@ -1,5 +1,5 @@
 // src/components/worksheets/WorksheetPreview.tsx
-// HTML preview that EXACTLY matches the PDF output
+// HTML preview matching PDF exactly - white backgrounds with colored accents
 
 import React from 'react'
 
@@ -8,8 +8,9 @@ interface WorksheetData {
   phonicsType: string
   activityType: string
   constraints: any
-  words: Array<{ word: string }>
-  distractors: Array<{ word: string }>
+  words: Array<{ word: string; icon?: string }>
+  distractors: Array<{ word: string; icon?: string }>
+  familyRows?: string[][]
 }
 
 interface PreviewProps {
@@ -18,19 +19,16 @@ interface PreviewProps {
 
 const MOOD_COLORS = {
   overwhelmed: { 
-    bg: '#E8F4F8', 
     accent: '#5BA3BF',
     textGray: '#666666',
     traceGray: '#CCCCCC'
   },
   highEnergy: { 
-    bg: '#FFF4E6', 
     accent: '#FF8C42',
     textGray: '#666666',
     traceGray: '#CCCCCC'
   },
   lowEnergy: { 
-    bg: '#F3F0FF', 
     accent: '#9B7EBD',
     textGray: '#666666',
     traceGray: '#CCCCCC'
@@ -40,7 +38,6 @@ const MOOD_COLORS = {
 export default function WorksheetPreview({ data }: PreviewProps) {
   const colors = MOOD_COLORS[data.mood as keyof typeof MOOD_COLORS]
   
-  // Route to appropriate template
   const renderTemplate = () => {
     switch (data.activityType) {
       case 'trace3':
@@ -63,109 +60,108 @@ export default function WorksheetPreview({ data }: PreviewProps) {
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div 
-        className="relative bg-white shadow-2xl rounded-lg overflow-hidden"
+        className="relative bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200"
         style={{
           aspectRatio: '210 / 297', // A4 ratio
-          backgroundColor: colors.bg,
         }}
       >
         {renderTemplate()}
+        
+        {/* Colored footer bar - like Canva PDF */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-4"
+          style={{ backgroundColor: colors.accent }}
+        />
       </div>
     </div>
   )
 }
 
 // ============================================================================
-// Template Components - Each matches PDF exactly
+// ICON COMPONENT
+// ============================================================================
+
+function WordIcon({ word, icon }: { word: string; icon?: string }) {
+  // If icon path exists, show as img, otherwise show placeholder
+  if (icon) {
+    return (
+      <img 
+        src={icon} 
+        alt={word}
+        className="w-12 h-12 object-contain"
+        onError={(e) => {
+          // Fallback if SVG doesn't exist
+          e.currentTarget.style.display = 'none'
+        }}
+      />
+    )
+  }
+  
+  // Placeholder circle with first letter
+  return (
+    <div className="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center">
+      <span className="text-xl font-bold text-gray-500">
+        {word[0].toUpperCase()}
+      </span>
+    </div>
+  )
+}
+
+// ============================================================================
+// TEMPLATE: TRACE 3 WORDS
 // ============================================================================
 
 function Trace3WordsPreview({ data, colors }: { data: WorksheetData; colors: any }) {
   const words = data.words.slice(0, 3)
   
   return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
       {/* Title */}
       <div className="text-center mb-2">
-        <h1 
-          className="font-normal"
-          style={{ 
-            fontSize: 'clamp(24px, 5vw, 36px)',
-            lineHeight: '1.2',
-            marginBottom: '0.3em'
-          }}
-        >
-          Just 3 Words
-        </h1>
-        <h2 
-          className="font-normal"
-          style={{ 
-            fontSize: 'clamp(14px, 3vw, 20px)',
-            color: '#333'
-          }}
-        >
-          Today
-        </h2>
+        <h1 className="font-normal text-4xl">Just 3 Words</h1>
+        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
       </div>
       
-      {/* Decorative line */}
+      {/* Colored accent line */}
       <div 
         className="w-4/5 mx-auto mb-6"
-        style={{
-          height: '1.5px',
-          backgroundColor: colors.accent,
-          opacity: 0.8
-        }}
+        style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
       {/* Instructions */}
-      <p 
-        className="text-center mb-10 font-normal"
-        style={{ 
-          fontSize: 'clamp(13px, 2.5vw, 16px)',
-          color: '#333'
-        }}
-      >
-        Trace these 3 words.
-      </p>
+      <p className="text-center mb-8 text-base">Trace these 3 words.</p>
       
-      {/* Words - MASSIVE spacing */}
-      <div className="flex-1 flex flex-col justify-around items-center py-4">
-        {words.map((wordObj, index) => (
-          <div key={index} className="text-center w-full">
-            <div 
-              className="font-normal"
-              style={{
-                fontSize: 'clamp(40px, 8vw, 60px)',
-                color: colors.traceGray,
-                letterSpacing: '0.05em',
-                marginBottom: '0.2em'
-              }}
-            >
-              {wordObj.word}
+      {/* Words with icons */}
+      <div className="flex-1 flex flex-col justify-center space-y-8">
+        {words.map((wordObj, i) => (
+          <div key={i} className="flex items-center justify-center gap-8">
+            {/* Icon */}
+            <WordIcon word={wordObj.word} icon={wordObj.icon} />
+            
+            {/* Word for tracing */}
+            <div className="flex flex-col items-center">
+              <span 
+                className="text-5xl font-normal tracking-wide"
+                style={{ color: colors.traceGray }}
+              >
+                {wordObj.word}
+              </span>
+              <div 
+                className="w-48 mt-1"
+                style={{
+                  borderBottom: `2px dotted ${colors.traceGray}`,
+                  opacity: 0.6
+                }}
+              />
             </div>
-            {/* Tracing line */}
-            <div 
-              className="w-2/3 mx-auto"
-              style={{
-                height: '1px',
-                borderBottom: `2px dotted ${colors.traceGray}`,
-                opacity: 0.6
-              }}
-            />
           </div>
         ))}
       </div>
       
-      {/* Completion message - integrated naturally */}
+      {/* Completion message */}
       <p 
-        className="text-center mt-8 font-normal"
-        style={{ 
-          fontSize: 'clamp(12px, 2.2vw, 15px)',
-          color: colors.textGray
-        }}
+        className="text-center mt-8 text-sm"
+        style={{ color: colors.textGray }}
       >
         You traced 3 words today. That's the goal.
       </p>
@@ -173,261 +169,114 @@ function Trace3WordsPreview({ data, colors }: { data: WorksheetData; colors: any
   )
 }
 
+// ============================================================================
+// TEMPLATE: BREATHE & CIRCLE
+// ============================================================================
+
 function BreatheCirclePreview({ data, colors }: { data: WorksheetData; colors: any }) {
   const words = data.words.slice(0, 3)
-  const allLetters = 'abcdefghijklmnopqrstuvwxyz'.split('')
-  const targetLetters = words.map(w => w.word[0].toLowerCase())
-  
-  // Create letter grid
-  const displayLetters: string[] = []
-  targetLetters.forEach(t => displayLetters.push(t))
-  while (displayLetters.length < 21) {
-    const random = allLetters[Math.floor(Math.random() * allLetters.length)]
-    displayLetters.push(random)
-  }
-  displayLetters.sort(() => Math.random() - 0.5)
   
   return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
       {/* Title */}
       <div className="text-center mb-2">
-        <h1 
-          className="font-normal"
-          style={{ fontSize: 'clamp(24px, 5vw, 36px)', lineHeight: '1.2' }}
-        >
-          Breathe & Circle
-        </h1>
-        <h2 
-          className="font-normal"
-          style={{ fontSize: 'clamp(14px, 3vw, 20px)', color: '#333', marginTop: '0.3em' }}
-        >
-          Today
-        </h2>
+        <h1 className="font-normal text-4xl">Breathe & Circle</h1>
+        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
       </div>
       
-      {/* Decorative line */}
       <div 
         className="w-4/5 mx-auto mb-6"
-        style={{ height: '1.5px', backgroundColor: colors.accent, opacity: 0.8 }}
+        style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      {/* Breathing guide box */}
-      <div 
-        className="mx-auto mb-8 p-3 rounded-lg"
-        style={{ 
-          border: `1px solid ${colors.accent}`,
-          backgroundColor: 'rgba(255, 255, 255, 0.3)',
-          maxWidth: '70%'
-        }}
-      >
-        <p 
-          className="text-center font-normal"
-          style={{ fontSize: 'clamp(11px, 2vw, 14px)', color: colors.textGray, marginBottom: '0.3em' }}
-        >
-          Breathing Guide:
-        </p>
-        <p 
-          className="text-center font-normal"
-          style={{ fontSize: 'clamp(11px, 2vw, 14px)', color: colors.textGray }}
-        >
-          In: 1-2-3 • Out: 1-2-3
-        </p>
-        <p 
-          className="text-center font-normal"
-          style={{ fontSize: 'clamp(11px, 2vw, 14px)', color: colors.textGray, marginTop: '0.3em' }}
-        >
-          Now circle!
-        </p>
+      {/* Breathing guide */}
+      <div className="text-center mb-6" style={{ color: colors.textGray }}>
+        <p className="text-sm font-semibold">Breathing Guide:</p>
+        <p className="text-sm">In: 1-2-3  •  Out: 1-2-3</p>
+        <p className="text-sm">Now circle!</p>
       </div>
       
-      {/* Letter grid - lots of space */}
-      <div 
-        className="grid grid-cols-7 gap-3 mb-6"
-        style={{ fontSize: 'clamp(16px, 3vw, 24px)' }}
-      >
-        {displayLetters.map((letter, i) => (
-          <div key={i} className="text-center font-normal">
-            {letter}
+      {/* Target words */}
+      <div className="mb-6">
+        <p className="text-center text-base font-semibold mb-3">Find these words:</p>
+        <div className="flex justify-center gap-8">
+          {words.map((wordObj, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <WordIcon word={wordObj.word} icon={wordObj.icon} />
+              <span className="text-base mt-2">{wordObj.word}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Word family rows */}
+      <div className="flex-1">
+        <p className="text-center text-base mb-4">Find the words below and circle them</p>
+        
+        {data.familyRows && (
+          <div className="space-y-4">
+            {data.familyRows.map((row, i) => (
+              <div key={i} className="text-center">
+                <span className="text-xl tracking-widest">
+                  {row.join('     ')}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
       
-      {/* Target words hint */}
       <p 
-        className="text-center mb-4 font-normal"
-        style={{ fontSize: 'clamp(11px, 2vw, 14px)', color: colors.textGray }}
+        className="text-center mt-4 text-sm"
+        style={{ color: colors.textGray }}
       >
-        Find: {words.map(w => w.word).join(', ')}
-      </p>
-      
-      {/* Completion message */}
-      <p 
-        className="text-center mt-auto font-normal"
-        style={{ fontSize: 'clamp(12px, 2.2vw, 15px)', color: colors.textGray }}
-      >
-        Good breathing = good learning 💙
+        You traced 3 words today. That's the goal.
       </p>
     </div>
   )
 }
+
+// ============================================================================
+// TEMPLATE: SOUND HUNT
+// ============================================================================
 
 function SoundHuntPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 4)
+  const words = data.words.slice(0, 9)
   
   return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
-      {/* Title */}
-      <div className="text-center mb-4">
-        <h1 
-          className="font-normal"
-          style={{ fontSize: 'clamp(22px, 4.5vw, 34px)', lineHeight: '1.2' }}
-        >
-          Sound Hunt Around You
-        </h1>
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Sound Hunt Around You</h1>
       </div>
       
-      {/* Decorative line */}
       <div 
-        className="w-4/5 mx-auto mb-6"
-        style={{ height: '1.5px', backgroundColor: colors.accent, opacity: 0.8 }}
+        className="w-4/5 mx-auto mb-4"
+        style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      {/* Instructions */}
-      <div className="text-center mb-8">
-        <p 
-          className="font-normal"
-          style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: '#333' }}
-        >
-          Find things that start with these sounds.
-        </p>
-        <p 
-          className="font-normal"
-          style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: '#333', marginTop: '0.3em' }}
-        >
-          Draw or write what you find.
-        </p>
+      <div className="text-center mb-6">
+        <p className="text-sm">Find things that start with these sounds.</p>
+        <p className="text-sm">Draw or write what you find.</p>
       </div>
       
-      {/* Sound boxes - 2 columns */}
-      <div className="grid grid-cols-2 gap-6 mb-8">
+      {/* Grid of sound boxes */}
+      <div className="grid grid-cols-3 gap-4 mb-6">
         {words.map((wordObj, i) => (
-          <div key={i} className="text-center">
-            <p 
-              className="font-normal mb-2"
-              style={{ fontSize: 'clamp(12px, 2.3vw, 14px)', color: '#333' }}
-            >
-              Things that start with
-            </p>
-            <p 
-              className="font-normal mb-3"
-              style={{ fontSize: 'clamp(12px, 2.3vw, 14px)', color: '#333' }}
-            >
-              /{wordObj.word[0]}/
-            </p>
-            <div 
-              className="border mx-auto"
-              style={{ 
-                borderColor: '#999',
-                borderWidth: '1px',
-                height: 'clamp(60px, 12vw, 90px)',
-                width: '90%'
-              }}
-            />
-          </div>
-        ))}
-      </div>
-      
-      {/* Hints */}
-      <p 
-        className="text-center font-normal"
-        style={{ fontSize: 'clamp(10px, 2vw, 12px)', color: colors.textGray }}
-      >
-        Hints: {data.words.slice(0, 8).map(w => w.word).join(', ')}
-      </p>
-      
-      {/* Completion message */}
-      <p 
-        className="text-center mt-auto font-normal"
-        style={{ fontSize: 'clamp(12px, 2.2vw, 15px)', color: colors.textGray }}
-      >
-        Found even one? You're a sound detective!
-      </p>
-    </div>
-  )
-}
-
-function BodyLetterPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 6)
-  
-  return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
-      {/* Title */}
-      <div className="text-center mb-4">
-        <h1 
-          className="font-normal"
-          style={{ fontSize: 'clamp(24px, 5vw, 36px)', lineHeight: '1.2' }}
-        >
-          Body Letter Fun
-        </h1>
-      </div>
-      
-      {/* Decorative line */}
-      <div 
-        className="w-4/5 mx-auto mb-6"
-        style={{ height: '1.5px', backgroundColor: colors.accent, opacity: 0.8 }}
-      />
-      
-      {/* Instructions */}
-      <p 
-        className="text-center mb-10 font-normal"
-        style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: '#333' }}
-      >
-        Make each letter with your body. Then say the word!
-      </p>
-      
-      {/* Words with checkboxes */}
-      <div className="flex-1 flex flex-col justify-around">
-        {words.map((wordObj, i) => (
-          <div key={i} className="flex items-center">
-            <div 
-              className="border-2 mr-3"
-              style={{ 
-                width: 'clamp(16px, 3vw, 20px)',
-                height: 'clamp(16px, 3vw, 20px)',
-                borderColor: '#999'
-              }}
-            />
-            <span 
-              className="font-semibold"
-              style={{ fontSize: 'clamp(18px, 4vw, 26px)' }}
-            >
-              {wordObj.word}
+          <div 
+            key={i}
+            className="border-2 border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center aspect-square"
+          >
+            <WordIcon word={wordObj.word} icon={wordObj.icon} />
+            <span className="text-lg font-bold mt-2">
+              {wordObj.word[0].toUpperCase()}
             </span>
           </div>
         ))}
       </div>
       
-      {/* Movement hint */}
       <p 
-        className="text-center mb-4 font-normal"
-        style={{ fontSize: 'clamp(11px, 2vw, 13px)', color: colors.textGray }}
-      >
-        💃 Take a wiggle break anytime!
-      </p>
-      
-      {/* Completion message */}
-      <p 
-        className="text-center font-normal"
-        style={{ fontSize: 'clamp(12px, 2.2vw, 15px)', color: colors.textGray }}
+        className="text-center mt-auto text-sm"
+        style={{ color: colors.textGray }}
       >
         You moved through {words.length} words. Great energy!
       </p>
@@ -435,64 +284,87 @@ function BodyLetterPreview({ data, colors }: { data: WorksheetData; colors: any 
   )
 }
 
-function PointRestPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 5)
+// ============================================================================
+// TEMPLATE: BODY LETTER
+// ============================================================================
+
+function BodyLetterPreview({ data, colors }: { data: WorksheetData; colors: any }) {
+  const words = data.words.slice(0, 6)
   
   return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
-      {/* Title */}
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
       <div className="text-center mb-2">
-        <h1 
-          className="font-normal"
-          style={{ fontSize: 'clamp(24px, 5vw, 36px)', lineHeight: '1.2' }}
-        >
-          Point & Rest
-        </h1>
-        <h2 
-          className="font-normal"
-          style={{ fontSize: 'clamp(14px, 3vw, 20px)', color: '#333', marginTop: '0.3em' }}
-        >
-          Today
-        </h2>
+        <h1 className="font-normal text-3xl">Body Letter Fun</h1>
       </div>
       
-      {/* Decorative line */}
       <div 
-        className="w-4/5 mx-auto mb-6"
-        style={{ height: '1.5px', backgroundColor: colors.accent, opacity: 0.8 }}
+        className="w-4/5 mx-auto mb-4"
+        style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      {/* Instructions */}
-      <p 
-        className="text-center mb-12 font-normal"
-        style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: '#333' }}
-      >
-        Just point to the words. No writing needed.
-      </p>
+      <div className="text-center mb-6">
+        <p className="text-sm">Make these letters with your body!</p>
+        <p className="text-sm">Stand up, move around, have fun!</p>
+      </div>
       
-      {/* HUGE words with MASSIVE spacing */}
-      <div className="flex-1 flex flex-col justify-around items-center">
+      <div className="flex-1 space-y-6">
         {words.map((wordObj, i) => (
-          <div 
-            key={i}
-            className="text-center font-normal"
-            style={{ 
-              fontSize: 'clamp(28px, 6vw, 44px)',
-              color: '#000'
-            }}
-          >
-            {wordObj.word}
+          <div key={i} className="text-center">
+            <span className="text-5xl font-bold">
+              {wordObj.word[0].toUpperCase()}
+            </span>
+            <p className="text-sm mt-1" style={{ color: colors.textGray }}>
+              ({wordObj.word})
+            </p>
           </div>
         ))}
       </div>
       
-      {/* Completion message */}
       <p 
-        className="text-center mt-8 font-normal"
-        style={{ fontSize: 'clamp(12px, 2.2vw, 15px)', color: colors.textGray }}
+        className="text-center text-sm"
+        style={{ color: colors.textGray }}
+      >
+        You moved! That helps your brain learn.
+      </p>
+    </div>
+  )
+}
+
+// ============================================================================
+// TEMPLATE: POINT & REST
+// ============================================================================
+
+function PointRestPreview({ data, colors }: { data: WorksheetData; colors: any }) {
+  const words = data.words.slice(0, 5)
+  
+  return (
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-4xl">Point & Rest</h1>
+        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-6"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center mb-8 text-base">
+        Just point to the words. No writing needed.
+      </p>
+      
+      <div className="flex-1 flex flex-col justify-center space-y-6">
+        {words.map((wordObj, i) => (
+          <div key={i} className="flex items-center justify-center gap-8">
+            <WordIcon word={wordObj.word} icon={wordObj.icon} />
+            <span className="text-4xl font-normal">{wordObj.word}</span>
+          </div>
+        ))}
+      </div>
+      
+      <p 
+        className="text-center mt-8 text-sm"
+        style={{ color: colors.textGray }}
       >
         Slow and steady. You pointed to some words.
       </p>
@@ -500,72 +372,53 @@ function PointRestPreview({ data, colors }: { data: WorksheetData; colors: any }
   )
 }
 
+// ============================================================================
+// TEMPLATE: TRACE ONE
+// ============================================================================
+
 function TraceOnePreview({ data, colors }: { data: WorksheetData; colors: any }) {
   const word = data.words[0].word
   const sentence = `I can ${word}.`
   
   return (
-    <div 
-      className="w-full h-full flex flex-col"
-      style={{ backgroundColor: colors.bg, padding: '8% 10%' }}
-    >
-      {/* Title */}
+    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
       <div className="text-center mb-2">
-        <h1 
-          className="font-normal"
-          style={{ fontSize: 'clamp(24px, 5vw, 36px)', lineHeight: '1.2' }}
-        >
-          Trace One Sentence
-        </h1>
-        <h2 
-          className="font-normal"
-          style={{ fontSize: 'clamp(14px, 3vw, 20px)', color: '#333', marginTop: '0.3em' }}
-        >
-          Today
-        </h2>
+        <h1 className="font-normal text-4xl">Trace One Sentence</h1>
+        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
       </div>
       
-      {/* Decorative line */}
       <div 
         className="w-4/5 mx-auto mb-6"
-        style={{ height: '1.5px', backgroundColor: colors.accent, opacity: 0.8 }}
+        style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      {/* Instructions */}
-      <p 
-        className="text-center mb-12 font-normal"
-        style={{ fontSize: 'clamp(13px, 2.5vw, 16px)', color: '#333' }}
-      >
+      <p className="text-center mb-12 text-base">
         Trace this sentence one time. Take your time.
       </p>
       
-      {/* Centered sentence for tracing */}
       <div className="flex-1 flex flex-col justify-center items-center">
-        <div 
-          className="font-normal text-center mb-2"
-          style={{ 
-            fontSize: 'clamp(32px, 7vw, 56px)',
-            color: colors.traceGray,
-            letterSpacing: '0.03em'
-          }}
-        >
-          {sentence}
+        <WordIcon word={word} icon={data.words[0].icon} />
+        
+        <div className="mt-8 flex flex-col items-center">
+          <span 
+            className="text-4xl font-normal tracking-wide"
+            style={{ color: colors.traceGray }}
+          >
+            {sentence}
+          </span>
+          <div 
+            className="w-96 mt-2"
+            style={{
+              borderBottom: `2px dotted ${colors.traceGray}`,
+              opacity: 0.6
+            }}
+          />
         </div>
-        {/* Tracing line */}
-        <div 
-          className="w-3/4"
-          style={{
-            height: '2px',
-            borderBottom: `2px dotted ${colors.traceGray}`,
-            opacity: 0.6
-          }}
-        />
       </div>
       
-      {/* Completion message */}
       <p 
-        className="text-center mt-8 font-normal"
-        style={{ fontSize: 'clamp(12px, 2.2vw, 15px)', color: colors.textGray }}
+        className="text-center mt-8 text-sm"
+        style={{ color: colors.textGray }}
       >
         One sentence traced. You did it.
       </p>

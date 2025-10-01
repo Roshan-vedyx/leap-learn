@@ -105,9 +105,9 @@ export default function MoodBasedWorksheetGenerator() {
     }
   }
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!worksheetData || !selectedMood || !selectedActivity) return
-    generateMoodPDF(worksheetData, selectedMood, selectedActivity)
+    await generateMoodPDF(worksheetData, selectedMood, selectedActivity)
   }
 
   const handleBack = () => {

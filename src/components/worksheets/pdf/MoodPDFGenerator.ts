@@ -1,5 +1,5 @@
 // src/components/worksheets/pdf/MoodPDFGenerator.ts
-// Redesigned to match Canva PDF aesthetic - warm, spacious, emotionally safe
+// White backgrounds with colored accents - matches Canva PDF aesthetic
 
 import jsPDF from 'jspdf'
 
@@ -8,33 +8,30 @@ interface WorksheetData {
   phonicsType: string
   activityType: string
   constraints: any
-  words: Array<{ word: string }>
-  distractors: Array<{ word: string }>
+  words: Array<{ word: string; icon?: string }>
+  distractors: Array<{ word: string; icon?: string }>
+  familyRows?: string[][]
 }
 
+// Color scheme: WHITE backgrounds with colored ACCENTS only
 const MOOD_COLORS = {
   overwhelmed: { 
-    bg: '#E8F4F8', 
-    accent: '#5BA3BF',
+    accent: '#5BA3BF',  // Blue accent for lines/bars
     textGray: '#666666',
     traceGray: '#CCCCCC'
   },
   highEnergy: { 
-    bg: '#FFF4E6', 
-    accent: '#FF8C42',
+    accent: '#FF8C42',  // Orange accent
     textGray: '#666666',
     traceGray: '#CCCCCC'
   },
   lowEnergy: { 
-    bg: '#F3F0FF', 
-    accent: '#9B7EBD',
+    accent: '#9B7EBD',  // Purple accent
     textGray: '#666666',
     traceGray: '#CCCCCC'
   },
 }
 
-// Font fallback since we can't embed Lexend Deca in jsPDF without custom fonts
-// Using Helvetica with specific weights to approximate the feel
 const FONTS = {
   title: { family: 'helvetica', weight: 'normal' as const, size: 36 },
   subtitle: { family: 'helvetica', weight: 'normal' as const, size: 18 },
@@ -44,7 +41,7 @@ const FONTS = {
   completion: { family: 'helvetica', weight: 'normal' as const, size: 14 },
 }
 
-export function generateMoodPDF(
+export async function generateMoodPDF(
   data: WorksheetData,
   mood: string,
   activityType: string
@@ -57,47 +54,41 @@ export function generateMoodPDF(
   
   const colors = MOOD_COLORS[mood as keyof typeof MOOD_COLORS]
   
-  // Fill entire page with background color - feels immersive, not form-like
-  doc.setFillColor(colors.bg)
-  doc.rect(0, 0, 210, 297, 'F')
+  // WHITE background (default) - just add colored footer bar
+  addColoredFooterBar(doc, colors.accent)
   
   // Route to appropriate template
   switch (activityType) {
     case 'trace3':
-      generateTrace3Words(doc, data, colors)
+      await generateTrace3Words(doc, data, colors)
       break
     case 'breatheCircle':
-      generateBreatheCircle(doc, data, colors)
+      await generateBreatheCircle(doc, data, colors)
       break
     case 'soundHunt':
-      generateSoundHunt(doc, data, colors)
+      await generateSoundHunt(doc, data, colors)
       break
     case 'bodyLetter':
-      generateBodyLetter(doc, data, colors)
+      await generateBodyLetter(doc, data, colors)
       break
     case 'pointRest':
-      generatePointRest(doc, data, colors)
+      await generatePointRest(doc, data, colors)
       break
     case 'traceOne':
-      generateTraceOne(doc, data, colors)
+      await generateTraceOne(doc, data, colors)
       break
     default:
-      generateTrace3Words(doc, data, colors)
+      await generateTrace3Words(doc, data, colors)
   }
   
   const filename = `${mood}_${activityType}_${Date.now()}.pdf`
   doc.save(filename)
 }
 
-// Helper: Add thin decorative line (1-2pt, not heavy bar)
-function addDecorativeLine(doc: jsPDF, yPos: number, color: string) {
-  const rgb = hexToRgb(color)
-  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
-  doc.setLineWidth(0.5) // Thin, elegant line
-  doc.line(20, yPos, 190, yPos)
-}
+// ============================================================================
+// HELPERS
+// ============================================================================
 
-// Helper: Convert hex to RGB
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return result ? {
@@ -107,72 +98,121 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   } : { r: 0, g: 0, b: 0 }
 }
 
-// Helper: Set text color from hex
 function setTextColorHex(doc: jsPDF, hex: string) {
   const rgb = hexToRgb(hex)
   doc.setTextColor(rgb.r, rgb.g, rgb.b)
 }
 
+function addDecorativeLine(doc: jsPDF, yPos: number, color: string) {
+  const rgb = hexToRgb(color)
+  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
+  doc.setLineWidth(0.8) // Thin accent line
+  doc.line(20, yPos, 190, yPos)
+}
+
+function addColoredFooterBar(doc: jsPDF, color: string) {
+  const rgb = hexToRgb(color)
+  doc.setFillColor(rgb.r, rgb.g, rgb.b)
+  doc.rect(0, 287, 210, 10, 'F') // Colored bar at bottom
+}
+
+/**
+ * Add icon placeholder above word
+ * Simple circle with first letter until SVGs are implemented
+ */
+async function addWordIcon(doc: jsPDF, word: string, iconPath: string | undefined, x: number, y: number) {
+    if (iconPath) {
+      try {
+        // Load the image
+        const img = new Image()
+        img.src = iconPath
+        await new Promise((resolve) => { img.onload = resolve })
+        
+        // Add to PDF (x, y, width, height)
+        doc.addImage(img, 'PNG', x - 8, y - 8, 16, 16)
+        return
+      } catch (err) {
+        // Fall through to placeholder if image fails
+      }
+    }
+    
+    // Fallback: circle with letter (existing code)
+    doc.setDrawColor(200, 200, 200)
+    doc.setLineWidth(0.3)
+    doc.circle(x, y, 8, 'S')
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(16)
+    doc.setTextColor(100, 100, 100)
+    doc.text(word[0].toUpperCase(), x, y + 2, { align: 'center' })
+}
+
 // ============================================================================
-// OVERWHELMED TEMPLATES - Maximum calm, maximum space
+// TEMPLATE: TRACE 3 WORDS
 // ============================================================================
 
-function generateTrace3Words(
+async function generateTrace3Words(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
 ) {
   const words = data.words.slice(0, 3)
   
-  // Title - generous top margin for breathing room
+  // Title
   doc.setFont(FONTS.title.family, FONTS.title.weight)
   doc.setFontSize(FONTS.title.size)
   doc.setTextColor(0, 0, 0)
   doc.text('Just 3 Words', 105, 35, { align: 'center' })
   
-  // Subtitle - "Today" feels personal, not institutional
+  // Subtitle
   doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
   doc.setFontSize(FONTS.subtitle.size)
   doc.text('Today', 105, 48, { align: 'center' })
   
-  // Thin decorative line - adds structure without weight
+  // Colored accent line
   addDecorativeLine(doc, 58, colors.accent)
   
-  // Instructions - simple, affirming
+  // Instructions
   doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
   doc.setFontSize(FONTS.instructions.size)
   doc.setTextColor(0, 0, 0)
   doc.text('Trace these 3 words.', 105, 75, { align: 'center' })
   
-  // Words with MASSIVE vertical spacing (90-100 units each)
+  // Words with icons and tracing guides
   let yPos = 115
-  words.forEach((wordObj) => {
+  for (const wordObj of words) {
     const word = wordObj.word
     
-    // Word model in light gray for tracing - MUCH larger font
+    // Icon placeholder (left side)
+    await addWordIcon(doc, wordObj.word, wordObj.icon, 60, yPos - 5)
+    
+    // Word in light gray for tracing
     doc.setFont(FONTS.traceWord.family, FONTS.traceWord.weight)
     doc.setFontSize(FONTS.traceWord.size)
     setTextColorHex(doc, colors.traceGray)
     doc.text(word, 105, yPos, { align: 'center' })
     
-    // Dotted guide line below word - subtle, not demanding
+    // Dotted guide line below word
     setTextColorHex(doc, colors.traceGray)
     doc.setLineDash([1, 2])
     doc.setLineWidth(0.3)
     doc.line(60, yPos + 3, 150, yPos + 3)
-    doc.setLineDash([]) // Reset
+    doc.setLineDash([])
     
-    yPos += 48 // Generous spacing between words
-  })
+    yPos += 48 // Generous spacing
+  }
   
-  // Completion message - integrated naturally at bottom, feels like a hug
+  // Completion message
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
   doc.setFontSize(FONTS.completion.size)
   setTextColorHex(doc, colors.textGray)
-  doc.text('You traced 3 words today. That\'s the goal.', 105, 270, { align: 'center' })
+  doc.text('You traced 3 words today. That\'s the goal.', 105, 250, { align: 'center' })
 }
 
-function generateBreatheCircle(
+// ============================================================================
+// TEMPLATE: BREATHE & CIRCLE
+// ============================================================================
+
+async function generateBreatheCircle(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
@@ -191,7 +231,7 @@ function generateBreatheCircle(
   
   addDecorativeLine(doc, 58, colors.accent)
   
-  // Breathing guide box - subtle, not shouty
+  // Breathing guide box
   doc.setFont(FONTS.instructions.family, 'normal')
   doc.setFontSize(13)
   setTextColorHex(doc, colors.textGray)
@@ -199,69 +239,48 @@ function generateBreatheCircle(
   doc.text('In: 1-2-3  •  Out: 1-2-3', 105, 83, { align: 'center' })
   doc.text('Now circle!', 105, 91, { align: 'center' })
   
-  // Thin box around breathing guide - optional, keeps it feeling light
-  doc.setDrawColor(200, 200, 200)
-  doc.setLineWidth(0.3)
-  doc.rect(50, 68, 110, 28, 'S')
+  // Target words with icons
+  doc.setFont('helvetica', 'bold')
+  doc.setFontSize(18)
+  doc.setTextColor(0, 0, 0)
+  doc.text('Find these words:', 105, 110, { align: 'center' })
   
-  // Letter hunt with LOTS of space
-  let yPos = 120
-  const allLetters = 'abcdefghijklmnopqrstuvwxyz'.split('')
-  
-  // Get first letters of target words
-  const targetLetters = words.map(w => w.word[0].toLowerCase())
-  
-  // Create mix of target and distractor letters
-  const displayLetters = []
-  targetLetters.forEach(t => displayLetters.push(t))
-  
-  // Add random distractors
-  while (displayLetters.length < 15) {
-    const random = allLetters[Math.floor(Math.random() * allLetters.length)]
-    if (!targetLetters.includes(random)) {
-      displayLetters.push(random)
-    }
+  // Show target words in a row
+  let xPos = 40
+  for (const wordObj of words) {
+    await addWordIcon(doc, wordObj.word, wordObj.icon, xPos, 125)
+    doc.setFontSize(16)
+    doc.text(wordObj.word, xPos, 140, { align: 'center' })
+    xPos += 55
   }
   
-  // Shuffle
-  displayLetters.sort(() => Math.random() - 0.5)
-  
-  // Display in spacious grid
+  // Word family rows (like Canva PDF page 2)
   doc.setFont('helvetica', 'normal')
-  doc.setFontSize(24)
-  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(16)
+  doc.text('Find the words below and circle them', 105, 160, { align: 'center' })
   
-  let col = 0
-  let row = 0
-  displayLetters.forEach((letter) => {
-    const x = 35 + (col * 25)
-    const y = yPos + (row * 30)
-    doc.text(letter, x, y)
-    
-    col++
-    if (col >= 7) {
-      col = 0
-      row++
-    }
-  })
-  
-  // Target words shown at bottom for reference
-  doc.setFont(FONTS.body.family, 'normal')
-  doc.setFontSize(14)
-  setTextColorHex(doc, colors.textGray)
-  doc.text(`Find: ${words.map(w => w.word).join(', ')}`, 105, 230, { align: 'center' })
+  let yPos = 180
+  if (data.familyRows) {
+    data.familyRows.forEach((row: string[]) => {
+      const rowText = row.join('     ') // Extra spacing between words
+      doc.setFontSize(20)
+      doc.text(rowText, 105, yPos, { align: 'center' })
+      yPos += 25
+    })
+  }
   
   // Completion message
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
   doc.setFontSize(FONTS.completion.size)
-  doc.text('Good breathing = good learning 💙', 105, 270, { align: 'center' })
+  setTextColorHex(doc, colors.textGray)
+  doc.text('You traced 3 words today. That\'s the goal.', 105, 270, { align: 'center' })
 }
 
 // ============================================================================
-// HIGH ENERGY TEMPLATES - More items, but same spacious feel
+// TEMPLATE: SOUND HUNT
 // ============================================================================
 
-function generateSoundHunt(
+async function generateSoundHunt(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
@@ -280,48 +299,45 @@ function generateSoundHunt(
   doc.text('Find things that start with these sounds.', 105, 65, { align: 'center' })
   doc.text('Draw or write what you find.', 105, 75, { align: 'center' })
   
-  // Create boxes for sound hunt - 2 columns
-  let yPos = 95
-  const cols = 2
-  const boxWidth = 70
-  const boxHeight = 60
-  
-  for (let i = 0; i < Math.min(4, words.length); i++) {
-    const word = words[i]
-    const sound = `/${word.word[0]}/`
+  // Grid of sound boxes
+  let yPos = 100
+  let col = 0
+  for (const wordObj of words) {
+    const xPos = 35 + (col * 60)
     
-    const col = i % cols
-    const row = Math.floor(i / cols)
-    const x = 30 + (col * 80)
-    const y = yPos + (row * 70)
+    // Box for drawing/writing
+    doc.setDrawColor(200, 200, 200)
+    doc.setLineWidth(0.5)
+    doc.rect(xPos, yPos, 50, 50, 'S')
     
-    // Label
-    doc.setFont('helvetica', 'normal')
+    // Icon placeholder
+    await addWordIcon(doc, wordObj.word, wordObj.icon, xPos + 25, yPos + 15)
+    
+    // Sound label
+    doc.setFont('helvetica', 'bold')
     doc.setFontSize(14)
     doc.setTextColor(0, 0, 0)
-    doc.text(`Things that start with`, x + 35, y, { align: 'center' })
-    doc.text(sound, x + 35, y + 8, { align: 'center' })
+    doc.text(wordObj.word[0], xPos + 25, yPos + 45, { align: 'center' })
     
-    // Drawing box
-    doc.setDrawColor(150, 150, 150)
-    doc.setLineWidth(0.5)
-    doc.rect(x, y + 12, boxWidth, boxHeight, 'S')
+    col++
+    if (col >= 3) {
+      col = 0
+      yPos += 60
+    }
   }
-  
-  // Hint words at bottom
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(11)
-  setTextColorHex(doc, colors.textGray)
-  const hints = words.slice(0, 8).map(w => w.word).join(', ')
-  doc.text(`Hints: ${hints}`, 105, 250, { align: 'center' })
   
   // Completion message
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
   doc.setFontSize(FONTS.completion.size)
-  doc.text('Found even one? You\'re a sound detective!', 105, 270, { align: 'center' })
+  setTextColorHex(doc, colors.textGray)
+  doc.text(`You moved through ${words.length} words. Great energy!`, 105, 270, { align: 'center' })
 }
 
-function generateBodyLetter(
+// ============================================================================
+// TEMPLATE: BODY LETTER
+// ============================================================================
+
+async function generateBodyLetter(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
@@ -337,42 +353,38 @@ function generateBodyLetter(
   
   doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
   doc.setFontSize(FONTS.instructions.size)
-  doc.text('Make each letter with your body. Then say the word!', 105, 65, { align: 'center' })
+  doc.text('Make these letters with your body!', 105, 65, { align: 'center' })
+  doc.text('Stand up, move around, have fun!', 105, 75, { align: 'center' })
   
-  // Words with checkboxes - generous spacing
-  let yPos = 95
-  words.forEach((wordObj, index) => {
-    // Checkbox
-    doc.setDrawColor(150, 150, 150)
-    doc.setLineWidth(0.5)
-    doc.rect(30, yPos - 6, 6, 6, 'S')
-    
-    // Word
+  // Letter list
+  let yPos = 100
+  for (const wordObj of words) {
+    // Large letter to make with body
     doc.setFont('helvetica', 'bold')
-    doc.setFontSize(24)
+    doc.setFontSize(48)
     doc.setTextColor(0, 0, 0)
-    doc.text(wordObj.word, 42, yPos)
+    doc.text(wordObj.word[0].toUpperCase(), 105, yPos, { align: 'center' })
     
-    yPos += 28 // Generous spacing for movement breaks
-  })
-  
-  // Movement hint
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(12)
-  setTextColorHex(doc, colors.textGray)
-  doc.text('💃 Take a wiggle break anytime!', 105, 250, { align: 'center' })
+    // Word reference
+    doc.setFontSize(16)
+    setTextColorHex(doc, colors.textGray)
+    doc.text(`(${wordObj.word})`, 105, yPos + 10, { align: 'center' })
+    
+    yPos += 35
+  }
   
   // Completion message
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
   doc.setFontSize(FONTS.completion.size)
-  doc.text(`You moved through ${words.length} words. Great energy!`, 105, 270, { align: 'center' })
+  setTextColorHex(doc, colors.textGray)
+  doc.text('You moved! That helps your brain learn.', 105, 270, { align: 'center' })
 }
 
 // ============================================================================
-// LOW ENERGY TEMPLATES - Absolute minimum effort required
+// TEMPLATE: POINT & REST
 // ============================================================================
 
-function generatePointRest(
+async function generatePointRest(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
@@ -396,14 +408,17 @@ function generatePointRest(
   
   // HUGE words with MASSIVE spacing - can be done lying down
   let yPos = 110
-  words.forEach((wordObj) => {
+  for (const wordObj of words) {
+    // Icon placeholder
+    await addWordIcon(doc, wordObj.word, wordObj.icon, 50, yPos - 5)
+    
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(40)
     doc.setTextColor(0, 0, 0)
     doc.text(wordObj.word, 105, yPos, { align: 'center' })
     
-    yPos += 32 // Huge spacing
-  })
+    yPos += 35 // Huge spacing
+  }
   
   // Completion message
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
@@ -412,12 +427,17 @@ function generatePointRest(
   doc.text('Slow and steady. You pointed to some words.', 105, 270, { align: 'center' })
 }
 
-function generateTraceOne(
+// ============================================================================
+// TEMPLATE: TRACE ONE
+// ============================================================================
+
+async function generateTraceOne(
   doc: jsPDF,
   data: WorksheetData,
   colors: any
 ) {
   const word = data.words[0].word
+  const sentence = `I can ${word}.`
   
   doc.setFont(FONTS.title.family, FONTS.title.weight)
   doc.setFontSize(FONTS.title.size)
@@ -434,19 +454,18 @@ function generateTraceOne(
   doc.setFontSize(FONTS.instructions.size)
   doc.text('Trace this sentence one time. Take your time.', 105, 75, { align: 'center' })
   
-  // Simple sentence with the word
-  const sentence = `I can ${word}.`
+  // Icon for the word
+  await addWordIcon(doc, word, data.words[0].icon, 105, 110)
   
-  // Sentence in HUGE light gray for tracing
-  doc.setFont('helvetica', 'normal')
-  doc.setFontSize(56)
+  // Sentence in large trace font
+  doc.setFont(FONTS.traceWord.family, FONTS.traceWord.weight)
+  doc.setFontSize(48)
   setTextColorHex(doc, colors.traceGray)
   doc.text(sentence, 105, 150, { align: 'center' })
   
-  // Baseline
-  setTextColorHex(doc, colors.traceGray)
-  doc.setLineDash([2, 3])
-  doc.setLineWidth(0.4)
+  // Dotted guide line
+  doc.setLineDash([1, 2])
+  doc.setLineWidth(0.3)
   doc.line(40, 155, 170, 155)
   doc.setLineDash([])
   
@@ -455,19 +474,4 @@ function generateTraceOne(
   doc.setFontSize(FONTS.completion.size)
   setTextColorHex(doc, colors.textGray)
   doc.text('One sentence traced. You did it.', 105, 270, { align: 'center' })
-}
-
-// Helper for matching activities
-function getMatchingOptions(
-  targetWord: string,
-  distractors: Array<{ word: string }>
-): string[] {
-  const similar = distractors
-    .filter(d => d.word.length === targetWord.length || 
-                 d.word[0] === targetWord[0])
-    .slice(0, 2)
-    .map(d => d.word)
-  
-  const options = [targetWord, ...similar]
-  return options.sort(() => Math.random() - 0.5).slice(0, 3)
 }
