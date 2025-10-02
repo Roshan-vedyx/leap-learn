@@ -41,10 +41,10 @@ interface WorksheetData {
 // TIER 1: Easiest wins - concrete, high-frequency, imageable
 // ============================================================================
 const TIER_1_WORDS = {
-  common: ['cat', 'dog', 'sun', 'hat', 'bed', 'run', 'sit', 'top', 'bat', 'red', 'mom', 'dad', 'pig', 'fox', 'hen', 'bus', 'cup', 'map'],
-  animals: ['cat', 'dog', 'pig', 'fox', 'hen', 'bug', 'bat', 'rat'],
-  objects: ['sun', 'hat', 'bed', 'map', 'cup', 'bus', 'box', 'pen', 'pot'],
-  actions: ['run', 'sit', 'hop', 'dig', 'hit', 'nap']
+    common: ['cat', 'dog', 'sun', 'hat', 'bed', 'run', 'sit', 'top', 'bat', 'red', 'mom', 'dad', 'pig', 'fox', 'hen', 'bus', 'cup', 'map', 'sad', 'six', 'sock', 'bag', 'box', 'big', 'bee', 'ball', 'bell'],
+    animals: ['cat', 'dog', 'pig', 'fox', 'hen', 'bug', 'bat', 'rat', 'bee', 'bird', 'seal', 'sheep'],
+    objects: ['sun', 'hat', 'bed', 'map', 'cup', 'bus', 'box', 'pen', 'pot', 'sock', 'star', 'spoon', 'bag', 'ball', 'bell', 'book', 'bed'],
+    actions: ['run', 'sit', 'hop', 'dig', 'hit', 'nap', 'swim', 'sing', 'skip', 'bite', 'blow']
 }
 
 // Word families for pattern-based activities (rhyming words)
@@ -98,7 +98,26 @@ const WORD_ICONS: Record<string, string> = {
   'nap': '/icons/words/nap.png',
   'hug': '/icons/words/hug.png',
   'mug': '/icons/words/mug.png',
-  'rug': '/icons/words/rug.png'
+  'sad': '/icons/words/sad.png',
+'six': '/icons/words/six.png',
+'sock': '/icons/words/sock.png',
+'star': '/icons/words/star.png',
+'spoon': '/icons/words/spoon.png',
+'seal': '/icons/words/seal.png',
+'sheep': '/icons/words/sheep.png',
+'swim': '/icons/words/swim.png',
+'sing': '/icons/words/sing.png',
+'skip': '/icons/words/skip.png',
+'bag': '/icons/words/bag.png',
+'ball': '/icons/words/ball.png',
+'bell': '/icons/words/bell.png',
+'book': '/icons/words/book.png',
+'bee': '/icons/words/bee.png',
+'bird': '/icons/words/bird.png',
+'big': '/icons/words/big.png',
+'bite': '/icons/words/bite.png',
+'blow': '/icons/words/blow.png',
+'rug': '/icons/words/rug.png'
 }
 
 const MOOD_CONSTRAINTS: Record<MoodType, MoodConstraints> = {
@@ -176,7 +195,7 @@ function selectWordsForActivity(
     if (activityType === 'bigLetterCircle') {
         // Just return 4 words - we'll use their first letters
         const easyWords = shuffle([...TIER_1_WORDS.common])
-        return easyWords.slice(0, 4).map(word => ({
+        return easyWords.slice(0, 2).map(word => ({
         word,
         icon: WORD_ICONS[word]
         }))
@@ -196,8 +215,8 @@ function selectWordsForActivity(
         // Get 4 words starting with 's' and 4 starting with 'b'
         const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
         
-        const sWords = shuffle(allWords.filter(w => w.startsWith('s'))).slice(0, 4)
-        const bWords = shuffle(allWords.filter(w => w.startsWith('b'))).slice(0, 4)
+        const sWords = shuffle(allWords.filter(w => w.toLowerCase().startsWith('s'))).slice(0, 4)
+        const bWords = shuffle(allWords.filter(w => w.toLowerCase().startsWith('b'))).slice(0, 4)
         
         return [...sWords, ...bWords].map(word => ({
           word,

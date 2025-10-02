@@ -267,17 +267,16 @@ function SoundHuntPreview({ data, colors }: { data: WorksheetData; colors: any }
       </div>
       
       {/* Grid of sound boxes */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {words.map((wordObj, i) => (
-          <div 
+      <div className="grid grid-cols-2 gap-6 mb-6">
+        {words.slice(0, 4).map((wordObj, i) => (
+        <div 
             key={i}
-            className="border-2 border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center aspect-square"
-          >
-            <WordIcon word={wordObj.word} icon={wordObj.icon} />
-            <span className="text-lg font-bold mt-2">
-              {wordObj.word[0].toUpperCase()}
+            className="border-2 border-gray-300 rounded-lg p-4 flex flex-col items-center justify-start aspect-square"
+        >
+            <span className="text-2xl font-bold">
+            {wordObj.word[0].toUpperCase()}
             </span>
-          </div>
+        </div>
         ))}
       </div>
       
@@ -285,7 +284,7 @@ function SoundHuntPreview({ data, colors }: { data: WorksheetData; colors: any }
         className="text-center mt-auto text-sm"
         style={{ color: colors.textGray }}
       >
-        You moved through {words.length} words. Great energy!
+        Found even one? You're a sound detective!
       </p>
     </div>
   )

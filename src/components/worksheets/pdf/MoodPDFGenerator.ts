@@ -138,23 +138,45 @@ function addColoredFooterBar(doc: jsPDF, color: string) {
  * Add icon placeholder above word
  * Simple circle with first letter until SVGs are implemented
  */
-async function addWordIcon(doc: jsPDF, word: string, iconPath: string | undefined, x: number, y: number) {
+async function addWordIcon(
+    doc: jsPDF, 
+    word: string, 
+    iconPath: string | undefined, 
+    x: number, 
+    y: number
+  ) {
     if (iconPath) {
       try {
-        // Load the image
         const img = new Image()
+        img.crossOrigin = 'anonymous'
         img.src = iconPath
-        await new Promise((resolve) => { img.onload = resolve })
+        await new Promise((resolve, reject) => {
+          img.onload = resolve
+          img.onerror = reject
+        })
         
-        // Add to PDF (x, y, width, height)
-        doc.addImage(img, 'PNG', x - 8, y - 8, 16, 16)
+        // Scale down to reduce file size
+        const canvas = document.createElement('canvas')
+        const maxSize = 64
+        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
+        
+        canvas.width = img.width * scale
+        canvas.height = img.height * scale
+        
+        const ctx = canvas.getContext('2d')!
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        
+        // PNG format preserves transparency but is larger than JPEG
+        const pngData = canvas.toDataURL('image/png')
+        
+        doc.addImage(pngData, 'PNG', x - 8, y - 8, 16, 16)
         return
       } catch (err) {
-        // Fall through to placeholder if image fails
+        console.warn('Icon load failed, using fallback:', err)
       }
     }
     
-    // Fallback: circle with letter (existing code)
+    // Fallback
     doc.setDrawColor(200, 200, 200)
     doc.setLineWidth(0.3)
     doc.circle(x, y, 8, 'S')
@@ -277,9 +299,9 @@ async function generateBreatheCircle(
         doc.setFont('helvetica', 'normal')
         doc.setFontSize(24)
         doc.setTextColor(0, 0, 0)
-        doc.text(letterArray.join('   '), 105, yPos + 15, { align: 'center' })
+        doc.text(letterArray.join('   '), 105, yPos + 25, { align: 'center' })
         
-        yPos += 45
+        yPos += 70
       })
     }
     
@@ -287,7 +309,7 @@ async function generateBreatheCircle(
     doc.setFont(FONTS.completion.family, FONTS.completion.weight)
     doc.setFontSize(FONTS.completion.size)
     setTextColorHex(doc, colors.textGray)
-    doc.text('Good breathing = good learning 💙', 105, 270, { align: 'center' })
+    doc.text('Good breathing = good learning.', 105, 270, { align: 'center' })
 }
 
 // ============================================================================
@@ -299,7 +321,7 @@ async function generateSoundHunt(
   data: WorksheetData,
   colors: any
 ) {
-  const words = data.words.slice(0, 9)
+  const words = data.words.slice(0, 4)
   
   doc.setFont(FONTS.title.family, FONTS.title.weight)
   doc.setFontSize(FONTS.title.size)
@@ -317,21 +339,18 @@ async function generateSoundHunt(
   let yPos = 100
   let col = 0
   for (const wordObj of words) {
-    const xPos = 35 + (col * 60)
+   const xPos = 45 + (col * 55)
     
     // Box for drawing/writing
     doc.setDrawColor(200, 200, 200)
     doc.setLineWidth(0.5)
     doc.rect(xPos, yPos, 50, 50, 'S')
     
-    // Icon placeholder
-    await addWordIcon(doc, wordObj.word, wordObj.icon, xPos + 25, yPos + 15)
-    
-    // Sound label
+    // Sound label at TOP of empty box (no icon)
     doc.setFont('helvetica', 'bold')
-    doc.setFontSize(14)
+    doc.setFontSize(20)
     doc.setTextColor(0, 0, 0)
-    doc.text(wordObj.word[0], xPos + 25, yPos + 45, { align: 'center' })
+    doc.text(wordObj.word[0].toUpperCase(), xPos + 25, yPos + 15, { align: 'center' })
     
     col++
     if (col >= 3) {
@@ -344,7 +363,7 @@ async function generateSoundHunt(
   doc.setFont(FONTS.completion.family, FONTS.completion.weight)
   doc.setFontSize(FONTS.completion.size)
   setTextColorHex(doc, colors.textGray)
-  doc.text(`You moved through ${words.length} words. Great energy!`, 105, 270, { align: 'center' })
+  doc.text('Found even one? You\'re a sound detective!', 105, 270, { align: 'center' })
 }
 
 // ============================================================================
@@ -356,7 +375,7 @@ async function generateBodyLetter(
   data: WorksheetData,
   colors: any
 ) {
-  const words = data.words.slice(0, 6)
+  const words = data.words.slice(0, 4)
   
   doc.setFont(FONTS.title.family, FONTS.title.weight)
   doc.setFontSize(FONTS.title.size)
@@ -373,18 +392,13 @@ async function generateBodyLetter(
   // Letter list
   let yPos = 100
   for (const wordObj of words) {
-    // Large letter to make with body
+    // Large letter to make with body 
     doc.setFont('helvetica', 'bold')
-    doc.setFontSize(48)
+    doc.setFontSize(60)
     doc.setTextColor(0, 0, 0)
     doc.text(wordObj.word[0].toUpperCase(), 105, yPos, { align: 'center' })
-    
-    // Word reference
-    doc.setFontSize(16)
-    setTextColorHex(doc, colors.textGray)
-    doc.text(`(${wordObj.word})`, 105, yPos + 10, { align: 'center' })
-    
-    yPos += 35
+
+    yPos += 50
   }
   
   // Completion message
@@ -451,7 +465,28 @@ async function generateTraceOne(
   colors: any
 ) {
   const word = data.words[0].word
-  const sentence = `I can ${word}.`
+  // Create meaningful sentence based on word type
+let sentence = `I can ${word}.`
+
+// Override with meaningful sentences for common words
+const meaningfulSentences: Record<string, string> = {
+  'cat': 'I see a cat.',
+  'dog': 'I pet the dog.',
+  'sun': 'The sun is up.',
+  'run': 'I can run.',
+  'sit': 'I can sit.',
+  'hat': 'I like this hat.',
+  'bed': 'I go to bed.',
+  'top': 'I am on top.',
+  'red': 'I see red.',
+  'map': 'I have a map.',
+  'cup': 'I fill the cup.',
+  'bus': 'I ride the bus.',
+  'hop': 'I can hop.',
+  'dig': 'I can dig.',
+}
+
+sentence = meaningfulSentences[word] || `I see ${word}.`  
   
   doc.setFont(FONTS.title.family, FONTS.title.weight)
   doc.setFontSize(FONTS.title.size)
@@ -601,7 +636,7 @@ async function generateBigLetterCircle(
     doc.setFont(FONTS.completion.family, FONTS.completion.weight)
     doc.setFontSize(FONTS.completion.size)
     setTextColorHex(doc, colors.textGray)
-    doc.text('4 letters found. That\'s all we needed.', 105, 270, { align: 'center' })
+    doc.text('2 letters found. That\'s all we needed.', 105, 270, { align: 'center' })
 }
 
 async function generateConnectPairs(
@@ -706,7 +741,7 @@ async function generatePictureSound(
         const word = words1[i]
         if (!word) continue
         
-        const xPos = 30 + (i * 42)
+        const xPos = 40 + (i * 40)
         
         // Icon placeholder (centered)
         if (word.icon) {
@@ -763,7 +798,7 @@ async function generatePictureSound(
         const word = words2[i]
         if (!word) continue
         
-        const xPos = 30 + (i * 42)
+        const xPos = 40 + (i * 40)
         
         // Icon placeholder (centered)
         if (word.icon) {
