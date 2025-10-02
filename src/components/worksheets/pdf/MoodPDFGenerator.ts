@@ -11,6 +11,12 @@ interface WorksheetData {
   words: Array<{ word: string; icon?: string }>
   distractors: Array<{ word: string; icon?: string }>
   familyRows?: string[][]
+  wordPairs?: { left: string[], right: string[] }
+  pictureSoundSections?: Array<{  // NEW PROPERTY
+    sound: string
+    displaySound: string
+    words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
+  }>
 }
 
 // Color scheme: WHITE backgrounds with colored ACCENTS only
@@ -80,8 +86,14 @@ export async function generateMoodPDF(
     case 'traceOne':
       await generateTraceOne(doc, data, colors)
       break
-    case 'bigLetterCircle':  // NEW CASE
+    case 'bigLetterCircle':  
       await generateBigLetterCircle(doc, data, colors)
+      break
+    case 'connectPairs':  
+      await generateConnectPairs(doc, data, colors)
+      break
+    case 'pictureSound':  
+      await generatePictureSound(doc, data, colors)
       break
     default:
       await generateTrace3Words(doc, data, colors)
@@ -590,4 +602,206 @@ async function generateBigLetterCircle(
     doc.setFontSize(FONTS.completion.size)
     setTextColorHex(doc, colors.textGray)
     doc.text('4 letters found. That\'s all we needed.', 105, 270, { align: 'center' })
+}
+
+async function generateConnectPairs(
+    doc: jsPDF,
+    data: WorksheetData,
+    colors: any
+  ) {
+    // Title
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Connect the Pairs', 105, 35, { align: 'center' })
+    
+    addDecorativeLine(doc, 48, colors.accent)
+    
+    // Instructions
+    doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+    doc.setFontSize(FONTS.instructions.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Draw a line to connect words that are exactly the same.', 105, 70, { align: 'center' })
+    
+    // Get word pairs
+    const pairs = data.wordPairs || { left: [], right: [] }
+    const leftColumn = pairs.left.slice(0, 5)
+    const rightColumn = pairs.right.slice(0, 5)
+    
+    // Display two columns with generous spacing
+    const leftX = 50
+    const rightX = 145
+    let yPos = 110
+    const rowHeight = 28
+    
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(40) // Large clear font
+    doc.setTextColor(0, 0, 0)
+    
+    for (let i = 0; i < 5; i++) {
+      // Left column word
+      if (leftColumn[i]) {
+        doc.text(leftColumn[i], leftX, yPos)
+      }
+      
+      // Right column word
+      if (rightColumn[i]) {
+        doc.text(rightColumn[i], rightX, yPos)
+      }
+      
+      yPos += rowHeight
+    }
+    
+    // Completion message
+    doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+    doc.setFontSize(FONTS.completion.size)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('5 connections made. That\'s the task done.', 105, 270, { align: 'center' })
+}
+
+async function generatePictureSound(
+    doc: jsPDF,
+    data: WorksheetData,
+    colors: any
+  ) {
+    // Title
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Picture and Sound Match', 105, 30, { align: 'center' })
+    
+    addDecorativeLine(doc, 42, colors.accent)
+    
+    // Instructions
+    doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+    doc.setFontSize(FONTS.instructions.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Look at each picture. Circle YES if it starts with the sound.', 105, 58, { align: 'center' })
+    doc.text('Circle NO if it doesn\'t.', 105, 68, { align: 'center' })
+    
+    // Get sections
+    const sections = data.pictureSoundSections || []
+    
+    // DEBUG: Log sections
+    console.log('PDF Sections:', sections.length, sections)
+    
+    // SECTION 1: /s/ sound
+    let yPos = 90
+    
+    if (sections[0]) {
+      const section1 = sections[0]
+      
+      // Section header
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(18)
+      setTextColorHex(doc, colors.accent)
+      doc.text(`Sound Focus: ${section1.displaySound}`, 30, yPos)
+      
+      yPos += 12
+      
+      // 4 pictures in a row
+      const words1 = section1.words.slice(0, 4)
+      
+      for (let i = 0; i < 4; i++) {
+        const word = words1[i]
+        if (!word) continue
+        
+        const xPos = 30 + (i * 42)
+        
+        // Icon placeholder (centered)
+        if (word.icon) {
+          await addWordIcon(doc, word.word, word.icon, xPos, yPos)
+        } else {
+          // Draw placeholder box
+          doc.setDrawColor(200, 200, 200)
+          doc.setLineWidth(0.5)
+          doc.rect(xPos, yPos, 20, 20)
+          doc.setFont('helvetica', 'normal')
+          doc.setFontSize(10)
+          doc.setTextColor(100, 100, 100)
+          doc.text(word.word, xPos + 10, yPos + 12, { align: 'center' })
+        }
+        
+        // Yes/No options (centered below)
+        const optionX = xPos + 10
+        const optionY = yPos + 28
+        
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(11)
+        doc.setTextColor(0, 0, 0)
+        doc.setDrawColor(100, 100, 100)
+        doc.setLineWidth(0.5)
+        
+        // YES
+        doc.circle(optionX - 5, optionY, 2.5)
+        doc.text('YES', optionX + 1, optionY + 1.5)
+        
+        // NO
+        doc.circle(optionX - 5, optionY + 7, 2.5)
+        doc.text('NO', optionX + 1, optionY + 8.5)
+      }
+    }
+    
+    // SECTION 2: /b/ sound
+    yPos = 155 // Fixed position for second section
+    
+    if (sections[1]) {
+      const section2 = sections[1]
+      
+      // Section header
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(18)
+      setTextColorHex(doc, colors.accent)
+      doc.text(`Sound Focus: ${section2.displaySound}`, 30, yPos)
+      
+      yPos += 12
+      
+      // 4 pictures in a row
+      const words2 = section2.words.slice(0, 4)
+      
+      for (let i = 0; i < 4; i++) {
+        const word = words2[i]
+        if (!word) continue
+        
+        const xPos = 30 + (i * 42)
+        
+        // Icon placeholder (centered)
+        if (word.icon) {
+          await addWordIcon(doc, word.word, word.icon, xPos, yPos)
+        } else {
+          // Draw placeholder box
+          doc.setDrawColor(200, 200, 200)
+          doc.setLineWidth(0.5)
+          doc.rect(xPos, yPos, 20, 20)
+          doc.setFont('helvetica', 'normal')
+          doc.setFontSize(10)
+          doc.setTextColor(100, 100, 100)
+          doc.text(word.word, xPos + 10, yPos + 12, { align: 'center' })
+        }
+        
+        // Yes/No options (centered below)
+        const optionX = xPos + 10
+        const optionY = yPos + 28
+        
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(11)
+        doc.setTextColor(0, 0, 0)
+        doc.setDrawColor(100, 100, 100)
+        doc.setLineWidth(0.5)
+        
+        // YES
+        doc.circle(optionX - 5, optionY, 2.5)
+        doc.text('YES', optionX + 1, optionY + 1.5)
+        
+        // NO
+        doc.circle(optionX - 5, optionY + 7, 2.5)
+        doc.text('NO', optionX + 1, optionY + 8.5)
+      }
+    }
+    
+    // Completion message - FIXED with proper font
+    doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+    doc.setFontSize(FONTS.completion.size)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('You checked 8 pictures. Quiet thinking is powerful thinking', 105, 265, { align: 'center' })
 }

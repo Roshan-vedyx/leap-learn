@@ -29,6 +29,12 @@ interface WorksheetData {
   words: WordData[]
   distractors: WordData[]
   letterRows?: string[][]
+  wordPairs?: { left: string[], right: string[] }
+  pictureSoundSections?: Array<{  // NEW PROPERTY
+    sound: string
+    displaySound: string
+    words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
+  }>
 }
 
 // ============================================================================
@@ -176,6 +182,29 @@ function selectWordsForActivity(
         }))
     }
     
+    // NEW: For connectPairs - needs 5 words
+    if (activityType === 'connectPairs') {
+        const easyWords = shuffle([...TIER_1_WORDS.common])
+        return easyWords.slice(0, 5).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+        }))
+    }
+
+    if (activityType === 'pictureSound') {
+        // We need words for two target sounds: /s/ and /b/
+        // Get 4 words starting with 's' and 4 starting with 'b'
+        const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
+        
+        const sWords = shuffle(allWords.filter(w => w.startsWith('s'))).slice(0, 4)
+        const bWords = shuffle(allWords.filter(w => w.startsWith('b'))).slice(0, 4)
+        
+        return [...sWords, ...bWords].map(word => ({
+          word,
+          icon: WORD_ICONS[word]
+        }))
+    }
+    
     // For activities requiring word families (like "Breathe & Circle")
     if (activityType === 'breatheCircle' || activityType === 'findWord') {
       const familyKey = randomChoice(Object.keys(WORD_FAMILIES))
@@ -257,6 +286,61 @@ function generateBigLetterRows(targetWords: WordData[]): string[][] {
     return letterRows
 }
 
+function generateWordPairs(targetWords: WordData[]): { left: string[], right: string[] } {
+    // Take first 5 words
+    const words = targetWords.slice(0, 5).map(w => w.word)
+    
+    // Left column stays in order
+    const leftColumn = [...words]
+    
+    // Right column is shuffled (different order)
+    const rightColumn = shuffle([...words])
+    
+    return { left: leftColumn, right: rightColumn }
+}
+
+function generatePictureSoundData(targetWords: WordData[]): {
+    sections: Array<{
+      sound: string
+      displaySound: string
+      words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
+    }>
+  } {
+    // Split words: first 4 should be 's' words, next 4 should be 'b' words
+    const sWords = targetWords.slice(0, 4)
+    const bWords = targetWords.slice(4, 8)
+    
+    // DEBUG: Log to verify data
+    console.log('PictureSound Data:', {
+      totalWords: targetWords.length,
+      sWords: sWords.map(w => w.word),
+      bWords: bWords.map(w => w.word)
+    })
+    
+    return {
+      sections: [
+        {
+          sound: 's',
+          displaySound: '/s/',
+          words: sWords.map(w => ({
+            word: w.word,
+            icon: w.icon,
+            startsWithSound: w.word.toLowerCase().startsWith('s')
+          }))
+        },
+        {
+          sound: 'b',
+          displaySound: '/b/',
+          words: bWords.map(w => ({
+            word: w.word,
+            icon: w.icon,
+            startsWithSound: w.word.toLowerCase().startsWith('b')
+          }))
+        }
+      ]
+    }
+}
+
 /**
  * Generate distractors (currently unused, keeping for future activities)
  */
@@ -313,6 +397,16 @@ export function generateMoodBasedWorksheet(
   // NEW: Special handling for bigLetterCircle
   if (activityType === 'bigLetterCircle') {
     worksheetData.letterRows = generateBigLetterRows(words)
+  }
+  if (activityType === 'connectPairs') {
+    const pairs = generateWordPairs(words)
+    // Store in a new property called wordPairs
+    worksheetData.wordPairs = pairs
+  }
+  // NEW: Special handling for pictureSound
+  if (activityType === 'pictureSound') {
+    const pictureSoundData = generatePictureSoundData(words)
+    worksheetData.pictureSoundSections = pictureSoundData.sections
   }
   return worksheetData
 }

@@ -11,6 +11,12 @@ interface WorksheetData {
   words: Array<{ word: string; icon?: string }>
   distractors: Array<{ word: string; icon?: string }>
   familyRows?: string[][]
+  wordPairs?: { left: string[], right: string[] }
+  pictureSoundSections?: Array<{  
+    sound: string
+    displaySound: string
+    words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
+  }>
 }
 
 interface PreviewProps {
@@ -56,6 +62,10 @@ export default function WorksheetPreview({ data }: PreviewProps) {
         return <TraceOnePreview data={data} colors={colors} />
       case 'bigLetterCircle':  
         return <BigLetterCirclePreview data={data} colors={colors} />
+      case 'connectPairs':  
+        return <ConnectPairsPreview data={data} colors={colors} />
+      case 'pictureSound':  
+        return <PictureSoundPreview data={data} colors={colors} />
       default:
         return <Trace3WordsPreview data={data} colors={colors} />
     }
@@ -563,6 +573,161 @@ interface BigLetterCirclePreviewProps {
             style={{ color: colors.textGray }}
           >
             4 letters found. That's all we needed.
+          </p>
+        </div>
+      </div>
+    )
+}
+
+interface ConnectPairsPreviewProps {
+    data: WorksheetData
+    colors: any
+  }
+  
+  function ConnectPairsPreview({ data, colors }: ConnectPairsPreviewProps) {
+    const pairs = data.wordPairs || { left: [], right: [] }
+    const leftColumn = pairs.left.slice(0, 5)
+    const rightColumn = pairs.right.slice(0, 5)
+    
+    return (
+      <div className="relative p-8 bg-white h-full flex flex-col">
+        {/* Title */}
+        <div className="text-center mb-4">
+          <h1 className="text-4xl font-normal text-black">
+            Connect the Pairs
+          </h1>
+        </div>
+        
+        {/* Decorative line */}
+        <div 
+          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
+          style={{ backgroundColor: colors.accent }}
+        />
+        
+        {/* Instructions */}
+        <div className="text-center mb-10">
+          <p className="text-base text-black">
+            Draw a line to connect words that are exactly the same.
+          </p>
+        </div>
+        
+        {/* Two columns of words */}
+        <div className="flex-1 flex justify-center items-center">
+          <div className="flex gap-32">
+            {/* Left column */}
+            <div className="space-y-6">
+              {leftColumn.map((word, idx) => (
+                <div key={idx} className="text-5xl font-normal text-black">
+                  {word}
+                </div>
+              ))}
+            </div>
+            
+            {/* Right column */}
+            <div className="space-y-6">
+              {rightColumn.map((word, idx) => (
+                <div key={idx} className="text-5xl font-normal text-black">
+                  {word}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Completion message */}
+        <div className="text-center mt-8 mb-4">
+          <p 
+            className="text-sm"
+            style={{ color: colors.textGray }}
+          >
+            5 connections made. That's the task done.
+          </p>
+        </div>
+      </div>
+    )
+}
+
+interface PictureSoundPreviewProps {
+    data: WorksheetData
+    colors: any
+  }
+  
+  function PictureSoundPreview({ data, colors }: PictureSoundPreviewProps) {
+    const sections = data.pictureSoundSections || []
+    
+    return (
+      <div className="relative p-6 bg-white h-full flex flex-col">
+        {/* Title */}
+        <div className="text-center mb-2">
+          <h1 className="text-3xl font-normal text-black">
+            Picture and Sound Match
+          </h1>
+        </div>
+        
+        {/* Decorative line */}
+        <div 
+          className="h-0.5 mx-auto mb-4 w-full max-w-2xl"
+          style={{ backgroundColor: colors.accent }}
+        />
+        
+        {/* Instructions */}
+        <div className="text-center mb-6">
+          <p className="text-sm text-black leading-relaxed">
+            Look at each picture. Circle YES if it starts with the sound.<br />
+            Circle NO if it doesn't.
+          </p>
+        </div>
+        
+        {/* Sections */}
+        <div className="flex-1 space-y-8">
+          {sections.slice(0, 2).map((section, sectionIdx) => (
+            <div key={sectionIdx} className="space-y-3">
+              {/* Section header */}
+              <h3 
+                className="text-lg font-bold"
+                style={{ color: colors.accent }}
+              >
+                Sound Focus: {section.displaySound}
+              </h3>
+              
+              {/* 4 pictures in a row */}
+              <div className="grid grid-cols-4 gap-4">
+                {section.words.slice(0, 4).map((pic, picIdx) => (
+                  <div key={picIdx} className="flex flex-col items-center space-y-2">
+                    {/* Icon or placeholder */}
+                    {pic.icon ? (
+                      <WordIcon word={pic.word} icon={pic.icon} />
+                    ) : (
+                      <div className="w-16 h-16 border border-gray-300 rounded flex items-center justify-center">
+                        <span className="text-xs text-gray-400">{pic.word}</span>
+                      </div>
+                    )}
+                    
+                    {/* Yes/No options */}
+                    <div className="flex flex-col items-start space-y-1 text-xs">
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <div className="w-3 h-3 rounded-full border border-gray-400" />
+                        <span>YES</span>
+                      </label>
+                      <label className="flex items-center gap-1 cursor-pointer">
+                        <div className="w-3 h-3 rounded-full border border-gray-400" />
+                        <span>NO</span>
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Completion message */}
+        <div className="text-center mt-6 mb-2">
+          <p 
+            className="text-xs"
+            style={{ color: colors.textGray }}
+          >
+            You checked 8 pictures. Quiet thinking is powerful thinking 🤫
           </p>
         </div>
       </div>
