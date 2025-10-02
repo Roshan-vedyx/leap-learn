@@ -143,41 +143,60 @@ function randomChoice<T>(array: T[]): T {
  * NOTE: phonicsType is hardcoded to 'cvc' internally
  */
 function selectWordsForActivity(
-  mood: MoodType,
-  activityType: string,
-  count: number
-): WordData[] {
-  
-  // For overwhelmed mood, ALWAYS use tier 1 easiest words
-  if (mood === 'overwhelmed') {
-    const easyWords = shuffle([...TIER_1_WORDS.common])
-    return easyWords.slice(0, count).map(word => ({
+    mood: MoodType,
+    activityType: string,
+    count: number
+  ): WordData[] {
+    
+    // For overwhelmed mood, ALWAYS use tier 1 easiest words
+    if (mood === 'overwhelmed') {
+      const easyWords = shuffle([...TIER_1_WORDS.common])
+      return easyWords.slice(0, count).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+      }))
+    }
+    
+    // NEW: For circleKnown activity - needs 15 words (5 rows × 3 words)
+    if (activityType === 'circleKnown') {
+      const easyWords = shuffle([...TIER_1_WORDS.common])
+      return easyWords.slice(0, 15).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+      }))
+    }
+    
+    // NEW: For bigLetterCircle - needs 4 target letters
+    if (activityType === 'bigLetterCircle') {
+        // Just return 4 words - we'll use their first letters
+        const easyWords = shuffle([...TIER_1_WORDS.common])
+        return easyWords.slice(0, 4).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+        }))
+    }
+    
+    // For activities requiring word families (like "Breathe & Circle")
+    if (activityType === 'breatheCircle' || activityType === 'findWord') {
+      const familyKey = randomChoice(Object.keys(WORD_FAMILIES))
+      const family = WORD_FAMILIES[familyKey as keyof typeof WORD_FAMILIES]
+      return shuffle([...family]).slice(0, count).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+      }))
+    }
+    
+    // For high energy and low energy, mix tier 1 words with some variety
+    const words = shuffle([
+      ...TIER_1_WORDS.common,
+      ...TIER_1_WORDS.animals,
+      ...TIER_1_WORDS.objects
+    ])
+    
+    return words.slice(0, count).map(word => ({
       word,
       icon: WORD_ICONS[word]
     }))
-  }
-  
-  // For activities requiring word families (like "Breathe & Circle")
-  if (activityType === 'breatheCircle' || activityType === 'findWord') {
-    const familyKey = randomChoice(Object.keys(WORD_FAMILIES))
-    const family = WORD_FAMILIES[familyKey as keyof typeof WORD_FAMILIES]
-    return shuffle([...family]).slice(0, count).map(word => ({
-      word,
-      icon: WORD_ICONS[word]
-    }))
-  }
-  
-  // For high energy and low energy, mix tier 1 words with some variety
-  const words = shuffle([
-    ...TIER_1_WORDS.common,
-    ...TIER_1_WORDS.animals,
-    ...TIER_1_WORDS.objects
-  ])
-  
-  return words.slice(0, count).map(word => ({
-    word,
-    icon: WORD_ICONS[word]
-  }))
 }
 
 /**
@@ -210,6 +229,32 @@ function generateLetterRows(targetWords: WordData[]): string[][] {
   })
   
   return letterRows
+}
+
+function generateBigLetterRows(targetWords: WordData[]): string[][] {
+    const letterRows: string[][] = []
+    const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'S', 'B', 'C', 'D', 'F', 'G']
+    
+    // Take first 4 words and get their first letters
+    const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
+    
+    targetLetters.forEach(letter => {
+      // Create array with target letter appearing ONCE
+      const row = [letter]
+      
+      // Add 3 distractor letters (different from target)
+      const availableDistractors = distractorLetters.filter(d => d !== letter)
+      const shuffledDistractors = shuffle([...availableDistractors])
+      row.push(...shuffledDistractors.slice(0, 3))
+      
+      // Shuffle the row so target isn't always first
+      const shuffledRow = shuffle(row)
+      
+      // Store as [targetLetter, ...shuffledLetters]
+      letterRows.push([letter, ...shuffledRow])
+    })
+    
+    return letterRows
 }
 
 /**
@@ -265,7 +310,10 @@ export function generateMoodBasedWorksheet(
   if (activityType === 'breatheCircle') {
     worksheetData.letterRows = generateLetterRows(words)
   }
-  
+  // NEW: Special handling for bigLetterCircle
+  if (activityType === 'bigLetterCircle') {
+    worksheetData.letterRows = generateBigLetterRows(words)
+  }
   return worksheetData
 }
 

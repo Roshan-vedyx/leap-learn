@@ -63,6 +63,7 @@ export default function MoodBasedWorksheetGenerator() {
     overwhelmed: [
       { id: 'trace3', label: 'Trace 3 Words', description: 'Just trace 3. That\'s enough.' },
       { id: 'breatheCircle', label: 'Breathe & Circle', description: 'Find letters while breathing calmly' },
+      { id: 'circleKnown', label: 'Circle Any Word You Know', description: 'Read what you can. Even one counts.' },
     ],
     highEnergy: [
       { id: 'soundHunt', label: 'Sound Hunt', description: 'Circle letters you hear (on paper)' },
@@ -71,6 +72,7 @@ export default function MoodBasedWorksheetGenerator() {
     lowEnergy: [
       { id: 'pointRest', label: 'Point & Rest', description: 'Just point. No writing needed.' },
       { id: 'traceOne', label: 'Trace Just One', description: 'One word. That\'s perfect.' },
+      { id: 'bigLetterCircle', label: 'Big Letter Circle', description: 'Find 4 letters. Easy and calm.' },  // NEW
     ],
   }
 

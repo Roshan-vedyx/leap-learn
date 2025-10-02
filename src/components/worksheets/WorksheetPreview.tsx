@@ -44,6 +44,8 @@ export default function WorksheetPreview({ data }: PreviewProps) {
         return <Trace3WordsPreview data={data} colors={colors} />
       case 'breatheCircle':
         return <BreatheCirclePreview data={data} colors={colors} />
+      case 'circleKnown':  
+        return <CircleKnownPreview data={data} colors={colors} />
       case 'soundHunt':
         return <SoundHuntPreview data={data} colors={colors} />
       case 'bodyLetter':
@@ -52,6 +54,8 @@ export default function WorksheetPreview({ data }: PreviewProps) {
         return <PointRestPreview data={data} colors={colors} />
       case 'traceOne':
         return <TraceOnePreview data={data} colors={colors} />
+      case 'bigLetterCircle':  
+        return <BigLetterCirclePreview data={data} colors={colors} />
       default:
         return <Trace3WordsPreview data={data} colors={colors} />
     }
@@ -417,4 +421,150 @@ function TraceOnePreview({ data, colors }: { data: WorksheetData; colors: any })
       </p>
     </div>
   )
+}
+
+interface CircleKnownPreviewProps {
+    data: WorksheetData
+    colors: any
+  }
+  
+  function CircleKnownPreview({ data, colors }: CircleKnownPreviewProps) {
+    const words = data.words.slice(0, 15) // 5 rows × 3 words
+    
+    return (
+      <div className="relative p-8 bg-white h-full flex flex-col">
+        {/* Title */}
+        <div className="text-center mb-2">
+          <h1 className="text-4xl font-normal text-black">
+            Circle the Word You Know
+          </h1>
+        </div>
+        
+        {/* Subtitle */}
+        <div className="text-center mb-3">
+          <p className="text-lg font-normal text-black">Today</p>
+        </div>
+        
+        {/* Decorative line */}
+        <div 
+          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
+          style={{ backgroundColor: colors.accent }}
+        />
+        
+        {/* Instructions */}
+        <div className="text-center mb-8">
+          <p className="text-base text-black leading-relaxed">
+            Look at each line. Circle any word you can read. Even one is<br />
+            great.
+          </p>
+        </div>
+        
+        {/* Word rows - 5 rows × 3 words */}
+        <div className="flex-1 flex flex-col justify-center space-y-6">
+          {[0, 1, 2, 3, 4].map((rowIndex) => {
+            const rowWords = words.slice(rowIndex * 3, rowIndex * 3 + 3)
+            
+            return (
+              <div 
+                key={rowIndex}
+                className="flex justify-around items-center"
+              >
+                {rowWords.map((wordObj, idx) => (
+                  <div key={idx} className="flex-1 text-center">
+                    <span className="text-5xl font-normal text-black">
+                      {wordObj.word}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+        </div>
+        
+        {/* Completion message */}
+        <div className="text-center mt-8 mb-4">
+          <p 
+            className="text-sm"
+            style={{ color: colors.textGray }}
+          >
+            You read some words today. Good.
+          </p>
+        </div>
+      </div>
+    )
+}
+
+interface BigLetterCirclePreviewProps {
+    data: WorksheetData
+    colors: any
+  }
+  
+  function BigLetterCirclePreview({ data, colors }: BigLetterCirclePreviewProps) {
+    const letterRows = data.letterRows || []
+    
+    return (
+      <div className="relative p-8 bg-white h-full flex flex-col">
+        {/* Title */}
+        <div className="text-center mb-4">
+          <h1 className="text-4xl font-normal text-black">
+            Big Letter Circle
+          </h1>
+        </div>
+        
+        {/* Decorative line */}
+        <div 
+          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
+          style={{ backgroundColor: colors.accent }}
+        />
+        
+        {/* Instructions */}
+        <div className="text-center mb-10">
+          <p className="text-base text-black">
+            Circle the letter shown. Take your time.
+          </p>
+        </div>
+        
+        {/* Letter finding tasks - 4 rows */}
+        <div className="flex-1 flex flex-col justify-center space-y-10">
+          {letterRows.slice(0, 4).map((row, rowIndex) => {
+            const targetLetter = row[0]
+            const shuffledLetters = row.slice(1)
+            
+            return (
+              <div key={rowIndex} className="space-y-2">
+                {/* Instruction line */}
+                <p 
+                  className="text-xl font-normal mb-3"
+                  style={{ color: colors.accent }}
+                >
+                  Circle the {targetLetter}:
+                </p>
+                
+                {/* 4 letters with huge spacing */}
+                <div className="flex items-center gap-8 ml-4">
+                  {shuffledLetters.slice(0, 4).map((letter, idx) => (
+                    <span 
+                      key={idx}
+                      className="text-6xl font-normal text-black"
+                    >
+                      {letter}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        
+        {/* Completion message */}
+        <div className="text-center mt-8 mb-4">
+          <p 
+            className="text-sm"
+            style={{ color: colors.textGray }}
+          >
+            4 letters found. That's all we needed.
+          </p>
+        </div>
+      </div>
+    )
 }

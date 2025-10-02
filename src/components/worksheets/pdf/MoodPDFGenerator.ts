@@ -65,6 +65,9 @@ export async function generateMoodPDF(
     case 'breatheCircle':
       await generateBreatheCircle(doc, data, colors)
       break
+    case 'circleKnown':  
+      await generateCircleKnown(doc, data, colors)
+      break
     case 'soundHunt':
       await generateSoundHunt(doc, data, colors)
       break
@@ -76,6 +79,9 @@ export async function generateMoodPDF(
       break
     case 'traceOne':
       await generateTraceOne(doc, data, colors)
+      break
+    case 'bigLetterCircle':  // NEW CASE
+      await generateBigLetterCircle(doc, data, colors)
       break
     default:
       await generateTrace3Words(doc, data, colors)
@@ -470,4 +476,118 @@ async function generateTraceOne(
   doc.setFontSize(FONTS.completion.size)
   setTextColorHex(doc, colors.textGray)
   doc.text('One sentence traced. You did it.', 105, 270, { align: 'center' })
+}
+
+async function generateCircleKnown(
+    doc: jsPDF,
+    data: WorksheetData,
+    colors: any
+  ) {
+    // Title
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Circle the Word You Know', 105, 35, { align: 'center' })
+    
+    // Subtitle
+    doc.setFont(FONTS.subtitle.family, FONTS.subtitle.weight)
+    doc.setFontSize(FONTS.subtitle.size)
+    doc.text('Today', 105, 48, { align: 'center' })
+    
+    addDecorativeLine(doc, 58, colors.accent)
+    
+    // Instructions
+    doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+    doc.setFontSize(FONTS.instructions.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Look at each line. Circle any word you can read. Even one is', 105, 75, { align: 'center' })
+    doc.text('great.', 105, 85, { align: 'center' })
+    
+    // Display 5 rows of 3 words each (using first 15 words)
+    const words = data.words.slice(0, 15)
+    let yPos = 120
+    
+    for (let row = 0; row < 5; row++) {
+      const rowWords = words.slice(row * 3, row * 3 + 3)
+      
+      // Position words with huge spacing (approx 60mm apart)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(48) // Very large font
+      doc.setTextColor(0, 0, 0)
+      
+      // Word 1 - left
+      doc.text(rowWords[0]?.word || '', 45, yPos, { align: 'center' })
+      
+      // Word 2 - center
+      doc.text(rowWords[1]?.word || '', 105, yPos, { align: 'center' })
+      
+      // Word 3 - right
+      doc.text(rowWords[2]?.word || '', 165, yPos, { align: 'center' })
+      
+      yPos += 36 // Generous vertical spacing between rows
+    }
+    
+    // Completion message at bottom
+    doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+    doc.setFontSize(FONTS.completion.size)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('You read some words today. Good.', 105, 270, { align: 'center' })
+}
+
+async function generateBigLetterCircle(
+    doc: jsPDF,
+    data: WorksheetData,
+    colors: any
+  ) {
+    // Title
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Big Letter Circle', 105, 35, { align: 'center' })
+    
+    addDecorativeLine(doc, 48, colors.accent)
+    
+    // Instructions
+    doc.setFont(FONTS.instructions.family, FONTS.instructions.weight)
+    doc.setFontSize(FONTS.instructions.size)
+    doc.setTextColor(0, 0, 0)
+    doc.text('Circle the letter shown. Take your time.', 105, 70, { align: 'center' })
+    
+    // Get letter rows (4 rows, each with [targetLetter, ...4 shuffled letters])
+    const letterRows = data.letterRows || []
+    let yPos = 100
+    
+    for (let i = 0; i < Math.min(4, letterRows.length); i++) {
+      const row = letterRows[i]
+      const targetLetter = row[0] // First element is the target
+      const shuffledLetters = row.slice(1) // Rest are the shuffled letters (including target)
+      
+      // Instruction line: "Circle the X:"
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(20)
+      setTextColorHex(doc, colors.accent) // Use mood color
+      doc.text(`Circle the ${targetLetter}:`, 30, yPos)
+      
+      // Display 4 letters with huge spacing
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(52) // Very large font
+      doc.setTextColor(0, 0, 0)
+      
+      const letterSpacing = 35 // mm between letters
+      const startX = 50
+      
+      for (let j = 0; j < 4; j++) {
+        const letter = shuffledLetters[j]
+        const xPos = startX + (j * letterSpacing)
+        doc.text(letter, xPos, yPos + 10)
+      }
+      
+      yPos += 50 // Generous spacing between rows
+    }
+    
+    // Completion message
+    doc.setFont(FONTS.completion.family, FONTS.completion.weight)
+    doc.setFontSize(FONTS.completion.size)
+    setTextColorHex(doc, colors.textGray)
+    doc.text('4 letters found. That\'s all we needed.', 105, 270, { align: 'center' })
 }
