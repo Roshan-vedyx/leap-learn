@@ -212,7 +212,7 @@ async function generateTrace3Words(
   doc.setFontSize(FONTS.instructions.size)
   doc.setTextColor(0, 0, 0)
   doc.text('Trace these 3 words. Take your time.', 105, y, { align: 'center' })
-  y += 15
+  y += 45
   
   // Words
   const words = activity.words.slice(0, 3)
@@ -327,22 +327,39 @@ async function generateCircleKnown(
   doc.setFontSize(FONTS.instructions.size)
   doc.setTextColor(0, 0, 0)
   doc.text('Read what you can. Even one counts.', 105, y, { align: 'center' })
-  y += 15
+  y += 30
   
-  const words = activity.words.slice(0, 6)
+  const words = activity.words.slice(0, 4) // MAX 4 words - ND friendly
+  const rowHeight = 35 // Lots of vertical breathing room
+
   for (let i = 0; i < words.length; i++) {
-    const col = i % 3
-    const row = Math.floor(i / 3)
-    const x = 40 + col * 50
-    const wordY = y + row * 25
+    const wordData = words[i]
+    const wordY = y + i * rowHeight
     
+    // Render word (centered)
     doc.setFont('helvetica', 'normal')
-    doc.setFontSize(28)
+    doc.setFontSize(32)
     doc.setTextColor(0, 0, 0)
-    doc.text(words[i].word, x, wordY)
+    doc.text(wordData.word, 105, wordY, { align: 'center' })
+    
+    // Render icon if present (right next to word)
+    if (wordData.icon) {
+        try {
+        const img = new Image()
+        img.src = wordData.icon
+        await new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve
+        })
+        const textWidth = doc.getTextWidth(wordData.word)
+        doc.addImage(img, 'PNG', 105 + textWidth/2 + 3, wordY - 7, 10, 10)
+        } catch (e) {
+        console.warn('Could not load icon:', wordData.word)
+        }
+    }
   }
-  
-  return y + 60
+
+  return y + (words.length * rowHeight) + 20
 }
 
 async function generateSoundHunt(

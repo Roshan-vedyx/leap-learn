@@ -184,16 +184,25 @@ function selectWordsForActivity(
     count: number
   ): WordData[] {
     
-    // For overwhelmed mood, ALWAYS use tier 1 easiest words
-    if (mood === 'overwhelmed') {
-      const easyWords = shuffle([...TIER_1_WORDS.common])
-      return easyWords.slice(0, count).map(word => ({
-        word,
-        icon: WORD_ICONS[word]
-      }))
+    // Handle pictureSound FIRST - it needs 8 words regardless of mood
+    if (activityType === 'pictureSound') {
+        const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
+        
+        // Always get 8 words for pictureSound (4 per section)
+        const shuffledWords = shuffle(allWords)
+        const section1Words = shuffledWords.slice(0, 3)
+        const section2Words = shuffledWords.slice(3, 6)
+        
+        console.log('📦 Section 1 words:', section1Words)
+        console.log('📦 Section 2 words:', section2Words)
+        
+        return [...section1Words, ...section2Words].map(word => ({
+          word,
+          icon: WORD_ICONS[word]
+        }))
     }
     
-    // NEW: For circleKnown activity - needs 15 words (5 rows × 3 words)
+    // For circleKnown activity - needs 15 words
     if (activityType === 'circleKnown') {
       const easyWords = shuffle([...TIER_1_WORDS.common])
       return easyWords.slice(0, 15).map(word => ({
@@ -202,36 +211,21 @@ function selectWordsForActivity(
       }))
     }
     
-    // NEW: For bigLetterCircle - needs 4 target letters
+    // For bigLetterCircle - needs 4 target letters
     if (activityType === 'bigLetterCircle') {
-        // Just return 4 words - we'll use their first letters
         const easyWords = shuffle([...TIER_1_WORDS.common])
-        return easyWords.slice(0, 2).map(word => ({
+        return easyWords.slice(0, 4).map(word => ({
         word,
         icon: WORD_ICONS[word]
         }))
     }
     
-    // NEW: For connectPairs - needs 5 words
+    // For connectPairs - needs 5 words
     if (activityType === 'connectPairs') {
         const easyWords = shuffle([...TIER_1_WORDS.common])
         return easyWords.slice(0, 5).map(word => ({
         word,
         icon: WORD_ICONS[word]
-        }))
-    }
-
-    if (activityType === 'pictureSound') {
-        // We need words for two target sounds: /s/ and /b/
-        // Get 4 words starting with 's' and 4 starting with 'b'
-        const allWords = [...TIER_1_WORDS.common, ...TIER_1_WORDS.animals, ...TIER_1_WORDS.objects]
-        
-        const sWords = shuffle(allWords.filter(w => w.toLowerCase().startsWith('s'))).slice(0, 4)
-        const bWords = shuffle(allWords.filter(w => w.toLowerCase().startsWith('b'))).slice(0, 4)
-        
-        return [...sWords, ...bWords].map(word => ({
-          word,
-          icon: WORD_ICONS[word]
         }))
     }
     
@@ -245,7 +239,16 @@ function selectWordsForActivity(
       }))
     }
     
-    // For high energy and low energy, mix tier 1 words with some variety
+    // Default: For overwhelmed mood or other activities, use tier 1 easiest words
+    if (mood === 'overwhelmed') {
+      const easyWords = shuffle([...TIER_1_WORDS.common])
+      return easyWords.slice(0, count).map(word => ({
+        word,
+        icon: WORD_ICONS[word]
+      }))
+    }
+    
+    // For high energy and low energy, mix tier 1 words with variety
     const words = shuffle([
       ...TIER_1_WORDS.common,
       ...TIER_1_WORDS.animals,
@@ -322,35 +325,39 @@ function generatePictureSoundData(targetWords: WordData[]): {
       words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
     }>
   } {
-    // Split words: first 4 should be 's' words, next 4 should be 'b' words
-    const sWords = targetWords.slice(0, 4)
-    const bWords = targetWords.slice(4, 8)
+    console.log('🔍 generatePictureSoundData received:', targetWords.length, 'words:', targetWords.map(w => w.word))
     
-    // DEBUG: Log to verify data
-    console.log('PictureSound Data:', {
-      totalWords: targetWords.length,
-      sWords: sWords.map(w => w.word),
-      bWords: bWords.map(w => w.word)
-    })
+    // Split into 2 groups of 4
+    const group1 = targetWords.slice(0, 3)
+    const group2 = targetWords.slice(3, 6)
+    
+    console.log('📦 Group 1:', group1.map(w => w.word))
+    console.log('📦 Group 2:', group2.map(w => w.word))
+    
+    // Get target sound from first word of each group
+    const sound1 = group1[0]?.word[0].toLowerCase() || 's'
+    const sound2 = group2[0]?.word[0].toLowerCase() || 'b'
+    
+    console.log(`🎯 Target sounds: /${sound1}/ and /${sound2}/`)
     
     return {
       sections: [
         {
-          sound: 's',
-          displaySound: '/s/',
-          words: sWords.map(w => ({
+          sound: sound1,
+          displaySound: `/${sound1}/`,
+          words: group1.map(w => ({
             word: w.word,
             icon: w.icon,
-            startsWithSound: w.word.toLowerCase().startsWith('s')
+            startsWithSound: w.word.toLowerCase().startsWith(sound1)
           }))
         },
         {
-          sound: 'b',
-          displaySound: '/b/',
-          words: bWords.map(w => ({
+          sound: sound2,
+          displaySound: `/${sound2}/`,
+          words: group2.map(w => ({
             word: w.word,
             icon: w.icon,
-            startsWithSound: w.word.toLowerCase().startsWith('b')
+            startsWithSound: w.word.toLowerCase().startsWith(sound2)
           }))
         }
       ]
