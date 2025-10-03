@@ -215,7 +215,7 @@ function BreatheCirclePreview({ activity, colors }: { activity: ActivitySection;
       />
       
       <p className="text-center text-sm mb-2">
-        Take a slow breath. Then circle the letter: {activity.words[0]?.word[0].toUpperCase() || 'H'}
+        Take a slow breath. Then circle the letter.
       </p>
       
       <div className="text-center mb-4" style={{ color: colors.textGray }}>
@@ -225,20 +225,26 @@ function BreatheCirclePreview({ activity, colors }: { activity: ActivitySection;
       </div>
       
       {activity.letterRows && activity.letterRows.length > 0 && (
-        <div className="text-center">
-            <div className="flex justify-center items-center gap-4">
-            {activity.letterRows[0].map((letter, idx) => {
-                const isTarget = letter === activity.words[0]?.word[0].toUpperCase()
-                return (
-                <span 
-                    key={idx} 
-                    className={isTarget ? 'text-4xl font-bold' : 'text-2xl font-normal'}
-                >
-                    {letter}
-                </span>
-                )
-            })}
-            </div>
+        <div className="space-y-6">
+          {activity.letterRows.map((row, rowIdx) => {
+            const targetLetter = row[0]
+            const letters = row.slice(1)
+            
+            return (
+              <div key={rowIdx} className="text-center">
+                <p className="text-base font-normal mb-2">
+                  Find the letter {targetLetter}:
+                </p>
+                <div className="flex justify-center items-center gap-4">
+                  {letters.map((letter, lIdx) => (
+                    <span key={lIdx} className="text-2xl font-normal">
+                      {letter}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
@@ -317,17 +323,51 @@ function BodyLetterPreview({ activity, colors }: { activity: ActivitySection; co
       />
       
       <p className="text-center text-sm mb-4">
-        Make letters with arms & legs - no writing!
+        Make these letters with your body. Move and learn!
       </p>
       
-      <div className="space-y-6 text-center">
-        {activity.words.slice(0, 3).map((word, idx) => (
-          <div key={idx} className="text-5xl font-normal">
-            {word.word}
-            <WordIcon word={word.word} icon={word.icon} />
-          </div>
-        ))}
+      <div className="space-y-6 text-left pl-8">
+        {activity.words.slice(0, 3).map((word, idx) => {
+          const letter = word.word[0].toUpperCase()
+          const instructions: Record<string, string> = {
+            'L': 'Stand straight. Put one arm out to the side.',
+            'T': 'Stand straight. Put both arms out wide.',
+            'O': 'Make a big circle with your arms above your head.',
+            'C': 'Curve your arms like you\'re hugging a big ball.',
+            'I': 'Stand tall and straight with arms at your sides.',
+            'V': 'Put both arms up in a V shape.',
+            'X': 'Cross your arms above your head.',
+            'Y': 'Put both arms up and out like a Y.',
+            'S': 'Stand and curve your body like a snake.',
+            'P': 'Stand straight. Put one arm out front.',
+            'B': 'Stand with one hand on hip.',
+            'H': 'Stand with arms out to sides.',
+            'M': 'Stand with arms up like mountains.',
+            'W': 'Stand with arms making a W.',
+            'D': 'Stand with one arm curved.',
+            'R': 'Stand with one arm bent.',
+            'K': 'Stand with arms in K shape.',
+            'F': 'Stand with arms forward.',
+            'N': 'Stand with arms diagonal.',
+            'Z': 'Make a Z with your arms.'
+          }
+          
+          return (
+            <div key={idx}>
+              <p className="text-lg font-semibold" style={{ color: colors.accent }}>
+                Make a{letter === 'O' || letter === 'I' ? 'n' : ''} {letter}:
+              </p>
+              <p className="text-sm mt-1 text-gray-700">
+                {instructions[letter] || 'Use your body to make this letter.'}
+              </p>
+            </div>
+          )
+        })}
       </div>
+      
+      <p className="text-center text-xs mt-6 text-gray-500">
+        Moving + learning = awesome!
+      </p>
     </div>
   )
 }
@@ -362,7 +402,19 @@ function PointRestPreview({ activity, colors }: { activity: ActivitySection; col
 }
 
 function TraceOnePreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
-  const sentence = `I read ${activity.words[0]?.word || 'word'}`
+  // Pool of simple, meaningful sentences for tracing
+  const sentencePool = [
+    'I can read.',
+    'I am learning.',
+    'I am brave.',
+    'I did it.',
+    'I am proud.',
+    'I will try.',
+    'I am growing.',
+    'I am here.'
+  ]
+  const randomIndex = Math.floor(Math.random() * sentencePool.length)
+  const sentence = sentencePool[randomIndex]
   
   return (
     <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
@@ -413,7 +465,7 @@ function BigLetterCirclePreview({ activity, colors }: { activity: ActivitySectio
       />
       
       <p className="text-center text-sm mb-4">
-        Find 4 letters. Easy and calm.
+        Circle letters you know. Easy and calm.
       </p>
       
       {activity.letterRows && activity.letterRows.length > 0 && (

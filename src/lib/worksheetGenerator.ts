@@ -265,35 +265,20 @@ function selectWordsForActivity(
  * Generate word family rows for "Breathe & Circle" activity
  */
 function generateLetterRows(targetWords: WordData[]): string[][] {
-    const targetLetter = targetWords[0]?.word[0].toUpperCase() || 'H'
-    const distractorLetters = ['B', 'D', 'F', 'G', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'T', 'V', 'W', 'Z']
-    
-    // Get 4 random distractors
-    const shuffled = shuffle(distractorLetters.filter(l => l !== targetLetter))
-    const distractors = shuffled.slice(0, 4)
-    
-    // Combine and shuffle to get 5 letters with target included
-    const allLetters = [targetLetter, ...distractors]
-    const singleRow = shuffle(allLetters)
-    
-    return [singleRow] // Return single row only
-}
-
-function generateBigLetterRows(targetWords: WordData[]): string[][] {
     const letterRows: string[][] = []
     const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'S', 'B', 'C', 'D', 'F', 'G']
     
-    // Take first 4 words and get their first letters
-    const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
+    // Take first 3 words and get their first letters as targets
+    const targetLetters = targetWords.slice(0, 3).map(w => w.word[0].toUpperCase())
     
     targetLetters.forEach(letter => {
-      // Create array with target letter appearing ONCE
-      const row = [letter]
+      // Create array with target letter appearing 2-3 times
+      const row = [letter, letter]
       
-      // Add 3 distractor letters (different from target)
+      // Add 5 distractor letters (different from target)
       const availableDistractors = distractorLetters.filter(d => d !== letter)
       const shuffledDistractors = shuffle([...availableDistractors])
-      row.push(...shuffledDistractors.slice(0, 3))
+      row.push(...shuffledDistractors.slice(0, 5))
       
       // Shuffle the row so target isn't always first
       const shuffledRow = shuffle(row)
@@ -303,6 +288,20 @@ function generateBigLetterRows(targetWords: WordData[]): string[][] {
     })
     
     return letterRows
+}
+
+function generateBigLetterRows(targetWords: WordData[]): string[][] {
+    const allLetters = ['B', 'C', 'D', 'F', 'G', 'H', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'W', 'Z']
+    
+    // Shuffle and pick 8 unique letters
+    const shuffled = shuffle([...allLetters])
+    const selectedLetters = shuffled.slice(0, 8)
+    
+    // Split into 2 rows of 4 letters each
+    const row1 = selectedLetters.slice(0, 4)
+    const row2 = selectedLetters.slice(4, 8)
+    
+    return [row1, row2]
 }
 
 function generateWordPairs(targetWords: WordData[]): { left: string[], right: string[] } {

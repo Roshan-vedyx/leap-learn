@@ -260,11 +260,9 @@ async function generateBreatheCircle(
   y += 12
   
   // Get target letter from first word
-  const targetLetter = activity.words[0]?.word[0].toUpperCase() || 'H'
-
   doc.setFontSize(FONTS.instructions.size)
   doc.setTextColor(0, 0, 0)
-  doc.text(`Take a slow breath. Then circle the letter: ${targetLetter}`, 105, y, { align: 'center' })
+  doc.text('Take a slow breath. Then circle the letter.', 105, y, { align: 'center' })
   y += 8
 
   doc.setFontSize(12)
@@ -273,31 +271,37 @@ async function generateBreatheCircle(
   y += 15
   
   if (activity.letterRows && activity.letterRows.length > 0) {
-    const row = activity.letterRows[0]
-    const letterSpacing = 15
-    const startX = 105 - (row.length * letterSpacing) / 2
-
-    row.forEach((letter, idx) => {
-      const x = startX + idx * letterSpacing
-    
-      if (letter === targetLetter) {
-      // Target letter - bigger and bold
-      doc.setFont('helvetica', 'bold')
-      doc.setFontSize(36)
-      } else {
-      // Regular letters
+    // Loop through each target letter row
+    activity.letterRows.forEach((row, rowIdx) => {
+      const targetLetter = row[0] // First element is the target
+      const letters = row.slice(1) // Rest are the letter options
+      
+      // "Find the letter X:" instruction
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(24)
-      }
-    
+      doc.setFontSize(16)
       doc.setTextColor(0, 0, 0)
-      doc.text(letter, x, y, { align: 'center' })
+      doc.text(`Find the letter ${targetLetter}:`, 105, y, { align: 'center' })
+      y += 12
+      
+      // Render letter selection row - ALL letters same size
+      const letterSpacing = 15
+      const startX = 105 - (letters.length * letterSpacing) / 2
+      
+      letters.forEach((letter, idx) => {
+        const x = startX + idx * letterSpacing
+        
+        // ALL letters uniform - no bold, no size difference
+        doc.setFont('helvetica', 'normal')
+        doc.setFontSize(24)
+        doc.setTextColor(0, 0, 0)
+        doc.text(letter, x, y, { align: 'center' })
+      })
+      
+      y += 25
     })
-
-    y += 25
   }
   
-  return y + 5
+  return y + 10
 }
 
 async function generateCircleKnown(
@@ -363,128 +367,215 @@ async function generateCircleKnown(
 }
 
 async function generateSoundHunt(
-  doc: jsPDF,
-  activity: ActivitySection,
-  colors: any,
-  startY: number
-): Promise<number> {
-  let y = startY
-  
-  doc.setFont(FONTS.title.family, FONTS.title.weight)
-  doc.setFontSize(FONTS.title.size)
-  doc.text('Sound Hunt', 105, y, { align: 'center' })
-  y += 8
-  
-  doc.setFontSize(FONTS.subtitle.size)
-  doc.setTextColor(102, 102, 102)
-  doc.text('Today', 105, y, { align: 'center' })
-  y += 10
-  
-  const rgb = hexToRgb(colors.accent)
-  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
-  doc.setLineWidth(1)
-  doc.line(50, y, 160, y)
-  y += 12
-  
-  doc.setFontSize(FONTS.instructions.size)
-  doc.setTextColor(0, 0, 0)
-  doc.text('Circle letters you hear in these words.', 105, y, { align: 'center' })
-  y += 15
-  
-  const words = activity.words.slice(0, 6)
-  for (let i = 0; i < words.length; i++) {
-    const col = i % 2
-    const row = Math.floor(i / 2)
-    const x = 50 + col * 70
-    const wordY = y + row * 25
+    doc: jsPDF,
+    activity: ActivitySection,
+    colors: any,
+    startY: number
+  ): Promise<number> {
+    let y = startY
     
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(32)
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.text('Sound Hunt', 105, y, { align: 'center' })
+    y += 8
+    
+    doc.setFontSize(FONTS.subtitle.size)
+    doc.setTextColor(102, 102, 102)
+    doc.text('Today', 105, y, { align: 'center' })
+    y += 10
+    
+    const rgb = hexToRgb(colors.accent)
+    doc.setDrawColor(rgb.r, rgb.g, rgb.b)
+    doc.setLineWidth(1)
+    doc.line(50, y, 160, y)
+    y += 12
+    
+    doc.setFontSize(FONTS.instructions.size)
     doc.setTextColor(0, 0, 0)
-    doc.text(words[i].word, x, wordY)
-  }
-  
-  return y + 80
+    doc.text('Circle letters you hear in these words.', 105, y, { align: 'center' })
+    y += 20
+    
+    const words = activity.words.slice(0, 6)
+    
+    for (let i = 0; i < words.length; i++) {
+      const col = i % 2
+      const row = Math.floor(i / 2)
+      const x = 50 + col * 70
+      const wordY = y + row * 35
+      
+      const wordData = words[i]
+      
+      // Render word
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(28)
+      doc.setTextColor(0, 0, 0)
+      doc.text(wordData.word, x, wordY)
+      
+      // Render icon if present (next to word)
+      if (wordData.icon) {
+        try {
+          const img = new Image()
+          img.src = wordData.icon
+          await new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve
+          })
+          const textWidth = doc.getTextWidth(wordData.word)
+          doc.addImage(img, 'PNG', x + textWidth + 3, wordY - 7, 10, 10)
+        } catch (e) {
+          console.warn('Could not load icon for:', wordData.word)
+        }
+      }
+    }
+    
+    return y + 110
 }
 
 async function generateBodyLetter(
-  doc: jsPDF,
-  activity: ActivitySection,
-  colors: any,
-  startY: number
-): Promise<number> {
-  let y = startY
-  
-  doc.setFont(FONTS.title.family, FONTS.title.weight)
-  doc.setFontSize(FONTS.title.size)
-  doc.text('Body Letters', 105, y, { align: 'center' })
-  y += 8
-  
-  doc.setFontSize(FONTS.subtitle.size)
-  doc.setTextColor(102, 102, 102)
-  doc.text('Today', 105, y, { align: 'center' })
-  y += 10
-  
-  const rgb = hexToRgb(colors.accent)
-  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
-  doc.setLineWidth(1)
-  doc.line(50, y, 160, y)
-  y += 12
-  
-  doc.setFontSize(FONTS.instructions.size)
-  doc.setTextColor(0, 0, 0)
-  doc.text('Make letters with arms & legs - no writing!', 105, y, { align: 'center' })
-  y += 15
-  
-  const words = activity.words.slice(0, 3)
-  for (let i = 0; i < words.length; i++) {
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(48)
+    doc: jsPDF,
+    activity: ActivitySection,
+    colors: any,
+    startY: number
+  ): Promise<number> {
+    let y = startY
+    
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.text('Body Letter Fun', 105, y, { align: 'center' })
+    y += 8
+    
+    doc.setFontSize(FONTS.subtitle.size)
+    doc.setTextColor(102, 102, 102)
+    doc.text('Today', 105, y, { align: 'center' })
+    y += 10
+    
+    const rgb = hexToRgb(colors.accent)
+    doc.setDrawColor(rgb.r, rgb.g, rgb.b)
+    doc.setLineWidth(1)
+    doc.line(50, y, 160, y)
+    y += 12
+    
+    doc.setFontSize(FONTS.instructions.size)
     doc.setTextColor(0, 0, 0)
-    doc.text(words[i].word, 105, y + i * 30, { align: 'center' })
-  }
-  
-  return y + 90
+    doc.text('Make these letters with your body. Move and learn!', 105, y, { align: 'center' })
+    y += 20
+    
+    // Get first letters from first 3 words
+    const targetLetters = activity.words.slice(0, 3).map(w => w.word[0].toUpperCase())
+    
+    // Letter-to-instruction mapping
+    const letterInstructions: Record<string, string> = {
+      'L': 'Stand straight. Put one arm out to the side.',
+      'T': 'Stand straight. Put both arms out wide.',
+      'O': 'Make a big circle with your arms above your head.',
+      'C': 'Curve your arms like you\'re hugging a big ball.',
+      'I': 'Stand tall and straight with arms at your sides.',
+      'V': 'Put both arms up in a V shape.',
+      'X': 'Cross your arms above your head.',
+      'Y': 'Put both arms up and out like a Y.',
+      'S': 'Stand and curve your body like a snake.',
+      'P': 'Stand straight. Put one arm out front.',
+      'B': 'Stand with one hand on hip, other arm curved out.',
+      'H': 'Stand with arms out to sides, parallel to ground.',
+      'M': 'Stand with arms up making mountain peaks.',
+      'W': 'Stand with arms making a W shape.',
+      'D': 'Stand with one arm curved like half a circle.',
+      'R': 'Stand straight with one arm bent at elbow.',
+      'K': 'Stand with one arm up, one arm out.',
+      'F': 'Stand with both arms forward.',
+      'N': 'Stand with arms diagonal like \\ and /.',
+      'Z': 'Make a Z with your arms in the air.'
+    }
+    
+    targetLetters.forEach((letter, idx) => {
+      const letterY = y + idx * 28
+      
+      // "Make an X:" instruction in color
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(16)
+      doc.setTextColor(rgb.r, rgb.g, rgb.b)
+      doc.text(`Make a${letter === 'O' || letter === 'I' ? 'n' : ''} ${letter}:`, 30, letterY)
+      
+      // Movement instruction
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(13)
+      doc.setTextColor(0, 0, 0)
+      const instruction = letterInstructions[letter] || 'Use your body to make this letter.'
+      doc.text(instruction, 30, letterY + 7)
+    })
+    
+    y += targetLetters.length * 28 + 15
+    
+    // Bonus message at bottom
+    doc.setFont('helvetica', 'normal')
+    doc.setFontSize(12)
+    doc.setTextColor(102, 102, 102)
+    doc.text('Bonus: Can you spell your name with your body?', 105, y, { align: 'center' })
+    y += 8
+    doc.text('Moving + learning = awesome!', 105, y, { align: 'center' })
+    
+    return y + 10
 }
 
 async function generatePointRest(
-  doc: jsPDF,
-  activity: ActivitySection,
-  colors: any,
-  startY: number
-): Promise<number> {
-  let y = startY
-  
-  doc.setFont(FONTS.title.family, FONTS.title.weight)
-  doc.setFontSize(FONTS.title.size)
-  doc.text('Point & Rest', 105, y, { align: 'center' })
-  y += 8
-  
-  doc.setFontSize(FONTS.subtitle.size)
-  doc.setTextColor(102, 102, 102)
-  doc.text('Today', 105, y, { align: 'center' })
-  y += 10
-  
-  const rgb = hexToRgb(colors.accent)
-  doc.setDrawColor(rgb.r, rgb.g, rgb.b)
-  doc.setLineWidth(1)
-  doc.line(50, y, 160, y)
-  y += 12
-  
-  doc.setFontSize(FONTS.instructions.size)
-  doc.setTextColor(0, 0, 0)
-  doc.text('Just point. No writing needed.', 105, y, { align: 'center' })
-  y += 15
-  
-  const words = activity.words.slice(0, 5)
-  for (let i = 0; i < words.length; i++) {
-    doc.setFont('helvetica', 'normal')
-    doc.setFontSize(36)
+    doc: jsPDF,
+    activity: ActivitySection,
+    colors: any,
+    startY: number
+  ): Promise<number> {
+    let y = startY
+    
+    doc.setFont(FONTS.title.family, FONTS.title.weight)
+    doc.setFontSize(FONTS.title.size)
+    doc.text('Point & Rest', 105, y, { align: 'center' })
+    y += 8
+    
+    doc.setFontSize(FONTS.subtitle.size)
+    doc.setTextColor(102, 102, 102)
+    doc.text('Today', 105, y, { align: 'center' })
+    y += 10
+    
+    const rgb = hexToRgb(colors.accent)
+    doc.setDrawColor(rgb.r, rgb.g, rgb.b)
+    doc.setLineWidth(1)
+    doc.line(50, y, 160, y)
+    y += 12
+    
+    doc.setFontSize(FONTS.instructions.size)
     doc.setTextColor(0, 0, 0)
-    doc.text(words[i].word, 105, y + i * 22, { align: 'center' })
-  }
-  
-  return y + 110
+    doc.text('Just point. No writing needed.', 105, y, { align: 'center' })
+    y += 20
+    
+    const words = activity.words.slice(0, 5)
+    
+    for (let i = 0; i < words.length; i++) {
+      const wordData = words[i]
+      const itemY = y + i * 25
+      
+      // Render word (centered)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(36)
+      doc.setTextColor(0, 0, 0)
+      doc.text(wordData.word, 105, itemY, { align: 'center' })
+      
+      // Render icon if present (right next to word)
+      if (wordData.icon) {
+        try {
+          const img = new Image()
+          img.src = wordData.icon
+          await new Promise((resolve) => {
+            img.onload = resolve
+            img.onerror = resolve
+          })
+          const textWidth = doc.getTextWidth(wordData.word)
+          doc.addImage(img, 'PNG', 105 + textWidth/2 + 3, itemY - 7, 12, 12)
+        } catch (e) {
+          console.warn('Could not load icon for:', wordData.word)
+        }
+      }
+    }
+    
+    return y + (words.length * 25) + 15
 }
 
 async function generateTraceOne(
@@ -516,7 +607,20 @@ async function generateTraceOne(
   doc.text('Trace this sentence one time. Take your time.', 105, y, { align: 'center' })
   y += 20
   
-  const sentence = `I read ${activity.words[0].word}`
+  // Pool of simple, meaningful sentences for tracing
+  const sentencePool = [
+    'I can read.',
+    'I am learning.',
+    'I am brave.',
+    'I did it.',
+    'I am proud.',
+    'I will try.',
+    'I am growing.',
+    'I am here.'
+  ]
+  const randomIndex = Math.floor(Math.random() * sentencePool.length)
+  const sentence = sentencePool[randomIndex]
+
   doc.setFont(FONTS.traceWord.family, FONTS.traceWord.weight)
   doc.setFontSize(40)
   doc.setTextColor(204, 204, 204)
@@ -555,8 +659,8 @@ async function generateBigLetterCircle(
   
   doc.setFontSize(FONTS.instructions.size)
   doc.setTextColor(0, 0, 0)
-  doc.text('Find 4 letters. Easy and calm.', 105, y, { align: 'center' })
-  y += 15
+  doc.text('Circle letters you know. Easy and calm.', 105, y, { align: 'center' })
+  y += 45
   
   if (activity.letterRows && activity.letterRows.length > 0) {
     for (const row of activity.letterRows) {
