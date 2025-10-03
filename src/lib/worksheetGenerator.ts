@@ -21,20 +21,24 @@ interface WordData {
   icon?: string // Path to SVG icon
 }
 
+interface ActivitySection {
+    activityId: string
+    words: WordData[]
+    letterRows?: string[][]
+    wordPairs?: { left: string[], right: string[] }
+    pictureSoundSections?: Array<{
+      sound: string
+      displaySound: string
+      words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
+    }>
+}
+  
 interface WorksheetData {
-  mood: MoodType
-  phonicsType: PhonicsType
-  activityType: string
-  constraints: MoodConstraints
-  words: WordData[]
-  distractors: WordData[]
-  letterRows?: string[][]
-  wordPairs?: { left: string[], right: string[] }
-  pictureSoundSections?: Array<{  // NEW PROPERTY
-    sound: string
-    displaySound: string
-    words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
-  }>
+mood: MoodType
+phonicsType: PhonicsType
+constraints: MoodConstraints
+activities: ActivitySection[]  // NEW: Array of activities
+distractors: WordData[]
 }
 
 // ============================================================================
@@ -139,6 +143,13 @@ const MOOD_CONSTRAINTS: Record<MoodType, MoodConstraints> = {
     allowNoWriting: true,
     completionMessage: 'Slow and steady. You [action] some [items].',
   },
+}
+
+// Activity pools for each mood
+const MOOD_ACTIVITY_POOLS = {
+    overwhelmed: ['trace3', 'breatheCircle', 'circleKnown', 'pictureSound'],
+    highEnergy: ['soundHunt', 'bodyLetter'],
+    lowEnergy: ['pointRest', 'traceOne', 'bigLetterCircle', 'connectPairs']
 }
 
 // ============================================================================
@@ -251,32 +262,18 @@ function selectWordsForActivity(
  * Generate word family rows for "Breathe & Circle" activity
  */
 function generateLetterRows(targetWords: WordData[]): string[][] {
-  const letterRows: string[][] = []
-  const distractorLetters = ['M', 'R', 'T', 'P', 'K', 'N', 'H', 'L', 'W', 'F', 'J', 'V', 'Z']
-  
-  // Take first 3-4 words and get their first letters
-  const targetLetters = targetWords.slice(0, 4).map(w => w.word[0].toUpperCase())
-  
-  targetLetters.forEach(letter => {
-    // Create array with target letter appearing 2-3 times
-    const timesToInclude = Math.random() > 0.5 ? 2 : 3
-    const row = Array(timesToInclude).fill(letter)
+    const targetLetter = targetWords[0]?.word[0].toUpperCase() || 'H'
+    const distractorLetters = ['B', 'D', 'F', 'G', 'J', 'K', 'L', 'M', 'N', 'P', 'R', 'T', 'V', 'W', 'Z']
     
-    // Add 4-5 distractor letters (make sure they're different from target)
-    const availableDistractors = distractorLetters.filter(d => d !== letter)
-    const shuffledDistractors = shuffle([...availableDistractors])
-    const numDistractors = 7 - timesToInclude // Total 7 letters per row
+    // Get 4 random distractors
+    const shuffled = shuffle(distractorLetters.filter(l => l !== targetLetter))
+    const distractors = shuffled.slice(0, 4)
     
-    row.push(...shuffledDistractors.slice(0, numDistractors))
+    // Combine and shuffle to get 5 letters with target included
+    const allLetters = [targetLetter, ...distractors]
+    const singleRow = shuffle(allLetters)
     
-    // Shuffle the final row so target isn't always first
-    const shuffledRow = shuffle(row)
-    
-    // Store as [targetLetter, ...shuffledLetters] so we know which letter to find
-    letterRows.push([letter, ...shuffledRow])
-  })
-  
-  return letterRows
+    return [singleRow] // Return single row only
 }
 
 function generateBigLetterRows(targetWords: WordData[]): string[][] {
@@ -387,47 +384,55 @@ function generateDistractors(
  * NOTE: phonicsType parameter removed - now hardcoded to 'cvc' internally
  */
 export function generateMoodBasedWorksheet(
-  mood: MoodType,
-  activityType: string
-): WorksheetData {
-  const constraints = MOOD_CONSTRAINTS[mood]
-  
-  // Hardcoded phonicsType to 'cvc' - all mood-based worksheets use CVC words
-  const phonicsType: PhonicsType = 'cvc'
-  
-  // Select curated words
-  const words = selectWordsForActivity(mood, activityType, constraints.maxItems)
-  const distractors = generateDistractors(words)
-  
-  // Base worksheet data
-  const worksheetData: WorksheetData = {
-    mood,
-    phonicsType,
-    activityType,
-    constraints,
-    words,
-    distractors,
-  }
-  
-  // Special handling for breatheCircle activity
-  if (activityType === 'breatheCircle') {
-    worksheetData.letterRows = generateLetterRows(words)
-  }
-  // NEW: Special handling for bigLetterCircle
-  if (activityType === 'bigLetterCircle') {
-    worksheetData.letterRows = generateBigLetterRows(words)
-  }
-  if (activityType === 'connectPairs') {
-    const pairs = generateWordPairs(words)
-    // Store in a new property called wordPairs
-    worksheetData.wordPairs = pairs
-  }
-  // NEW: Special handling for pictureSound
-  if (activityType === 'pictureSound') {
-    const pictureSoundData = generatePictureSoundData(words)
-    worksheetData.pictureSoundSections = pictureSoundData.sections
-  }
-  return worksheetData
+    mood: MoodType
+  ): WorksheetData {
+    const constraints = MOOD_CONSTRAINTS[mood]
+    const phonicsType: PhonicsType = 'cvc'
+    
+    // Get activity pool for this mood
+    const activityPool = MOOD_ACTIVITY_POOLS[mood]
+    
+    // Shuffle and select 2 random activities
+    const shuffled = shuffle([...activityPool])
+    const selectedActivities = shuffled.slice(0, 2)
+    
+    // Generate data for each activity
+    const activities: ActivitySection[] = selectedActivities.map(activityId => {
+      const words = selectWordsForActivity(mood, activityId, constraints.maxItems)
+      const section: ActivitySection = {
+        activityId,
+        words
+      }
+      
+      // Add activity-specific data
+      if (activityId === 'breatheCircle') {
+        section.letterRows = generateLetterRows(words)
+      }
+      if (activityId === 'bigLetterCircle') {
+        section.letterRows = generateBigLetterRows(words)
+      }
+      if (activityId === 'connectPairs') {
+        section.wordPairs = generateWordPairs(words)
+      }
+      if (activityId === 'pictureSound') {
+        const pictureSoundData = generatePictureSoundData(words)
+        section.pictureSoundSections = pictureSoundData.sections
+      }
+      
+      return section
+    })
+    
+    // Generate distractors (for potential future use)
+    const allWords = activities.flatMap(a => a.words)
+    const distractors = generateDistractors(allWords)
+    
+    return {
+      mood,
+      phonicsType,
+      constraints,
+      activities,
+      distractors
+    }
 }
 
 /**
@@ -452,4 +457,4 @@ export function formatCompletionMessage(
 
 // Export types and constraints
 export { MOOD_CONSTRAINTS, WORD_FAMILIES, WORD_ICONS }
-export type { MoodType, PhonicsType, WordData, WorksheetData, MoodConstraints }
+export type { MoodType, PhonicsType, WordData, WorksheetData, MoodConstraints, ActivitySection }

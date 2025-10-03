@@ -25,9 +25,7 @@ interface ActivityOption {
 }
 
 export default function MoodBasedWorksheetGenerator() {
-  const [step, setStep] = useState<1 | 2>(1)
   const [selectedMood, setSelectedMood] = useState<MoodType>(null)
-  const [selectedActivity, setSelectedActivity] = useState<ActivityType>(null)
   const [worksheetData, setWorksheetData] = useState<any>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
@@ -59,91 +57,40 @@ export default function MoodBasedWorksheetGenerator() {
     },
   ]
 
-  const activityOptions: Record<'overwhelmed' | 'highEnergy' | 'lowEnergy', ActivityOption[]> = {
-    overwhelmed: [
-      { id: 'trace3', label: 'Trace 3 Words', description: 'Just trace 3. That\'s enough.' },
-      { id: 'breatheCircle', label: 'Breathe & Circle', description: 'Find letters while breathing calmly' },
-      { id: 'circleKnown', label: 'Circle Any Word You Know', description: 'Read what you can. Even one counts.' },
-      { id: 'pictureSound', label: 'Picture & Sound Match', description: 'Look and circle Yes or No.' },  // NEW
-    ],
-    highEnergy: [
-      { id: 'soundHunt', label: 'Sound Hunt', description: 'Circle letters you hear (on paper)' },
-      { id: 'bodyLetter', label: 'Body Letters', description: 'Make letters with arms & legs - no writing!' },
-    ],
-    lowEnergy: [
-      { id: 'pointRest', label: 'Point & Rest', description: 'Just point. No writing needed.' },
-      { id: 'traceOne', label: 'Trace Just One', description: 'One word. That\'s perfect.' },
-      { id: 'bigLetterCircle', label: 'Big Letter Circle', description: 'Find 4 letters. Easy and calm.' },
-      { id: 'connectPairs', label: 'Connect the Pairs', description: 'Draw lines to match words.' },
-    ],
-  }
-
   const handleMoodSelect = (mood: MoodType) => {
     if (!mood) return
     
     setSelectedMood(mood)
-    setStep(2)
-    setSelectedActivity(null)
-    setShowPreview(false)
-    setWorksheetData(null)
-  }
-
-  const handleActivitySelect = (activityId: string) => {
-    setSelectedActivity(activityId)
     
-    // Generate worksheet data immediately for preview
-    if (selectedMood) {
-      const data = generateMoodBasedWorksheet(
-        selectedMood,
-        activityId
-      )
-      setWorksheetData(data)
-      setShowPreview(true)
-      setHasGenerated(true)
-    }
+    // Generate immediately with 2 activities
+    const data = generateMoodBasedWorksheet(mood)
+    setWorksheetData(data)
+    setShowPreview(true)
+    setHasGenerated(true)
   }
-
+  
   const handleGenerateAnother = () => {
-    // Regenerate with same selections
-    if (selectedMood && selectedActivity) {
-      const data = generateMoodBasedWorksheet(
-        selectedMood,
-        selectedActivity
-      )
+    if (selectedMood) {
+      const data = generateMoodBasedWorksheet(selectedMood)
       setWorksheetData(data)
     }
   }
 
   const handleDownload = async () => {
-    if (!worksheetData || !selectedMood || !selectedActivity) return
-    await generateMoodPDF(worksheetData, selectedMood, selectedActivity)
+    if (!worksheetData || !selectedMood) return
+    await generateMoodPDF(worksheetData, selectedMood)
   }
-
-  const handleBack = () => {
-    if (step === 2) {
-      setStep(1)
-      setShowPreview(false)
-      setSelectedActivity(null)
-      setWorksheetData(null)
-    }
-  }
-
+  
   const handleStartOver = () => {
-    setStep(1)
     setSelectedMood(null)
-    setSelectedActivity(null)
     setWorksheetData(null)
     setShowPreview(false)
   }
 
   const handleQuickPick = () => {
-    // Auto-select: Overwhelmed + Trace 3
     setSelectedMood('overwhelmed')
-    setSelectedActivity('trace3')
-    setStep(2)
     
-    // Generate immediately
-    const data = generateMoodBasedWorksheet('overwhelmed', 'trace3')
+    const data = generateMoodBasedWorksheet('overwhelmed')
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
@@ -163,30 +110,30 @@ export default function MoodBasedWorksheetGenerator() {
           
           {/* Breadcrumb indicator */}
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-            <span className={step >= 1 ? 'font-semibold text-blue-600' : ''}>
-              Choose Mood
+            <span className={selectedMood ? 'font-semibold text-blue-600' : ''}>
+                Choose Mood
             </span>
             <span>→</span>
-            <span className={step >= 2 ? 'font-semibold text-blue-600' : ''}>
-              Preview
+            <span className={showPreview ? 'font-semibold text-blue-600' : ''}>
+                Preview
             </span>
           </div>
 
-          {step > 1 && (
+          {showPreview && (
             <button
-              onClick={handleStartOver}
-              className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
+                onClick={handleStartOver}
+                className="mt-4 text-sm text-gray-500 hover:text-gray-700 underline"
             >
-              Start over
+                Start over
             </button>
           )}
         </div>
 
-        <div className="flex gap-8">
+        <div className="flex gap-8 justify-center">
           {/* Left Column - Selection */}
           <div className={`${showPreview ? 'flex-1' : 'max-w-3xl mx-auto w-full'} transition-all`}>
-            {/* Step 1: Mood Selection */}
-            {step === 1 && (
+            {/* Mood Selection */}
+            {!showPreview && (
               <div className="space-y-8">
                 <h2 className="text-3xl font-semibold text-center text-gray-800">
                   How is your child today?
@@ -236,40 +183,7 @@ export default function MoodBasedWorksheetGenerator() {
                 </div>
               </div>
             )}
-
-            {/* Step 2: Activity Selection */}
-            {step === 2 && selectedMood && (
-              <div className="space-y-8">
-                <button
-                  onClick={handleBack}
-                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Back to mood selection</span>
-                </button>
-                
-                <h2 className="text-3xl font-semibold text-center text-gray-800">
-                  Choose activity type
-                </h2>
-                
-                <div className="grid gap-4 max-w-2xl mx-auto">
-                  {activityOptions[selectedMood].map((activity) => (
-                    <button
-                      key={activity.id}
-                      onClick={() => handleActivitySelect(activity.id)}
-                      className={`p-8 rounded-xl border-2 text-left transition-all hover:shadow-lg ${
-                        selectedActivity === activity.id
-                          ? 'bg-gray-100 border-gray-400 shadow-md'
-                          : 'bg-white border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <p className="font-bold text-xl text-gray-900 mb-2">{activity.label}</p>
-                      <p className="text-sm text-gray-500">{activity.description}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            
           </div>
 
           {/* Right Column - Preview */}

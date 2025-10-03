@@ -1,22 +1,26 @@
 // src/components/worksheets/WorksheetPreview.tsx
-// HTML preview matching PDF exactly - white backgrounds with colored accents
+// HTML preview matching PDF exactly - multi-activity support
 
 import React from 'react'
 
-interface WorksheetData {
-  mood: string
-  phonicsType: string
-  activityType: string
-  constraints: any
+interface ActivitySection {
+  activityId: string
   words: Array<{ word: string; icon?: string }>
-  distractors: Array<{ word: string; icon?: string }>
-  familyRows?: string[][]
+  letterRows?: string[][]
   wordPairs?: { left: string[], right: string[] }
-  pictureSoundSections?: Array<{  
+  pictureSoundSections?: Array<{
     sound: string
     displaySound: string
     words: Array<{ word: string; icon?: string; startsWithSound: boolean }>
   }>
+}
+
+interface WorksheetData {
+  mood: string
+  phonicsType: string
+  constraints: any
+  activities: ActivitySection[]  // NEW: Multiple activities
+  distractors: Array<{ word: string; icon?: string }>
 }
 
 interface PreviewProps {
@@ -44,33 +48,6 @@ const MOOD_COLORS = {
 export default function WorksheetPreview({ data }: PreviewProps) {
   const colors = MOOD_COLORS[data.mood as keyof typeof MOOD_COLORS]
   
-  const renderTemplate = () => {
-    switch (data.activityType) {
-      case 'trace3':
-        return <Trace3WordsPreview data={data} colors={colors} />
-      case 'breatheCircle':
-        return <BreatheCirclePreview data={data} colors={colors} />
-      case 'circleKnown':  
-        return <CircleKnownPreview data={data} colors={colors} />
-      case 'soundHunt':
-        return <SoundHuntPreview data={data} colors={colors} />
-      case 'bodyLetter':
-        return <BodyLetterPreview data={data} colors={colors} />
-      case 'pointRest':
-        return <PointRestPreview data={data} colors={colors} />
-      case 'traceOne':
-        return <TraceOnePreview data={data} colors={colors} />
-      case 'bigLetterCircle':  
-        return <BigLetterCirclePreview data={data} colors={colors} />
-      case 'connectPairs':  
-        return <ConnectPairsPreview data={data} colors={colors} />
-      case 'pictureSound':  
-        return <PictureSoundPreview data={data} colors={colors} />
-      default:
-        return <Trace3WordsPreview data={data} colors={colors} />
-    }
-  }
-  
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div 
@@ -79,9 +56,40 @@ export default function WorksheetPreview({ data }: PreviewProps) {
           aspectRatio: '210 / 297', // A4 ratio
         }}
       >
-        {renderTemplate()}
+        {/* Render all activities */}
+        <div className="w-full h-full overflow-y-auto">
+          {data.activities.map((activity, index) => (
+            <div key={index}>
+              {/* Separator between activities (not before first) */}
+              {index > 0 && (
+                <div 
+                  className="my-6 mx-auto w-4/5"
+                  style={{
+                    height: '2px',
+                    backgroundColor: colors.accent,
+                    opacity: 0.4
+                  }}
+                />
+              )}
+              
+              {/* Render activity template */}
+              <ActivityRenderer 
+                activity={activity} 
+                colors={colors}
+                isFirst={index === 0}
+              />
+            </div>
+          ))}
+          
+          {/* Combined completion message */}
+          <div className="text-center mt-8 mb-6">
+            <p className="text-sm" style={{ color: colors.textGray }}>
+              You did {data.activities.length} activities today. That's the goal.
+            </p>
+          </div>
+        </div>
         
-        {/* Colored footer bar - like Canva PDF */}
+        {/* Colored footer bar */}
         <div 
           className="absolute bottom-0 left-0 right-0 h-4"
           style={{ backgroundColor: colors.accent }}
@@ -92,643 +100,402 @@ export default function WorksheetPreview({ data }: PreviewProps) {
 }
 
 // ============================================================================
+// ACTIVITY RENDERER
+// ============================================================================
+
+function ActivityRenderer({ 
+  activity, 
+  colors,
+  isFirst 
+}: { 
+  activity: ActivitySection
+  colors: any
+  isFirst: boolean
+}) {
+  switch (activity.activityId) {
+    case 'trace3':
+      return <Trace3WordsPreview activity={activity} colors={colors} />
+    case 'breatheCircle':
+      return <BreatheCirclePreview activity={activity} colors={colors} />
+    case 'circleKnown':
+      return <CircleKnownPreview activity={activity} colors={colors} />
+    case 'soundHunt':
+      return <SoundHuntPreview activity={activity} colors={colors} />
+    case 'bodyLetter':
+      return <BodyLetterPreview activity={activity} colors={colors} />
+    case 'pointRest':
+      return <PointRestPreview activity={activity} colors={colors} />
+    case 'traceOne':
+      return <TraceOnePreview activity={activity} colors={colors} />
+    case 'bigLetterCircle':
+      return <BigLetterCirclePreview activity={activity} colors={colors} />
+    case 'connectPairs':
+      return <ConnectPairsPreview activity={activity} colors={colors} />
+    case 'pictureSound':
+      return <PictureSoundPreview activity={activity} colors={colors} />
+    default:
+      return <Trace3WordsPreview activity={activity} colors={colors} />
+  }
+}
+
+// ============================================================================
 // ICON COMPONENT
 // ============================================================================
 
 function WordIcon({ word, icon }: { word: string; icon?: string }) {
-  // If icon path exists, show as img, otherwise show placeholder
-  if (icon) {
-    return (
-      <img 
-        src={icon} 
-        alt={word}
-        className="w-12 h-12 object-contain"
-        onError={(e) => {
-          // Fallback if SVG doesn't exist
-          e.currentTarget.style.display = 'none'
-        }}
-      />
-    )
-  }
+  if (!icon) return null
   
-  // Placeholder circle with first letter
   return (
-    <div className="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center">
-      <span className="text-xl font-bold text-gray-500">
-        {word[0].toUpperCase()}
-      </span>
-    </div>
+    <img 
+      src={icon} 
+      alt={word}
+      className="inline-block w-8 h-8 ml-2 align-middle"
+      onError={(e) => {
+        e.currentTarget.style.display = 'none'
+      }}
+    />
   )
 }
 
 // ============================================================================
-// TEMPLATE: TRACE 3 WORDS
+// ACTIVITY TEMPLATES
 // ============================================================================
 
-function Trace3WordsPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 3)
-  
+function Trace3WordsPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
   return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
-      {/* Title */}
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
       <div className="text-center mb-2">
-        <h1 className="font-normal text-4xl">Just 3 Words</h1>
-        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
+        <h1 className="font-normal text-3xl">Trace 3 Words</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
       </div>
       
-      {/* Colored accent line */}
       <div 
-        className="w-4/5 mx-auto mb-6"
+        className="w-4/5 mx-auto mb-3"
         style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      {/* Instructions */}
-      <p className="text-center mb-8 text-base">Trace these 3 words.</p>
-      
-      {/* Words with icons */}
-      <div className="flex-1 flex flex-col justify-center space-y-8">
-        {words.map((wordObj, i) => (
-          <div key={i} className="flex items-center justify-center gap-8">
-            {/* Icon */}
-            <WordIcon word={wordObj.word} icon={wordObj.icon} />
-            
-            {/* Word for tracing */}
-            <div className="flex flex-col items-center">
-              <span 
-                className="text-5xl font-normal tracking-wide"
-                style={{ color: colors.traceGray }}
-              >
-                {wordObj.word}
-              </span>
-              <div 
-                className="w-48 mt-1"
-                style={{
-                  borderBottom: `2px dotted ${colors.traceGray}`,
-                  opacity: 0.6
-                }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {/* Completion message */}
-      <p 
-        className="text-center mt-8 text-sm"
-        style={{ color: colors.textGray }}
-      >
-        You traced 3 words today. That's the goal.
+      <p className="text-center text-sm mb-4">
+        Trace these 3 words. Take your time.
       </p>
-    </div>
-  )
-}
-
-// ============================================================================
-// TEMPLATE: BREATHE & CIRCLE
-// ============================================================================
-
-function BreatheCirclePreview({ data, colors }: { data: WorksheetData; colors: any }) {
-    return (
-      <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
-        {/* Title */}
-        <div className="text-center mb-2">
-          <h1 className="font-normal text-4xl">Breathe & Circle</h1>
-          <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
-        </div>
-        
-        <div 
-          className="w-4/5 mx-auto mb-4"
-          style={{ height: '2px', backgroundColor: colors.accent }}
-        />
-        
-        {/* Instructions */}
-        <p className="text-center text-base mb-3">
-          Take a slow breath. Then circle the letter.
-        </p>
-        
-        {/* Breathing guide */}
-        <div className="text-center mb-6" style={{ color: colors.textGray }}>
-          <p className="text-sm">
-            Breathing Guide: In: 1-2-3  *  Out: 1-2-3  Now circle!
-          </p>
-        </div>
-        
-        {/* Letter finding rows */}
-        <div className="flex-1 space-y-6">
-          {data.letterRows && data.letterRows.map((row, index) => {
-            const targetLetter = row[0]
-            const letterArray = row.slice(1)
-            
-            return (
-              <div key={index} className="text-center">
-                <p className="text-base font-semibold mb-2">
-                  Find the letter {targetLetter}:
-                </p>
-                <p className="text-2xl tracking-widest font-normal">
-                  {letterArray.join('   ')}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-        
-        {/* Completion message */}
-        <p 
-          className="text-center mt-6 text-sm"
-          style={{ color: colors.textGray }}
-        >
-          Good breathing = good learning 💙
-        </p>
-      </div>
-    )
-}
-
-// ============================================================================
-// TEMPLATE: SOUND HUNT
-// ============================================================================
-
-function SoundHuntPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 9)
-  
-  return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
-      <div className="text-center mb-2">
-        <h1 className="font-normal text-3xl">Sound Hunt Around You</h1>
-      </div>
       
-      <div 
-        className="w-4/5 mx-auto mb-4"
-        style={{ height: '2px', backgroundColor: colors.accent }}
-      />
-      
-      <div className="text-center mb-6">
-        <p className="text-sm">Find things that start with these sounds.</p>
-        <p className="text-sm">Draw or write what you find.</p>
-      </div>
-      
-      {/* Grid of sound boxes */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
-        {words.slice(0, 4).map((wordObj, i) => (
-        <div 
-            key={i}
-            className="border-2 border-gray-300 rounded-lg p-4 flex flex-col items-center justify-start aspect-square"
-        >
-            <span className="text-2xl font-bold">
-            {wordObj.word[0].toUpperCase()}
-            </span>
-        </div>
-        ))}
-      </div>
-      
-      <p 
-        className="text-center mt-auto text-sm"
-        style={{ color: colors.textGray }}
-      >
-        Found even one? You're a sound detective!
-      </p>
-    </div>
-  )
-}
-
-// ============================================================================
-// TEMPLATE: BODY LETTER
-// ============================================================================
-
-function BodyLetterPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 6)
-  
-  return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
-      <div className="text-center mb-2">
-        <h1 className="font-normal text-3xl">Body Letter Fun</h1>
-      </div>
-      
-      <div 
-        className="w-4/5 mx-auto mb-4"
-        style={{ height: '2px', backgroundColor: colors.accent }}
-      />
-      
-      <div className="text-center mb-6">
-        <p className="text-sm">Make these letters with your body!</p>
-        <p className="text-sm">Stand up, move around, have fun!</p>
-      </div>
-      
-      <div className="flex-1 space-y-6">
-        {words.map((wordObj, i) => (
-          <div key={i} className="text-center">
-            <span className="text-5xl font-bold">
-              {wordObj.word[0].toUpperCase()}
-            </span>
-            <p className="text-sm mt-1" style={{ color: colors.textGray }}>
-              ({wordObj.word})
+      <div className="space-y-8">
+        {activity.words.slice(0, 3).map((word, idx) => (
+          <div key={idx} className="text-center">
+            <p 
+              className="text-5xl font-normal tracking-wide"
+              style={{ color: colors.traceGray }}
+            >
+              {word.word}
             </p>
+            <div 
+              className="w-2/3 mx-auto mt-2"
+              style={{ 
+                borderBottom: `1px solid ${colors.traceGray}`,
+                opacity: 0.5 
+              }}
+            />
           </div>
         ))}
       </div>
-      
-      <p 
-        className="text-center text-sm"
-        style={{ color: colors.textGray }}
-      >
-        You moved! That helps your brain learn.
-      </p>
     </div>
   )
 }
 
-// ============================================================================
-// TEMPLATE: POINT & REST
-// ============================================================================
-
-function PointRestPreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const words = data.words.slice(0, 5)
-  
+function BreatheCirclePreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
   return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
       <div className="text-center mb-2">
-        <h1 className="font-normal text-4xl">Point & Rest</h1>
-        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
+        <h1 className="font-normal text-3xl">Breathe & Circle</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
       </div>
       
       <div 
-        className="w-4/5 mx-auto mb-6"
+        className="w-4/5 mx-auto mb-3"
         style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      <p className="text-center mb-8 text-base">
-        Just point to the words. No writing needed.
+      <p className="text-center text-sm mb-2">
+        Take a slow breath. Then circle the letter: {activity.words[0]?.word[0].toUpperCase() || 'H'}
       </p>
       
-      <div className="flex-1 flex flex-col justify-center space-y-6">
-        {words.map((wordObj, i) => (
-          <div key={i} className="flex items-center justify-center gap-8">
-            <WordIcon word={wordObj.word} icon={wordObj.icon} />
-            <span className="text-4xl font-normal">{wordObj.word}</span>
-          </div>
-        ))}
+      <div className="text-center mb-4" style={{ color: colors.textGray }}>
+        <p className="text-xs">
+          Breathing Guide: In: 1-2-3  *  Out: 1-2-3  Now circle!
+        </p>
       </div>
       
-      <p 
-        className="text-center mt-8 text-sm"
-        style={{ color: colors.textGray }}
-      >
-        Slow and steady. You pointed to some words.
-      </p>
+      {activity.letterRows && activity.letterRows.length > 0 && (
+        <div className="text-center">
+            <div className="flex justify-center items-center gap-4">
+            {activity.letterRows[0].map((letter, idx) => {
+                const isTarget = letter === activity.words[0]?.word[0].toUpperCase()
+                return (
+                <span 
+                    key={idx} 
+                    className={isTarget ? 'text-4xl font-bold' : 'text-2xl font-normal'}
+                >
+                    {letter}
+                </span>
+                )
+            })}
+            </div>
+        </div>
+      )}
     </div>
   )
 }
 
-// ============================================================================
-// TEMPLATE: TRACE ONE
-// ============================================================================
-
-function TraceOnePreview({ data, colors }: { data: WorksheetData; colors: any }) {
-  const word = data.words[0].word
-  const sentence = `I can ${word}.`
-  
+function CircleKnownPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
   return (
-    <div className="w-full h-full flex flex-col" style={{ padding: '8% 10%' }}>
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
       <div className="text-center mb-2">
-        <h1 className="font-normal text-4xl">Trace One Sentence</h1>
-        <h2 className="font-normal text-xl text-gray-700 mt-1">Today</h2>
+        <h1 className="font-normal text-3xl">Circle Any Word You Know</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
       </div>
       
       <div 
-        className="w-4/5 mx-auto mb-6"
+        className="w-4/5 mx-auto mb-3"
         style={{ height: '2px', backgroundColor: colors.accent }}
       />
       
-      <p className="text-center mb-12 text-base">
+      <p className="text-center text-sm mb-4">
+        Read what you can. Even one counts.
+      </p>
+      
+      <div className="grid grid-cols-3 gap-6 text-center">
+        {activity.words.slice(0, 6).map((word, idx) => (
+          <div key={idx} className="text-2xl font-normal">
+            {word.word}
+            <WordIcon word={word.word} icon={word.icon} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SoundHuntPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Sound Hunt</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Circle letters you hear in these words.
+      </p>
+      
+      <div className="grid grid-cols-2 gap-6">
+        {activity.words.slice(0, 6).map((word, idx) => (
+          <div key={idx} className="text-3xl font-normal text-center">
+            {word.word}
+            <WordIcon word={word.word} icon={word.icon} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function BodyLetterPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Body Letters</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Make letters with arms & legs - no writing!
+      </p>
+      
+      <div className="space-y-6 text-center">
+        {activity.words.slice(0, 3).map((word, idx) => (
+          <div key={idx} className="text-5xl font-normal">
+            {word.word}
+            <WordIcon word={word.word} icon={word.icon} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PointRestPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Point & Rest</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Just point. No writing needed.
+      </p>
+      
+      <div className="space-y-4 text-center">
+        {activity.words.slice(0, 5).map((word, idx) => (
+          <div key={idx} className="text-4xl font-normal">
+            {word.word}
+            <WordIcon word={word.word} icon={word.icon} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function TraceOnePreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  const sentence = `I read ${activity.words[0]?.word || 'word'}`
+  
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Trace Just One</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-6">
         Trace this sentence one time. Take your time.
       </p>
       
-      <div className="flex-1 flex flex-col justify-center items-center">
-        <WordIcon word={word} icon={data.words[0].icon} />
-        
-        <div className="mt-8 flex flex-col items-center">
-          <span 
-            className="text-4xl font-normal tracking-wide"
-            style={{ color: colors.traceGray }}
-          >
-            {sentence}
-          </span>
-          <div 
-            className="w-96 mt-2"
-            style={{
-              borderBottom: `2px dotted ${colors.traceGray}`,
-              opacity: 0.6
-            }}
-          />
-        </div>
+      <div className="text-center">
+        <p 
+          className="text-4xl font-normal tracking-wide"
+          style={{ color: colors.traceGray }}
+        >
+          {sentence}
+        </p>
+        <div 
+          className="w-3/4 mx-auto mt-2"
+          style={{ 
+            borderBottom: `1px solid ${colors.traceGray}`,
+            opacity: 0.5 
+          }}
+        />
       </div>
-      
-      <p 
-        className="text-center mt-8 text-sm"
-        style={{ color: colors.textGray }}
-      >
-        One sentence traced. You did it.
-      </p>
     </div>
   )
 }
 
-interface CircleKnownPreviewProps {
-    data: WorksheetData
-    colors: any
-  }
-  
-  function CircleKnownPreview({ data, colors }: CircleKnownPreviewProps) {
-    const words = data.words.slice(0, 15) // 5 rows × 3 words
-    
-    return (
-      <div className="relative p-8 bg-white h-full flex flex-col">
-        {/* Title */}
-        <div className="text-center mb-2">
-          <h1 className="text-4xl font-normal text-black">
-            Circle the Word You Know
-          </h1>
-        </div>
-        
-        {/* Subtitle */}
-        <div className="text-center mb-3">
-          <p className="text-lg font-normal text-black">Today</p>
-        </div>
-        
-        {/* Decorative line */}
-        <div 
-          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
-          style={{ backgroundColor: colors.accent }}
-        />
-        
-        {/* Instructions */}
-        <div className="text-center mb-8">
-          <p className="text-base text-black leading-relaxed">
-            Look at each line. Circle any word you can read. Even one is<br />
-            great.
-          </p>
-        </div>
-        
-        {/* Word rows - 5 rows × 3 words */}
-        <div className="flex-1 flex flex-col justify-center space-y-6">
-          {[0, 1, 2, 3, 4].map((rowIndex) => {
-            const rowWords = words.slice(rowIndex * 3, rowIndex * 3 + 3)
-            
-            return (
-              <div 
-                key={rowIndex}
-                className="flex justify-around items-center"
-              >
-                {rowWords.map((wordObj, idx) => (
-                  <div key={idx} className="flex-1 text-center">
-                    <span className="text-5xl font-normal text-black">
-                      {wordObj.word}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )
-          })}
-        </div>
-        
-        {/* Completion message */}
-        <div className="text-center mt-8 mb-4">
-          <p 
-            className="text-sm"
-            style={{ color: colors.textGray }}
-          >
-            You read some words today. Good.
-          </p>
-        </div>
+function BigLetterCirclePreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Big Letter Circle</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
       </div>
-    )
-}
-
-interface BigLetterCirclePreviewProps {
-    data: WorksheetData
-    colors: any
-  }
-  
-  function BigLetterCirclePreview({ data, colors }: BigLetterCirclePreviewProps) {
-    const letterRows = data.letterRows || []
-    
-    return (
-      <div className="relative p-8 bg-white h-full flex flex-col">
-        {/* Title */}
-        <div className="text-center mb-4">
-          <h1 className="text-4xl font-normal text-black">
-            Big Letter Circle
-          </h1>
-        </div>
-        
-        {/* Decorative line */}
-        <div 
-          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
-          style={{ backgroundColor: colors.accent }}
-        />
-        
-        {/* Instructions */}
-        <div className="text-center mb-10">
-          <p className="text-base text-black">
-            Circle the letter shown. Take your time.
-          </p>
-        </div>
-        
-        {/* Letter finding tasks - 4 rows */}
-        <div className="flex-1 flex flex-col justify-center space-y-10">
-          {letterRows.slice(0, 4).map((row, rowIndex) => {
-            const targetLetter = row[0]
-            const shuffledLetters = row.slice(1)
-            
-            return (
-              <div key={rowIndex} className="space-y-2">
-                {/* Instruction line */}
-                <p 
-                  className="text-xl font-normal mb-3"
-                  style={{ color: colors.accent }}
-                >
-                  Circle the {targetLetter}:
-                </p>
-                
-                {/* 4 letters with huge spacing */}
-                <div className="flex items-center gap-8 ml-4">
-                  {shuffledLetters.slice(0, 4).map((letter, idx) => (
-                    <span 
-                      key={idx}
-                      className="text-6xl font-normal text-black"
-                    >
-                      {letter}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-        
-        {/* Completion message */}
-        <div className="text-center mt-8 mb-4">
-          <p 
-            className="text-sm"
-            style={{ color: colors.textGray }}
-          >
-            4 letters found. That's all we needed.
-          </p>
-        </div>
-      </div>
-    )
-}
-
-interface ConnectPairsPreviewProps {
-    data: WorksheetData
-    colors: any
-  }
-  
-  function ConnectPairsPreview({ data, colors }: ConnectPairsPreviewProps) {
-    const pairs = data.wordPairs || { left: [], right: [] }
-    const leftColumn = pairs.left.slice(0, 5)
-    const rightColumn = pairs.right.slice(0, 5)
-    
-    return (
-      <div className="relative p-8 bg-white h-full flex flex-col">
-        {/* Title */}
-        <div className="text-center mb-4">
-          <h1 className="text-4xl font-normal text-black">
-            Connect the Pairs
-          </h1>
-        </div>
-        
-        {/* Decorative line */}
-        <div 
-          className="h-0.5 mx-auto mb-6 w-full max-w-2xl"
-          style={{ backgroundColor: colors.accent }}
-        />
-        
-        {/* Instructions */}
-        <div className="text-center mb-10">
-          <p className="text-base text-black">
-            Draw a line to connect words that are exactly the same.
-          </p>
-        </div>
-        
-        {/* Two columns of words */}
-        <div className="flex-1 flex justify-center items-center">
-          <div className="flex gap-32">
-            {/* Left column */}
-            <div className="space-y-6">
-              {leftColumn.map((word, idx) => (
-                <div key={idx} className="text-5xl font-normal text-black">
-                  {word}
-                </div>
-              ))}
-            </div>
-            
-            {/* Right column */}
-            <div className="space-y-6">
-              {rightColumn.map((word, idx) => (
-                <div key={idx} className="text-5xl font-normal text-black">
-                  {word}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        {/* Completion message */}
-        <div className="text-center mt-8 mb-4">
-          <p 
-            className="text-sm"
-            style={{ color: colors.textGray }}
-          >
-            5 connections made. That's the task done.
-          </p>
-        </div>
-      </div>
-    )
-}
-
-interface PictureSoundPreviewProps {
-    data: WorksheetData
-    colors: any
-  }
-  
-  function PictureSoundPreview({ data, colors }: PictureSoundPreviewProps) {
-    const sections = data.pictureSoundSections || []
-    
-    return (
-      <div className="relative p-6 bg-white h-full flex flex-col">
-        {/* Title */}
-        <div className="text-center mb-2">
-          <h1 className="text-3xl font-normal text-black">
-            Picture and Sound Match
-          </h1>
-        </div>
-        
-        {/* Decorative line */}
-        <div 
-          className="h-0.5 mx-auto mb-4 w-full max-w-2xl"
-          style={{ backgroundColor: colors.accent }}
-        />
-        
-        {/* Instructions */}
-        <div className="text-center mb-6">
-          <p className="text-sm text-black leading-relaxed">
-            Look at each picture. Circle YES if it starts with the sound.<br />
-            Circle NO if it doesn't.
-          </p>
-        </div>
-        
-        {/* Sections */}
-        <div className="flex-1 space-y-8">
-          {sections.slice(0, 2).map((section, sectionIdx) => (
-            <div key={sectionIdx} className="space-y-3">
-              {/* Section header */}
-              <h3 
-                className="text-lg font-bold"
-                style={{ color: colors.accent }}
-              >
-                Sound Focus: {section.displaySound}
-              </h3>
-              
-              {/* 4 pictures in a row */}
-              <div className="grid grid-cols-4 gap-4">
-                {section.words.slice(0, 4).map((pic, picIdx) => (
-                  <div key={picIdx} className="flex flex-col items-center space-y-2">
-                    {/* Icon or placeholder */}
-                    {pic.icon ? (
-                      <WordIcon word={pic.word} icon={pic.icon} />
-                    ) : (
-                      <div className="w-16 h-16 border border-gray-300 rounded flex items-center justify-center">
-                        <span className="text-xs text-gray-400">{pic.word}</span>
-                      </div>
-                    )}
-                    
-                    {/* Yes/No options */}
-                    <div className="flex flex-col items-start space-y-1 text-xs">
-                      <label className="flex items-center gap-1 cursor-pointer">
-                        <div className="w-3 h-3 rounded-full border border-gray-400" />
-                        <span>YES</span>
-                      </label>
-                      <label className="flex items-center gap-1 cursor-pointer">
-                        <div className="w-3 h-3 rounded-full border border-gray-400" />
-                        <span>NO</span>
-                      </label>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Find 4 letters. Easy and calm.
+      </p>
+      
+      {activity.letterRows && activity.letterRows.length > 0 && (
+        <div className="space-y-5 text-center">
+          {activity.letterRows.map((row, idx) => (
+            <div key={idx} className="text-4xl tracking-widest font-normal">
+              {row.join('   ')}
             </div>
           ))}
         </div>
-        
-        {/* Completion message */}
-        <div className="text-center mt-6 mb-2">
-          <p 
-            className="text-xs"
-            style={{ color: colors.textGray }}
-          >
-            You checked 8 pictures. Quiet thinking is powerful thinking 🤫
-          </p>
-        </div>
+      )}
+    </div>
+  )
+}
+
+function ConnectPairsPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Connect the Pairs</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
       </div>
-    )
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Draw a line to connect words that are exactly the same.
+      </p>
+      
+      {activity.wordPairs && (
+        <div className="space-y-4">
+          {activity.wordPairs.left.slice(0, 5).map((leftWord, idx) => (
+            <div key={idx} className="flex justify-between items-center px-8">
+              <div className="text-3xl font-normal">{leftWord}</div>
+              <div className="text-3xl font-normal">{activity.wordPairs!.right[idx]}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function PictureSoundPreview({ activity, colors }: { activity: ActivitySection; colors: any }) {
+  return (
+    <div className="w-full h-auto flex flex-col" style={{ padding: '6% 10%' }}>
+      <div className="text-center mb-2">
+        <h1 className="font-normal text-3xl">Picture & Sound Match</h1>
+        <h2 className="font-normal text-lg text-gray-700 mt-1">Today</h2>
+      </div>
+      
+      <div 
+        className="w-4/5 mx-auto mb-3"
+        style={{ height: '2px', backgroundColor: colors.accent }}
+      />
+      
+      <p className="text-center text-sm mb-4">
+        Look and circle Yes or No.
+      </p>
+      
+      {activity.pictureSoundSections && activity.pictureSoundSections.map((section, sectionIdx) => (
+        <div key={sectionIdx} className="mb-6">
+          <p className="text-center font-semibold text-lg mb-3">
+            Does it start with {section.displaySound}?
+          </p>
+          
+          <div className="space-y-3">
+            {section.words.map((item, wordIdx) => (
+              <div className="flex justify-between items-center px-8">
+                <div className="flex items-center gap-2">
+                    <WordIcon word={item.word} icon={item.icon} />
+                    <span className="text-2xl font-normal">{item.word}</span>
+                </div>
+                <div className="text-base">Yes   No</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
