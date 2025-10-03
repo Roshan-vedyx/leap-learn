@@ -3,6 +3,33 @@
 
 import jsPDF from 'jspdf'
 
+// Image cache to prevent re-embedding same images
+const imageCache = new Map<string, string>()
+
+async function loadAndCompressImage(src: string, maxWidth = 40): Promise<string> {
+  if (imageCache.has(src)) return imageCache.get(src)!
+  
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      const ratio = img.width / img.height
+      canvas.width = maxWidth
+      canvas.height = maxWidth / ratio
+      
+      const ctx = canvas.getContext('2d')!
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      
+      const compressed = canvas.toDataURL('image/jpeg', 0.6) // 60% quality
+      imageCache.set(src, compressed)
+      resolve(compressed)
+    }
+    img.onerror = () => resolve('')
+    img.src = src
+  })
+}
+
 interface ActivitySection {
   activityId: string
   words: Array<{ word: string; icon?: string }>
@@ -348,17 +375,10 @@ async function generateCircleKnown(
     
     // Render icon if present (right next to word)
     if (wordData.icon) {
-        try {
-        const img = new Image()
-        img.src = wordData.icon
-        await new Promise((resolve) => {
-            img.onload = resolve
-            img.onerror = resolve
-        })
-        const textWidth = doc.getTextWidth(wordData.word)
-        doc.addImage(img, 'PNG', 105 + textWidth/2 + 3, wordY - 7, 10, 10)
-        } catch (e) {
-        console.warn('Could not load icon:', wordData.word)
+        const compressed = await loadAndCompressImage(wordData.icon, 40)
+        if (compressed) {
+          const textWidth = doc.getTextWidth(wordData.word)
+          doc.addImage(compressed, 'JPEG', 105 + textWidth/2 + 3, wordY - 7, 10, 10)
         }
     }
   }
@@ -413,17 +433,10 @@ async function generateSoundHunt(
       
       // Render icon if present (next to word)
       if (wordData.icon) {
-        try {
-          const img = new Image()
-          img.src = wordData.icon
-          await new Promise((resolve) => {
-            img.onload = resolve
-            img.onerror = resolve
-          })
+        const compressed = await loadAndCompressImage(wordData.icon, 40)
+        if (compressed) {
           const textWidth = doc.getTextWidth(wordData.word)
-          doc.addImage(img, 'PNG', x + textWidth + 3, wordY - 7, 10, 10)
-        } catch (e) {
-          console.warn('Could not load icon for:', wordData.word)
+          doc.addImage(compressed, 'JPEG', x + textWidth + 3, wordY - 7, 10, 10)
         }
       }
     }
@@ -560,17 +573,10 @@ async function generatePointRest(
       
       // Render icon if present (right next to word)
       if (wordData.icon) {
-        try {
-          const img = new Image()
-          img.src = wordData.icon
-          await new Promise((resolve) => {
-            img.onload = resolve
-            img.onerror = resolve
-          })
+        const compressed = await loadAndCompressImage(wordData.icon, 48)
+        if (compressed) {
           const textWidth = doc.getTextWidth(wordData.word)
-          doc.addImage(img, 'PNG', 105 + textWidth/2 + 3, itemY - 7, 12, 12)
-        } catch (e) {
-          console.warn('Could not load icon for:', wordData.word)
+          doc.addImage(compressed, 'JPEG', 105 + textWidth/2 + 3, itemY - 7, 12, 12)
         }
       }
     }
@@ -763,17 +769,10 @@ async function generatePictureSound(
       for (const item of section.words) {
         // Add image first (left side)
         if (item.icon) {
-          try {
-            const img = new Image()
-            img.src = item.icon
-            await new Promise((resolve) => {
-              img.onload = resolve
-              img.onerror = resolve
-            })
-            doc.addImage(img, 'PNG', 30, y - 5, 10, 10)
-          } catch (e) {
-            console.warn('Could not load image:', item.icon)
-          }
+            const compressed = await loadAndCompressImage(item.icon, 40)
+            if (compressed) {
+              doc.addImage(compressed, 'JPEG', 30, y - 5, 10, 10)
+            }
         }
         
         // Word next to image
