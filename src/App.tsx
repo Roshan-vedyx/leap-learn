@@ -511,10 +511,6 @@ function AppContent() {
               </AuthGate>
             </Route>
             
-            <Route path="/worksheet-generator">
-              <MoodBasedWorksheetGenerator />
-            </Route>
-
             {/* Parent login - separate route for existing users */}
             <Route path="/parent-login">
               <ParentLogin />
@@ -693,6 +689,12 @@ function TeacherApp() {
             <SightWordsWorksheetGenerator />
           </TeacherAuthGuard>
         </Route>
+        {/* NEW: Mood-Based Generator - Now Protected */}
+        <Route path="/teacher/worksheet-generator">
+          <TeacherAuthGuard>
+            <MoodBasedWorksheetGenerator />
+          </TeacherAuthGuard>
+        </Route>
         
       </Router>
     </TeacherAuthProvider>
@@ -704,7 +706,12 @@ function App() {
   const [location] = useLocation()
   
   // Route teacher pages to separate app
-  if (location.startsWith('/teacher')) {
+  if (location.startsWith('/teacher') || location === '/worksheet-generator') {
+    // Redirect /worksheet-generator to /teacher/worksheet-generator
+    if (location === '/worksheet-generator') {
+      window.location.href = '/teacher/worksheet-generator'
+      return null
+    }
     return <TeacherApp />
   }
   

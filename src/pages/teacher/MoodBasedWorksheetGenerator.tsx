@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Cloud, Zap, Moon, Download, Eye, ArrowLeft } from 'lucide-react'
 import { generateMoodBasedWorksheet } from '../../lib/worksheetGenerator'
+import { useUserTier, useUsageLimit, useTrackGeneration } from '../../hooks/useUsageTracking'
 import { generateMoodPDF } from '../../components/worksheets/pdf/MoodPDFGenerator'
 import WorksheetPreview from '../../components/worksheets/WorksheetPreview'
 
@@ -29,6 +30,9 @@ export default function MoodBasedWorksheetGenerator() {
   const [worksheetData, setWorksheetData] = useState<any>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
+  const { tier, isPremium } = useUserTier()
+  const { remaining, canGenerate, loading: usageLoading } = useUsageLimit()
+  const { trackGeneration } = useTrackGeneration()
 
   const moodOptions: MoodOption[] = [
     {
@@ -57,8 +61,14 @@ export default function MoodBasedWorksheetGenerator() {
     },
   ]
 
-  const handleMoodSelect = (mood: MoodType) => {
+  const handleMoodSelect = async (mood: MoodType) => {
     if (!mood) return
+    
+    // Check usage limit for free users
+    if (!isPremium && !canGenerate) {
+      alert('You have used your 2 free adaptive worksheets this month. Upgrade to premium for unlimited access!')
+      return
+    }
     
     setSelectedMood(mood)
     
@@ -67,12 +77,28 @@ export default function MoodBasedWorksheetGenerator() {
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
+    
+    // Track generation if free user
+    if (!isPremium) {
+      await trackGeneration()
+    }
   }
   
-  const handleGenerateAnother = () => {
-    if (selectedMood) {
-      const data = generateMoodBasedWorksheet(selectedMood)
-      setWorksheetData(data)
+  const handleGenerateAnother = async () => {
+    if (!selectedMood) return
+    
+    // Check usage limit for free users
+    if (!isPremium && !canGenerate) {
+      alert('You have used your 2 free adaptive worksheets this month. Upgrade to premium for unlimited access!')
+      return
+    }
+    
+    const data = generateMoodBasedWorksheet(selectedMood)
+    setWorksheetData(data)
+    
+    // Track generation if free user
+    if (!isPremium) {
+      await trackGeneration()
     }
   }
 
@@ -138,6 +164,15 @@ export default function MoodBasedWorksheetGenerator() {
                 <h2 className="text-3xl font-semibold text-center text-gray-800">
                   How is your child today?
                 </h2>
+                {!isPremium && !usageLoading && (
+                <div className="text-center text-sm text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    {remaining > 0 ? (
+                    <span>✨ {remaining} adaptive worksheet{remaining !== 1 ? 's' : ''} remaining this month</span>
+                    ) : (
+                    <span className="text-orange-600 font-semibold">⚠️ You've used your 2 free worksheets this month</span>
+                    )}
+                </div>
+                )}
                 
                 {/* Quick Pick Button */}
                 <div className="mb-6 p-4 bg-purple-50 rounded-xl border-2 border-purple-300">

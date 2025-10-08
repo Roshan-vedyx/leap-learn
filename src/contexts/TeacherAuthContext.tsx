@@ -19,7 +19,7 @@ export interface TeacherProfile {
   }
   createdAt: Date
   subscription?: {
-    tier: 'free' | 'pro' | 'school'
+    tier: 'free' | 'monthly' | 'annual'
     status: 'active' | 'cancelled'
   }
 }
