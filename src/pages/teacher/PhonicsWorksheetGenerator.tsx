@@ -5,6 +5,10 @@ import { TeacherAppWrapper } from '../../components/teacher/TeacherAppWrapper'
 import { Button } from '../../components/ui/Button'
 import { generatePhonicsWorksheet } from '../../services/worksheetGenerator'
 import { generateAndDownloadPDF } from '../../services/pdfGenerator'
+import { useUserTier, useUsageLimit, useTrackGeneration, usePurchaseEmergencyPack } from '../../hooks/useUsageTracking'
+import { WeeklyUsageCounter } from '../../components/worksheets/WeeklyUsageCounter'
+import { UpgradeModal } from '../../components/worksheets/UpgradeModal'
+
 
 // Student archetype definitions
 const STUDENT_ARCHETYPES = [
@@ -114,15 +118,29 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
   // Advanced options (collapsed by default)
   const [showAdvanced, setShowAdvanced] = useState(false)
 
+  // Usage tracking
+  const { tier, isPremium } = useUserTier()
+  const usageLimit = useUsageLimit()
+  const { remaining, canGenerate, loading: usageLoading, resetDate } = usageLimit
+  const { trackGeneration } = useTrackGeneration()
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const { purchaseEmergencyPack, isPurchasing } = usePurchaseEmergencyPack()
+
   useEffect(() => {
     // Load available phonics patterns
     setAvailablePatterns(['magic_e', 'long_vowels', 'consonant_blends', 'digraphs', 'r_controlled'])
   }, [])
 
-  const canGenerate = selectedArchetype && selectedEnergy && selectedTime && selectedPattern
+  const canGenerateBasic = selectedArchetype && selectedEnergy && selectedTime && selectedPattern
 
   const generateWorksheet = async () => {
-    if (!canGenerate) return
+    if (!canGenerateBasic) return
+    
+    // Check usage limit for free users
+    if (!isPremium && !canGenerate) {
+      setShowUpgradeModal(true)
+      return
+    }
 
     setIsLoading(true)
     try {
@@ -149,6 +167,11 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
         energy: energy.config,
         availableTime: timeOption.time
       })
+      // Track generation for free users
+      if (!isPremium) {
+        await trackGeneration()
+      }
+      
       setWorksheetData(result)
     } catch (error) {
       console.error('Error generating worksheet:', error)
@@ -171,6 +194,28 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
     setShowAdvanced(false)
   }
 
+  const handleUpgrade = () => {
+    window.location.href = '/teacher/pricing'
+  }
+
+  const handleEmergencyPack = async () => {
+    const result = await purchaseEmergencyPack()
+    if (result.success) {
+      alert('Emergency pack purchased! You now have 2 more worksheets this week.')
+      setShowUpgradeModal(false)
+      window.location.reload()
+    } else {
+      alert(result.error || 'Purchase failed. Please try again.')
+    }
+  }
+
+  const calculateDaysUntilReset = () => {
+    if (!resetDate) return 7
+    const now = new Date()
+    const diffTime = resetDate.getTime() - now.getTime()
+    return Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+  }
+
   return (
     <TeacherAppWrapper>
       <div className="max-w-6xl mx-auto p-6">
@@ -187,6 +232,25 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
           <div className="flex items-center gap-3">
             <Brain className="w-8 h-8 text-blue-600" />
             <div>
+              {/* Usage Counter */}
+              {!isPremium && (
+                <WeeklyUsageCounter
+                  used={usageLimit?.used || 0}
+                  remaining={remaining}
+                  limit={usageLimit?.limit || 3}
+                  resetDate={resetDate || new Date()}
+                  isPremium={isPremium}
+                />
+              )}
+
+              {/* Upgrade Modal */}
+              <UpgradeModal
+                isOpen={showUpgradeModal}
+                onClose={() => setShowUpgradeModal(false)}
+                onUpgrade={handleUpgrade}
+                onEmergencyPack={handleEmergencyPack}
+                daysUntilReset={calculateDaysUntilReset()}
+              />
               <h1 className="text-2xl font-bold text-gray-900">Quick Phonics Worksheet</h1>
               <p className="text-gray-600">Three simple choices, one great worksheet</p>
             </div>

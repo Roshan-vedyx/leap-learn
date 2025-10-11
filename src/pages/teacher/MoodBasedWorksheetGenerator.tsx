@@ -3,9 +3,11 @@
 import React, { useState } from 'react'
 import { Cloud, Zap, Moon, Download, Eye, ArrowLeft } from 'lucide-react'
 import { generateMoodBasedWorksheet } from '../../lib/worksheetGenerator'
-import { useUserTier, useUsageLimit, useTrackGeneration } from '../../hooks/useUsageTracking'
+import { useUserTier, useUsageLimit, useTrackGeneration, usePurchaseEmergencyPack } from '../../hooks/useUsageTracking'
 import { generateMoodPDF } from '../../components/worksheets/pdf/MoodPDFGenerator'
 import WorksheetPreview from '../../components/worksheets/WorksheetPreview'
+import { WeeklyUsageCounter } from '../../components/worksheets/WeeklyUsageCounter'
+import { UpgradeModal } from '../../components/worksheets/UpgradeModal'
 
 type MoodType = 'overwhelmed' | 'highEnergy' | 'lowEnergy' | null
 type ActivityType = string | null
@@ -31,8 +33,11 @@ export default function MoodBasedWorksheetGenerator() {
   const [showPreview, setShowPreview] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
   const { tier, isPremium } = useUserTier()
-  const { remaining, canGenerate, loading: usageLoading } = useUsageLimit()
+  const usageLimit = useUsageLimit()
+  const { remaining, canGenerate, loading: usageLoading, resetDate } = usageLimit
   const { trackGeneration } = useTrackGeneration()
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const { purchaseEmergencyPack, isPurchasing } = usePurchaseEmergencyPack()
 
   const moodOptions: MoodOption[] = [
     {
@@ -66,8 +71,8 @@ export default function MoodBasedWorksheetGenerator() {
     
     // Check usage limit for free users
     if (!isPremium && !canGenerate) {
-      alert('You have used your 2 free adaptive worksheets this month. Upgrade to premium for unlimited access!')
-      return
+        setShowUpgradeModal(true)
+        return
     }
     
     setSelectedMood(mood)
@@ -89,8 +94,8 @@ export default function MoodBasedWorksheetGenerator() {
     
     // Check usage limit for free users
     if (!isPremium && !canGenerate) {
-      alert('You have used your 2 free adaptive worksheets this month. Upgrade to premium for unlimited access!')
-      return
+        setShowUpgradeModal(true)
+        return
     }
     
     const data = generateMoodBasedWorksheet(selectedMood)
@@ -122,9 +127,50 @@ export default function MoodBasedWorksheetGenerator() {
     setHasGenerated(true)
   }
 
+  const handleUpgrade = () => {
+    // TODO: Implement Stripe checkout
+    console.log('Upgrade to premium clicked')
+    window.location.href = '/teacher/pricing' // Placeholder
+  }
+  
+  const handleEmergencyPack = async () => {
+    const result = await purchaseEmergencyPack()
+    if (result.success) {
+      alert('Emergency pack purchased! You now have 2 more worksheets this week.')
+      setShowUpgradeModal(false)
+      window.location.reload() // Refresh to update limits
+    } else {
+      alert(result.error || 'Purchase failed. Please try again.')
+    }
+  }
+  
+  const calculateDaysUntilReset = () => {
+    if (!resetDate) return 7
+    const now = new Date()
+    const diffTime = resetDate.getTime() - now.getTime()
+    return Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
+        {!isPremium && (
+            <WeeklyUsageCounter
+                used={usageLimit?.used || 0}
+                remaining={remaining}
+                limit={usageLimit?.limit || 3}
+                resetDate={resetDate || new Date()}
+                isPremium={isPremium}
+            />
+        )}
+
+        <UpgradeModal
+        isOpen={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        onUpgrade={handleUpgrade}
+        onEmergencyPack={handleEmergencyPack}
+        daysUntilReset={calculateDaysUntilReset()}
+        />
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">
