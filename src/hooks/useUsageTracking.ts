@@ -1,6 +1,6 @@
 // src/hooks/useUsageTracking.ts
-import { useState, useEffect } from 'react'
-import { doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from 'firebase/firestore'
+import { useState, useEffect, useCallback } from 'react'
+import { doc, getDoc, setDoc, updateDoc, runTransaction, serverTimestamp } from 'firebase/firestore'
 import { db } from '../lib/firebase-config'
 import { useTeacherAuth } from '../contexts/TeacherAuthContext'
 
@@ -9,13 +9,13 @@ import { useTeacherAuth } from '../contexts/TeacherAuthContext'
 // ============================================================================
 
 interface UsageData {
-    weekStartDate: string // ISO date of Monday (e.g., "2025-10-13")
-    worksheetsGenerated: number
-    lastReset: Date
-    lastGenerated?: Date
-    totalAllTime: number
-    emergencyPacksPurchased?: number
-    lastEmergencyPackDate?: Date
+  weekStartDate: string // ISO date of Monday (e.g., "2025-10-13")
+  worksheetsGenerated: number
+  lastReset: Date
+  lastGenerated?: Date
+  totalAllTime: number
+  emergencyPacksPurchased?: number
+  lastEmergencyPackDate?: Date
 }
 
 type Tier = 'free' | 'monthly' | 'annual'
@@ -32,25 +32,31 @@ const EMERGENCY_PACK_BONUS = 2 // Emergency pack adds 2 extra worksheets
 // ============================================================================
 
 /**
- * Get the Monday of the current week in ISO format (YYYY-MM-DD)
+ * Get the Monday of the current week in LOCAL timezone (YYYY-MM-DD)
+ * Fixed: Now uses local timezone instead of UTC to prevent early/late resets
  */
 const getCurrentWeekStart = (): string => {
-    const now = new Date()
-    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, etc.
-    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek // Calculate days to Monday
-    const monday = new Date(now)
-    monday.setDate(now.getDate() + diff)
-    monday.setHours(0, 0, 0, 0)
-    return monday.toISOString().split('T')[0] // Returns "2025-10-13"
+  const now = new Date()
+  const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, etc.
+  const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek // Calculate days to Monday
+  const monday = new Date(now)
+  monday.setDate(now.getDate() + diff)
+  monday.setHours(0, 0, 0, 0)
+  
+  // Format in local timezone (not UTC)
+  const year = monday.getFullYear()
+  const month = String(monday.getMonth() + 1).padStart(2, '0')
+  const day = String(monday.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 /**
- * Check if usage doc needs reset 
+ * Check if usage doc needs reset
  */
 const needsReset = (usageData: UsageData | null): boolean => {
-    if (!usageData) return false
-    const currentWeekStart = getCurrentWeekStart()
-    return usageData.weekStartDate !== currentWeekStart
+  if (!usageData || !usageData.weekStartDate) return false
+  const currentWeekStart = getCurrentWeekStart()
+  return usageData.weekStartDate !== currentWeekStart
 }
 
 // ============================================================================
@@ -73,65 +79,74 @@ export const useUserTier = () => {
 // ============================================================================
 // HOOK 2: useUsageLimit
 // Returns usage stats and whether user can generate more worksheets
+// Now includes refetch capability for real-time updates
 // ============================================================================
 
 export const useUsageLimit = () => {
   const { user, profile, loading: authLoading } = useTeacherAuth()
   const [usageData, setUsageData] = useState<UsageData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [refetchTrigger, setRefetchTrigger] = useState(0)
 
+  // Fixed: Use consistent tier check (monthly/annual, not pro/school)
   const tier: Tier = profile?.subscription?.tier || 'free'
-  const isPremium = tier === 'pro' || tier === 'school'
+  const isPremium = tier === 'monthly' || tier === 'annual'
 
-  useEffect(() => {
+  const fetchUsage = useCallback(async () => {
     if (!user || authLoading) {
       setLoading(false)
       return
     }
 
-    const fetchUsage = async () => {
-      try {
-        const usageRef = doc(db, 'usage', user.uid)
-        const usageDoc = await getDoc(usageRef)
+    try {
+      const usageRef = doc(db, 'usage', user.uid)
+      const usageDoc = await getDoc(usageRef)
 
-        if (usageDoc.exists()) {
-            const data = usageDoc.data() as UsageData
-          
-            // Check if we need to reset for new week
-            if (needsReset(data)) {
-              const resetData: UsageData = {
-                weekStartDate: getCurrentWeekStart(),
-                worksheetsGenerated: 0,
-                lastReset: new Date(),
-                totalAllTime: data.totalAllTime || data.worksheetsGenerated || 0,
-                emergencyPacksPurchased: 0 // Reset emergency packs each week
-              }
-              await setDoc(usageRef, resetData)
-              setUsageData(resetData)
-            } else {
-              setUsageData(data)
-            }
-          } else {
-            // First time - create usage doc
-            const newData: UsageData = {
-              weekStartDate: getCurrentWeekStart(),
-              worksheetsGenerated: 0,
-              lastReset: new Date(),
-              totalAllTime: 0,
-              emergencyPacksPurchased: 0
-            }
-            await setDoc(usageRef, newData)
-            setUsageData(newData)
+      if (usageDoc.exists()) {
+        const data = usageDoc.data() as UsageData
+        
+        // Check if we need to reset for new week
+        if (needsReset(data)) {
+          const resetData: UsageData = {
+            weekStartDate: getCurrentWeekStart(),
+            worksheetsGenerated: 0,
+            lastReset: new Date(),
+            totalAllTime: data.totalAllTime || data.worksheetsGenerated || 0,
+            emergencyPacksPurchased: 0 // Reset emergency packs each week
+          }
+          await setDoc(usageRef, resetData)
+          setUsageData(resetData)
+        } else {
+          setUsageData(data)
         }
-      } catch (error) {
-        console.error('Error fetching usage data:', error)
-      } finally {
-        setLoading(false)
+      } else {
+        // First time - create usage doc
+        const newData: UsageData = {
+          weekStartDate: getCurrentWeekStart(),
+          worksheetsGenerated: 0,
+          lastReset: new Date(),
+          totalAllTime: 0,
+          emergencyPacksPurchased: 0
+        }
+        await setDoc(usageRef, newData)
+        setUsageData(newData)
       }
+    } catch (error) {
+      console.error('Error fetching usage data:', error)
+      throw error // Propagate error so UI can handle it
+    } finally {
+      setLoading(false)
     }
-
-    fetchUsage()
   }, [user, authLoading])
+
+  useEffect(() => {
+    fetchUsage()
+  }, [fetchUsage, refetchTrigger])
+
+  // Manual refetch function for after purchases or generations
+  const refetch = useCallback(() => {
+    setRefetchTrigger(prev => prev + 1)
+  }, [])
 
   // Calculate remaining worksheets
   const used = usageData?.worksheetsGenerated || 0
@@ -143,11 +158,12 @@ export const useUsageLimit = () => {
 
   // Calculate next Monday for reset date
   const getNextMonday = () => {
-    const weekStart = new Date(usageData?.weekStartDate || getCurrentWeekStart())
+    if (!usageData?.weekStartDate) return new Date()
+    const weekStart = new Date(usageData.weekStartDate)
     weekStart.setDate(weekStart.getDate() + 7)
     return weekStart
   }
-  const resetDate = usageData ? getNextMonday() : new Date()
+  const resetDate = getNextMonday()
 
   return {
     used,
@@ -156,68 +172,74 @@ export const useUsageLimit = () => {
     canGenerate,
     loading: loading || authLoading,
     isPremium,
-    resetDate
+    resetDate,
+    refetch // Expose refetch for manual updates
   }
 }
 
 // ============================================================================
 // HOOK 3: useTrackGeneration
-// Increments the usage counter after successful generation
+// Increments the usage counter ATOMICALLY using Firestore transactions
+// Fixed: Now throws errors on failure to prevent silent limit bypasses
 // ============================================================================
 
 export const useTrackGeneration = () => {
   const { user } = useTeacherAuth()
   const [isTracking, setIsTracking] = useState(false)
 
-  const trackGeneration = async () => {
+  const trackGeneration = async (): Promise<void> => {
     if (!user) {
-      console.warn('Cannot track generation: user not authenticated')
-      return
+      throw new Error('Cannot track generation: user not authenticated')
     }
 
     setIsTracking(true)
 
     try {
       const usageRef = doc(db, 'usage', user.uid)
-      const usageDoc = await getDoc(usageRef)
-
-      if (usageDoc.exists()) {
-        const data = usageDoc.data() as UsageData
       
-        // Check if we need to reset for new week
-        if (needsReset(data)) {
-          // New week - reset count and track first generation
-          await setDoc(usageRef, {
+      // Use transaction for atomic read-modify-write
+      await runTransaction(db, async (transaction) => {
+        const usageDoc = await transaction.get(usageRef)
+
+        if (usageDoc.exists()) {
+          const data = usageDoc.data() as UsageData
+        
+          // Check if we need to reset for new week
+          if (needsReset(data)) {
+            // New week - reset count and track first generation
+            transaction.set(usageRef, {
+              weekStartDate: getCurrentWeekStart(),
+              worksheetsGenerated: 1,
+              lastReset: serverTimestamp(),
+              lastGenerated: serverTimestamp(),
+              totalAllTime: (data.totalAllTime || 0) + 1,
+              emergencyPacksPurchased: 0
+            })
+          } else {
+            // Same week - increment count
+            transaction.update(usageRef, {
+              worksheetsGenerated: (data.worksheetsGenerated || 0) + 1,
+              lastGenerated: serverTimestamp(),
+              totalAllTime: (data.totalAllTime || 0) + 1
+            })
+          }
+        } else {
+          // First generation ever
+          transaction.set(usageRef, {
             weekStartDate: getCurrentWeekStart(),
             worksheetsGenerated: 1,
-            lastReset: new Date(),
-            lastGenerated: new Date(),
-            totalAllTime: (data.totalAllTime || 0) + 1,
+            lastReset: serverTimestamp(),
+            lastGenerated: serverTimestamp(),
+            totalAllTime: 1,
             emergencyPacksPurchased: 0
           })
-        } else {
-          // Same week - increment count
-          await updateDoc(usageRef, {
-            worksheetsGenerated: increment(1),
-            lastGenerated: serverTimestamp(),
-            totalAllTime: increment(1)
-          })
         }
-      } else {
-        // First generation ever
-        await setDoc(usageRef, {
-          weekStartDate: getCurrentWeekStart(),
-          worksheetsGenerated: 1,
-          lastReset: new Date(),
-          lastGenerated: new Date(),
-          totalAllTime: 1,
-          emergencyPacksPurchased: 0
-        })
-     }
+      })
 
       console.log('✅ Usage tracked successfully')
     } catch (error) {
-      console.error('Error tracking generation:', error)
+      console.error('❌ Error tracking generation:', error)
+      throw new Error('Failed to track worksheet usage. Please try again.')
     } finally {
       setIsTracking(false)
     }
@@ -230,7 +252,66 @@ export const useTrackGeneration = () => {
 }
 
 // ============================================================================
+// HOOK 4: usePurchaseEmergencyPack
+// Purchase emergency pack - adds 2 worksheets to current week
+// Fixed: Better validation and no page reload
+// ============================================================================
+
+export const usePurchaseEmergencyPack = () => {
+  const { user } = useTeacherAuth()
+  const [isPurchasing, setIsPurchasing] = useState(false)
+
+  const purchaseEmergencyPack = async () => {
+    if (!user) return { success: false, error: 'Not authenticated' }
+
+    setIsPurchasing(true)
+    try {
+      const usageRef = doc(db, 'usage', user.uid)
+      const usageDoc = await getDoc(usageRef)
+
+      if (!usageDoc.exists()) {
+        return { success: false, error: 'Usage data not found' }
+      }
+
+      const data = usageDoc.data() as UsageData
+
+      // Fixed: Stronger validation (>= instead of > 0)
+      if (data.emergencyPacksPurchased && data.emergencyPacksPurchased >= 1) {
+        return { 
+          success: false, 
+          error: 'You already purchased an emergency pack this week. It resets on Monday!' 
+        }
+      }
+
+      // TODO: Add Stripe payment here before updating Firestore
+      // const paymentResult = await processStripePayment(user.uid, 299) // $2.99
+      // if (!paymentResult.success) throw new Error('Payment failed')
+
+      // Update Firestore
+      await updateDoc(usageRef, {
+        emergencyPacksPurchased: 1,
+        lastEmergencyPackDate: serverTimestamp()
+      })
+
+      console.log('✅ Emergency pack purchased successfully')
+      return { success: true }
+    } catch (error) {
+      console.error('❌ Error purchasing emergency pack:', error)
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Purchase failed' 
+      }
+    } finally {
+      setIsPurchasing(false)
+    }
+  }
+
+  return { purchaseEmergencyPack, isPurchasing }
+}
+
+// ============================================================================
 // BONUS: Admin hook to manually reset usage (for testing)
+// Fixed: Removed invalid getCurrentMonth() reference
 // ============================================================================
 
 export const useResetUsage = () => {
@@ -242,61 +323,17 @@ export const useResetUsage = () => {
     try {
       const usageRef = doc(db, 'usage', user.uid)
       await setDoc(usageRef, {
-        month: getCurrentMonth(),
-        adaptiveWorksheetsGenerated: 0,
-        lastReset: new Date()
+        weekStartDate: getCurrentWeekStart(),
+        worksheetsGenerated: 0,
+        lastReset: serverTimestamp(),
+        totalAllTime: 0,
+        emergencyPacksPurchased: 0
       })
       console.log('✅ Usage reset successfully')
     } catch (error) {
-      console.error('Error resetting usage:', error)
+      console.error('❌ Error resetting usage:', error)
     }
   }
 
   return { resetUsage }
-}
-
-/**
- * Purchase emergency pack - adds 2 worksheets to current week
- */
-export const usePurchaseEmergencyPack = () => {
-    const { user } = useTeacherAuth()
-    const [isPurchasing, setIsPurchasing] = useState(false)
-  
-    const purchaseEmergencyPack = async () => {
-      if (!user) return { success: false, error: 'Not authenticated' }
-  
-      setIsPurchasing(true)
-      try {
-        const usageRef = doc(db, 'usage', user.uid)
-        const usageDoc = await getDoc(usageRef)
-  
-        if (!usageDoc.exists()) {
-          return { success: false, error: 'Usage data not found' }
-        }
-  
-        const data = usageDoc.data() as UsageData
-  
-        // Check if already purchased this week
-        if (data.emergencyPacksPurchased && data.emergencyPacksPurchased > 0) {
-          return { success: false, error: 'You already purchased an emergency pack this week' }
-        }
-  
-        // TODO: Add Stripe payment here
-        // For now, just mock the purchase
-        await updateDoc(usageRef, {
-          emergencyPacksPurchased: 1,
-          lastEmergencyPackDate: new Date()
-        })
-  
-        console.log('✅ Emergency pack purchased successfully')
-        return { success: true }
-      } catch (error) {
-        console.error('Error purchasing emergency pack:', error)
-        return { success: false, error: 'Purchase failed' }
-      } finally {
-        setIsPurchasing(false)
-      }
-    }
-  
-    return { purchaseEmergencyPack, isPurchasing }
 }

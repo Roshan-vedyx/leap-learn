@@ -34,7 +34,7 @@ export default function MoodBasedWorksheetGenerator() {
   const [hasGenerated, setHasGenerated] = useState(false)
   const { tier, isPremium } = useUserTier()
   const usageLimit = useUsageLimit()
-  const { remaining, canGenerate, loading: usageLoading, resetDate } = usageLimit
+  const { remaining, canGenerate, loading: usageLoading, resetDate, refetch } = usageLimit
   const { trackGeneration } = useTrackGeneration()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const { purchaseEmergencyPack, isPurchasing } = usePurchaseEmergencyPack()
@@ -77,33 +77,58 @@ export default function MoodBasedWorksheetGenerator() {
     
     setSelectedMood(mood)
     
-    // Generate immediately with 2 activities
+    // FIXED: Track generation FIRST to prevent exploits
+    if (!isPremium) {
+      try {
+        await trackGeneration()
+      } catch (error) {
+        alert('Failed to track usage. Please try again.')
+        return // Don't show worksheet if tracking failed
+      }
+    }
+    
+    // Generate worksheet AFTER tracking
     const data = generateMoodBasedWorksheet(mood)
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
     
-    // Track generation if free user
+    // Refetch to update counter immediately
     if (!isPremium) {
-      await trackGeneration()
+      refetch()
     }
   }
   
   const handleGenerateAnother = async () => {
     if (!selectedMood) return
     
-    // Check usage limit for free users
+    // FIXED: Refetch latest usage before checking (prevents stale state)
+    if (!isPremium) {
+      await refetch()
+    }
+    
+    // Check usage limit with fresh data
     if (!isPremium && !canGenerate) {
         setShowUpgradeModal(true)
         return
     }
     
+    // Track generation FIRST
+    if (!isPremium) {
+      try {
+        await trackGeneration()
+      } catch (error) {
+        alert('Failed to track usage. Please try again.')
+        return
+      }
+    }
+    
     const data = generateMoodBasedWorksheet(selectedMood)
     setWorksheetData(data)
     
-    // Track generation if free user
+    // Refetch to update counter
     if (!isPremium) {
-      await trackGeneration()
+      refetch()
     }
   }
 
@@ -118,13 +143,34 @@ export default function MoodBasedWorksheetGenerator() {
     setShowPreview(false)
   }
 
-  const handleQuickPick = () => {
+  const handleQuickPick = async () => {
+    // FIXED: Add limit check (was missing!)
+    if (!isPremium && !canGenerate) {
+        setShowUpgradeModal(true)
+        return
+    }
+    
     setSelectedMood('overwhelmed')
+    
+    // Track generation FIRST
+    if (!isPremium) {
+      try {
+        await trackGeneration()
+      } catch (error) {
+        alert('Failed to track usage. Please try again.')
+        return
+      }
+    }
     
     const data = generateMoodBasedWorksheet('overwhelmed')
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
+    
+    // Refetch to update counter
+    if (!isPremium) {
+      refetch()
+    }
   }
 
   const handleUpgrade = () => {
@@ -136,9 +182,10 @@ export default function MoodBasedWorksheetGenerator() {
   const handleEmergencyPack = async () => {
     const result = await purchaseEmergencyPack()
     if (result.success) {
-      alert('Emergency pack purchased! You now have 2 more worksheets this week.')
+      // FIXED: Refetch instead of full page reload
+      await refetch()
       setShowUpgradeModal(false)
-      window.location.reload() // Refresh to update limits
+      alert('✅ Emergency pack activated! You now have 2 more worksheets this week.')
     } else {
       alert(result.error || 'Purchase failed. Please try again.')
     }

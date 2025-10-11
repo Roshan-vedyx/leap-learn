@@ -25,7 +25,7 @@ export const WeeklyUsageCounter: React.FC<WeeklyUsageCounterProps> = ({
   const diffTime = resetDate.getTime() - now.getTime()
   const daysUntilReset = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-  const percentage = (used / limit) * 100
+  const percentage = limit === Infinity ? 0 : Math.min(100, (used / limit) * 100)
 
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">

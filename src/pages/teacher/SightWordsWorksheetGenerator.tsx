@@ -92,7 +92,7 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
   // Usage tracking
   const { tier, isPremium } = useUserTier()
   const usageLimit = useUsageLimit()
-  const { remaining, canGenerate, loading: usageLoading, resetDate } = usageLimit
+  const { remaining, canGenerate, loading: usageLoading, resetDate, refetch } = usageLimit
   const { trackGeneration } = useTrackGeneration()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const { purchaseEmergencyPack, isPurchasing } = usePurchaseEmergencyPack()
@@ -182,6 +182,15 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
     setIsLoading(true)
     
     try {
+      if (!isPremium) {
+        try {
+          await trackGeneration()
+        } catch (error) {
+          setIsLoading(false)
+          alert('Failed to track usage. Please try again.')
+          return
+        }
+      }
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
       
@@ -198,12 +207,11 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
         successPrediction: calculateSuccessPrediction(config, selectedWords, selectedActivities)
       }
       
-      // Track generation for free users
-      if (!isPremium) {
-        await trackGeneration()
-      }
-
       setWorksheetData(worksheetData)
+      // Refetch to update counter
+      if (!isPremium) {
+        refetch()
+      }
     } catch (error) {
       console.error('Error generating worksheet:', error)
     } finally {
@@ -296,9 +304,9 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
   const handleEmergencyPack = async () => {
     const result = await purchaseEmergencyPack()
     if (result.success) {
-      alert('Emergency pack purchased! You now have 2 more worksheets this week.')
+      await refetch()
       setShowUpgradeModal(false)
-      window.location.reload()
+      alert('✅ Emergency pack activated! You now have 2 more worksheets this week.')
     } else {
       alert(result.error || 'Purchase failed. Please try again.')
     }
