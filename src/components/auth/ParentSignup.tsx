@@ -6,7 +6,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   getAdditionalUserInfo,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth'
 import { doc, setDoc, collection, addDoc } from 'firebase/firestore'
 import { auth, db } from '../../config/firebase'
@@ -22,11 +23,14 @@ const isValidEmail = (email: string): boolean => {
   }
 
 export const ParentSignup: React.FC = () => {
-  const [step, setStep] = useState(1) // 1: Parent signup, 2: Ownership transition, 3: Create children, 4: Complete
+  const [step, setStep] = useState(1) // 1: Parent signup, 2: Email verification, 3: Ownership transition, 4: Create children, 5: Complete
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showSecurityPrompt, setShowSecurityPrompt] = useState<Record<number, boolean>>({})
   const [showUsernameError, setShowUsernameError] = useState(false)
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false)
+  const [checkingVerification, setCheckingVerification] = useState(false)
+  const [resendCooldown, setResendCooldown] = useState(0)
   
   // Parent data
   const [parentData, setParentData] = useState({
@@ -68,9 +72,12 @@ export const ParentSignup: React.FC = () => {
       parentData.password
     )
     
+    // Send verification email
+    await sendEmailVerification(userCredential.user)
+
     await createParentProfile(userCredential.user, 'email')
     setCreatedParentId(userCredential.user.uid)
-    setStep(2) // Go to ownership transition
+    setStep(2) // Go to email verification screen first
     
   } catch (err: any) {
     setError(err.message || 'Failed to create account')
@@ -345,6 +352,48 @@ export const ParentSignup: React.FC = () => {
     }
   }
 
+  const handleResendVerification = async () => {
+    if (resendCooldown > 0 || !auth.currentUser) return
+    
+    try {
+      await sendEmailVerification(auth.currentUser)
+      setVerificationEmailSent(true)
+      setResendCooldown(60) // 60 second cooldown
+      
+      // Countdown timer
+      const interval = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(interval)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    } catch (err: any) {
+      setError(err.message || 'Failed to resend email')
+    }
+  }
+  
+  const handleCheckVerification = async () => {
+    if (!auth.currentUser) return
+    
+    setCheckingVerification(true)
+    try {
+      await auth.currentUser.reload() // Refresh user data
+      
+      if (auth.currentUser.emailVerified) {
+        setStep(3) // Move to ownership transition
+      } else {
+        setError('Email not verified yet. Please check your inbox and click the link.')
+      }
+    } catch (err: any) {
+      setError('Failed to check verification status')
+    } finally {
+      setCheckingVerification(false)
+    }
+  }
+
   const goToApp = () => {
     window.location.href = '/'
   }
@@ -518,8 +567,72 @@ export const ParentSignup: React.FC = () => {
             </div>
           )}
 
-          {/* STEP 2: Ownership Transition - THE MAGIC MOMENT */}
+          {/* STEP 2: EMAIL VERIFICATION */}
           {step === 2 && (
+            <div className="text-center space-y-6">
+              <div className="bg-indigo-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto">
+                <Mail className="w-10 h-10 text-indigo-600" />
+              </div>
+              
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Check Your Email
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  We sent a verification link to:<br />
+                  <span className="font-semibold text-gray-900">{parentData.email}</span>
+                </p>
+                <p className="text-sm text-gray-500">
+                  Click the link in the email to verify your account, then come back here.
+                </p>
+              </div>
+
+              {error && (
+                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <AlertCircle className="w-4 h-4" />
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <Button
+                  onClick={handleCheckVerification}
+                  disabled={checkingVerification}
+                  className="w-full"
+                >
+                  {checkingVerification ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Checking...
+                    </div>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      I've Verified My Email
+                    </>
+                  )}
+                </Button>
+
+                <Button
+                  onClick={handleResendVerification}
+                  disabled={resendCooldown > 0}
+                  className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+                >
+                  {resendCooldown > 0 
+                    ? `Resend in ${resendCooldown}s` 
+                    : 'Resend Verification Email'
+                  }
+                </Button>
+              </div>
+
+              <p className="text-xs text-gray-500">
+                Can't find the email? Check your spam folder.
+              </p>
+            </div>
+          )}
+
+          {/* STEP 2: Ownership Transition - THE MAGIC MOMENT */}
+          {step === 3 && (
             <div className="text-center">
               <div className="flex justify-center mb-6">
                 <div className="p-6 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full">
@@ -590,7 +703,7 @@ export const ParentSignup: React.FC = () => {
           )}
 
           {/* STEP 3: Create Children */}
-          {step === 3 && (
+          {step === 4 && (
             <div>
               <div className="text-center mb-8">
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -908,7 +1021,7 @@ export const ParentSignup: React.FC = () => {
           )}
 
           {/* STEP 4: Complete */}
-          {step === 4 && (
+          {step === 5 && (
             <div className="text-center">
               <div className="flex justify-center mb-6">
                 <div className="p-6 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 rounded-full">

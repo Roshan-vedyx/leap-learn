@@ -21,7 +21,7 @@ async function loadAndCompressImage(src: string, maxWidth = 40): Promise<string>
       const ctx = canvas.getContext('2d')!
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
       
-      const compressed = canvas.toDataURL('image/jpeg', 0.6) // 60% quality
+      const compressed = canvas.toDataURL('image/png', 0.8) // PNG preserves transparency
       imageCache.set(src, compressed)
       resolve(compressed)
     }

@@ -676,9 +676,7 @@ function TeacherApp() {
           <TeacherLogin />
         </Route>
         <Route path="/dashboard">
-          <TeacherAuthGuard>
-            <GenDashboard />
-          </TeacherAuthGuard>
+          <GenDashboard />
         </Route>
         <Route path="/teacher/dashboard">
           <TeacherAuthGuard>

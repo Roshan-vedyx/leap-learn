@@ -6,7 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth'
 import { doc, setDoc } from 'firebase/firestore'
 import { auth, db } from '../../lib/firebase-config'
@@ -20,6 +21,9 @@ export const TeacherLogin: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
+  const [needsVerification, setNeedsVerification] = useState(false)
+  const [verificationEmail, setVerificationEmail] = useState('')
+  const [resendCooldown, setResendCooldown] = useState(0)
   
   // Forgot password state
   const [showForgotPassword, setShowForgotPassword] = useState(false)
@@ -42,6 +46,8 @@ export const TeacherLogin: React.FC = () => {
       if (isSignUp) {
         userCredential = await createUserWithEmailAndPassword(auth, email, password)
         
+        // Send verification email
+        await sendEmailVerification(userCredential.user)
         // Create teacher profile
         const teacherProfile: TeacherProfile = {
           teacherId: userCredential.user.uid,
@@ -58,8 +64,18 @@ export const TeacherLogin: React.FC = () => {
         }
         
         await setDoc(doc(db, 'teachers', userCredential.user.uid), teacherProfile)
+        // Show verification screen instead of redirecting
+        setNeedsVerification(true)
+        setVerificationEmail(email)
+        return
       } else {
         userCredential = await signInWithEmailAndPassword(auth, email, password)
+        // Check if email is verified
+        if (!userCredential.user.emailVerified) {
+          setNeedsVerification(true)
+          setVerificationEmail(email)
+          return
+        }
       }
       
       console.log('Teacher authentication successful')
@@ -114,6 +130,48 @@ export const TeacherLogin: React.FC = () => {
     }
   }
 
+  const handleResendVerification = async () => {
+    if (resendCooldown > 0 || !auth.currentUser) return
+    
+    try {
+      await sendEmailVerification(auth.currentUser)
+      setResendCooldown(60)
+      
+      const interval = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            clearInterval(interval)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    } catch (err: any) {
+      setError(err.message || 'Failed to resend email')
+    }
+  }
+  
+  const handleCheckVerification = async () => {
+    if (!auth.currentUser) return
+    
+    setLoading(true)
+    try {
+      await auth.currentUser.reload()
+      
+      if (auth.currentUser.emailVerified) {
+        const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard'
+        sessionStorage.removeItem('intendedRoute')
+        window.location.href = intendedRoute
+      } else {
+        setError('Email not verified yet. Please check your inbox.')
+      }
+    } catch (err: any) {
+      setError('Failed to check verification')
+    } finally {
+      setLoading(false)
+    }
+  }
+  
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault()
     setResetLoading(true)
@@ -126,6 +184,59 @@ export const TeacherLogin: React.FC = () => {
     } finally {
       setResetLoading(false)
     }
+  }
+
+  // Email verification screen
+  if (needsVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8">
+          <div className="text-center mb-6">
+            <Mail className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+            <p className="text-gray-600">
+              We sent a verification link to:<br />
+              <span className="font-semibold">{verificationEmail}</span>
+            </p>
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm mb-4">
+              <AlertCircle className="w-4 h-4" />
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <Button
+              onClick={handleCheckVerification}
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? 'Checking...' : "I've Verified My Email"}
+            </Button>
+
+            <Button
+              onClick={handleResendVerification}
+              disabled={resendCooldown > 0}
+              className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Email'}
+            </Button>
+
+            <Button
+              onClick={() => {
+                setNeedsVerification(false)
+                auth.signOut()
+              }}
+              className="w-full bg-white border border-gray-300 text-gray-700"
+            >
+              Back to Login
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (showForgotPassword) {

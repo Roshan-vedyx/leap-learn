@@ -1,6 +1,6 @@
 // src/pages/teacher/MoodBasedWorksheetGenerator.tsx
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Cloud, Zap, Moon, Download, Eye, ArrowLeft } from 'lucide-react'
 import { generateMoodBasedWorksheet } from '../../lib/worksheetGenerator'
 import { useUserTier, useUsageLimit, useTrackGeneration, usePurchaseEmergencyPack } from '../../hooks/useUsageTracking'
@@ -37,9 +37,24 @@ export default function MoodBasedWorksheetGenerator() {
   const { remaining, canGenerate, loading: usageLoading, resetDate, refetch } = usageLimit
   const { trackGeneration } = useTrackGeneration()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [hasDownloaded, setHasDownloaded] = useState(false)
+  const [showDownloadReminder, setShowDownloadReminder] = useState(false)
   const { purchaseEmergencyPack, isPurchasing } = usePurchaseEmergencyPack()
-
-  const moodOptions: MoodOption[] = [
+  
+  // Warn before leaving page with unsaved worksheet
+  useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        if (worksheetData && !hasDownloaded) {
+            e.preventDefault()
+            e.returnValue = '' // Required for Chrome
+        }
+        }
+        
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [worksheetData, hasDownloaded])
+  
+    const moodOptions: MoodOption[] = [
     {
       type: 'overwhelmed',
       label: 'Overwhelmed',
@@ -92,6 +107,7 @@ export default function MoodBasedWorksheetGenerator() {
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
+    setHasDownloaded(false)
     
     // Refetch to update counter immediately
     if (!isPremium) {
@@ -135,12 +151,17 @@ export default function MoodBasedWorksheetGenerator() {
   const handleDownload = async () => {
     if (!worksheetData || !selectedMood) return
     await generateMoodPDF(worksheetData, selectedMood)
+    setHasDownloaded(true)
   }
   
   const handleStartOver = () => {
-    setSelectedMood(null)
-    setWorksheetData(null)
-    setShowPreview(false)
+    if (worksheetData && !hasDownloaded) {
+      setShowDownloadReminder(true)
+    } else {
+      setSelectedMood(null)
+      setWorksheetData(null)
+      setShowPreview(false)
+    }
   }
 
   const handleQuickPick = async () => {
@@ -260,7 +281,7 @@ export default function MoodBasedWorksheetGenerator() {
                 {!isPremium && !usageLoading && (
                 <div className="text-center text-sm text-gray-600 bg-blue-50 p-3 rounded-lg border border-blue-200">
                     {remaining > 0 ? (
-                    <span>✨ {remaining} adaptive worksheet{remaining !== 1 ? 's' : ''} remaining this month</span>
+                    <span>✨ {remaining} adaptive worksheet{remaining !== 1 ? 's' : ''} remaining this week</span>
                     ) : (
                     <span className="text-orange-600 font-semibold">⚠️ You've used your 2 free worksheets this month</span>
                     )}
@@ -336,17 +357,90 @@ export default function MoodBasedWorksheetGenerator() {
                     Download PDF
                   </button>
 
-                  <button
-                    onClick={handleGenerateAnother}
-                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-all"
-                  >
-                    Generate Similar
-                  </button>
+                  {isPremium ? (
+                    <button
+                        onClick={handleGenerateAnother}
+                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-all"
+                    >
+                        Generate Similar
+                    </button>
+                    ) : (
+                    <button
+                        disabled
+                        className="w-full bg-gray-100 text-gray-500 px-6 py-3 rounded-lg font-semibold opacity-50 cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                        Generate Similar
+                        <span className="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs rounded font-bold">
+                        PREMIUM
+                        </span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           )}
         </div>
+        {/* Download Reminder Modal */}
+        {showDownloadReminder && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
+            {/* Header */}
+            <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Download className="w-8 h-8 text-orange-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                Haven't Downloaded Yet
+                </h3>
+                <p className="text-gray-600">
+                This worksheet will be lost if you start over. Want to download it first?
+                </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
+                <Button
+                onClick={async () => {
+                    await handleDownload()
+                    setShowDownloadReminder(false)
+                    // Then reset the form
+                    setTimeout(() => {
+                    setSelectedMood(null)
+                    setWorksheetData(null)
+                    setShowPreview(false)
+                    }, 300)
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                >
+                <Download className="w-5 h-5 mr-2" />
+                Download Now & Start Over
+                </Button>
+
+                <Button
+                onClick={() => {
+                    setShowDownloadReminder(false)
+                    setSelectedMood(null)
+                    setWorksheetData(null)
+                    setShowPreview(false)
+                    setHasDownloaded(false)
+                }}
+                variant="outline"
+                className="w-full py-3 border-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
+                Start Over Without Downloading
+                </Button>
+
+                <Button
+                onClick={() => setShowDownloadReminder(false)}
+                variant="ghost"
+                className="w-full py-3 text-gray-600 hover:text-gray-900"
+                >
+                Cancel (Keep This Worksheet)
+                </Button>
+            </div>
+            </div>
+        </div>
+        )}
       </div>
     </div>
   )

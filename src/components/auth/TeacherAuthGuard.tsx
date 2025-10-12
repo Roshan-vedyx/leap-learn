@@ -23,6 +23,7 @@ export const TeacherAuthGuard: React.FC<TeacherAuthGuardProps> = ({ children }) 
 
   if (!user || !profile) {
     // Redirect to teacher login
+    sessionStorage.setItem('intendedRoute', window.location.pathname)
     window.location.href = '/teacher'
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">

@@ -108,9 +108,9 @@ export const GenDashboard: React.FC = () => {
             </Link>
 
             {/* Custom Generate Card */}
-            <Link href="/teacher">
+            <Link href="/teacher/dashboard">
                 <div 
-                    onClick={() => sessionStorage.setItem('intendedRoute', '/teacher')}
+                    onClick={() => sessionStorage.setItem('intendedRoute', '/teacher/dashboard')}
                     className="bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-2xl p-8 hover:shadow-xl transition-all cursor-pointer group"
                 >
                 <div className="flex items-center gap-3 mb-4">

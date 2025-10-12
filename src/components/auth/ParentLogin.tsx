@@ -60,6 +60,12 @@ export const ParentLogin: React.FC = () => {
         await setDoc(doc(db, 'parents', userCredential.user.uid), parentProfile)
       } else {
         userCredential = await signInWithEmailAndPassword(auth, email, password)
+        // Check email verification
+        if (!userCredential.user.emailVerified) {
+          setError('Please verify your email before logging in. Check your inbox for the verification link.')
+          await auth.signOut()
+          return
+        }
       }
       
       console.log('Email authentication successful')
