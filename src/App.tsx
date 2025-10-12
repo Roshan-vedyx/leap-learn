@@ -43,6 +43,7 @@ import SentenceThemeSelectionPage from './pages/SentenceThemeSelectionPage'
 import { PhonicsWorksheetGenerator } from './pages/teacher/PhonicsWorksheetGenerator'
 import { SightWordsWorksheetGenerator } from './pages/teacher/SightWordsWorksheetGenerator'
 import MoodBasedWorksheetGenerator from './pages/teacher/MoodBasedWorksheetGenerator'
+import { GenDashboard } from './pages/GenDashboard'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -671,8 +672,13 @@ function TeacherApp() {
   return (
     <TeacherAuthProvider>
       <Router>
-        <Route path="/teacher" exact>
+      <Route path="/teacher" exact>
           <TeacherLogin />
+        </Route>
+        <Route path="/dashboard">
+          <TeacherAuthGuard>
+            <GenDashboard />
+          </TeacherAuthGuard>
         </Route>
         <Route path="/teacher/dashboard">
           <TeacherAuthGuard>
@@ -695,6 +701,11 @@ function TeacherApp() {
             <MoodBasedWorksheetGenerator />
           </TeacherAuthGuard>
         </Route>
+        <Route path="/worksheet-generator">
+          <TeacherAuthGuard>
+            <MoodBasedWorksheetGenerator />
+          </TeacherAuthGuard>
+        </Route>
         
       </Router>
     </TeacherAuthProvider>
@@ -706,12 +717,7 @@ function App() {
   const [location] = useLocation()
   
   // Route teacher pages to separate app
-  if (location.startsWith('/teacher') || location === '/worksheet-generator') {
-    // Redirect /worksheet-generator to /teacher/worksheet-generator
-    if (location === '/worksheet-generator') {
-      window.location.href = '/teacher/worksheet-generator'
-      return null
-    }
+  if (location.startsWith('/teacher') || location === '/worksheet-generator' || location === '/dashboard') {
     return <TeacherApp />
   }
   

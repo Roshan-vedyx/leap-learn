@@ -63,7 +63,9 @@ export const TeacherLogin: React.FC = () => {
       }
       
       console.log('Teacher authentication successful')
-      window.location.href = '/teacher/dashboard'
+      const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard'
+      sessionStorage.removeItem('intendedRoute')
+      window.location.href = intendedRoute
       
     } catch (err: any) {
       console.error('Authentication error:', err)
@@ -100,7 +102,9 @@ export const TeacherLogin: React.FC = () => {
       await setDoc(teacherDoc, teacherProfile, { merge: true })
       
       console.log('Google teacher authentication successful')
-      window.location.href = '/teacher/dashboard'
+      const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard'
+      sessionStorage.removeItem('intendedRoute')
+      window.location.href = intendedRoute
       
     } catch (err: any) {
       console.error('Google auth error:', err)
