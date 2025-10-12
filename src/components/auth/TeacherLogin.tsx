@@ -1,5 +1,5 @@
 // src/components/auth/TeacherLogin.tsx
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect  } from 'react'
 import { GraduationCap, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react'
 import { 
   signInWithEmailAndPassword, 
@@ -24,12 +24,21 @@ export const TeacherLogin: React.FC = () => {
   const [needsVerification, setNeedsVerification] = useState(false)
   const [verificationEmail, setVerificationEmail] = useState('')
   const [resendCooldown, setResendCooldown] = useState(0)
+  const cooldownIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
   // Forgot password state
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [forgotEmail, setForgotEmail] = useState('')
   const [resetEmailSent, setResetEmailSent] = useState(false)
   const [resetLoading, setResetLoading] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (cooldownIntervalRef.current) {
+        clearInterval(cooldownIntervalRef.current)
+      }
+    }
+  }, [])
 
   const googleProvider = new GoogleAuthProvider()
   googleProvider.addScope('email')
@@ -85,7 +94,11 @@ export const TeacherLogin: React.FC = () => {
       
     } catch (err: any) {
       console.error('Authentication error:', err)
-      setError(err.message || 'Authentication failed')
+      if (err.code === 'auth/email-already-in-use') {
+        setError('This email already has an account.')
+      } else {
+        setError(err.message || 'Authentication failed')
+      }
     } finally {
       setLoading(false)
     }
@@ -131,16 +144,22 @@ export const TeacherLogin: React.FC = () => {
   }
 
   const handleResendVerification = async () => {
-    if (resendCooldown > 0 || !auth.currentUser) return
+    if (resendCooldown > 0) return
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
     
     try {
       await sendEmailVerification(auth.currentUser)
       setResendCooldown(60)
       
-      const interval = setInterval(() => {
+      cooldownIntervalRef.current = setInterval(() => {
         setResendCooldown(prev => {
           if (prev <= 1) {
-            clearInterval(interval)
+            if (cooldownIntervalRef.current) {
+              clearInterval(cooldownIntervalRef.current)
+            }
             return 0
           }
           return prev - 1
@@ -152,7 +171,10 @@ export const TeacherLogin: React.FC = () => {
   }
   
   const handleCheckVerification = async () => {
-    if (!auth.currentUser) return
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
     
     setLoading(true)
     try {
@@ -393,9 +415,29 @@ export const TeacherLogin: React.FC = () => {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              <AlertCircle className="w-4 h-4" />
-              {error}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <AlertCircle className="w-4 h-4" />
+                {error}
+              </div>
+              {error.includes('already has an account') && !isSignUp && (
+                <Button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  className="w-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                >
+                  Switch to Login
+                </Button>
+              )}
+              {error.includes('already has an account') && isSignUp && (
+                <Button
+                  type="button"
+                  onClick={() => setIsSignUp(false)}
+                  className="w-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                >
+                  Login Instead
+                </Button>
+              )}
             </div>
           )}
 

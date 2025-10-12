@@ -1,5 +1,5 @@
 // src/components/auth/ParentLogin.tsx - FULLY RESPONSIVE VERSION
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect  } from 'react'
 import { UserPlus, Mail, Lock, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react'
 import { 
   signInWithEmailAndPassword, 
@@ -7,7 +7,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   getAdditionalUserInfo,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  sendEmailVerification
 } from 'firebase/auth'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, db } from '../../config/firebase'
@@ -21,12 +22,24 @@ export const ParentLogin: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState('')
+  const [needsVerification, setNeedsVerification] = useState(false)
+  const [verificationEmail, setVerificationEmail] = useState('')
+  const [resendCooldown, setResendCooldown] = useState(0)
+  const cooldownIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
   // Forgot password state
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [forgotEmail, setForgotEmail] = useState('')
   const [resetEmailSent, setResetEmailSent] = useState(false)
   const [resetLoading, setResetLoading] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      if (cooldownIntervalRef.current) {
+        clearInterval(cooldownIntervalRef.current)
+      }
+    }
+  }, [])
 
   const googleProvider = new GoogleAuthProvider()
   googleProvider.addScope('email')
@@ -62,7 +75,10 @@ export const ParentLogin: React.FC = () => {
         userCredential = await signInWithEmailAndPassword(auth, email, password)
         // Check email verification
         if (!userCredential.user.emailVerified) {
-          setError('Please verify your email before logging in. Check your inbox for the verification link.')
+          await sendEmailVerification(userCredential.user)
+          setNeedsVerification(true)
+          setVerificationEmail(email)
+          return
           await auth.signOut()
           return
         }
@@ -114,6 +130,59 @@ export const ParentLogin: React.FC = () => {
     }
   }
 
+  const handleResendVerification = async () => {
+    if (resendCooldown > 0) return
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
+    
+    setError('')
+    
+    try {
+      await sendEmailVerification(auth.currentUser)
+      setResendCooldown(60)
+      
+      cooldownIntervalRef.current = setInterval(() => {
+        setResendCooldown(prev => {
+          if (prev <= 1) {
+            if (cooldownIntervalRef.current) {
+              clearInterval(cooldownIntervalRef.current)
+            }
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    } catch (err: any) {
+      setError(err.message || 'Failed to resend email')
+    }
+  }
+  
+  const handleCheckVerification = async () => {
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
+    
+    setLoading(true)
+    setError('')
+    
+    try {
+      await auth.currentUser.reload()
+      
+      if (auth.currentUser.emailVerified) {
+        window.location.href = '/parent'
+      } else {
+        setError('Email not verified yet. Please check your inbox and click the link.')
+      }
+    } catch (err: any) {
+      setError('Failed to check verification')
+    } finally {
+      setLoading(false)
+    }
+  }
+  
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -146,6 +215,59 @@ export const ParentLogin: React.FC = () => {
     setError('')
   }
 
+  // Email verification screen
+  if (needsVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8">
+          <div className="text-center mb-6">
+            <Mail className="w-16 h-16 text-indigo-600 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+            <p className="text-gray-600">
+              We just sent a verification link to:<br />
+              <span className="font-semibold">{verificationEmail}</span>
+            </p>
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm mb-4">
+              <AlertCircle className="w-4 h-4" />
+              {error}
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <Button
+              onClick={handleCheckVerification}
+              disabled={loading}
+              className="w-full"
+            >
+              {loading ? 'Checking...' : "I've Verified My Email"}
+            </Button>
+
+            <Button
+              onClick={handleResendVerification}
+              disabled={resendCooldown > 0}
+              className="w-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+            >
+              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Email'}
+            </Button>
+
+            <Button
+              onClick={() => {
+                setNeedsVerification(false)
+                auth.signOut()
+              }}
+              className="w-full bg-white border border-gray-300 text-gray-700"
+            >
+              Back to Login
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  
   // Forgot Password Modal - RESPONSIVE
   if (showForgotPassword) {
     return (

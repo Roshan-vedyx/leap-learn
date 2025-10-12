@@ -1,5 +1,5 @@
 // src/components/auth/ParentSignup.tsx - CHILD-CENTERED SIGNUP FLOW
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Plus, Check, Shield, Heart, Star, CheckCircle, X, Eye, EyeOff } from 'lucide-react'
 import { 
   createUserWithEmailAndPassword,
@@ -31,6 +31,7 @@ export const ParentSignup: React.FC = () => {
   const [verificationEmailSent, setVerificationEmailSent] = useState(false)
   const [checkingVerification, setCheckingVerification] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
+  const cooldownIntervalRef = useRef<NodeJS.Timeout | null>(null)
   
   // Parent data
   const [parentData, setParentData] = useState({
@@ -51,6 +52,14 @@ export const ParentSignup: React.FC = () => {
   const [createdParentId, setCreatedParentId] = useState('')
 
   const googleProvider = new GoogleAuthProvider()
+
+  useEffect(() => {
+    return () => {
+      if (cooldownIntervalRef.current) {
+        clearInterval(cooldownIntervalRef.current)
+      }
+    }
+  }, [])
 
   // === STEP 1: PARENT REGISTRATION ===
   const handleEmailSignup = async (e: React.FormEvent) => {
@@ -80,7 +89,11 @@ export const ParentSignup: React.FC = () => {
     setStep(2) // Go to email verification screen first
     
   } catch (err: any) {
-    setError(err.message || 'Failed to create account')
+    if (err.code === 'auth/email-already-in-use') {
+      setError('This email already has an account.')
+    } else {
+      setError(err.message || 'Failed to create account')
+    }
   } finally {
     setLoading(false)
   }
@@ -97,7 +110,7 @@ export const ParentSignup: React.FC = () => {
       if (additionalUserInfo?.isNewUser) {
         await createParentProfile(result.user, 'google')
         setCreatedParentId(result.user.uid)
-        setStep(2) // Go to ownership transition
+        setStep(3) // FIX: Skip email verification for Google users
       } else {
         // Existing user - redirect to parent dashboard
         window.location.href = '/parent'
@@ -353,7 +366,11 @@ export const ParentSignup: React.FC = () => {
   }
 
   const handleResendVerification = async () => {
-    if (resendCooldown > 0 || !auth.currentUser) return
+    if (resendCooldown > 0) return
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
     
     try {
       await sendEmailVerification(auth.currentUser)
@@ -361,10 +378,12 @@ export const ParentSignup: React.FC = () => {
       setResendCooldown(60) // 60 second cooldown
       
       // Countdown timer
-      const interval = setInterval(() => {
+      cooldownIntervalRef.current = setInterval(() => {
         setResendCooldown(prev => {
           if (prev <= 1) {
-            clearInterval(interval)
+            if (cooldownIntervalRef.current) {
+              clearInterval(cooldownIntervalRef.current)
+            }
             return 0
           }
           return prev - 1
@@ -376,7 +395,10 @@ export const ParentSignup: React.FC = () => {
   }
   
   const handleCheckVerification = async () => {
-    if (!auth.currentUser) return
+    if (!auth.currentUser) {
+      setError('Session expired. Please refresh and try again.')
+      return
+    }
     
     setCheckingVerification(true)
     try {
@@ -588,9 +610,19 @@ export const ParentSignup: React.FC = () => {
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {error}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {error}
+                  </div>
+                  {error.includes('already has an account') && (
+                    <Button
+                      onClick={() => window.location.href = '/auth/parent-login'}
+                      className="w-full bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                    >
+                      Login Instead
+                    </Button>
+                  )}
                 </div>
               )}
 
