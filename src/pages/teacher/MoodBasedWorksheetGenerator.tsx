@@ -8,6 +8,7 @@ import { generateMoodPDF } from '../../components/worksheets/pdf/MoodPDFGenerato
 import WorksheetPreview from '../../components/worksheets/WorksheetPreview'
 import { WeeklyUsageCounter } from '../../components/worksheets/WeeklyUsageCounter'
 import { UpgradeModal } from '../../components/worksheets/UpgradeModal'
+import { Link } from 'wouter'
 
 type MoodType = 'overwhelmed' | 'highEnergy' | 'lowEnergy' | null
 type ActivityType = string | null
@@ -221,6 +222,14 @@ export default function MoodBasedWorksheetGenerator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto mb-4">
+        <Link href="/dashboard">
+            <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="font-medium">Back to Dashboard</span>
+            </button>
+        </Link>
+      </div>
       <div className="max-w-7xl mx-auto">
         {!isPremium && (
             <WeeklyUsageCounter

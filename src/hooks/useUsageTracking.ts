@@ -93,9 +93,14 @@ export const useUsageLimit = () => {
   const isPremium = tier === 'monthly' || tier === 'annual'
 
   const fetchUsage = useCallback(async () => {
-    if (!user || authLoading) {
-      setLoading(false)
-      return
+    if (authLoading) {
+      return  // Stay in loading state while checking auth
+    }
+    
+    if (!user) {
+      setUsageData(null)  
+      setLoading(false)   
+      return              
     }
 
     try {

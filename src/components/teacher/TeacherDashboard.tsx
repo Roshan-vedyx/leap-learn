@@ -13,10 +13,12 @@ import {
   ChevronRight,
   BarChart3,
   Clock,
-  CheckCircle
+  CheckCircle,
+  ArrowLeft
 } from 'lucide-react'
 import { TeacherAppWrapper } from './TeacherAppWrapper'
 import { Button } from '../ui/Button'
+import { Link } from 'wouter'
 
 interface WorksheetOption {
   id: string
@@ -89,13 +91,21 @@ export const TeacherDashboard: React.FC = () => {
 
   return (
     <TeacherAppWrapper currentPage="dashboard">
+      <div className="mb-4">
+        <Link href="/dashboard">
+          <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="font-medium">Back to Dashboard</span>
+          </button>
+        </Link>
+      </div>
       {/* Dashboard Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
             <p className="text-gray-600 mt-1">
-              Create and manage literacy worksheets for neurodivergent learners
+              Choose specific phonics patterns, sight words, and literacy skills to target
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">

@@ -3,10 +3,12 @@ import React from 'react'
 import { Link } from 'wouter'
 import { Zap, Target, Sparkles, Clock } from 'lucide-react'
 import { useUsageLimit, useUserTier } from '../hooks/useUsageTracking'
+import { useTeacherAuth } from '../contexts/TeacherAuthContext'
 
 export const GenDashboard: React.FC = () => {
   const { tier, isPremium } = useUserTier()
   const { remaining, used, resetDate, loading } = useUsageLimit()
+  const { user } = useTeacherAuth()
 
   // Calculate days until reset
   const getDaysUntilReset = () => {
@@ -23,7 +25,7 @@ export const GenDashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-900">Vedyx Learning</h1>
             <div className="flex items-center gap-4">
-              {!isPremium && (
+              {!isPremium && user && (
                 <div className="text-sm text-gray-600">
                   <span className="font-semibold">{remaining}</span> worksheets left this week
                 </div>
@@ -75,7 +77,7 @@ export const GenDashboard: React.FC = () => {
         {/* Two Generator Options */}
         <div className="max-w-5xl mx-auto">
           <h3 className="text-2xl font-bold text-blue-900 text-center mb-8">
-            Two ways to generate the worksheet you need.
+            Choose how you want to create today's worksheet.
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -83,7 +85,7 @@ export const GenDashboard: React.FC = () => {
             <Link href="/worksheet-generator">
                 <div 
                     onClick={() => sessionStorage.setItem('intendedRoute', '/worksheet-generator')}
-                    className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-8 hover:shadow-xl transition-all cursor-pointer group"
+                    className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-8 hover:shadow-xl transition-all cursor-pointer group h-[350px]"
                 >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-3 bg-amber-100 rounded-lg group-hover:bg-amber-200 transition-colors">
@@ -117,16 +119,16 @@ export const GenDashboard: React.FC = () => {
                   <div className="p-3 bg-cyan-100 rounded-lg group-hover:bg-cyan-200 transition-colors">
                     <Target className="w-8 h-8 text-cyan-600" />
                   </div>
-                  <h4 className="text-2xl font-bold text-gray-900">Custom Generate</h4>
+                  <h4 className="text-2xl font-bold text-gray-900">Skill Builder</h4>
                 </div>
 
                 <p className="text-gray-700 mb-4 leading-relaxed">
-                  Full control over every detail (2-3 mins)
+                    Target specific phonics, sight words & skills (2-3 mins)
                 </p>
 
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
                   <Clock className="w-4 h-4" />
-                  <span>Choose phonics pattern, sight words & more</span>
+                  <span>Choose exact patterns you're working on</span>
                 </div>
 
                 <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
@@ -153,7 +155,7 @@ export const GenDashboard: React.FC = () => {
             <div className="bg-white border border-gray-200 rounded-xl p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Zap className="w-6 h-6 text-amber-600" />
-                <h4 className="text-xl font-bold text-gray-900">Quick Generate</h4>
+                <h4 className="text-xl font-bold text-gray-900">Skill Builder</h4>
               </div>
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start gap-2">
