@@ -44,6 +44,7 @@ import { PhonicsWorksheetGenerator } from './pages/teacher/PhonicsWorksheetGener
 import { SightWordsWorksheetGenerator } from './pages/teacher/SightWordsWorksheetGenerator'
 import MoodBasedWorksheetGenerator from './pages/teacher/MoodBasedWorksheetGenerator'
 import { GenDashboard } from './pages/GenDashboard'
+import { PaymentSuccessPage } from './pages/payment/PaymentSuccessPage'
 
 // Import Zustand store
 import { useSessionStore } from '@/stores/sessionStore'
@@ -677,6 +678,11 @@ function TeacherApp() {
         </Route>
         <Route path="/dashboard">
           <GenDashboard />
+        </Route>
+        <Route path="/payment-success">
+          <TeacherAuthGuard>
+            <PaymentSuccessPage />
+          </TeacherAuthGuard>
         </Route>
         <Route path="/teacher/dashboard">
           <TeacherAuthGuard>
