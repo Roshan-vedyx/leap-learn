@@ -27,6 +27,14 @@ export const verifyEmergencyPayment = functions.https.onCall(
       )
     }
 
+    // SECURITY: Verify authenticated user matches teacherId
+    if (!request.auth || request.auth.uid !== teacherId) {
+        throw new functions.https.HttpsError(
+        'permission-denied',
+        'You can only verify payments for your own account'
+        )
+    }
+
     try {
       // Verify signature
       const text = orderId + '|' + paymentId
@@ -64,22 +72,23 @@ export const verifyEmergencyPayment = functions.https.onCall(
         throw new functions.https.HttpsError('not-found', 'Teacher not found')
       }
 
-      // Add 2 credits to worksheetCredits
-      await teacherRef.update({
-        worksheetCredits: FieldValue.increment(2),
-      })
-
-      // Mark payment as processed
-      await eventRef.set({
-        paymentId,
-        orderId,
-        teacherId,
-        amount: 14900,
-        creditsAdded: 2,
-        processedAt: new Date(),
-      })
-
-      console.log('Emergency credits added:', teacherId, paymentId)
+      // Add credits and mark payment atomically
+        await db.runTransaction(async (transaction) => {
+            transaction.update(teacherRef, {
+            worksheetCredits: FieldValue.increment(2),
+            })
+            
+            transaction.set(eventRef, {
+            paymentId,
+            orderId,
+            teacherId,
+            amount: 14900,
+            creditsAdded: 2,
+            processedAt: new Date(),
+            })
+        })
+        
+        console.log('Emergency credits added:', teacherId, paymentId)
 
       return {
         success: true,

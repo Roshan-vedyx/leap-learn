@@ -30,19 +30,18 @@ export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
 
   const handleClick = async () => {
     if (!user || !profile) {
-      console.error('User not authenticated')
+      alert('Please sign in to continue')
       return
     }
-
+  
     setLoading(true)
-
+  
     try {
       if (type === 'subscription') {
         if (!planId || !tier) {
-          console.error('Missing planId or tier for subscription')
-          return
+          throw new Error('Invalid subscription configuration')
         }
-
+  
         await openSubscriptionCheckout({
           planId,
           teacherId: user.uid,
@@ -52,10 +51,9 @@ export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
         })
       } else if (type === 'one-time') {
         if (!amount || !description) {
-          console.error('Missing amount or description for one-time payment')
-          return
+          throw new Error('Invalid payment configuration')
         }
-
+  
         await openOneTimeCheckout({
           amount,
           teacherId: user.uid,
@@ -64,8 +62,21 @@ export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
           description,
         })
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Checkout error:', error)
+      
+      // Show user-friendly error messages
+      let errorMessage = 'Payment failed. Please try again.'
+      
+      if (error.message?.includes('already have an active')) {
+        errorMessage = 'You already have an active subscription.'
+      } else if (error.message?.includes('Failed to load')) {
+        errorMessage = 'Could not load payment gateway. Please check your internet connection.'
+      } else if (error.code === 'permission-denied') {
+        errorMessage = 'Permission denied. Please sign in again.'
+      }
+      
+      alert(errorMessage)
     } finally {
       setLoading(false)
     }

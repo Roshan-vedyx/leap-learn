@@ -23,6 +23,14 @@ export const createEmergencyOrder = functions.https.onCall(
       )
     }
 
+    // SECURITY: Verify authenticated user matches teacherId
+    if (!request.auth || request.auth.uid !== teacherId) {
+        throw new functions.https.HttpsError(
+        'permission-denied',
+        'You can only create orders for your own account'
+        )
+    }
+
     try {
       // Verify teacher exists
       const teacherDoc = await db.collection('teachers').doc(teacherId).get()

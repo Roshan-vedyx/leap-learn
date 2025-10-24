@@ -271,9 +271,9 @@ export default function MoodBasedWorksheetGenerator() {
           )}
         </div>
 
-        <div className="flex gap-8 justify-center">
+        <div className={showPreview ? "flex justify-center" : "flex gap-8 justify-center"}>
           {/* Left Column - Selection */}
-          <div className={`${showPreview ? 'flex-1' : 'max-w-3xl mx-auto w-full'} transition-all`}>
+          <div className={`${showPreview ? 'hidden' : 'max-w-3xl mx-auto w-full'} transition-all`}>
             {/* Mood Selection */}
             {!showPreview && (
               <div className="space-y-8">
@@ -339,7 +339,7 @@ export default function MoodBasedWorksheetGenerator() {
 
           {/* Right Column - Preview */}
           {showPreview && worksheetData && (
-            <div className="w-2/5 flex flex-col gap-4">
+            <div className="max-w-4xl mx-auto w-full flex flex-col gap-4">
               <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">

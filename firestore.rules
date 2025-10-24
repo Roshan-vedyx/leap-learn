@@ -1,20 +1,182 @@
-// firestore.rules - CREATE OR UPDATE THIS FILE IN YOUR PROJECT ROOT
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Allow all reads/writes for development (TEMPORARY - WE'LL SECURE THIS LATER)
-    match /{document=**} {
-      allow read, write: if true;
+    // ============================================
+    // HELPER FUNCTIONS
+    // ============================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
     }
     
-    // TODO: Implement proper security rules after MVP testing
-    // match /parents/{parentId} {
-    //   allow read, write: if request.auth != null && request.auth.uid == parentId;
-    // }
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
     
-    // match /children/{childId} {
-    //   allow read, create, update: if request.auth != null;
-    // }
+    // ============================================
+    // PARENT ACCOUNTS
+    // ============================================
+    
+    match /parents/{parentId} {
+      // Parents can only read/write their own profile
+      allow read: if isOwner(parentId);
+      allow create: if isOwner(parentId);
+      allow update: if isOwner(parentId) 
+        && request.resource.data.parentId == parentId
+        && request.resource.data.email == resource.data.email; // Prevent email changes
+      allow delete: if false; // Prevent accidental deletion
+    }
+    
+    // ============================================
+    // CHILDREN ACCOUNTS & PROFILES
+    // ============================================
+    
+    match /children/{childId} {
+      // Parents can read all their children's profiles
+      allow read: if isAuthenticated() 
+        && (isOwner(childId) 
+            || resource.data.parentId == request.auth.uid);
+      
+      // Only parent can create child profiles
+      allow create: if isAuthenticated() 
+        && request.resource.data.parentId == request.auth.uid;
+      
+      // Parent or child can update (for lastActive, sessions, etc.)
+      allow update: if isAuthenticated() 
+        && (resource.data.parentId == request.auth.uid
+            || isOwner(childId));
+      
+      // Only parent can delete
+      allow delete: if isAuthenticated() 
+        && resource.data.parentId == request.auth.uid;
+    }
+    
+    // ============================================
+    // CHILD LEARNING DATA & ANALYTICS
+    // ============================================
+    
+    match /child_progress/{childId} {
+      // Parent can read their child's progress
+      allow read: if isAuthenticated() 
+        && (isOwner(childId)
+            || get(/databases/$(database)/documents/children/$(childId)).data.parentId == request.auth.uid);
+      
+      // Child or parent can write progress
+      allow write: if isAuthenticated() 
+        && (isOwner(childId)
+            || get(/databases/$(database)/documents/children/$(childId)).data.parentId == request.auth.uid);
+    }
+    
+    match /learning_sessions/{sessionId} {
+      // Parent can read their child's sessions
+      allow read: if isAuthenticated() 
+        && (resource.data.childId == request.auth.uid
+            || get(/databases/$(database)/documents/children/$(resource.data.childId)).data.parentId == request.auth.uid);
+      
+      // Child can create/update their own sessions
+      allow create, update: if isAuthenticated() 
+        && request.resource.data.childId == request.auth.uid;
+      
+      allow delete: if false; // Preserve learning history
+    }
+    
+    match /user_events/{eventId} {
+      // Parent can read their child's events
+      allow read: if isAuthenticated() 
+        && (resource.data.userId == request.auth.uid
+            || get(/databases/$(database)/documents/children/$(resource.data.userId)).data.parentId == request.auth.uid);
+      
+      // Child can create events
+      allow create: if isAuthenticated() 
+        && request.resource.data.userId == request.auth.uid;
+      
+      allow update, delete: if false; // Events are immutable
+    }
+    
+    // ============================================
+    // TEACHER ACCOUNTS (WORKSHEET GENERATOR)
+    // ============================================
+    
+    match /teachers/{teacherId} {
+      // Teachers can read/write their own profile
+      allow read: if isOwner(teacherId);
+      allow create: if isOwner(teacherId);
+      allow update: if isOwner(teacherId);
+      allow delete: if false; // Prevent accidental deletion
+    }
+    
+    // ============================================
+    // TEACHER PAYMENTS & USAGE
+    // ============================================
+    
+    match /usage/{userId} {
+      // Users can only access their own usage data
+      allow read, write: if isOwner(userId);
+    }
+    
+    // Webhook events - only Cloud Functions can write
+    match /webhook_events/{eventId} {
+      allow read, write: if false;
+    }
+    
+    // Payment events - only Cloud Functions can write
+    match /payment_events/{eventId} {
+      allow read, write: if false;
+    }
+    
+    // ============================================
+    // SHARED CONTENT (Stories, Activities)
+    // ============================================
+    
+    // User-generated stories
+    match /user_stories/{storyId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      
+      // Users can create/update their own stories
+      allow create: if isAuthenticated() 
+        && request.resource.data.authorId == request.auth.uid;
+      allow update: if isAuthenticated() 
+        && resource.data.authorId == request.auth.uid;
+      allow delete: if isAuthenticated() 
+        && resource.data.authorId == request.auth.uid;
+    }
+    
+    // ============================================
+    // RECOVERY & SECURITY
+    // ============================================
+    
+    // Recovery attempts tracking (for PIN reset)
+    match /recovery_attempts/{attemptId} {
+      allow read: if false; // Only Cloud Functions should read
+      allow create: if isAuthenticated(); // Allow tracking attempts
+      allow update, delete: if false;
+    }
+    
+    // ============================================
+    // SYSTEM COLLECTIONS (Read-Only)
+    // ============================================
+    
+    // Word banks, phonics data, etc.
+    match /words/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admin/Cloud Functions
+    }
+    
+    // Story templates
+    match /story_templates/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only admin/Cloud Functions
+    }
+    
+    // ============================================
+    // DENY ALL OTHER ACCESS
+    // ============================================
+    
+    // Catch-all rule - deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
   }
 }

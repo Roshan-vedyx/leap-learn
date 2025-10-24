@@ -32,6 +32,14 @@ export const createSubscription = functions.https.onCall(
       )
     }
 
+    // SECURITY: Verify authenticated user matches teacherId
+    if (!request.auth || request.auth.uid !== teacherId) {
+        throw new functions.https.HttpsError(
+        'permission-denied',
+        'You can only create subscriptions for your own account'
+        )
+    }
+    
     try {
       // Check if teacher already has premium subscription
       const teacherDoc = await db.collection('teachers').doc(teacherId).get()

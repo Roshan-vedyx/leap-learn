@@ -146,17 +146,27 @@ export const openOneTimeCheckout = async ({
       handler: async (response: any) => {
         console.log('Payment successful:', response)
       
-        // Call Firebase function to verify and add credits
-        const verifyEmergencyPayment = httpsCallable(functions, 'verifyEmergencyPayment')
-        await verifyEmergencyPayment({
-          teacherId,
-          orderId: response.razorpay_order_id,
-          paymentId: response.razorpay_payment_id,
-          signature: response.razorpay_signature,
-        })
-
-        // Redirect to dashboard
-        window.location.href = '/dashboard'
+        try {
+          // Call Firebase function to verify and add credits
+          const verifyEmergencyPayment = httpsCallable(functions, 'verifyEmergencyPayment')
+          const result = await verifyEmergencyPayment({
+            teacherId,
+            orderId: response.razorpay_order_id,
+            paymentId: response.razorpay_payment_id,
+            signature: response.razorpay_signature,
+          })
+      
+          // Wait for verification before redirect
+          if (result.data) {
+            console.log('Credits added successfully:', result.data)
+            // Small delay to ensure Firestore propagation
+            await new Promise(resolve => setTimeout(resolve, 500))
+            window.location.href = '/dashboard?payment=success'
+          }
+        } catch (error) {
+          console.error('Payment verification failed:', error)
+          alert('Payment successful but verification failed. Please contact support or refresh your dashboard.')
+        }
       },
       modal: {
         ondismiss: () => {

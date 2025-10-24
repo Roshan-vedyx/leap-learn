@@ -5,12 +5,14 @@ import { Zap, Target, Sparkles, Clock, X } from 'lucide-react'
 import { useUsageLimit, useUserTier } from '../hooks/useUsageTracking'
 import { useTeacherAuth } from '../contexts/TeacherAuthContext'
 import { CheckoutButton } from '@/components/pricing/CheckoutButton'
+import { AccountSettingsModal } from '@/components/account/AccountSettingsModal'
 
 export const GenDashboard: React.FC = () => {
   const { tier, isPremium } = useUserTier()
   const { remaining, used, resetDate, loading } = useUsageLimit()
   const { user } = useTeacherAuth()
   const [showPricingModal, setShowPricingModal] = useState(false)
+  const [showAccountSettings, setShowAccountSettings] = useState(false)
 
   // Calculate days until reset
   const getDaysUntilReset = () => {
@@ -33,10 +35,16 @@ export const GenDashboard: React.FC = () => {
                 </div>
               )}
               <button 
-                onClick={() => setShowPricingModal(true)}
+                onClick={() => {
+                  if (isPremium) {
+                    setShowAccountSettings(true)
+                  } else {
+                    setShowPricingModal(true)
+                  }
+                }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
               >
-                {isPremium ? 'Manage Plan' : 'Upgrade to Premium'}
+                {isPremium ? 'Account Settings' : 'Upgrade to Premium'}
               </button>
             </div>
           </div>
@@ -334,6 +342,12 @@ export const GenDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Account Settings Modal */}
+      <AccountSettingsModal
+        isOpen={showAccountSettings}
+        onClose={() => setShowAccountSettings(false)}
+      />
     </div>
   )
 }

@@ -57,9 +57,20 @@ export const razorpayWebhook = functions.https.onRequest(
       // Always return 200 to Razorpay
       response.status(200).send('OK')
     } catch (error) {
-      console.error('Webhook error:', error)
-      // Still return 200 to avoid retries
-      response.status(200).send('OK')
+        console.error('Webhook error:', error)
+        
+        // If it's a transient error (Firestore timeout, network), tell Razorpay to retry
+        if (error instanceof Error && (
+          error.message.includes('Firestore') ||
+          error.message.includes('timeout') ||
+          error.message.includes('UNAVAILABLE')
+        )) {
+          response.status(500).send('Temporary error, please retry')
+          return
+        }
+        
+        // For other errors (malformed payload, etc), return 200 to avoid infinite retries
+        response.status(200).send('OK')
     }
   }
 )
@@ -98,19 +109,21 @@ async function handleSubscriptionActivated(payload: any) {
   }
 
   // Update teacher subscription
-  await teacherDoc.ref.update({
+  // Update teacher subscription atomically with event marking
+  await db.runTransaction(async (transaction) => {
+    transaction.update(teacherDoc.ref, {
     'subscription.tier': tier,
     'subscription.status': 'active',
     'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
-  })
-
-  // Mark event as processed
-  await eventRef.set({
+    })
+    
+    transaction.set(eventRef, {
     event: 'subscription.activated',
     subscriptionId,
     processedAt: new Date(),
+    })
   })
-
+  
   console.log('Subscription activated:', subscriptionId, tier)
 }
 
@@ -143,19 +156,20 @@ async function handleSubscriptionCharged(payload: any) {
     return
   }
 
-  // Update current period end
-  await teacherDoc.ref.update({
-    'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
-  })
-
-  // Mark event as processed
-  await eventRef.set({
-    event: 'subscription.charged',
-    subscriptionId,
-    processedAt: new Date(),
-  })
-
-  console.log('Subscription charged:', subscriptionId)
+  // Update current period end atomically with event marking
+    await db.runTransaction(async (transaction) => {
+        transaction.update(teacherDoc.ref, {
+        'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
+        })
+        
+        transaction.set(eventRef, {
+        event: 'subscription.charged',
+        subscriptionId,
+        processedAt: new Date(),
+        })
+    })
+    
+    console.log('Subscription charged:', subscriptionId)
 }
 
 async function handleSubscriptionCancelled(payload: any) {
@@ -186,17 +200,18 @@ async function handleSubscriptionCancelled(payload: any) {
     return
   }
 
-  // Update status
-  await teacherDoc.ref.update({
-    'subscription.status': 'cancelled',
-  })
-
-  // Mark event as processed
-  await eventRef.set({
-    event: 'subscription.cancelled',
-    subscriptionId,
-    processedAt: new Date(),
-  })
-
-  console.log('Subscription cancelled:', subscriptionId)
+  // Update status atomically with event marking
+    await db.runTransaction(async (transaction) => {
+        transaction.update(teacherDoc.ref, {
+        'subscription.status': 'cancelled',
+        })
+        
+        transaction.set(eventRef, {
+        event: 'subscription.cancelled',
+        subscriptionId,
+        processedAt: new Date(),
+        })
+    })
+    
+    console.log('Subscription cancelled:', subscriptionId)
 }

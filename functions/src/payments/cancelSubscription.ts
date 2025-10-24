@@ -24,6 +24,14 @@ export const cancelSubscription = functions.https.onCall(
       )
     }
 
+    // SECURITY: Verify authenticated user matches teacherId
+    if (!request.auth || request.auth.uid !== teacherId) {
+        throw new functions.https.HttpsError(
+        'permission-denied',
+        'You can only cancel your own subscription'
+        )
+    }
+
     try {
       // Verify teacher owns this subscription
       const teacherRef = db.collection('teachers').doc(teacherId)
