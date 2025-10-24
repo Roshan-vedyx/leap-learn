@@ -1,51 +1,44 @@
-// functions/src/payments/addEmergencyCredits.ts
+// functions/src/payments/verifyEmergencyPayment.ts
 import * as functions from 'firebase-functions/v2'
 import { db } from '../firebase-admin'
 import { FieldValue } from 'firebase-admin/firestore'
-import Razorpay from 'razorpay'
+import * as crypto from 'crypto'
 
-interface AddEmergencyCreditsInput {
+interface VerifyEmergencyPaymentInput {
   teacherId: string
+  orderId: string
   paymentId: string
+  signature: string
 }
 
-export const addEmergencyCredits = functions.https.onCall(
+export const verifyEmergencyPayment = functions.https.onCall(
   {
     region: 'asia-south1',
     secrets: ['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'],
   },
   async (request) => {
-    const { teacherId, paymentId } = request.data as AddEmergencyCreditsInput
+    const { teacherId, orderId, paymentId, signature } = request.data as VerifyEmergencyPaymentInput
 
-    // Validate input
-    if (!teacherId || !paymentId) {
+    // Validate all fields exist
+    if (!teacherId || !orderId || !paymentId || !signature) {
       throw new functions.https.HttpsError(
         'invalid-argument',
-        'Missing required fields: teacherId or paymentId'
+        'Missing required fields: teacherId, orderId, paymentId, or signature'
       )
     }
 
     try {
-      // Initialize Razorpay
-      const razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID!,
-        key_secret: process.env.RAZORPAY_KEY_SECRET!,
-      })
+      // Verify signature
+      const text = orderId + '|' + paymentId
+      const expectedSignature = crypto
+        .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET!)
+        .update(text)
+        .digest('hex')
 
-      // Fetch and verify payment
-      const payment = await razorpay.payments.fetch(paymentId)
-
-      if (payment.status !== 'captured') {
-        throw new functions.https.HttpsError(
-          'failed-precondition',
-          'Payment not captured'
-        )
-      }
-
-      if (payment.amount !== 14900) {
+      if (signature !== expectedSignature) {
         throw new functions.https.HttpsError(
           'invalid-argument',
-          'Invalid payment amount. Expected ₹149'
+          'Invalid payment signature'
         )
       }
 
@@ -79,8 +72,9 @@ export const addEmergencyCredits = functions.https.onCall(
       // Mark payment as processed
       await eventRef.set({
         paymentId,
+        orderId,
         teacherId,
-        amount: payment.amount,
+        amount: 14900,
         creditsAdded: 2,
         processedAt: new Date(),
       })
@@ -92,10 +86,10 @@ export const addEmergencyCredits = functions.https.onCall(
         creditsAdded: 2,
       }
     } catch (error: any) {
-      console.error('Error adding emergency credits:', error)
+      console.error('Error verifying emergency payment:', error)
       throw new functions.https.HttpsError(
         'internal',
-        `Failed to add emergency credits: ${error.message}`
+        `Failed to verify emergency payment: ${error.message}`
       )
     }
   }

@@ -297,10 +297,6 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
     alert('PDF generation would happen here using your existing pdfGenerator service')
   }
 
-  const handleUpgrade = () => {
-    window.location.href = '/teacher/pricing'
-  }
-
   const handleEmergencyPack = async () => {
     const result = await purchaseEmergencyPack()
     if (result.success) {
@@ -336,7 +332,6 @@ export const SightWordsWorksheetGenerator: React.FC = () => {
       <UpgradeModal
         isOpen={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
-        onUpgrade={handleUpgrade}
         onEmergencyPack={handleEmergencyPack}
         daysUntilReset={calculateDaysUntilReset()}
       />

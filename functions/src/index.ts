@@ -7,7 +7,8 @@ setGlobalOptions({ maxInstances: 10 });
 // --- PAYMENT FUNCTIONS ---
 
 import { createSubscription } from './payments/createSubscription'
-import { addEmergencyCredits } from './payments/addEmergencyCredits'
+import { createEmergencyOrder } from './payments/createEmergencyOrder'
+import { verifyEmergencyPayment } from './payments/verifyEmergencyPayment'
 import { cancelSubscription } from './payments/cancelSubscription'
 
 // --- WEBHOOKS ---
@@ -15,8 +16,9 @@ import { razorpayWebhook } from "./webhooks/razorpayWebhook";
 
 // --- EXPORT FUNCTIONS ---
 export {
-  createSubscription,
-  addEmergencyCredits,
-  cancelSubscription,
-  razorpayWebhook,
+    createSubscription,
+    createEmergencyOrder,
+    verifyEmergencyPayment,
+    cancelSubscription,
+    razorpayWebhook,
 };

@@ -26,7 +26,7 @@ export const razorpayWebhook = functions.https.onRequest(
       }
 
       // Verify webhook signature
-      const body = JSON.stringify(request.body)
+      const body = request.rawBody || JSON.stringify(request.body)
       const expectedSignature = crypto
         .createHmac('sha256', webhookSecret)
         .update(body)

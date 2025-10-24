@@ -123,11 +123,16 @@ export const openOneTimeCheckout = async ({
     // Load Razorpay SDK
     await loadRazorpaySDK()
 
+    // Call Firebase function to create order
+    const createOrder = httpsCallable(functions, 'createEmergencyOrder')
+    const orderResult = await createOrder({ teacherId })
+    const { orderId } = orderResult.data as { orderId: string; amount: number }
+
     // Open Razorpay checkout
     const options: RazorpayOptions = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount, // Amount in paise (14900 = ₹149)
-      currency: 'INR',
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+    order_id: orderId,
+    currency: 'INR',
       name: 'Vedyx Leap',
       description,
       prefill: {
@@ -140,12 +145,14 @@ export const openOneTimeCheckout = async ({
       },
       handler: async (response: any) => {
         console.log('Payment successful:', response)
-
-        // Call Firebase function to add credits
-        const addEmergencyCredits = httpsCallable(functions, 'addEmergencyCredits')
-        await addEmergencyCredits({
+      
+        // Call Firebase function to verify and add credits
+        const verifyEmergencyPayment = httpsCallable(functions, 'verifyEmergencyPayment')
+        await verifyEmergencyPayment({
           teacherId,
+          orderId: response.razorpay_order_id,
           paymentId: response.razorpay_payment_id,
+          signature: response.razorpay_signature,
         })
 
         // Redirect to dashboard

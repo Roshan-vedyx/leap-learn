@@ -195,12 +195,6 @@ export default function MoodBasedWorksheetGenerator() {
     }
   }
 
-  const handleUpgrade = () => {
-    // TODO: Implement Stripe checkout
-    console.log('Upgrade to premium clicked')
-    window.location.href = '/teacher/pricing' // Placeholder
-  }
-  
   const handleEmergencyPack = async () => {
     const result = await purchaseEmergencyPack()
     if (result.success) {
@@ -242,11 +236,10 @@ export default function MoodBasedWorksheetGenerator() {
         )}
 
         <UpgradeModal
-        isOpen={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
-        onUpgrade={handleUpgrade}
-        onEmergencyPack={handleEmergencyPack}
-        daysUntilReset={calculateDaysUntilReset()}
+          isOpen={showUpgradeModal}
+          onClose={() => setShowUpgradeModal(false)}
+          onEmergencyPack={handleEmergencyPack}
+          daysUntilReset={calculateDaysUntilReset()}
         />
         {/* Header */}
         <div className="text-center mb-8">

@@ -202,10 +202,6 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
     setShowAdvanced(false)
   }
 
-  const handleUpgrade = () => {
-    window.location.href = '/teacher/pricing'
-  }
-
   const handleEmergencyPack = async () => {
     const result = await purchaseEmergencyPack()
     if (result.success) {
@@ -255,7 +251,6 @@ export const PhonicsWorksheetGenerator: React.FC = () => {
               <UpgradeModal
                 isOpen={showUpgradeModal}
                 onClose={() => setShowUpgradeModal(false)}
-                onUpgrade={handleUpgrade}
                 onEmergencyPack={handleEmergencyPack}
                 daysUntilReset={calculateDaysUntilReset()}
               />

@@ -2,11 +2,11 @@
 import React from 'react'
 import { X, Sparkles, Zap, Clock } from 'lucide-react'
 import { Button } from '../ui/Button'
+import { CheckoutButton } from '../pricing/CheckoutButton'
 
 interface UpgradeModalProps {
   isOpen: boolean
   onClose: () => void
-  onUpgrade: () => void
   onEmergencyPack: () => void
   daysUntilReset: number
 }
@@ -14,7 +14,6 @@ interface UpgradeModalProps {
 export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   isOpen,
   onClose,
-  onUpgrade,
   onEmergencyPack,
   daysUntilReset
 }) => {
@@ -52,14 +51,27 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
               <p className="text-sm text-gray-600 mb-2">
                 Unlimited worksheets, forever. No weekly limits.
               </p>
-              <p className="text-2xl font-bold text-blue-600">
-                $9.99<span className="text-sm font-normal">/month</span>
-              </p>
             </div>
           </div>
-          <Button onClick={onUpgrade} className="w-full bg-blue-600 hover:bg-blue-700">
-            Upgrade Now
-          </Button>
+          
+          <div className="space-y-2">
+            <CheckoutButton
+              type="subscription"
+              planId={import.meta.env.VITE_RAZORPAY_PLAN_MONTHLY}
+              tier="monthly"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Monthly - ₹799/month
+            </CheckoutButton>
+            <CheckoutButton
+              type="subscription"
+              planId={import.meta.env.VITE_RAZORPAY_PLAN_ANNUAL}
+              tier="annual"
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-sm"
+            >
+              Annual - ₹7,999/year (Save 17%)
+            </CheckoutButton>
+          </div>
         </div>
 
         {/* Option 2: Emergency Pack - Secondary CTA */}

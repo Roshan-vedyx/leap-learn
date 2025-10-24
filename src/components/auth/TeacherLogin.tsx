@@ -9,7 +9,7 @@ import {
   sendPasswordResetEmail,
   sendEmailVerification
 } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, db } from '../../lib/firebase-config'
 import { Button } from '../ui/Button'
 import type { TeacherProfile } from '../../contexts/TeacherAuthContext'
@@ -107,28 +107,38 @@ export const TeacherLogin: React.FC = () => {
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true)
     setError('')
-
+  
     try {
       const result = await signInWithPopup(auth, googleProvider)
       
-      // Check if teacher profile exists, create if not
-      const teacherDoc = doc(db, 'teachers', result.user.uid)
+      // Check if teacher profile already exists
+      const teacherDocRef = doc(db, 'teachers', result.user.uid)
+      const existingDoc = await getDoc(teacherDocRef)
       
-      const teacherProfile: TeacherProfile = {
-        teacherId: result.user.uid,
-        email: result.user.email!,
-        displayName: result.user.displayName || result.user.email!.split('@')[0],
-        photoURL: result.user.photoURL,
-        authProvider: 'google',
-        userType: 'teacher',
-        createdAt: new Date(),
-        subscription: {
-          tier: 'free',
-          status: 'active'
+      if (existingDoc.exists()) {
+        // EXISTING USER: Only update name/photo, PRESERVE subscription
+        await setDoc(teacherDocRef, {
+          displayName: result.user.displayName || result.user.email!.split('@')[0],
+          photoURL: result.user.photoURL,
+          lastLoginAt: new Date()
+        }, { merge: true })
+      } else {
+        // NEW USER: Create full profile with free tier
+        const teacherProfile: TeacherProfile = {
+          teacherId: result.user.uid,
+          email: result.user.email!,
+          displayName: result.user.displayName || result.user.email!.split('@')[0],
+          photoURL: result.user.photoURL,
+          authProvider: 'google',
+          userType: 'teacher',
+          createdAt: new Date(),
+          subscription: {
+            tier: 'free',
+            status: 'active'
+          }
         }
+        await setDoc(teacherDocRef, teacherProfile)
       }
-      
-      await setDoc(teacherDoc, teacherProfile, { merge: true })
       
       console.log('Google teacher authentication successful')
       const intendedRoute = sessionStorage.getItem('intendedRoute') || '/dashboard'

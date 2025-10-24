@@ -1,14 +1,16 @@
 // src/pages/Dashboard.tsx
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'wouter'
-import { Zap, Target, Sparkles, Clock } from 'lucide-react'
+import { Zap, Target, Sparkles, Clock, X } from 'lucide-react'
 import { useUsageLimit, useUserTier } from '../hooks/useUsageTracking'
 import { useTeacherAuth } from '../contexts/TeacherAuthContext'
+import { CheckoutButton } from '@/components/pricing/CheckoutButton'
 
 export const GenDashboard: React.FC = () => {
   const { tier, isPremium } = useUserTier()
   const { remaining, used, resetDate, loading } = useUsageLimit()
   const { user } = useTeacherAuth()
+  const [showPricingModal, setShowPricingModal] = useState(false)
 
   // Calculate days until reset
   const getDaysUntilReset = () => {
@@ -30,11 +32,12 @@ export const GenDashboard: React.FC = () => {
                   <span className="font-semibold">{remaining}</span> worksheets left this week
                 </div>
               )}
-              <Link href="/teacher/pricing">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-                  {isPremium ? 'Manage Plan' : 'Upgrade to Premium'}
-                </button>
-              </Link>
+              <button 
+                onClick={() => setShowPricingModal(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+              >
+                {isPremium ? 'Manage Plan' : 'Upgrade to Premium'}
+              </button>
             </div>
           </div>
         </div>
@@ -214,6 +217,87 @@ export const GenDashboard: React.FC = () => {
           </p>
         </div>
       </footer>
+
+      {/* Pricing Modal */}
+      {showPricingModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-4xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setShowPricingModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              {/* Monthly Plan */}
+              <div className="border-2 border-blue-500 rounded-lg p-6">
+                <h3 className="text-xl font-bold mb-2">Monthly</h3>
+                <p className="text-3xl font-bold mb-4">
+                  ₹799<span className="text-sm font-normal text-gray-600">/month</span>
+                </p>
+                <ul className="space-y-2 mb-6 text-sm text-gray-700">
+                  <li>✓ Unlimited worksheets</li>
+                  <li>✓ All worksheet types</li>
+                  <li>✓ Cancel anytime</li>
+                </ul>
+                <CheckoutButton
+                  type="subscription"
+                  planId={import.meta.env.VITE_RAZORPAY_PLAN_MONTHLY}
+                  tier="monthly"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  Subscribe Monthly
+                </CheckoutButton>
+              </div>
+
+              {/* Annual Plan */}
+              <div className="border-2 border-green-500 rounded-lg p-6 relative">
+                <div className="absolute top-4 right-4 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
+                  SAVE 17%
+                </div>
+                <h3 className="text-xl font-bold mb-2">Annual</h3>
+                <p className="text-3xl font-bold mb-4">
+                  ₹7,999<span className="text-sm font-normal text-gray-600">/year</span>
+                </p>
+                <ul className="space-y-2 mb-6 text-sm text-gray-700">
+                  <li>✓ Unlimited worksheets</li>
+                  <li>✓ All worksheet types</li>
+                  <li>✓ Save ₹1,589/year</li>
+                </ul>
+                <CheckoutButton
+                  type="subscription"
+                  planId={import.meta.env.VITE_RAZORPAY_PLAN_ANNUAL}
+                  tier="annual"
+                  className="w-full bg-green-600 hover:bg-green-700"
+                >
+                  Subscribe Annually
+                </CheckoutButton>
+              </div>
+            </div>
+
+            {/* Emergency Boost */}
+            <div className="border-2 border-orange-400 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold mb-1">Emergency Boost</h3>
+                  <p className="text-sm text-gray-600">Get 2 extra worksheets for ₹149</p>
+                </div>
+                <CheckoutButton
+                  type="one-time"
+                  amount={14900}
+                  description="Emergency Boost - 2 Worksheets"
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  Buy Now
+                </CheckoutButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
