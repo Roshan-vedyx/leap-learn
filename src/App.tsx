@@ -684,7 +684,7 @@ function TeacherApp() {
             <PaymentSuccessPage />
           </TeacherAuthGuard>
         </Route>
-        <Route path="/teacher/dashboard">
+        <Route path="/skill-builder">
           <TeacherAuthGuard>
             <TeacherDashboard />
           </TeacherAuthGuard>
@@ -721,7 +721,7 @@ function App() {
   const [location] = useLocation()
   
   // Route teacher pages to separate app
-  if (location.startsWith('/teacher') || location === '/worksheet-generator' || location === '/dashboard') {
+  if (location.startsWith('/teacher') || location === '/worksheet-generator' || location === '/dashboard' || location === '/payment-success' || location === '/skill-builder') {
     return <TeacherApp />
   }
   

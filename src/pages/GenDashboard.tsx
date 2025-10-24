@@ -77,6 +77,42 @@ export const GenDashboard: React.FC = () => {
           </div>
         )}
 
+        {/* Quick Stats - Only show for logged-in users */}
+        {user && (
+          <div className="max-w-5xl mx-auto mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Worksheets Created</p>
+                    <p className="text-2xl font-bold text-gray-900 mt-1">{used}</p>
+                  </div>
+                  <div className="bg-blue-50 p-3 rounded-lg">
+                    <Sparkles className="w-6 h-6 text-blue-600" />
+                  </div>
+                </div>
+                <div className="flex items-center mt-2 text-sm">
+                  <span className="text-gray-500">This week</span>
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Your Plan</p>
+                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                    {isPremium ? tier.charAt(0).toUpperCase() + tier.slice(1) : 'Free'}
+                  </p>
+                </div>
+                <div className="flex items-center mt-2 text-sm">
+                  <span className="text-gray-500">
+                    {isPremium ? 'Unlimited worksheets' : `${remaining}/3 remaining`}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Two Generator Options */}
         <div className="max-w-5xl mx-auto">
           <h3 className="text-2xl font-bold text-blue-900 text-center mb-8">
@@ -107,15 +143,15 @@ export const GenDashboard: React.FC = () => {
                 </div>
 
                 <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                  Try Free
+                  {user ? 'Create Now' : 'Try Free'}
                 </button>
               </div>
             </Link>
 
             {/* Custom Generate Card */}
-            <Link href="/teacher/dashboard">
+            <Link href="/skill-builder">
                 <div 
-                    onClick={() => sessionStorage.setItem('intendedRoute', '/teacher/dashboard')}
+                    onClick={() => sessionStorage.setItem('intendedRoute', '/skill-builder')}
                     className="bg-gradient-to-br from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-2xl p-8 hover:shadow-xl transition-all cursor-pointer group"
                 >
                 <div className="flex items-center gap-3 mb-4">
@@ -135,7 +171,7 @@ export const GenDashboard: React.FC = () => {
                 </div>
 
                 <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                  Try Free
+                  {user ? 'Create Now' : 'Try Free'}
                 </button>
               </div>
             </Link>
