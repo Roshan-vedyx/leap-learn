@@ -32,12 +32,15 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            You've used this week's free worksheets
-          </h2>
-          <p className="text-gray-600">
-            No worries! Here are your options:
-          </p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          You've used this week's free worksheets
+        </h2>
+        <p className="text-gray-600 mb-2">
+          Your free tier resets in <span className="font-semibold text-blue-600">{daysUntilReset} day{daysUntilReset !== 1 ? 's' : ''}</span>.
+        </p>
+        <p className="text-gray-600">
+          Meanwhile, here are your options:
+        </p>
         </div>
 
         {/* Option 1: Premium - Primary CTA */}
@@ -75,25 +78,25 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
         </div>
 
         {/* Option 2: Emergency Pack - Secondary CTA */}
-        <div className="border border-gray-300 rounded-lg p-4 mb-4">
+        <div className="border border-orange-200 bg-orange-50 rounded-lg p-4 mb-4">
           <div className="flex items-start gap-3 mb-3">
             <Zap className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
             <div>
               <h3 className="font-semibold text-gray-900 mb-1">
                 Emergency Pack
               </h3>
-              <p className="text-sm text-gray-600 mb-2">
-                Get 2 more worksheets just for this week
+              <p className="text-sm text-gray-700 mb-2">
+                Get 2 more worksheets (4 activities) right now!
               </p>
               <p className="text-xl font-bold text-gray-900">
-                $2.99<span className="text-sm font-normal"> one-time</span>
+                ₹149<span className="text-sm font-normal"> one-time</span>
               </p>
             </div>
           </div>
           <Button 
             onClick={onEmergencyPack} 
             variant="outline"
-            className="w-full"
+            className="w-full border-orange-400 text-orange-700 hover:bg-orange-100 hover:text-orange-800"
           >
             Buy Emergency Pack
           </Button>

@@ -125,6 +125,21 @@ service cloud.firestore {
       allow read, write: if false;
     }
     
+    // Enforce worksheet generation limits
+    match /worksheets/{worksheetId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() 
+        && (
+          // Allow if premium tier
+          get(/databases/$(database)/documents/teachers/$(request.auth.uid)).data.subscriptionTier in ['monthly', 'annual']
+          // OR if free tier hasn't exceeded weekly limit
+          || (
+            get(/databases/$(database)/documents/usage/$(request.auth.uid)).data.worksheetsGenerated < 3
+          )
+        );
+      allow update, delete: if false; // Worksheets are immutable
+    }
+
     // ============================================
     // SHARED CONTENT (Stories, Activities)
     // ============================================

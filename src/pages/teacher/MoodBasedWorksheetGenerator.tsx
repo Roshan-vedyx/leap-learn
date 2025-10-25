@@ -35,7 +35,7 @@ export default function MoodBasedWorksheetGenerator() {
   const [hasGenerated, setHasGenerated] = useState(false)
   const { tier, isPremium } = useUserTier()
   const usageLimit = useUsageLimit()
-  const { remaining, canGenerate, loading: usageLoading, resetDate, refetch } = usageLimit
+  const { remaining, canGenerate, loading: usageLoading, resetDate, daysUntilReset, refetch } = usageLimit
   const { trackGeneration } = useTrackGeneration()
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [hasDownloaded, setHasDownloaded] = useState(false)
@@ -166,13 +166,15 @@ export default function MoodBasedWorksheetGenerator() {
   }
 
   const handleQuickPick = async () => {
-    // FIXED: Add limit check (was missing!)
-    if (!isPremium && !canGenerate) {
-        setShowUpgradeModal(true)
-        return
+    // ===== FIXED: Add limit check that was completely missing! =====
+    if (!isPremium) {
+      await refetch() // Get fresh usage data
     }
     
-    setSelectedMood('overwhelmed')
+    if (!isPremium && !canGenerate) {
+      setShowUpgradeModal(true)
+      return
+    }
     
     // Track generation FIRST
     if (!isPremium) {
@@ -184,10 +186,13 @@ export default function MoodBasedWorksheetGenerator() {
       }
     }
     
+    // Generate worksheet AFTER tracking
     const data = generateMoodBasedWorksheet('overwhelmed')
+    setSelectedMood('overwhelmed')
     setWorksheetData(data)
     setShowPreview(true)
     setHasGenerated(true)
+    setHasDownloaded(false)
     
     // Refetch to update counter
     if (!isPremium) {
@@ -238,8 +243,8 @@ export default function MoodBasedWorksheetGenerator() {
         <UpgradeModal
           isOpen={showUpgradeModal}
           onClose={() => setShowUpgradeModal(false)}
-          onEmergencyPack={handleEmergencyPack}
-          daysUntilReset={calculateDaysUntilReset()}
+          onEmergencyPack={purchaseEmergencyPack}
+          daysUntilReset={daysUntilReset || 7} // ===== ADD THIS =====
         />
         {/* Header */}
         <div className="text-center mb-8">
@@ -285,7 +290,16 @@ export default function MoodBasedWorksheetGenerator() {
                     {remaining > 0 ? (
                     <span>✨ {remaining} adaptive worksheet{remaining !== 1 ? 's' : ''} remaining this week</span>
                     ) : (
-                    <span className="text-orange-600 font-semibold">⚠️ You've used your 3 free worksheets this week . It will reset on Monday!</span>
+                    <span className="text-orange-600 font-semibold">
+                      ⚠️ You've used your 3 free worksheets this week.{' '}
+                      <button 
+                        onClick={() => setShowUpgradeModal(true)}
+                        className="underline hover:text-orange-700 font-bold"
+                      >
+                        Upgrade now
+                      </button>
+                      {' '}or wait until Monday for reset.
+                    </span>
                     )}
                 </div>
                 )}

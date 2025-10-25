@@ -1,6 +1,6 @@
 // src/components/account/AccountSettingsModal.tsx
 import React, { useState } from 'react'
-import { X, CreditCard, Pause, BarChart3, AlertCircle } from 'lucide-react'
+import { X, CreditCard, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card, CardContent } from '@/components/ui/Card'
 import { useTeacherAuth } from '@/contexts/TeacherAuthContext'
@@ -164,23 +164,6 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                 </button>
               )}
 
-              {/* Usage History - placeholder */}
-              <button
-                className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-left"
-                onClick={() => {
-                  // TODO: Show usage modal
-                  alert('Usage history coming soon!')
-                }}
-              >
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <BarChart3 className="w-5 h-5 text-purple-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">Usage History</p>
-                  <p className="text-sm text-gray-500">View past worksheet generations</p>
-                </div>
-              </button>
-
               {/* Cancel Subscription */}
               {isPremium && !isCanceling && (
                 <button
@@ -197,24 +180,23 @@ export const AccountSettingsModal: React.FC<AccountSettingsModalProps> = ({
                 </button>
               )}
 
-              {/* Reactivate - if canceling */}
-              {isCanceling && (
+              {/* Contact Support - if canceling */}
+                {isCanceling && (
                 <button
-                  className="flex items-center gap-3 p-4 border-2 border-green-200 bg-green-50 rounded-lg hover:border-green-400 transition-all text-left"
-                  onClick={() => {
-                    // TODO: Implement reactivation
-                    alert('Reactivation coming soon! Contact support.')
-                  }}
+                    className="flex items-center gap-3 p-4 border-2 border-blue-200 bg-blue-50 rounded-lg hover:border-blue-300 transition-all text-left"
+                    onClick={() => {
+                    window.open('mailto:support@vedyx.ai?subject=Reactivate My Subscription', '_blank')
+                    }}
                 >
-                  <div className="p-2 bg-green-200 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-green-700" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Reactivate Subscription</p>
-                    <p className="text-sm text-gray-600">Keep your Premium benefits</p>
-                  </div>
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                    <p className="font-medium text-gray-900">Changed Your Mind?</p>
+                    <p className="text-sm text-gray-500">Contact us to reactivate before {formatDate(subscription.currentPeriodEnd)}</p>
+                    </div>
                 </button>
-              )}
+                )}
             </div>
           </div>
 

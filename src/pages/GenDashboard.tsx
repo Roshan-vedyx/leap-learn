@@ -34,18 +34,32 @@ export const GenDashboard: React.FC = () => {
                   <span className="font-semibold">{remaining}</span> worksheets left this week
                 </div>
               )}
-              <button 
-                onClick={() => {
-                  if (isPremium) {
-                    setShowAccountSettings(true)
-                  } else {
-                    setShowPricingModal(true)
-                  }
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-              >
-                {isPremium ? 'Account Settings' : 'Upgrade to Premium'}
-              </button>
+              
+              {/* Show Sign In button for non-authenticated users */}
+              {!user && (
+                <button 
+                  onClick={() => window.location.href = '/teacher'}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Sign In
+                </button>
+              )}
+              
+              {/* Show appropriate button for authenticated users */}
+              {user && (
+                <button 
+                  onClick={() => {
+                    if (isPremium) {
+                      setShowAccountSettings(true)
+                    } else {
+                      setShowPricingModal(true)
+                    }
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  {isPremium ? 'Account Settings' : 'Upgrade to Premium'}
+                </button>
+              )}
             </div>
           </div>
         </div>

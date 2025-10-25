@@ -116,25 +116,23 @@ export const CancelSubscriptionFlow: React.FC<CancelSubscriptionFlowProps> = ({
               </select>
             </div>
 
-            {/* Pause suggestion */}
+            {/* Support contact option */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm font-medium text-blue-900 mb-2">
-                💡 Not using it right now?
-              </p>
-              <p className="text-sm text-blue-700 mb-3">
-                Instead of canceling, you could pause your subscription for 1-3 months. 
-                You won't be charged during the pause.
-              </p>
-              <Button
+            <p className="text-sm font-medium text-blue-900 mb-2">
+                💡 Need help or want to pause temporarily?
+            </p>
+            <p className="text-sm text-blue-700 mb-3">
+                We're here to help! Email us and we'll work out the best solution for you.
+            </p>
+            <Button
                 variant="outline"
                 className="w-full border-blue-300 text-blue-700 hover:bg-blue-100"
                 onClick={() => {
-                  // TODO: Implement pause functionality
-                  alert('Pause feature coming soon! Contact support for assistance.')
+                window.open('mailto:support@vedyx.ai?subject=Pause Subscription Request', '_blank')
                 }}
-              >
-                Pause Instead
-              </Button>
+            >
+                Contact Support
+            </Button>
             </div>
 
             {/* Action buttons */}

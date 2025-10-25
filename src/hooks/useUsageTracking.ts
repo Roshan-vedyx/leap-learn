@@ -186,6 +186,15 @@ export const useUsageLimit = () => {
     return weekStart
   }
   const resetDate = getNextMonday()
+  
+  // Calculate days until reset
+  const getDaysUntilReset = () => {
+    const now = new Date()
+    const reset = getNextMonday()
+    const diff = Math.ceil((reset.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+    return Math.max(0, diff)
+  }
+  const daysUntilReset = getDaysUntilReset()
 
   return {
     used,
@@ -195,6 +204,7 @@ export const useUsageLimit = () => {
     loading: loading || authLoading,
     isPremium,
     resetDate,
+    daysUntilReset,
     refetch // Expose refetch for manual updates
   }
 }
