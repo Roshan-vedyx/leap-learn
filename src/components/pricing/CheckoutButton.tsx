@@ -67,13 +67,19 @@ export const CheckoutButton: React.FC<CheckoutButtonProps> = ({
       
       // Show user-friendly error messages
       let errorMessage = 'Payment failed. Please try again.'
-      
+        
       if (error.message?.includes('already have an active')) {
-        errorMessage = 'You already have an active subscription.'
+          errorMessage = 'You already have an active subscription.'
       } else if (error.message?.includes('Failed to load')) {
-        errorMessage = 'Could not load payment gateway. Please check your internet connection.'
+          errorMessage = 'Could not load payment gateway. Please check your internet connection.'
       } else if (error.code === 'permission-denied') {
-        errorMessage = 'Permission denied. Please sign in again.'
+          errorMessage = 'Permission denied. Please sign in again.'
+      } else if (error.message?.includes('payment in progress')) {
+          errorMessage = 'You have a payment in progress. Please complete it first.'
+      } else if (error.message?.includes('not found')) {
+          errorMessage = 'Account not found. Please sign in again.'
+      } else if (error.code === 'unavailable') {
+          errorMessage = 'Service temporarily unavailable. Please try again in a moment.'
       }
       
       alert(errorMessage)

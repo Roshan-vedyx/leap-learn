@@ -46,17 +46,26 @@ export const createEmergencyOrder = functions.https.onCall(
 
       // Create Razorpay order for ₹149 (14900 paise)
       const order = await razorpay.orders.create({
-        amount: 14900,
-        currency: 'INR',
-        notes: {
+          amount: 14900,
+          currency: 'INR',
+          notes: {
           teacherId,
           type: 'emergency_boost',
-        },
+          },
       })
-
-      console.log('Emergency order created:', teacherId, order.id)
-
-      return { orderId: order.id, amount: order.amount }
+        
+      // Store order in Firestore to track pending purchases
+      await db.collection('emergency_orders').doc(order.id).set({
+          orderId: order.id,
+          teacherId,
+          amount: 14900,
+          status: 'created',
+          createdAt: new Date(),
+      })
+        
+        console.log('Emergency order created:', teacherId, order.id)
+        
+        return { orderId: order.id, amount: order.amount }
     } catch (error: any) {
       console.error('Error creating emergency order:', error)
       throw new functions.https.HttpsError(

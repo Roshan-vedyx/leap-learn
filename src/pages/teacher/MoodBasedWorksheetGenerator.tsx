@@ -285,7 +285,7 @@ export default function MoodBasedWorksheetGenerator() {
                     {remaining > 0 ? (
                     <span>✨ {remaining} adaptive worksheet{remaining !== 1 ? 's' : ''} remaining this week</span>
                     ) : (
-                    <span className="text-orange-600 font-semibold">⚠️ You've used your 2 free worksheets this month</span>
+                    <span className="text-orange-600 font-semibold">⚠️ You've used your 3 free worksheets this week . It will reset on Monday!</span>
                     )}
                 </div>
                 )}

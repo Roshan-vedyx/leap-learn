@@ -119,14 +119,39 @@ export const openOneTimeCheckout = async ({
   name: string
   description: string
 }): Promise<void> => {
-  try {
-    // Load Razorpay SDK
-    await loadRazorpaySDK()
-
-    // Call Firebase function to create order
-    const createOrder = httpsCallable(functions, 'createEmergencyOrder')
-    const orderResult = await createOrder({ teacherId })
-    const { orderId } = orderResult.data as { orderId: string; amount: number }
+    try {
+        // Load Razorpay SDK
+        await loadRazorpaySDK()
+      
+        // Check for pending emergency order first
+        const { db } = await import('@/lib/firebase-config')
+        const { collection, query, where, getDocs, orderBy, limit } = await import('firebase/firestore')
+        
+        const ordersRef = collection(db, 'emergency_orders')
+        const recentOrderQuery = query(
+          ordersRef,
+          where('teacherId', '==', teacherId),
+          where('status', 'in', ['created', 'pending']),
+          orderBy('createdAt', 'desc'),
+          limit(1)
+        )
+        
+        const recentOrders = await getDocs(recentOrderQuery)
+        
+        if (!recentOrders.empty) {
+          const recentOrder = recentOrders.docs[0].data()
+          const orderAge = Date.now() - recentOrder.createdAt.toMillis()
+          
+          // If order created in last 5 minutes, block new purchase
+          if (orderAge < 5 * 60 * 1000) {
+            throw new Error('You have a payment in progress. Please complete it or wait 5 minutes.')
+          }
+        }
+      
+        // Call Firebase function to create order
+        const createOrder = httpsCallable(functions, 'createEmergencyOrder')
+        const orderResult = await createOrder({ teacherId })
+        const { orderId } = orderResult.data as { orderId: string; amount: number }
 
     // Open Razorpay checkout
     const options: RazorpayOptions = {

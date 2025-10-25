@@ -68,11 +68,20 @@ export const useUserTier = () => {
   const { profile, loading: authLoading } = useTeacherAuth()
   
   const tier: Tier = profile?.subscription?.tier || 'free'
+  const cancelAtPeriodEnd = profile?.subscription?.cancelAtPeriodEnd || false
+  const currentPeriodEnd = profile?.subscription?.currentPeriodEnd
+    ? (profile.subscription.currentPeriodEnd.toDate?.() || new Date(profile.subscription.currentPeriodEnd))
+    : null
+
+  // Grant premium access if: (1) tier is premium OR (2) canceling but still within period
+  const isPremium = 
+    (tier === 'monthly' || tier === 'annual') || 
+    (cancelAtPeriodEnd && currentPeriodEnd && new Date() < currentPeriodEnd)
   
   return {
     tier,
     loading: authLoading,
-    isPremium: tier === 'monthly' || tier === 'annual'
+    isPremium
   }
 }
 
@@ -90,7 +99,15 @@ export const useUsageLimit = () => {
 
   // Fixed: Use consistent tier check (monthly/annual, not pro/school)
   const tier: Tier = profile?.subscription?.tier || 'free'
-  const isPremium = tier === 'monthly' || tier === 'annual'
+  const cancelAtPeriodEnd = profile?.subscription?.cancelAtPeriodEnd || false
+  const currentPeriodEnd = profile?.subscription?.currentPeriodEnd
+    ? (profile.subscription.currentPeriodEnd.toDate?.() || new Date(profile.subscription.currentPeriodEnd))
+    : null
+
+  // Grant premium access if: (1) tier is premium OR (2) canceling but still within period
+  const isPremium = 
+    (tier === 'monthly' || tier === 'annual') || 
+    (cancelAtPeriodEnd && currentPeriodEnd && new Date() < currentPeriodEnd)
 
   const fetchUsage = useCallback(async () => {
     if (authLoading) {

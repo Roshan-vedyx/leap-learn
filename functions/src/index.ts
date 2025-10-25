@@ -10,6 +10,7 @@ import { createSubscription } from './payments/createSubscription'
 import { createEmergencyOrder } from './payments/createEmergencyOrder'
 import { verifyEmergencyPayment } from './payments/verifyEmergencyPayment'
 import { cancelSubscription } from './payments/cancelSubscription'
+import { checkExpiredSubscriptions } from './scheduled/checkExpiredSubscriptions'
 
 // --- WEBHOOKS ---
 import { razorpayWebhook } from "./webhooks/razorpayWebhook";
@@ -21,4 +22,5 @@ export {
     verifyEmergencyPayment,
     cancelSubscription,
     razorpayWebhook,
+    checkExpiredSubscriptions,
 };

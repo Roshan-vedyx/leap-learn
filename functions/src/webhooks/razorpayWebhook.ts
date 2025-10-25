@@ -45,13 +45,15 @@ export const razorpayWebhook = functions.https.onRequest(
 
       // Handle different subscription events
       if (event === 'subscription.activated') {
-        await handleSubscriptionActivated(payload)
+          await handleSubscriptionActivated(payload)
       } else if (event === 'subscription.charged') {
-        await handleSubscriptionCharged(payload)
+          await handleSubscriptionCharged(payload)
       } else if (event === 'subscription.cancelled') {
-        await handleSubscriptionCancelled(payload)
+          await handleSubscriptionCancelled(payload)
+      } else if (event === 'subscription.completed') {
+          await handleSubscriptionCompleted(payload)
       } else {
-        console.log('Unhandled event type:', event)
+          console.log('Unhandled event type:', event)
       }
 
       // Always return 200 to Razorpay
@@ -76,142 +78,207 @@ export const razorpayWebhook = functions.https.onRequest(
 )
 
 async function handleSubscriptionActivated(payload: any) {
-  const subscription = payload.subscription.entity
-  const subscriptionId = subscription.id
-  const planId = subscription.plan_id
-  const currentPeriodEnd = subscription.current_end * 1000 // Convert to ms
-
-  // Determine tier from plan ID
-  const tier = planId.includes('annual') ? 'annual' : 'monthly'
-
-  // Find teacher by subscriptionId
-  const teachersRef = db.collection('teachers')
-  const snapshot = await teachersRef
-    .where('subscription.subscriptionId', '==', subscriptionId)
-    .limit(1)
-    .get()
-
-  if (snapshot.empty) {
-    console.error('Teacher not found for subscription:', subscriptionId)
-    return
-  }
-
-  const teacherDoc = snapshot.docs[0]
-
-  // Idempotency check
-  const eventId = `subscription_activated_${subscriptionId}_${subscription.created_at}`
-  const eventRef = db.collection('webhook_events').doc(eventId)
-  const eventDoc = await eventRef.get()
-
-  if (eventDoc.exists) {
-    console.log('Event already processed:', eventId)
-    return
-  }
-
-  // Update teacher subscription
-  // Update teacher subscription atomically with event marking
-  await db.runTransaction(async (transaction) => {
-    transaction.update(teacherDoc.ref, {
-    'subscription.tier': tier,
-    'subscription.status': 'active',
-    'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
-    })
-    
-    transaction.set(eventRef, {
-    event: 'subscription.activated',
-    subscriptionId,
-    processedAt: new Date(),
-    })
-  })
+    const subscription = payload.subscription.entity
+    const subscriptionId = subscription.id
+    const planId = subscription.plan_id
+    const currentPeriodEnd = subscription.current_end * 1000 // Convert to ms
   
-  console.log('Subscription activated:', subscriptionId, tier)
+    // Determine tier from plan ID
+    const tier = planId.includes('annual') ? 'annual' : 'monthly'
+  
+    // Find teacher by subscriptionId
+    const teachersRef = db.collection('teachers')
+    const snapshot = await teachersRef
+      .where('subscription.subscriptionId', '==', subscriptionId)
+      .limit(1)
+      .get()
+  
+    if (snapshot.empty) {
+      console.error('Teacher not found for subscription:', subscriptionId)
+      return
+    }
+  
+    const teacherDoc = snapshot.docs[0]
+  
+    // Idempotency check
+    const eventId = `subscription_activated_${subscriptionId}_${subscription.created_at}`
+    const eventRef = db.collection('webhook_events').doc(eventId)
+    const eventDoc = await eventRef.get()
+  
+    if (eventDoc.exists) {
+      console.log('Event already processed:', eventId)
+      return
+    }
+  
+    // Get existing subscription data to preserve cancellation flags
+    const existingData = teacherDoc.data()
+    const existingSubscription = existingData?.subscription || {}
+  
+    // Prepare update - preserve cancelAtPeriodEnd if it exists
+    const updateData: any = {
+      'subscription.tier': tier,
+      'subscription.status': 'active',
+      'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
+    }
+  
+    // CRITICAL: If user already cancelled, preserve the flag
+    if (existingSubscription.cancelAtPeriodEnd !== true) {
+      // Only set to false if it wasn't already true
+      updateData['subscription.cancelAtPeriodEnd'] = false
+    }
+  
+    // Update teacher subscription atomically with event marking
+    await db.runTransaction(async (transaction) => {
+      transaction.update(teacherDoc.ref, updateData)
+  
+      transaction.set(eventRef, {
+        event: 'subscription.activated',
+        subscriptionId,
+        processedAt: new Date(),
+      })
+    })
+  
+    console.log('Subscription activated:', subscriptionId, tier, 
+      existingSubscription.cancelAtPeriodEnd ? '(cancel flag preserved)' : '')
 }
 
 async function handleSubscriptionCharged(payload: any) {
-  const subscription = payload.subscription.entity
-  const subscriptionId = subscription.id
-  const currentPeriodEnd = subscription.current_end * 1000
-
-  // Find teacher
-  const teachersRef = db.collection('teachers')
-  const snapshot = await teachersRef
-    .where('subscription.subscriptionId', '==', subscriptionId)
-    .limit(1)
-    .get()
-
-  if (snapshot.empty) {
-    console.error('Teacher not found for subscription:', subscriptionId)
-    return
-  }
-
-  const teacherDoc = snapshot.docs[0]
-
-  // Idempotency check
-  const eventId = `subscription_charged_${subscriptionId}_${subscription.created_at}`
-  const eventRef = db.collection('webhook_events').doc(eventId)
-  const eventDoc = await eventRef.get()
-
-  if (eventDoc.exists) {
-    console.log('Event already processed:', eventId)
-    return
-  }
-
-  // Update current period end atomically with event marking
+    const subscription = payload.subscription.entity
+    const subscriptionId = subscription.id
+    const currentPeriodEnd = subscription.current_end * 1000
+  
+    // Find teacher
+    const teachersRef = db.collection('teachers')
+    const snapshot = await teachersRef
+      .where('subscription.subscriptionId', '==', subscriptionId)
+      .limit(1)
+      .get()
+  
+    if (snapshot.empty) {
+      console.error('Teacher not found for subscription:', subscriptionId)
+      return
+    }
+  
+    const teacherDoc = snapshot.docs[0]
+  
+    // Idempotency check
+    const eventId = `subscription_charged_${subscriptionId}_${subscription.created_at}`
+    const eventRef = db.collection('webhook_events').doc(eventId)
+    const eventDoc = await eventRef.get()
+  
+    if (eventDoc.exists) {
+      console.log('Event already processed:', eventId)
+      return
+    }
+  
+    // Get existing subscription data to check for cancellation
+    const existingData = teacherDoc.data()
+    const existingSubscription = existingData?.subscription || {}
+  
+    // Prepare update
+    const updateData: any = {
+      'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
+    }
+  
+    // If renewal happened but user had cancelled, they renewed - clear the flag
+    // (This means they paid again, so we treat it as a fresh start)
+    if (existingSubscription.cancelAtPeriodEnd === true) {
+      updateData['subscription.cancelAtPeriodEnd'] = false
+      updateData['subscription.cancelRequestedAt'] = null
+      console.log('User renewed after cancellation - clearing cancel flag')
+    }
+  
+    // Update current period end atomically with event marking
     await db.runTransaction(async (transaction) => {
-        transaction.update(teacherDoc.ref, {
-        'subscription.currentPeriodEnd': new Date(currentPeriodEnd),
-        })
-        
-        transaction.set(eventRef, {
+      transaction.update(teacherDoc.ref, updateData)
+  
+      transaction.set(eventRef, {
         event: 'subscription.charged',
         subscriptionId,
         processedAt: new Date(),
-        })
+      })
     })
-    
+  
     console.log('Subscription charged:', subscriptionId)
 }
 
 async function handleSubscriptionCancelled(payload: any) {
-  const subscription = payload.subscription.entity
-  const subscriptionId = subscription.id
+    const subscription = payload.subscription.entity
+    const subscriptionId = subscription.id
+  
+    const teachersRef = db.collection('teachers')
+    const snapshot = await teachersRef
+      .where('subscription.subscriptionId', '==', subscriptionId)
+      .limit(1)
+      .get()
+  
+    if (snapshot.empty) {
+      console.error('Teacher not found for subscription:', subscriptionId)
+      return
+    }
+  
+    // Idempotency check
+    const eventId = `subscription_cancelled_${subscriptionId}_${subscription.created_at}`
+    const eventRef = db.collection('webhook_events').doc(eventId)
+    const eventDoc = await eventRef.get()
+  
+    if (eventDoc.exists) {
+      console.log('Event already processed:', eventId)
+      return
+    }
+  
+    // This webhook fires when Razorpay actually cancels (from scheduled function)
+    // Just mark as processed - scheduled function already updated tier
+    await eventRef.set({
+      event: 'subscription.cancelled',
+      subscriptionId,
+      processedAt: new Date(),
+    })
+  
+    console.log('Subscription cancelled webhook processed:', subscriptionId)
+}
 
-  // Find teacher
-  const teachersRef = db.collection('teachers')
-  const snapshot = await teachersRef
-    .where('subscription.subscriptionId', '==', subscriptionId)
-    .limit(1)
-    .get()
-
-  if (snapshot.empty) {
-    console.error('Teacher not found for subscription:', subscriptionId)
-    return
-  }
-
-  const teacherDoc = snapshot.docs[0]
-
-  // Idempotency check
-  const eventId = `subscription_cancelled_${subscriptionId}_${subscription.created_at}`
-  const eventRef = db.collection('webhook_events').doc(eventId)
-  const eventDoc = await eventRef.get()
-
-  if (eventDoc.exists) {
-    console.log('Event already processed:', eventId)
-    return
-  }
-
-  // Update status atomically with event marking
+async function handleSubscriptionCompleted(payload: any) {
+    const subscription = payload.subscription.entity
+    const subscriptionId = subscription.id
+  
+    // Find teacher
+    const teachersRef = db.collection('teachers')
+    const snapshot = await teachersRef
+      .where('subscription.subscriptionId', '==', subscriptionId)
+      .limit(1)
+      .get()
+  
+    if (snapshot.empty) {
+      console.error('Teacher not found for subscription:', subscriptionId)
+      return
+    }
+  
+    const teacherDoc = snapshot.docs[0]
+  
+    // Idempotency check
+    const eventId = `subscription_completed_${subscriptionId}`
+    const eventRef = db.collection('webhook_events').doc(eventId)
+    const eventDoc = await eventRef.get()
+  
+    if (eventDoc.exists) {
+      console.log('Event already processed:', eventId)
+      return
+    }
+  
+    // Downgrade to free tier atomically
     await db.runTransaction(async (transaction) => {
-        transaction.update(teacherDoc.ref, {
-        'subscription.status': 'cancelled',
-        })
-        
-        transaction.set(eventRef, {
-        event: 'subscription.cancelled',
+      transaction.update(teacherDoc.ref, {
+        'subscription.tier': 'free',
+        'subscription.status': 'completed',
+      })
+      
+      transaction.set(eventRef, {
+        event: 'subscription.completed',
         subscriptionId,
         processedAt: new Date(),
-        })
+      })
     })
     
-    console.log('Subscription cancelled:', subscriptionId)
+    console.log('Subscription completed, downgraded to free:', subscriptionId)
 }

@@ -90,10 +90,12 @@ export const createSubscription = functions.https.onCall(
       
       const subscription: any = await razorpay.subscriptions.create(subscriptionData)
 
-      // Store subscription ID and customer ID (don't update tier/status yet - webhook will do that)
+      // Store subscription ID, customer ID, AND pending status so UI can detect it
       await db.collection('teachers').doc(teacherId).update({
-        'subscription.subscriptionId': subscription.id,
-        'subscription.customerId': customerId,
+            'subscription.subscriptionId': subscription.id,
+            'subscription.customerId': customerId,
+            'subscription.status': 'pending', // NEW: Mark as pending
+            'subscription.tier': tier, // NEW: Set tier immediately
       })
 
       return { subscriptionId: subscription.id }

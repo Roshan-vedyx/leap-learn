@@ -1,7 +1,6 @@
 // functions/src/payments/cancelSubscription.ts
 import * as functions from 'firebase-functions/v2'
 import { db } from '../firebase-admin'
-import Razorpay from 'razorpay'
 
 interface CancelSubscriptionInput {
   teacherId: string
@@ -51,21 +50,13 @@ export const cancelSubscription = functions.https.onCall(
         )
       }
 
-      // Initialize Razorpay
-      const razorpay = new Razorpay({
-        key_id: process.env.RAZORPAY_KEY_ID!,
-        key_secret: process.env.RAZORPAY_KEY_SECRET!,
-      })
-
-      // Cancel subscription at end of billing cycle
-      await razorpay.subscriptions.cancel(subscriptionId, true)
-
-      // Update teacher document
+      // Mark for cancellation at period end (don't cancel in Razorpay yet)
       await teacherRef.update({
-        'subscription.cancelAtPeriodEnd': true,
+          'subscription.cancelAtPeriodEnd': true,
+          'subscription.cancelRequestedAt': new Date(),
       })
-
-      console.log('Subscription cancelled:', teacherId, subscriptionId)
+        
+      console.log('Subscription marked for cancellation:', teacherId, subscriptionId)
 
       return { success: true }
     } catch (error: any) {

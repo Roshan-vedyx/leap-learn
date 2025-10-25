@@ -28,15 +28,26 @@ export const PaymentSuccessPage: React.FC = () => {
       setPollCount((prev) => {
         const newCount = prev + 1
 
-        // Check if subscription is active
-        if (type === 'subscription' && profile?.subscription?.status === 'active') {
-          setStatus('success')
-          clearInterval(pollInterval)
-          
-          // Redirect to dashboard after 2 seconds
-          setTimeout(() => {
-            setLocation('/dashboard')
-          }, 2000)
+        // Check if subscription exists (pending or active)
+        if (type === 'subscription' && profile?.subscription?.subscriptionId === subscriptionId) {
+            // If status is active, we're done
+            if (profile.subscription.status === 'active') {
+            setStatus('success')
+            clearInterval(pollInterval)
+            
+            setTimeout(() => {
+                setLocation('/dashboard')
+            }, 2000)
+            }
+            // If still pending after 15 attempts, show success anyway (webhook will catch up)
+            else if (newCount >= 15 && profile.subscription.status === 'pending') {
+            setStatus('success')
+            clearInterval(pollInterval)
+            
+            setTimeout(() => {
+                setLocation('/dashboard')
+            }, 2000)
+            }
         }
 
         // Timeout after 15 attempts (30 seconds)

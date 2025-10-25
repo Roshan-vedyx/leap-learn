@@ -73,22 +73,30 @@ export const verifyEmergencyPayment = functions.https.onCall(
       }
 
       // Add credits and mark payment atomically
-        await db.runTransaction(async (transaction) => {
-            transaction.update(teacherRef, {
-            worksheetCredits: FieldValue.increment(2),
-            })
+      await db.runTransaction(async (transaction) => {
+          transaction.update(teacherRef, {
+          worksheetCredits: FieldValue.increment(2),
+          })
             
-            transaction.set(eventRef, {
-            paymentId,
-            orderId,
-            teacherId,
-            amount: 14900,
-            creditsAdded: 2,
-            processedAt: new Date(),
-            })
-        })
+          transaction.set(eventRef, {
+          paymentId,
+          orderId,
+          teacherId,
+          amount: 14900,
+          creditsAdded: 2,
+          processedAt: new Date(),
+          })
+            
+          // Mark order as completed
+          const orderRef = db.collection('emergency_orders').doc(orderId)
+          transaction.update(orderRef, {
+          status: 'completed',
+          paymentId,
+          completedAt: new Date(),
+          })
+      })
         
-        console.log('Emergency credits added:', teacherId, paymentId)
+      console.log('Emergency credits added:', teacherId, paymentId)
 
       return {
         success: true,
